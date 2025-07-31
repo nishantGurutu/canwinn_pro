@@ -1,0 +1,1 @@
+C:\canwinn\task_management\task_management\build\app\intermediates\cxx\RelWithDebInfo\44ch345f\obj\x86_64

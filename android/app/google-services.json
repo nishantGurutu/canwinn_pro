@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451996737352",
+    "project_id": "taskmaster-293c4",
+    "storage_bucket": "taskmaster-293c4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451996737352:android:e087a07c5c61ed3500dd7d",
+        "android_client_info": {
+          "package_name": "com.cannwin.task_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgGYJjJ7xm-8Vb437hRZB7T-souwAXxVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,2 @@
+C:/canwinn/task_management/task_management/android/app/.cxx/RelWithDebInfo/44ch345f/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/canwinn/task_management/task_management/android/app/.cxx/RelWithDebInfo/44ch345f/arm64-v8a/CMakeFiles/rebuild_cache.dir
