@@ -171,7 +171,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                     await showDatePicker(
                                                   context: context,
                                                   initialDate: DateTime.now(),
-                                                  firstDate: DateTime(1950),
+                                                  firstDate: DateTime.now(),
                                                   lastDate: DateTime(2100),
                                                 );
 
@@ -276,7 +276,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                       await showDatePicker(
                                                     context: context,
                                                     initialDate: DateTime.now(),
-                                                    firstDate: DateTime(1950),
+                                                    firstDate: DateTime.now(),
                                                     lastDate: DateTime(2100),
                                                   );
 

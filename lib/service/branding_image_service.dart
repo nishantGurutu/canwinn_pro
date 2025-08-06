@@ -13,7 +13,6 @@ class BrandingImageService {
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.overlay_images,
       );
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         return BrandImagemodel.fromJson(response.data);
       } else {

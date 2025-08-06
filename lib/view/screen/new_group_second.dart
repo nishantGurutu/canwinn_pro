@@ -69,7 +69,7 @@ class NewGroupSecond extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       controller: groupNameTextEditingController,
-                      autofocus: true,
+                      // autofocus: true,
                       decoration: InputDecoration(
                           hintText: 'Group Name',
                           hintStyle: TextStyle(color: lightGreyColor)),

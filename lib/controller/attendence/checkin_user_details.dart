@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +14,7 @@ import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/attendence/attendence_controller.dart';
 import 'package:task_management/controller/register_controller.dart';
 import 'package:task_management/controller/task_controller.dart';
+import 'package:task_management/helper/storage_helper.dart';
 
 class CheckinUserDetails extends StatefulWidget {
   const CheckinUserDetails({super.key});
@@ -50,6 +52,40 @@ class _CheckinUserDetailsState extends State<CheckinUserDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: whiteColor,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+        ),
+        title: Text(
+          checkin,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          if (StorageHelper.getType() == 3)
+            InkWell(
+              onTap: () {
+                logoutApp();
+              },
+              child: SizedBox(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 10.w),
+                  child: Icon(Icons.logout),
+                ),
+              ),
+            ),
+        ],
+      ),
       backgroundColor: whiteColor,
       body: Container(
         color: whiteColor,

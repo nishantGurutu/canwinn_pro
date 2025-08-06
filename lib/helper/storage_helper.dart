@@ -19,7 +19,8 @@ class StorageHelper {
   static const String _keydob = "dob";
   static const String _keyImage = "image";
   static const String _keyDepartmentId = "department_id";
-  static const String _role = "role";
+  static const String _role = "role_id";
+  static const String _roleName = "role_name";
   static const String _type = "type";
   static const String _token = "token";
   static const String _tokenType = "token_type";
@@ -64,8 +65,10 @@ class StorageHelper {
       await _preferences?.setString(_keyImage, image);
   static Future<void> setDepartmentId(int departmentId) async =>
       await _preferences?.setInt(_keyDepartmentId, departmentId);
-  static Future<void> setRole(int role) async =>
-      await _preferences?.setInt(_role, role);
+  static Future<void> setRole(String role) async =>
+      await _preferences?.setString(_role, role);
+  static Future<void> setRoleName(String roleName) async =>
+      await _preferences?.setString(_roleName, roleName);
   static Future<void> setType(int type) async =>
       await _preferences?.setInt(_type, type);
 
@@ -114,7 +117,8 @@ class StorageHelper {
   static dynamic getDob() => _preferences?.getString(_keydob);
   static dynamic getImage() => _preferences?.getString(_keyImage);
   static dynamic getDepartmentId() => _preferences?.getInt(_keyDepartmentId);
-  static dynamic getRole() => _preferences?.getInt(_role);
+  static dynamic getRole() => _preferences?.getString(_role);
+  static dynamic getRoleName() => _preferences?.getString(_roleName);
   static dynamic getType() => _preferences?.getInt(_type);
   static dynamic getRecoveryPassword() =>
       _preferences?.getString(_recoveryPassword);

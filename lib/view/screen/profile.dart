@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     apiCall();
+    profileController.selectedGender?.value = "";
     super.initState();
   }
 
@@ -66,6 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
+    profileController.selectedGender?.value = '';
     profileController.dataFromImagePicker.value = false;
     super.dispose();
   }
@@ -225,115 +228,74 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: CircularProgressIndicator(),
                 )
               : SingleChildScrollView(
-                  child: Center(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              icon: SvgPicture.asset(
+                                  'assets/images/svg/back_arrow.svg'),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  Get.back();
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  showAlertDialog(context);
                                 },
-                                icon: SvgPicture.asset(
-                                    'assets/images/svg/back_arrow.svg'),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15.w),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    showAlertDialog(context);
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Obx(
-                                        () => profileController
-                                                .profilePicPath.value.isEmpty
-                                            ? Container(
-                                                height: 90.h,
-                                                width: 90.w,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                      Radius.circular(45.r),
-                                                    ),
-                                                    border: Border.all(
-                                                        color: borderColor)),
-                                                child: ClipRRect(
+                                child: Stack(
+                                  children: [
+                                    Obx(
+                                      () => profileController
+                                              .profilePicPath.value.isEmpty
+                                          ? Container(
+                                              height: 90.h,
+                                              width: 90.w,
+                                              decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(
-                                                              45.r)),
-                                                  child: Image.asset(
-                                                      'assets/images/png/profile-image-removebg-preview.png'),
-                                                ),
-                                              )
-                                            : profileController
-                                                            .dataFromImagePicker
-                                                            .value ==
-                                                        false &&
-                                                    profileController
-                                                        .profilePicPath
-                                                        .value
-                                                        .isNotEmpty
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      openFile(
-                                                        profileController
-                                                                .profilePicPath
-                                                                .value ??
-                                                            '',
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      height: 90.h,
-                                                      width: 90.w,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      45.r))),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    45.r)),
-                                                        child: Image.network(
-                                                          "${profileController.profilePicPath.value}",
-                                                          fit: BoxFit.cover,
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          20.r),
-                                                                ),
-                                                              ),
-                                                              child: Image.asset(
-                                                                  backgroundLogo),
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(
+                                                    Radius.circular(45.r),
+                                                  ),
+                                                  border: Border.all(
+                                                      color: borderColor)),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(45.r)),
+                                                child: Image.asset(
+                                                    'assets/images/png/profile-image-removebg-preview.png'),
+                                              ),
+                                            )
+                                          : profileController
+                                                          .dataFromImagePicker
+                                                          .value ==
+                                                      false &&
+                                                  profileController
+                                                      .profilePicPath
+                                                      .value
+                                                      .isNotEmpty
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    openFile(
+                                                      profileController
+                                                              .profilePicPath
+                                                              .value ??
+                                                          '',
+                                                    );
+                                                  },
+                                                  child: Container(
                                                     height: 90.h,
                                                     width: 90.w,
                                                     decoration: BoxDecoration(
@@ -346,326 +308,504 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           BorderRadius.all(
                                                               Radius.circular(
                                                                   45.r)),
-                                                      child: Image.file(
-                                                        File(
-                                                          profileController
-                                                              .profilePicPath
-                                                              .value,
-                                                        ),
-                                                        fit: BoxFit.fill,
+                                                      child: Image.network(
+                                                        "${profileController.profilePicPath.value}",
+                                                        fit: BoxFit.cover,
+                                                        errorBuilder: (context,
+                                                            error, stackTrace) {
+                                                          return Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    20.r),
+                                                              ),
+                                                            ),
+                                                            child: Image.asset(
+                                                                backgroundLogo),
+                                                          );
+                                                        },
                                                       ),
                                                     ),
                                                   ),
-                                      ),
-                                      Positioned(
-                                        bottom: 5.h,
-                                        right: 1.w,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: textColor,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(20))),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Icon(
-                                              Icons.camera_alt,
-                                              color: whiteColor,
-                                              size: 18,
-                                            ),
+                                                )
+                                              : Container(
+                                                  height: 90.h,
+                                                  width: 90.w,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  45.r))),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                45.r)),
+                                                    child: Image.file(
+                                                      File(
+                                                        profileController
+                                                            .profilePicPath
+                                                            .value,
+                                                      ),
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                ),
+                                    ),
+                                    Positioned(
+                                      bottom: 5.h,
+                                      right: 1.w,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: textColor,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Icon(
+                                            Icons.camera_alt,
+                                            color: whiteColor,
+                                            size: 18,
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Text(
-                                  completeYourProfile,
-                                  style: TextStyle(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: primaryColor),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => UserAssetsList(
-                                        profileController.allocatedAssetsList,
-                                        profileController));
-                                  },
-                                  child: Container(
-                                    width: 100.w,
-                                    height: 30.h,
-                                    decoration: BoxDecoration(
-                                      color: primaryButtonColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8.r),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Your Assets',
-                                        style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w500,
-                                            color: whiteColor),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                SizedBox(height: 15.h),
-                                CustomTextField(
-                                  controller: profileController
-                                      .nameTextEditingController.value,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  data: name,
-                                  hintText: name,
-                                ),
-                                SizedBox(height: 15.h),
-                                CustomTextField(
-                                  controller: profileController
-                                      .emailTextEditingController.value,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  keyboardType: TextInputType.emailAddress,
-                                  data: email,
-                                  hintText: email,
-                                ),
-                                SizedBox(height: 15.h),
-                                CustomTextField(
-                                  controller: profileController
-                                      .mobileTextEditingController.value,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 10,
-                                  data: mobileNumber,
-                                  hintText: mobileNumber,
-                                ),
-                                SizedBox(height: 15.h),
-                                Obx(
-                                  () => CustomTextField(
-                                    controller: profileController
-                                        .departmentTextEditingController.value,
-                                    textCapitalization:
-                                        TextCapitalization.sentences,
-                                    enable: false,
-                                    data: departmentName,
-                                    hintText: departmentName,
-                                  ),
-                                ),
-                                SizedBox(height: 15.h),
-                                Obx(
-                                  () => CustomTextField(
-                                    controller: userPageControlelr
-                                        .roleTextDateController.value,
-                                    textCapitalization:
-                                        TextCapitalization.sentences,
-                                    enable: false,
-                                    data: role,
-                                    hintText: role,
-                                  ),
-                                ),
-                                SizedBox(height: 15.h),
-                                Obx(
-                                  () => CustomTextField(
-                                    controller: profileController
-                                        .genderDateController.value,
-                                    textCapitalization:
-                                        TextCapitalization.sentences,
-                                    enable: true,
-                                    data: gender,
-                                    hintText: gender,
-                                  ),
-                                ),
-                                SizedBox(height: 15.h),
-                                Obx(
-                                  () => CustomTextField(
-                                    controller: profileController
-                                        .dobTextEditingController.value,
-                                    textCapitalization:
-                                        TextCapitalization.sentences,
-                                    readonly: true,
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.all(9.0),
-                                      child: Image.asset(
-                                        'assets/images/png/callender.png',
-                                        color: secondaryColor,
-                                        height: 10.h,
-                                      ),
-                                    ),
-                                    data: dob,
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                          await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime(1950),
-                                        lastDate: DateTime(2100),
-                                      );
-
-                                      if (pickedDate != null) {
-                                        String formattedDate =
-                                            DateFormat('dd-MM-yyyy')
-                                                .format(pickedDate);
-                                        profileController
-                                            .dobTextEditingController
-                                            .value
-                                            .text = formattedDate;
-                                      }
-                                    },
-                                    hintText: dateFormate,
-                                  ),
-                                ),
-                                SizedBox(height: 15.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Anniversary Date',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 5.h),
-                                Obx(
-                                  () => CustomTextField(
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Text(
+                                completeYourProfile,
+                                style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: primaryColor),
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => UserAssetsList(
+                                      profileController.allocatedAssetsList,
+                                      profileController));
+                                },
+                                child: Container(
+                                  width: 100.w,
+                                  height: 30.h,
+                                  decoration: BoxDecoration(
+                                    color: primaryButtonColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.r),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Your Assets',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: whiteColor),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              SizedBox(height: 15.h),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Name',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  CustomTextField(
                                     controller: profileController
-                                        .anniversaryDateController.value,
+                                        .nameTextEditingController.value,
                                     textCapitalization:
                                         TextCapitalization.sentences,
-                                    readonly: true,
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.all(9.0),
-                                      child: Image.asset(
-                                        'assets/images/png/anniversary_logo.png',
-                                        height: 10.h,
+                                    data: name,
+                                    hintText: name,
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Email',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  CustomTextField(
+                                    controller: profileController
+                                        .emailTextEditingController.value,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
+                                    keyboardType: TextInputType.emailAddress,
+                                    data: email,
+                                    hintText: email,
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Mobile',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  CustomTextField(
+                                    controller: profileController
+                                        .mobileTextEditingController.value,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 10,
+                                    data: 'Phone',
+                                    hintText: mobileNumber,
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Department',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Obx(
+                                    () => CustomTextField(
+                                      controller: profileController
+                                          .departmentTextEditingController
+                                          .value,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      enable: false,
+                                      data: departmentName,
+                                      hintText: departmentName,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Role',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Obx(
+                                    () => CustomTextField(
+                                      controller: userPageControlelr
+                                          .roleTextDateController.value,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      enable: false,
+                                      data: role,
+                                      hintText: role,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Gender',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Obx(
+                                    () => DropdownButtonHideUnderline(
+                                      child: DropdownButton2<String>(
+                                        isExpanded: true,
+                                        items: profileController.genderList
+                                            .map((String? item) {
+                                          return DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item ?? "",
+                                              style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                fontFamily: 'Roboto',
+                                                color: darkGreyColor,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        value: profileController
+                                                .selectedGender!.value.isEmpty
+                                            ? null
+                                            : profileController
+                                                .selectedGender?.value,
+                                        onChanged: (String? value) {
+                                          profileController.selectedGender
+                                              ?.value = value ?? '';
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 50,
+                                          width: double.infinity,
+                                          padding: EdgeInsets.only(
+                                              left: 12.w, right: 1),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12.r),
+                                            border: Border.all(
+                                                color: lightBorderColor),
+                                            color: whiteColor,
+                                          ),
+                                        ),
+                                        hint: Text(
+                                          'Select Gender',
+                                          style: TextStyle(
+                                            decoration: TextDecoration.none,
+                                            fontFamily: 'Roboto',
+                                            color: darkGreyColor,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        iconStyleData: IconStyleData(
+                                          icon: Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 8.w),
+                                            child: Image.asset(
+                                              'assets/images/png/Vector 3.png',
+                                              color: secondaryColor,
+                                              height: 8.h,
+                                            ),
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: lightGreyColor,
+                                          iconDisabledColor: lightGreyColor,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200.h,
+                                          width: 330.w,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.r),
+                                              color: whiteColor,
+                                              border: Border.all(
+                                                  color: lightBorderColor)),
+                                          offset: const Offset(0, 0),
+                                          scrollbarTheme: ScrollbarThemeData(
+                                            radius: const Radius.circular(40),
+                                            thickness:
+                                                WidgetStateProperty.all<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStateProperty.all<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData: MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 12.w, right: 12.w),
+                                        ),
                                       ),
                                     ),
-                                    data: "aniversary",
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                          await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime(1950),
-                                        lastDate: DateTime(2100),
-                                      );
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'DOB',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Obx(
+                                    () => CustomTextField(
+                                      controller: profileController
+                                          .dobTextEditingController.value,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      readonly: true,
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: Image.asset(
+                                          'assets/images/png/callender.png',
+                                          color: secondaryColor,
+                                          height: 10.h,
+                                        ),
+                                      ),
+                                      data: dob,
+                                      onTap: () async {
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1950),
+                                          lastDate: DateTime(2100),
+                                        );
 
-                                      if (pickedDate != null) {
-                                        String formattedDate =
-                                            DateFormat('dd-MM-yyyy')
-                                                .format(pickedDate);
-                                        profileController
-                                            .anniversaryDateController
-                                            .value
-                                            .text = formattedDate;
-                                      }
-                                    },
-                                    hintText: dateFormate,
-                                  ),
-                                ),
-                                SizedBox(height: 15.h),
-                                Obx(
-                                  () => CustomButton(
-                                    onPressed: () {
-                                      profileController.selectedGender?.value =
+                                        if (pickedDate != null) {
+                                          String formattedDate =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(pickedDate);
                                           profileController
-                                              .genderDateController.value.text
-                                              .toString();
-                                      // if (_formKey.currentState!.validate()) {
-                                      if (profileController
-                                              .isProfileUpdating.value !=
-                                          true) {
-                                        profileController.updateProfile(
-                                            profileController
-                                                .nameTextEditingController
-                                                .value
-                                                .value
-                                                .text,
-                                            profileController
-                                                .emailTextEditingController
-                                                .value
-                                                .text,
-                                            profileController
-                                                .mobileTextEditingController
-                                                .value
-                                                .text,
-                                            profileController
-                                                .selectedDepartMentListData
-                                                .value
-                                                ?.id,
-                                            userPageControlelr
-                                                .selectedRoleListData.value?.id,
-                                            profileController
-                                                .selectedGender?.value,
-                                            profileController
-                                                .dobTextEditingController
-                                                .value
-                                                .text,
-                                            profileController
-                                                    .selectedAnniversary
-                                                    ?.value ??
-                                                "",
-                                            profileController
-                                                .anniversaryDateController
-                                                .value
-                                                .text,
-                                            context);
-                                      }
-                                      // }
-                                    },
-                                    text: profileController
-                                                .isProfileUpdating.value ==
-                                            true
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: 30.h,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: whiteColor,
-                                                ),
-                                              ),
-                                              SizedBox(width: 10.w),
-                                              Text(
-                                                loading,
-                                                style: changeTextColor(
-                                                    rubikBlack, whiteColor),
-                                              ),
-                                            ],
-                                          )
-                                        : Text(
-                                            updateProfile,
-                                            style: changeTextColor(
-                                                rubikBlack, whiteColor),
-                                          ),
-                                    color: primaryColor,
-                                    height: 45.h,
-                                    width: double.infinity,
+                                              .dobTextEditingController
+                                              .value
+                                              .text = formattedDate;
+                                        }
+                                      },
+                                      hintText: dateFormate,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                              ],
-                            ),
+                                  SizedBox(height: 10.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Anniversary Date',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Obx(
+                                    () => CustomTextField(
+                                      controller: profileController
+                                          .anniversaryDateController.value,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      readonly: true,
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: Image.asset(
+                                          'assets/images/png/anniversary_logo.png',
+                                          height: 10.h,
+                                        ),
+                                      ),
+                                      data: "aniversary",
+                                      onTap: () async {
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1950),
+                                          lastDate: DateTime(2100),
+                                        );
+
+                                        if (pickedDate != null) {
+                                          String formattedDate =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(pickedDate);
+                                          profileController
+                                              .anniversaryDateController
+                                              .value
+                                              .text = formattedDate;
+                                        }
+                                      },
+                                      hintText: dateFormate,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Obx(
+                                    () => CustomButton(
+                                      onPressed: () {
+                                        // profileController
+                                        //     .selectedGender?.value =
+                                        // profileController
+                                        //     .genderDateController.value.text
+                                        //     .toString();
+                                        // if (_formKey.currentState!.validate()) {
+                                        if (profileController
+                                                .isProfileUpdating.value !=
+                                            true) {
+                                          profileController.updateProfile(
+                                              profileController
+                                                  .nameTextEditingController
+                                                  .value
+                                                  .value
+                                                  .text,
+                                              profileController
+                                                  .emailTextEditingController
+                                                  .value
+                                                  .text,
+                                              profileController
+                                                  .mobileTextEditingController
+                                                  .value
+                                                  .text,
+                                              profileController
+                                                  .departmentIdTextEditingController
+                                                  .value
+                                                  .text,
+                                              userPageControlelr
+                                                  .selectedRoleListData
+                                                  .value
+                                                  ?.id,
+                                              profileController
+                                                  .selectedGender?.value,
+                                              profileController
+                                                  .dobTextEditingController
+                                                  .value
+                                                  .text,
+                                              profileController
+                                                      .selectedAnniversary
+                                                      ?.value ??
+                                                  "",
+                                              profileController
+                                                  .anniversaryDateController
+                                                  .value
+                                                  .text,
+                                              context);
+                                        }
+                                        // }
+                                      },
+                                      text: profileController
+                                                  .isProfileUpdating.value ==
+                                              true
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: 30.h,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: whiteColor,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10.w),
+                                                Text(
+                                                  loading,
+                                                  style: changeTextColor(
+                                                      rubikBlack, whiteColor),
+                                                ),
+                                              ],
+                                            )
+                                          : Text(
+                                              updateProfile,
+                                              style: changeTextColor(
+                                                  rubikBlack, whiteColor),
+                                            ),
+                                      color: primaryColor,
+                                      height: 45.h,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

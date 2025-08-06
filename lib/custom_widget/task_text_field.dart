@@ -70,7 +70,6 @@ class _TaskCustomTextFieldState extends State<TaskCustomTextField> {
       valueListenable: widget.focusedIndexNotifier,
       builder: (context, focusedIndex, child) {
         final bool isFocused = focusedIndex == widget.index;
-
         return TextFormField(
           focusNode: _focusNode,
           keyboardType: widget.keyboardType,
@@ -82,8 +81,18 @@ class _TaskCustomTextFieldState extends State<TaskCustomTextField> {
           maxLength: widget.maxLength,
           obscureText: widget.obscureText ?? false,
           validator: (value) {
+            if (widget.data == "") {
+              return null;
+            }
             if (value == null || value.isEmpty) {
               return "Please Enter ${widget.data}";
+            }
+            if (widget.data == "Name") {
+              final String namePattern = r'^[a-zA-Z. ]+$';
+              final RegExp regex = RegExp(namePattern);
+              if (!regex.hasMatch(value)) {
+                return "Please Enter a Valid Name";
+              }
             }
             if (widget.data == "Email") {
               const String emailPattern =
@@ -91,6 +100,20 @@ class _TaskCustomTextFieldState extends State<TaskCustomTextField> {
               final RegExp regex = RegExp(emailPattern);
               if (!regex.hasMatch(value)) {
                 return "Please Enter a Valid Email";
+              }
+            }
+            if (widget.data == "Phone") {
+              final String phonePattern = r'^[0-9]+$';
+              final RegExp regex = RegExp(phonePattern);
+              if (!regex.hasMatch(value) && (widget.data?.length ?? 0) < 10) {
+                return "Please Enter a Valid Phone Number";
+              }
+            }
+            if (widget.data == "Name") {
+              final String phonePattern = r'^[0-9]+$';
+              final RegExp regex = RegExp(phonePattern);
+              if (!regex.hasMatch(value)) {
+                return "Please Enter a Valid Phone Number";
               }
             }
             return null;

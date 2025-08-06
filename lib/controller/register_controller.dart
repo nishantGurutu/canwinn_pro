@@ -42,7 +42,6 @@ class RegisterController extends GetxController {
 
   final LeadController leadController = Get.put(LeadController());
 
-  // Login function
   var isLoginLoading = false.obs;
   var loginModel = LoginModel().obs;
   Future<void> userLogin(
@@ -62,9 +61,6 @@ class RegisterController extends GetxController {
         appVersion: appVersion);
     if (result != null) {
       loginModel.value = result;
-      await leadController.statusListApi(status: '');
-      await leadController.sourceList(source: '');
-      // await LocationTrackerService().getCurrentLocation();
     } else {}
     isLoginLoading.value = false;
   }

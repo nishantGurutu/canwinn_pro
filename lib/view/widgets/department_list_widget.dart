@@ -65,8 +65,8 @@ class DepartmentList extends StatelessWidget {
             onSelected: (DepartmentListData? menu) {
               if (menu != null) {
                 profileController.selectedDepartMentListData.value = menu;
-                // taskController.responsiblePersonListApi(
-                //     profileController.selectedDepartMentListData.value?.id, "");
+                taskController.responsiblePersonListApi(
+                    profileController.selectedDepartMentListData.value?.id, "");
               }
             },
             dropdownMenuEntries: profileController.departmentDataList

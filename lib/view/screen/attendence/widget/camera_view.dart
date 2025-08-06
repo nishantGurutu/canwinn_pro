@@ -38,9 +38,6 @@ class _CameraViewState extends State<CameraView> {
   @override
   void initState() {
     super.initState();
-    print('address iue8 i8ue98 ${widget.latitude}');
-    print('address iue8 i8ue98 ${widget.longitude}');
-    print('address iue8 i8ue98 ${widget.address}');
     initializeCamera();
   }
 

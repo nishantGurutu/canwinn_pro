@@ -42,7 +42,6 @@ import 'package:task_management/view/screen/vehicleManagement.dart';
 import 'package:task_management/view/widgets/all_assets.dart';
 import 'package:task_management/view/widgets/notes_folder.dart';
 import 'package:task_management/view/widgets/select_user.dart';
-import 'package:task_management/view/widgets/stored_location_screen.dart';
 import '../screen/outscreen/hr_screen.dart';
 import '../screen/outscreen/security.dart';
 import 'add_assets.dart';

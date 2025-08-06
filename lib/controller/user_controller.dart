@@ -20,12 +20,11 @@ class UserPageControlelr extends GetxController {
     if (result != null) {
       userList.clear();
       userList.assignAll(result['data']);
+      userList.refresh();
     } else {}
     isUserRoleLoading.value = false;
   }
 
-  // ProfileController profileController = Get.put(ProfileController());
-  // ProfileController profileController = Get.find();
   var roleTextDateController = TextEditingController().obs;
   var roleListModel = RoleListModel().obs;
   Rx<RoleListData?> selectedRoleListData = Rx<RoleListData?>(null);
@@ -39,7 +38,9 @@ class UserPageControlelr extends GetxController {
       roleListModel.value = result;
       roleList.clear();
       roleList.assignAll(roleListModel.value.data!);
-
+      isRoleLoading.value = false;
+      isRoleLoading.refresh();
+      roleList.refresh();
       for (var role in roleList) {
         if (StorageHelper.getRole().toString() == role.id.toString()) {
           selectedRoleListData.value = role;
@@ -74,7 +75,7 @@ class UserPageControlelr extends GetxController {
         mobile, mobile2, password, conPassword, pickedFile, deptId, place);
     if (result) {
       Get.back();
-      userListApi();
+      await userListApi();
     } else {}
     isuserAdding.value = false;
   }
@@ -89,7 +90,7 @@ class UserPageControlelr extends GetxController {
     final result = await UserClassService().addRole(roleName, id);
     if (result) {
       Get.back();
-      roleListApi(
+      await roleListApi(
         id,
       );
     } else {}

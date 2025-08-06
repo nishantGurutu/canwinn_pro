@@ -82,10 +82,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
   late Animation<double> _animation;
   late AnimationController _animationController;
-  late TabController _tabController;
+  // late TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    // _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     apiCall(context);
     _animationController = AnimationController(
       vsync: this,
@@ -238,112 +238,71 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             _animationController.reverse();
           }
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Container(
-              //   color: whiteColor,
-              //   child: TabBar(
-              //     controller: _tabController,
-              //     isScrollable: false,
-              //     onTap: (value) {
-              //       homeController.isTabIndexSelected.value = value;
-              //       if (_animationController.isCompleted) {
-              //         _animationController.reverse();
-              //       }
-              //     },
-              //     indicatorSize: TabBarIndicatorSize.tab,
-              //     tabs: [
-              //       Tab(
-              //         icon: Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             SvgPicture.asset(
-              //                 'assets/image/svg/assignment_late.svg'),
-              //             SizedBox(width: 5.w),
-              //             Text(
-              //               'Task',
-              //               style: TextStyle(
-              //                   fontSize: 16, fontWeight: FontWeight.w500),
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              //       Tab(
-              //         icon: Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             SvgPicture.asset('assets/image/svg/done_all (1).svg'),
-              //             SizedBox(width: 5.w),
-              //             Text(
-              //               'Lead',
-              //               style: TextStyle(
-              //                   fontSize: 16, fontWeight: FontWeight.w500),
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // Expanded(
-              //   child: TabBarView(
-              //     controller: _tabController,
-              //     children: [
-              //       _buildHomeContent(),
-              //       _buildHomeLeadContent(),
-              //     ],
-              //   ),
-              // ),
-              _buildHomeContent(),
-            ],
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Container(
+                //   color: whiteColor,
+                //   child: TabBar(
+                //     controller: _tabController,
+                //     isScrollable: false,
+                //     onTap: (value) {
+                //       homeController.isTabIndexSelected.value = value;
+                //       if (_animationController.isCompleted) {
+                //         _animationController.reverse();
+                //       }
+                //     },
+                //     indicatorSize: TabBarIndicatorSize.tab,
+                //     tabs: [
+                //       Tab(
+                //         icon: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             SvgPicture.asset(
+                //                 'assets/image/svg/assignment_late.svg'),
+                //             SizedBox(width: 5.w),
+                //             Text(
+                //               'Task',
+                //               style: TextStyle(
+                //                   fontSize: 16, fontWeight: FontWeight.w500),
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //       Tab(
+                //         icon: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             SvgPicture.asset('assets/image/svg/done_all (1).svg'),
+                //             SizedBox(width: 5.w),
+                //             Text(
+                //               'Lead',
+                //               style: TextStyle(
+                //                   fontSize: 16, fontWeight: FontWeight.w500),
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // Expanded(
+                //   child: TabBarView(
+                //     controller: _tabController,
+                //     children: [
+                //       _buildHomeLeadContent(),
+                //     ],
+                //   ),
+                // ),
+                _buildHomeContent(),
+              ],
+            ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
-          // Bubble(
-          //   title: "Add Visit/Meeting",
-          //   iconColor: Colors.white,
-          //   bubbleColor: primaryColor,
-          //   icon: Icons.add,
-          //   titleStyle: TextStyle(fontSize: 16, color: Colors.white),
-          //   onPress: () {
-          //     Get.to(() => MeetingScreens(
-          //           mergedPeopleList: [],
-          //           leadId: '',
-          //         ));
-          //     _animationController.reverse();
-          //   },
-          // ),
-          // Bubble(
-          //   title: "Add Followup",
-          //   iconColor: Colors.white,
-          //   bubbleColor: primaryColor,
-          //   icon: Icons.add,
-          //   titleStyle: TextStyle(fontSize: 16, color: Colors.white),
-          //   onPress: () {
-          //     Get.to(
-          //       () => FollowUpsScreen(
-          //         leadId: '',
-          //         phoneNumber: '',
-          //       ),
-          //     );
-          //     _animationController.reverse();
-          //   },
-          // ),
-          // Bubble(
-          //   title: "Add Leads",
-          //   iconColor: Colors.white,
-          //   bubbleColor: primaryColor,
-          //   icon: Icons.list,
-          //   titleStyle: TextStyle(fontSize: 16, color: Colors.white),
-          //   onPress: () async {
-          //     Get.to(() => AddLeads());
-
-          //     await _animationController.reverse();
-          //   },
-          // ),
           Bubble(
             title: "Calender",
             iconColor: Colors.white,
@@ -433,8 +392,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         height: 10.h,
                       ),
                       summary(),
-                      if (StorageHelper.getType() == 1) SizedBox(height: 10.h),
-                      if (StorageHelper.getType() == 1)
+                      if (StorageHelper.getAssignedDept() != null)
+                        SizedBox(height: 10.h),
+                      if (homeController.userReportDataList.isNotEmpty)
                         AdminUserList(
                           (homeController.homeDataModel.value?.users ?? []).obs,
                           taskController,
@@ -1665,7 +1625,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
           SizedBox(height: 8.h),
-          Flexible(
+          Expanded(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14.r),
@@ -1680,53 +1640,78 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: leadData?.pinnedNotes?.length,
-                itemBuilder: (context, index) {
-                  var note = leadData?.pinnedNotes?[index];
-                  quill.QuillController? quillController;
-                  return InkWell(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) => Padding(
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          child: viewNotesBottomSheet(context, note),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 8.w),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                      decoration: BoxDecoration(
-                        color: pinnedColorList[index % pinnedColorList.length],
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
+              child: (leadData?.pinnedNotes ?? []).isEmpty
+                  ? Center(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Image.asset(
+                            'assets/image/png/pinned 1 (1).png',
+                            height: 80.h,
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           Text(
-                            '${leadData?.pinnedNotes?[index].title ?? ""}',
+                            'No pinned notes available',
                             style: TextStyle(
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              color: textColor,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          )
                         ],
                       ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: leadData?.pinnedNotes?.length,
+                      itemBuilder: (context, index) {
+                        var note = leadData?.pinnedNotes?[index];
+                        quill.QuillController? quillController;
+                        return InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) => Padding(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                ),
+                                child: viewNotesBottomSheet(context, note),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 6.h, horizontal: 8.w),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8.w, vertical: 5.h),
+                            decoration: BoxDecoration(
+                              color: pinnedColorList[
+                                  index % pinnedColorList.length],
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${leadData?.pinnedNotes?[index].title ?? ""}',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ),
         ],
@@ -1758,8 +1743,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
           SizedBox(height: 8.h),
-          Flexible(
+          Expanded(
             child: Container(
+              width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14.r),
                 border: Border.all(color: boxBorderColor),
@@ -1774,67 +1760,92 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ],
               ),
               child: Obx(
-                () => ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: homePinnedNotes.length,
-                  itemBuilder: (context, index) {
-                    var note = homePinnedNotes[index];
-                    quill.QuillController? quillController;
-                    return InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => Padding(
-                            padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                            ),
-                            child: viewNotesBottomSheet(context, note),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: 6.h, horizontal: 8.w),
-                        padding: EdgeInsets.all(12.sp),
-                        decoration: BoxDecoration(
-                          color:
-                              pinnedColorList[index % pinnedColorList.length],
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
+                () => homePinnedNotes.isEmpty
+                    ? Center(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              '${homePinnedNotes[index].title ?? ''}',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            Image.asset(
+                              'assets/image/png/pinned 1 (1).png',
+                              height: 80.h,
                             ),
-                            SizedBox(height: 4.h),
-                            if (quillController != null)
-                              quill.QuillEditor(
-                                controller: quillController,
-                                focusNode: FocusNode(),
-                                scrollController: ScrollController(),
-                                config: quill.QuillEditorConfig(
-                                  enableInteractiveSelection: false,
-                                  showCursor: false,
-                                  expands: false,
-                                  padding: EdgeInsets.zero,
-                                  scrollable: true,
-                                ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              'No pinned notes available',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: textColor,
                               ),
+                            )
                           ],
                         ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: homePinnedNotes.length,
+                        itemBuilder: (context, index) {
+                          var note = homePinnedNotes[index];
+                          quill.QuillController? quillController;
+                          return InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: viewNotesBottomSheet(context, note),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 6.h, horizontal: 8.w),
+                              padding: EdgeInsets.all(12.sp),
+                              decoration: BoxDecoration(
+                                color: pinnedColorList[
+                                    index % pinnedColorList.length],
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${homePinnedNotes[index].title ?? ''}',
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  if (quillController != null)
+                                    quill.QuillEditor(
+                                      controller: quillController,
+                                      focusNode: FocusNode(),
+                                      scrollController: ScrollController(),
+                                      config: quill.QuillEditorConfig(
+                                        enableInteractiveSelection: false,
+                                        showCursor: false,
+                                        expands: false,
+                                        padding: EdgeInsets.zero,
+                                        scrollable: true,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ),
           ),

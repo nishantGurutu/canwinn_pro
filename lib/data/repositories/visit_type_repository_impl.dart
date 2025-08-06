@@ -1,3 +1,4 @@
+import 'package:task_management/api/api_constant.dart';
 import 'package:task_management/data/model/visit_type_model.dart';
 import 'package:task_management/data/network/base_api_services.dart';
 import 'package:task_management/data/network/network_api_services.dart';
@@ -8,7 +9,7 @@ class VisitTypeRepository {
   Future<List<VisitType>> fetchVisitTypes() async {
     try {
       final response = await _apiServices.getGetApiResponse(
-        "https://taskmaster.electionmaster.in/public/api/visit-type-list",
+        ApiConstant.baseUrl + ApiConstant.visit_type_list,
       );
 
       if (response['status'] == true && response['data'] != null) {

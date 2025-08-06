@@ -137,19 +137,20 @@ class _NewGroupState extends State<NewGroup> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          shape: CircleBorder(),
-          onPressed: () {
-            if (selectedList.isNotEmpty) {
-              Get.to(NewGroupSecond(selectedList));
-            } else {
-              CustomToast().showCustomToast('Please select person.');
-            }
-          },
-          backgroundColor: primaryColor,
-          child: Icon(
-            Icons.arrow_right_alt,
-            color: whiteColor,
-          )),
+        shape: CircleBorder(),
+        onPressed: () {
+          if (selectedList.isNotEmpty) {
+            Get.to(NewGroupSecond(selectedList));
+          } else {
+            CustomToast().showCustomToast('Please select person.');
+          }
+        },
+        backgroundColor: primaryColor,
+        child: Icon(
+          Icons.arrow_right_alt,
+          color: whiteColor,
+        ),
+      ),
     );
   }
 }

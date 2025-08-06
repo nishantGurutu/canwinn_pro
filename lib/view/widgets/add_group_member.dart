@@ -74,223 +74,233 @@ class _AddGroupMemberState extends State<AddGroupMember> {
             : Container(
                 width: double.infinity,
                 color: backgroundColor,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            if (chatController.isGroupUserAdding.value ==
-                                false) {
-                              if (chatController.selectedMemberId.isNotEmpty) {
-                                chatController.addGroupUser(
-                                  widget.chatId,
-                                  chatController.selectedMemberId,
-                                );
-                              } else {
-                                CustomToast()
-                                    .showCustomToast('Please select member.');
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              if (chatController.isGroupUserAdding.value ==
+                                  false) {
+                                if (chatController
+                                    .selectedMemberId.isNotEmpty) {
+                                  chatController.addGroupUser(
+                                    widget.chatId,
+                                    chatController.selectedMemberId,
+                                  );
+                                } else {
+                                  CustomToast()
+                                      .showCustomToast('Please select member.');
+                                }
                               }
-                            }
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.w),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: primaryColor),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.r),
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10.w),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: primaryColor),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.r),
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w, vertical: 5.h),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 20.h,
-                                      width: 20.w,
-                                      decoration: BoxDecoration(
-                                        color: primaryColor,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10.r),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 5.h),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: 20.h,
+                                        width: 20.w,
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: whiteColor,
+                                          size: 18.h,
                                         ),
                                       ),
-                                      child: Icon(
-                                        Icons.add,
-                                        color: whiteColor,
-                                        size: 18.h,
+                                      SizedBox(
+                                        width: 8.w,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 8.w,
-                                    ),
-                                    Text(
-                                      "Add Member",
-                                      style: changeTextColor(
-                                          robotoRegular, primaryColor),
-                                    )
-                                  ],
+                                      Text(
+                                        "Add Member",
+                                        style: changeTextColor(
+                                            robotoRegular, primaryColor),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: taskController.responsiblePersonList.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  if (chatController.selectedMemberId.contains(
-                                      taskController
-                                          .responsiblePersonList[index].id)) {
-                                    taskController.selectedLongPress[index] =
-                                        false;
-                                    chatController.selectedMemberId.remove(
-                                        taskController
-                                            .responsiblePersonList[index].id);
-                                  } else {
-                                    taskController.selectedLongPress[index] =
-                                        true;
-                                    chatController.selectedMemberId.add(
-                                        taskController
-                                            .responsiblePersonList[index].id);
-                                  }
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 10.w, top: 10.h, right: 10.w),
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Color(0xffF4E2FF).withOpacity(0.50),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8.r),
+                        ],
+                      ),
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount:
+                              taskController.responsiblePersonList.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (chatController.selectedMemberId
+                                        .contains(taskController
+                                            .responsiblePersonList[index].id)) {
+                                      taskController.selectedLongPress[index] =
+                                          false;
+                                      chatController.selectedMemberId.remove(
+                                          taskController
+                                              .responsiblePersonList[index].id);
+                                    } else {
+                                      taskController.selectedLongPress[index] =
+                                          true;
+                                      chatController.selectedMemberId.add(
+                                          taskController
+                                              .responsiblePersonList[index].id);
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10.w, top: 10.h, right: 10.w),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Color(0xffF4E2FF).withOpacity(0.50),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(8.r),
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8.w, vertical: 10.h),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 45,
-                                            width: 45,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xffF4E2FF),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(22.5),
-                                              ),
-                                            ),
-                                            child: InkWell(
-                                              onTap: () {
-                                                openFile(
-                                                  taskController
-                                                          .responsiblePersonList[
-                                                              index]
-                                                          .image ??
-                                                      "",
-                                                );
-                                              },
-                                              child: ClipRRect(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 8.w, vertical: 10.h),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              height: 45,
+                                              width: 45,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xffF4E2FF),
                                                 borderRadius: BorderRadius.all(
                                                   Radius.circular(22.5),
                                                 ),
-                                                child: Image.network(
-                                                  taskController
-                                                          .responsiblePersonList[
-                                                              index]
-                                                          .image ??
-                                                      "",
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (context, error,
-                                                      stackTrace) {
-                                                    return Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                          Radius.circular(20.r),
+                                              ),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  openFile(
+                                                    taskController
+                                                            .responsiblePersonList[
+                                                                index]
+                                                            .image ??
+                                                        "",
+                                                  );
+                                                },
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(22.5),
+                                                  ),
+                                                  child: Image.network(
+                                                    taskController
+                                                            .responsiblePersonList[
+                                                                index]
+                                                            .image ??
+                                                        "",
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                            Radius.circular(
+                                                                20.r),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      child: Image.asset(
-                                                          backgroundLogo),
-                                                    );
-                                                  },
+                                                        child: Image.asset(
+                                                            backgroundLogo),
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${taskController.responsiblePersonList[index].name}',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: textColor),
-                                              ),
-                                              Text(
-                                                taskController
-                                                            .responsiblePersonList[
-                                                                index]
-                                                            .phone ==
-                                                        null
-                                                    ? ""
-                                                    : '${taskController.responsiblePersonList[index].phone}',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Color(0xff262626)
-                                                        .withOpacity(0.38)),
-                                              )
-                                            ],
-                                          ),
-                                        ],
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${taskController.responsiblePersonList[index].name}',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: textColor),
+                                                ),
+                                                Text(
+                                                  taskController
+                                                              .responsiblePersonList[
+                                                                  index]
+                                                              .phone ==
+                                                          null
+                                                      ? ""
+                                                      : '${taskController.responsiblePersonList[index].phone}',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Color(0xff262626)
+                                                          .withOpacity(0.38)),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Obx(
-                                () => taskController.selectedLongPress[index] ==
-                                        true
-                                    ? Positioned(
-                                        top: 35.h,
-                                        right: 25.w,
-                                        child: Icon(
-                                          Icons.done,
-                                          color: primaryColor,
-                                          size: 20,
-                                        ),
-                                      )
-                                    : SizedBox(),
-                              ),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
-                            height: 8.h,
-                          );
-                        },
+                                Obx(
+                                  () =>
+                                      taskController.selectedLongPress[index] ==
+                                              true
+                                          ? Positioned(
+                                              top: 35.h,
+                                              right: 25.w,
+                                              child: Icon(
+                                                Icons.done,
+                                                color: primaryColor,
+                                                size: 20,
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              height: 8.h,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
       ),

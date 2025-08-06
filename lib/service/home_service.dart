@@ -13,7 +13,6 @@ class HomeService {
       var url = "${ApiConstant.baseUrl + ApiConstant.homeData}?user_id=$id";
       print('user id in home $id');
       print('user id in home 2 $url');
-      print('user id in home 2 $token');
       _dio.options.headers["Authorization"] = "Bearer $token";
       final response = await _dio.get(
         url,
@@ -117,11 +116,9 @@ class HomeService {
       dynamic id) async {
     try {
       var token = StorageHelper.getToken();
+      print('Responsible person API URL: 873ye8738 $id');
       var url =
           "${ApiConstant.baseUrl + ApiConstant.responsiblePersonList}?dept_id=$id";
-
-      print('Responsible person API URL: $url');
-      print('Responsible person API URL: $id');
 
       _dio.options.headers["Authorization"] = "Bearer $token";
 

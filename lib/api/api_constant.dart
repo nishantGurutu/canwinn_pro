@@ -1,6 +1,8 @@
 class ApiConstant {
-  static const String baseUrl = "https://canwinnpro.canwinn.in/public/api/";
-  // "https://taskmaster.electionmaster.in/public/api/";
+  static const String baseUrl =
+      // "https://taskmaster.electionmaster.in/public/api/";
+      // "https://onesuite.winntus.in/public/api/";
+      "https://canwinnpro.canwinn.in/public/api/"; //live
   static const String register = "auth/register";
   static const String login = "auth/login";
   static const String logout = "logout";
@@ -196,4 +198,48 @@ class ApiConstant {
   static const String change_meeting_status = "change-lead-meetings-status";
   static const String save_user_locations_json =
       "auth/save-user-locations-json";
+  static const String lead_meetings_list = "lead-meetings-list";
+  static const String change_lead_meeting_status =
+      "change-lead-meetings-status";
+  static const String store_lead_meetings = "store-lead-meetings";
+  static const String store_follow_ups = "store-follow-ups";
+  static const String update_lead_people = "update-lead-people";
+  static const String download_quotation = "download-quotation";
+  static const String lead_discussion_list = "lead-discussion-list";
+  static const String send_lead_discussion = "send-lead-discussion";
+  static const String lead_notes_important = "lead-notes-important";
+  static const String lead_notes_list = "lead-notes-list";
+  static const String store_lead_notes = "store-lead-notes";
+  static const String lead_contacts_list = "lead-contacts-list";
+  static const String list_quotation = "list-quotation";
+  static const String store_lead_contacts = "store-lead-contacts";
+  static const String change_lead_status = "change-lead-status";
+  static const String store_quotation = "store-quotation";
+  static const String products_list = "products-list";
+  static const String store_visit = "store-visit";
+  static const String update_lead_details = "update-lead-details";
+  static const String get_lead_document = "get-lead-document";
+  static const String upload_lead_document = "upload-lead-document";
+  static const String get_document_types = "get-document-types";
+  static const String assign_followup = "assign-followup";
+  static const String update_leads = "update-leads";
+  static const String source_list = "source-list";
+  static const String lead_status_list = "lead-status-list";
+  static const String lead_details = "lead-details";
+  static const String home_lead = "home-lead";
+  static const String get_user_report = "get-user-report";
+  static const String delete_lead = "delete-lead";
+  static const String lead_followup_list = "lead-followup-list";
+  static const String followup_type_list = "followup-type-list";
+  static const String visit_list = "visit-list";
+  static const String visit_type_list = "visit-type-list";
+  static const String approve_lead_document = "approve-lead-document";
+  static const String added_document_lead_list = "added-document-lead-list";
+  static const String manager_approve_lead_document =
+      "manager-approve-lead-document";
+  static const String branchhead_approve_lead_document =
+      "branchhead-approve-lead-document";
+  static const String download_employee_report = "download-employee-report";
+  static const String change_lead_followup_status =
+      "change-lead-followup-status";
 }

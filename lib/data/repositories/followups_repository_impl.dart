@@ -1,5 +1,5 @@
+import 'package:task_management/api/api_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
-import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/data/network/base_api_services.dart';
 import 'package:task_management/data/network/network_api_services.dart';
 import 'package:task_management/domain/repositories/followups_repository.dart';
@@ -28,7 +28,7 @@ class FollowupsRepositoryImpl implements FollowupsRepository {
       });
 
       final response = await _apiService.getMultipartPostApiResponse(
-        "https://taskmaster.electionmaster.in/public/api/store-follow-ups",
+        "${ApiConstant.baseUrl}${ApiConstant.store_follow_ups}",
         formData,
       );
 
@@ -52,15 +52,13 @@ class FollowupsRepositoryImpl implements FollowupsRepository {
         'status': status.toString(),
         'remarks': remarks,
       });
-      print('ui738t874y8r73 837r874gt87 $id');
-      print('ui738t874y8r73 837r874gt87 $status');
-      print('ui738t874y8r73 837r874gt87 $remark');
+
       final response = await _apiService.getMultipartPostApiResponse(
-        "https://taskmaster.electionmaster.in/public/api/change-lead-followup-status",
+        ApiConstant.baseUrl + ApiConstant.change_lead_followup_status,
         formData,
       );
 
-      CustomToast().showCustomToast(response['message']);
+      CustomToast().showCustomToast(response['message'] ?? 'Status updated');
       return true;
     } catch (e) {
       CustomToast().showCustomToast("Status update failed: $e");

@@ -79,6 +79,10 @@ class HomeController extends GetxController {
     final result = await LeadService().leadHomeApi();
     if (result != null) {
       homeLeadData.value = result.data;
+      isLeadDetailsLoading.value = false;
+      isLeadDetailsLoading.refresh();
+      homeLeadData.refresh();
+
       print("ksiudyiue eidueoi");
     } else {}
     isLeadDetailsLoading.value = false;
@@ -91,6 +95,8 @@ class HomeController extends GetxController {
     final result = await LeadService().userleadHomeApi(homeAdminUserId);
     if (result != null) {
       userhomeLeadData.value = result.data;
+      isLeadDetailsLoading.value = false;
+      userhomeLeadData.refresh();
       print("ksiudyiue eidueoi");
     } else {}
     isLeadDetailsLoading.value = false;
@@ -120,6 +126,7 @@ class HomeController extends GetxController {
         onTimemsg.value = result['data']['message'];
         onTimemsgUrl.value = result['data']['link'];
       }
+      onTimemsgUrl.refresh();
 
       if (StorageHelper.getOnetimeMsg().toString().toLowerCase() !=
           onTimemsg.value.toString().toLowerCase()) {
@@ -173,6 +180,7 @@ class HomeController extends GetxController {
       selectedResponsiblePersonData.value = null;
       responsiblePersonListModel.value = result;
       isResponsiblePersonLoading.value = false;
+      isResponsiblePersonLoading.refresh();
       responsiblePersonList.clear();
       if (fromPage.toString() == "add_meeting") {
         responsiblePersonList.add(
@@ -186,6 +194,7 @@ class HomeController extends GetxController {
       for (var person in responsiblePersonListModel.value.data!) {
         responsiblePersonList.add(person);
       }
+      responsiblePersonList.refresh();
       selectedSharedListPerson
           .addAll(List<bool>.filled(responsiblePersonList.length, false));
       responsiblePersonSelectedCheckBox

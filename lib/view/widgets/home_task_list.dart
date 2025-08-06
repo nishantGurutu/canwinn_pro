@@ -16,111 +16,133 @@ class HomeTaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => ListView.builder(
-        itemCount: homeTaskList.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 8.w,
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 4.h,
-                ),
-                InkWell(
-                  onLongPress: () {},
-                  onTap: () {
-                    Get.to(TaskDetails(
-                        taskId: homeTaskList[index].taskId,
-                        assignedStatus:
-                            taskController.selectedAssignedTask.value,
-                        initialIndex: 2));
-                  },
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 0.w, vertical: 0.h),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8.r)),
+      () => homeTaskList.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/image/png/chat 1.png',
+                    height: 80.h,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    'No Task discussion data',
+                    style:
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: homeTaskList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.w,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 4.h,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 40.h,
-                            width: 40.h,
+                      InkWell(
+                        onLongPress: () {},
+                        onTap: () {
+                          Get.to(TaskDetails(
+                              taskId: homeTaskList[index].taskId,
+                              assignedStatus:
+                                  taskController.selectedAssignedTask.value,
+                              initialIndex: 2));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 0.w, vertical: 0.h),
+                          child: Container(
+                            width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Color(0xffF4E2FF),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20.h)),
+                                  BorderRadius.all(Radius.circular(8.r)),
                             ),
-                            child: Center(
-                              child: Text(
-                                '${CustomTextConvert().getNameChar(homeTaskList[index].senderName)}',
-                                style: TextStyle(
-                                  color: whiteColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  width: 300.w,
-                                  child: Text(
-                                    '${homeTaskList[index].taskTitle ?? ""}',
-                                    style: heading6,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  height: 40.h,
+                                  width: 40.h,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF4E2FF),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.h)),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${CustomTextConvert().getNameChar(homeTaskList[index].senderName)}',
+                                      style: TextStyle(
+                                        color: whiteColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: 10.w),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                          '${homeTaskList[index].message ?? ""}',
+                                SizedBox(width: 8.w),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 300.w,
+                                        child: Text(
+                                          '${homeTaskList[index].taskTitle ?? ""}',
+                                          style: heading6,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: changeTextColor(
-                                              heading10, timeColor)),
-                                    ),
-                                    Text(
-                                        '${homeTaskList[index].messageDate.split(" ").last}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: changeTextColor(
-                                            heading10, timeColor)),
-                                  ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 10.w),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                                '${homeTaskList[index].message ?? ""}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: changeTextColor(
+                                                    heading10, timeColor)),
+                                          ),
+                                          Text(
+                                              '${homeTaskList[index].messageDate.split(" ").last}',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: changeTextColor(
+                                                  heading10, timeColor)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      homeTaskList.length - 1 == index
+                          ? SizedBox(
+                              height: 2.h,
+                            )
+                          : Divider(
+                              thickness: 1,
+                            ),
+                    ],
                   ),
-                ),
-                homeTaskList.length - 1 == index
-                    ? SizedBox(
-                        height: 2.h,
-                      )
-                    : Divider(
-                        thickness: 1,
-                      ),
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

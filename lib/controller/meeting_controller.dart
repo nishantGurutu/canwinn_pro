@@ -7,13 +7,11 @@ import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/task_text_field.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
-import 'package:task_management/helper/db_helper.dart';
 import 'package:task_management/model/meeting_attendence_model.dart';
 import 'package:task_management/model/meeting_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/service/meeting_service.dart';
 import 'package:task_management/view/widgets/attendent_user_botomsheet.dart';
-import 'package:task_management/view/widgets/video_call_page.dart';
 
 class MeetingController extends GetxController {
   var isMeetingAdding = false.obs;

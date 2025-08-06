@@ -28,184 +28,187 @@ class ToAssignUserList extends StatelessWidget {
       ),
       width: double.infinity,
       height: 600.h,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 15.h,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  assignedTaskText2,
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            TextFormField(
-              controller: searchAssignController,
-              onChanged: (value) {
-                filteredList.value = homeController.responsiblePersonList
-                    .where((person) =>
-                        person.name
-                            ?.toLowerCase()
-                            .contains(value.toLowerCase()) ??
-                        false)
-                    .toList();
-              },
-              decoration: InputDecoration(
-                hintText: 'Search here...',
-                fillColor: Colors.white,
-                filled: true,
-                labelStyle: TextStyle(
-                  color: secondaryColor,
-                ),
-                counterText: "",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: secondaryColor),
-                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: secondaryColor),
-                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: secondaryColor),
-                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 15.h,
               ),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Expanded(
-              child: Obx(
-                () => ListView.separated(
-                  itemCount: filteredList.length,
-                  reverse: false,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 50.h,
-                          width: 50.w,
-                          decoration: BoxDecoration(
-                            color: thirdPrimryColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25.r),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    assignedTaskText2,
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              TextFormField(
+                controller: searchAssignController,
+                onChanged: (value) {
+                  filteredList.value = homeController.responsiblePersonList
+                      .where((person) =>
+                          person.name
+                              ?.toLowerCase()
+                              .contains(value.toLowerCase()) ??
+                          false)
+                      .toList();
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search here...',
+                  fillColor: Colors.white,
+                  filled: true,
+                  labelStyle: TextStyle(
+                    color: secondaryColor,
+                  ),
+                  counterText: "",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: secondaryColor),
+                    borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: secondaryColor),
+                    borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: secondaryColor),
+                    borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                ),
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              Expanded(
+                child: Obx(
+                  () => ListView.separated(
+                    itemCount: filteredList.length,
+                    reverse: false,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 50.h,
+                            width: 50.w,
+                            decoration: BoxDecoration(
+                              color: thirdPrimryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.r),
+                              ),
                             ),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25.r),
-                            ),
-                            child: Center(
-                              child: Image.network(
-                                '${filteredList[index].image ?? ""}',
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    'assets/images/png/group_icon.png',
-                                    height: 40.h,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.r),
+                              ),
+                              child: Center(
+                                child: Image.network(
+                                  '${filteredList[index].image ?? ""}',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/images/png/group_icon.png',
+                                      height: 40.h,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${filteredList[index].name}",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${filteredList[index].name}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            StorageHelper.getId() == filteredList[index].id
-                                ? Text(
-                                    "Self Assign",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: secondaryColor),
-                                  )
-                                : SizedBox()
-                          ],
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.h),
-                          child: Obx(
-                            () => SizedBox(
-                              height: 20.h,
-                              width: 20.w,
-                              child: Checkbox(
-                                value: taskController.toAssignedPersonCheckBox[
-                                        filteredList[index].id] ??
-                                    false,
-                                onChanged: (value) {
-                                  taskController.toAssignedPersonCheckBox[
-                                      filteredList[index].id] = value!;
+                              StorageHelper.getId() == filteredList[index].id
+                                  ? Text(
+                                      "Self Assign",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: secondaryColor),
+                                    )
+                                  : SizedBox()
+                            ],
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: Obx(
+                              () => SizedBox(
+                                height: 20.h,
+                                width: 20.w,
+                                child: Checkbox(
+                                  value:
+                                      taskController.toAssignedPersonCheckBox[
+                                              filteredList[index].id] ??
+                                          false,
+                                  onChanged: (value) {
+                                    taskController.toAssignedPersonCheckBox[
+                                        filteredList[index].id] = value!;
 
-                                  if (value) {
-                                    taskController.assignedUserId
-                                        .add(filteredList[index].id.toString());
-                                  } else {
-                                    taskController.assignedUserId.remove(
-                                        filteredList[index].id.toString());
-                                    taskController.selectAll.value = false;
-                                  }
-                                },
+                                    if (value) {
+                                      taskController.assignedUserId.add(
+                                          filteredList[index].id.toString());
+                                    } else {
+                                      taskController.assignedUserId.remove(
+                                          filteredList[index].id.toString());
+                                      taskController.selectAll.value = false;
+                                    }
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 10.h,
-                    );
-                  },
+                        ],
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        height: 10.h,
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomButton(
-              onPressed: () {
-                Get.back();
-              },
-              text: Text(
-                done,
-                style: changeTextColor(rubikBlack, whiteColor),
+              SizedBox(
+                height: 15.h,
               ),
-              color: primaryColor,
-              height: 45.h,
-              width: double.infinity,
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-          ],
+              CustomButton(
+                onPressed: () {
+                  Get.back();
+                },
+                text: Text(
+                  done,
+                  style: changeTextColor(rubikBlack, whiteColor),
+                ),
+                color: primaryColor,
+                height: 45.h,
+                width: double.infinity,
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+            ],
+          ),
         ),
       ),
     );

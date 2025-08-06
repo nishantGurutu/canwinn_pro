@@ -2,14 +2,12 @@ import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/component/location_handler.dart';
 import 'package:task_management/component/location_service.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
-import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/attendence/attendence_controller.dart';
 import 'package:task_management/controller/attendence/checkin_user_details.dart';
 import 'package:task_management/controller/register_controller.dart';
@@ -84,9 +82,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
       lName2.value =
           "${place?.name} ${place?.subLocality}, ${place?.street}, ${place?.locality}";
       locaitonAddress.value = lName2.value;
+      locaitonAddress.refresh();
       await StorageHelper.setUserLocationName(locaitonAddress.value);
-      debugPrint('locatiuon data in attendance ${locaitonAddress.value}');
+      debugPrint('locatiuon data in at9tendance ${locaitonAddress.value}');
       isLocationLoading.value = false;
+      isLocationLoading.refresh();
     } catch (e) {
       isLocationLoading.value = false;
       lName.value = "Location not available";
@@ -117,40 +117,40 @@ class _CheckinScreenState extends State<CheckinScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: whiteColor,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
-        ),
-        title: Text(
-          checkin,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 21,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          if (StorageHelper.getType() == 3)
-            InkWell(
-              onTap: () {
-                logoutApp();
-              },
-              child: SizedBox(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 10.w),
-                  child: Icon(Icons.logout),
-                ),
-              ),
-            ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: whiteColor,
+      //   automaticallyImplyLeading: false,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       Get.back();
+      //     },
+      //     icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+      //   ),
+      //   title: Text(
+      //     checkin,
+      //     style: TextStyle(
+      //       color: textColor,
+      //       fontSize: 21,
+      //       fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      //   centerTitle: true,
+      //   actions: [
+      //     if (StorageHelper.getType() == 3)
+      //       InkWell(
+      //         onTap: () {
+      //           logoutApp();
+      //         },
+      //         child: SizedBox(
+      //           child: Padding(
+      //             padding: EdgeInsets.only(right: 10.w),
+      //             child: Icon(Icons.logout),
+      //           ),
+      //         ),
+      //       ),
+      //   ],
+      // ),
       backgroundColor: whiteColor,
       body: Container(
         color: lightBlueColor,
@@ -451,104 +451,109 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 15.w, vertical: 20.h),
-                          child: Obx(
-                            () {
-                              return InkWell(
-                                onTap: () async {
-                                  // if (!attendenceController
-                                  //     .isAttendencePunching.value) {
-                                  //   await availableCameras().then(
-                                  //     (value) => Get.to(
-                                  //       () => CameraView(
-                                  //         cameras: value,
-                                  //         type: "checkin",
-                                  //         latitude: latitude,
-                                  //         longitude: longitude,
-                                  //         attendenceTime: attendenceTime,
-                                  //         address: locaitonAddress.value,
-                                  //       ),
-                                  //     ),
-                                  //   );
-                                  if (!attendenceController
-                                      .isAttendencePunching.value) {
-                                    await locationName();
+                          child: Column(
+                            children: [
+                              Obx(
+                                () => locaitonAddress.isNotEmpty
+                                    ? Column(
+                                        children: [
+                                          Text("${locaitonAddress.value}"),
+                                          SizedBox(
+                                            height: 5.h,
+                                          )
+                                        ],
+                                      )
+                                    : SizedBox(),
+                              ),
+                              Obx(
+                                () {
+                                  return InkWell(
+                                    onTap: () async {
+                                      if (!attendenceController
+                                          .isAttendencePunching.value) {
+                                        await locationName();
 
-                                    if (locaitonAddress.value.isNotEmpty) {
-                                      final cameras = await availableCameras();
-                                      Get.to(
-                                        () => CameraView(
-                                          cameras: cameras,
-                                          type: "checkin",
-                                          latitude: latitude,
-                                          longitude: longitude,
-                                          attendenceTime: attendenceTime,
-                                          address: locaitonAddress.value,
+                                        if (locaitonAddress.value.isNotEmpty) {
+                                          final cameras =
+                                              await availableCameras();
+                                          Get.to(
+                                            () => CameraView(
+                                              cameras: cameras,
+                                              type: "checkin",
+                                              latitude: latitude,
+                                              longitude: longitude,
+                                              attendenceTime: attendenceTime,
+                                              address: locaitonAddress.value,
+                                            ),
+                                          );
+                                        } else {
+                                          CustomToast().showCustomToast(
+                                              "Location not available. Try again.");
+                                        }
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 40.h,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 244, 54, 54),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20.r),
                                         ),
-                                      );
-                                    } else {
-                                      CustomToast().showCustomToast(
-                                          "Location not available. Try again.");
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                  height: 40.h,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 244, 54, 54),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20.r),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child:
-                                        (attendenceController
-                                                    .isAttendencePunching
-                                                    .value ||
-                                                attendenceController
-                                                    .isAttendencePunchout
-                                                    .value ||
-                                                attendenceController
-                                                        .isuserDetailsAttendenceListLoading
-                                                        .value ==
-                                                    true)
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  CircularProgressIndicator(
-                                                      color: whiteColor),
-                                                  SizedBox(width: 8.w),
-                                                  Text(
-                                                    'Loading...',
+                                      ),
+                                      child: Center(
+                                        child:
+                                            (attendenceController
+                                                        .isAttendencePunching
+                                                        .value ||
+                                                    attendenceController
+                                                        .isAttendencePunchout
+                                                        .value ||
+                                                    attendenceController
+                                                            .isuserDetailsAttendenceListLoading
+                                                            .value ==
+                                                        true)
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      CircularProgressIndicator(
+                                                          color: whiteColor),
+                                                      SizedBox(width: 8.w),
+                                                      Text(
+                                                        'Loading...',
+                                                        style: TextStyle(
+                                                          color: whiteColor,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Text(
+                                                    attendenceController
+                                                                .attendenceUserDetails
+                                                                .value
+                                                                ?.data
+                                                                ?.punchin ==
+                                                            1
+                                                        ? "Punch Out"
+                                                        : "Punch In",
                                                     style: TextStyle(
-                                                      color: whiteColor,
                                                       fontSize: 18,
                                                       fontWeight:
                                                           FontWeight.w500,
+                                                      color: whiteColor,
                                                     ),
                                                   ),
-                                                ],
-                                              )
-                                            : Text(
-                                                attendenceController
-                                                            .attendenceUserDetails
-                                                            .value
-                                                            ?.data
-                                                            ?.punchin ==
-                                                        1
-                                                    ? "Punch Out"
-                                                    : "Punch In",
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: whiteColor,
-                                                ),
-                                              ),
-                                  ),
-                                ),
-                              );
-                            },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ),

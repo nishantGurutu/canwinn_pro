@@ -153,13 +153,16 @@ class _EditProjectState extends State<EditProject> {
                             textCapitalization: TextCapitalization.sentences,
                           ),
                           SizedBox(height: 10.h),
-                          CustomDropdown<AllProjectData>(
-                            items: projectController.projectDataList,
-                            itemLabel: (item) => item.projectTypeName ?? '',
-                            onChanged: (value) {
-                              projectController.selectedAllProjectData = value;
-                            },
-                            hintText: selectProjectType,
+                          Obx(
+                            () => CustomDropdown<AllProjectData>(
+                              items: projectController.projectDataList,
+                              itemLabel: (item) => item.projectTypeName ?? '',
+                              onChanged: (value) {
+                                projectController.selectedAllProjectData =
+                                    value;
+                              },
+                              hintText: selectProjectType,
+                            ),
                           ),
                           SizedBox(height: 10.h),
                           Text(

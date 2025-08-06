@@ -58,7 +58,7 @@
 //     try {
 //       final token = await StorageHelper.getToken();
 
-//       final response = await _dio.get(
+//       final response = await _dio.get(ApiConstant.baseUrl + ApiConstant.lead_meetings_list
 //         'https://taskmaster.electionmaster.in/public/api/lead-meetings-list',
 //         queryParameters: {
 //           'lead_id': leadId.toString(),
@@ -109,7 +109,7 @@
 //     try {
 //       final token = await StorageHelper.getToken();
 
-//       final response = await dio.post(
+//       final response = await dio.post(ApiConstant.baseUrl + ApiConstant.lead_meetings_list
 //         'https://taskmaster.electionmaster.in/public/api/change-lead-meetings-status',
 //         data: {
 //           "id": id.toString(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:task_management/constant/color_constant.dart';
+import 'package:task_management/constant/image_constant.dart';
 import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/view/screen/unauthorised/login.dart';
@@ -326,7 +327,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Image.asset(
-                'assets/images/png/_2093978688240.png',
+                splashLogo,
               ),
               SizedBox(
                 height: 20.h,

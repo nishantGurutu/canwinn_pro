@@ -1,6 +1,6 @@
 String appVersion = "Version 1.0.10";
 String splashHeading = "Advanced Task Management";
-String welcomeHeading = "Welcome to TaskMaster";
+String welcomeHeading = "Welcome to One Suite";
 String splashText =
     "TaskMaster helps you manage your tasks with ease. Stay organized and increase your productivity.";
 String welcomeText =
@@ -454,7 +454,7 @@ String todoTitle = "Todo Title";
 String assignee = "Assignee";
 String editNotes = "Edit Notes";
 String addNotes = "Add Notes";
-String welcomeToCanwinn = "Welcome to CanWinn";
+String welcomeToCanwinn = "Welcome to Winntus";
 String skip = "Skip";
 String collaboration = "Collaboration";
 String taskAndProjects = "Task and projects";
@@ -497,7 +497,7 @@ String updateTask = "Update Task";
 String enterTaskName = "Enter Task Name Active Field";
 String enterRemark = "Enter Remark";
 String taskName = "Task Name";
-String leadName = "Person Name";
+String leadName = "Lead Name";
 String leadType = "Lead Type";
 String companyName = "Company Name";
 String assets = "Assets";

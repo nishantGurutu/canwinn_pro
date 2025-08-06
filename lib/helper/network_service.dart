@@ -58,7 +58,7 @@ class NetworkService {
       if (result != null) {
         await DatabaseHelper.instance.clearLeadsTable();
 
-        await LeadController().leadsList(null);
+        await LeadController().leadsList(null, '');
         debugPrint("Offline lead ${lead.leadName} synced successfully.");
       } else {
         debugPrint("Failed to sync offline lead: ${lead.leadName}");

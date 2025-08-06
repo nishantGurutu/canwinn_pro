@@ -21,7 +21,7 @@ class ProfileService {
     String name,
     String email,
     String mobile,
-    int? departmentId,
+    String? departmentId,
     int? id,
     String? value,
     Rx<File> pickedFile,
@@ -39,7 +39,6 @@ class ProfileService {
         'email': email,
         'position': id,
         'mobile': mobile,
-        'department_id': departmentId,
         'dob': dob,
         "anniversary_type":
             annivresaryDate.isNotEmpty ? 'Marriage Anniversary' : "",
@@ -99,14 +98,14 @@ class ProfileService {
     }
   }
 
-  Future<DepartMentListModel?> departmentList() async {
+  Future<DepartMentListModel?> departmentList(dynamic selectedProjectId) async {
     try {
-      // print("department dtat $selectedProjectId");
+      print("department dtat $selectedProjectId");
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
 
       final response = await _dio.get(
-        "${ApiConstant.baseUrl + ApiConstant.departmentList}",
+        "${ApiConstant.baseUrl + ApiConstant.departmentList}?project_id=${selectedProjectId == '' ? "" : selectedProjectId}",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -564,7 +563,7 @@ class ProfileService {
       _dio.options.headers["Authorization"] = "Bearer $token";
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/download-employee-report/$userId?date=$date",
+        "${ApiConstant.baseUrl}${ApiConstant.download_employee_report}/$userId?date=$date",
         options: Options(
           responseType: ResponseType.bytes,
         ),

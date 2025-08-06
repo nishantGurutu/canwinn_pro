@@ -1,18 +1,18 @@
 class LoginModel {
   bool? status;
-  String? message;
+  dynamic message;
   Data? data;
 
   LoginModel({this.status, this.message, this.data});
 
-  LoginModel.fromJson(Map<String, dynamic> json) {
+  LoginModel.fromJson(Map<dynamic, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
@@ -23,25 +23,26 @@ class LoginModel {
 }
 
 class Data {
-  int? id;
-  String? name;
-  String? email;
-  int? departmentId;
-  int? shiftId;
-  int? checkinType;
-  int? attendanceType;
-  int? role;
-  String? phone;
-  String? gender;
-  String? dob;
-  String? image;
-  String? recoveryPassword;
-  String? fcmToken;
-  int? type;
-  String? token;
-  String? assignedDept;
-  int? isHead;
-  String? tokenType;
+  dynamic id;
+  dynamic name;
+  dynamic email;
+  dynamic shiftId;
+  dynamic departmentId;
+  dynamic checkinType;
+  dynamic attendanceType;
+  dynamic roleId;
+  dynamic phone;
+  dynamic gender;
+  dynamic dob;
+  dynamic image;
+  dynamic recoveryPassword;
+  dynamic fcmToken;
+  dynamic type;
+  dynamic token;
+  dynamic assignedDept;
+  dynamic isHead;
+  dynamic roleName;
+  dynamic tokenType;
 
   Data(
       {this.id,
@@ -51,7 +52,7 @@ class Data {
       this.shiftId,
       this.checkinType,
       this.attendanceType,
-      this.role,
+      this.roleId,
       this.phone,
       this.gender,
       this.dob,
@@ -62,9 +63,10 @@ class Data {
       this.token,
       this.assignedDept,
       this.isHead,
+      this.roleName,
       this.tokenType});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
     name = json['name'];
     email = json['email'];
@@ -72,7 +74,7 @@ class Data {
     shiftId = json['shift_id'];
     checkinType = json['checkin_type'];
     attendanceType = json['attendance_type'];
-    role = json['role'];
+    roleId = json['role_id'];
     phone = json['phone'];
     gender = json['gender'];
     dob = json['dob'];
@@ -83,11 +85,12 @@ class Data {
     token = json['token'];
     assignedDept = json['assigned_dept'];
     isHead = json['is_head'];
+    roleName = json['role_name'];
     tokenType = json['token_type'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['email'] = this.email;
@@ -95,7 +98,7 @@ class Data {
     data['shift_id'] = this.shiftId;
     data['checkin_type'] = this.checkinType;
     data['attendance_type'] = this.attendanceType;
-    data['role'] = this.role;
+    data['role_id'] = this.roleId;
     data['phone'] = this.phone;
     data['gender'] = this.gender;
     data['dob'] = this.dob;
@@ -106,6 +109,7 @@ class Data {
     data['token'] = this.token;
     data['assigned_dept'] = this.assignedDept;
     data['is_head'] = this.isHead;
+    data['role_name'] = this.roleName;
     data['token_type'] = this.tokenType;
     return data;
   }

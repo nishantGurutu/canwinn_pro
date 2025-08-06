@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart' as calendar;
@@ -54,42 +55,30 @@ class _CalendarEventScreenState extends State<CalendarEventScreen> {
   //     await apiCall(userAuth.accessToken);
   //   }
   // }
-  final GoogleSignIn signIn = GoogleSignIn(
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       calendar.CalendarApi.calendarScope,
       calendar.CalendarApi.calendarEventsScope,
     ],
   );
 
-  // Future<void> login() async {
-  //   try {
-  //     await _googleSignIn.signOut();
-
-  //     final GoogleSignInAccount? user = await _googleSignIn.signIn();
-  //     if (user == null) {
-  //       print('❌ Sign-in cancelled by user');
-  //       return;
-  //     }
-
-  //     final GoogleSignInAuthentication auth = await user.authentication;
-  //     print('✅ Login successful: ${user.email}');
-  //     print('✅ Access Token: ${auth.accessToken}');
-
-  //     await apiCall(auth.accessToken);
-  //   } catch (e) {
-  //     print('❌  Sign-in error: $e');
-  //   }
-  // }
-  // GoogleSignIn signIn = GoogleSignI n();
-  void googleSignin() async {
+  Future<void> login() async {
     try {
-      var user = await signIn.signIn();
+      await _googleSignIn.signOut();
+
+      final GoogleSignInAccount? user = await _googleSignIn.signIn();
       if (user == null) {
+        print('❌ Sign-in cancelled by user');
         return;
       }
-      print("user data in calendar ${user}");
+
+      final GoogleSignInAuthentication auth = await user.authentication;
+      print('✅ Login successful: ${user.email}');
+      print('✅ Access Token: ${auth.accessToken}');
+
+      await apiCall(auth.accessToken);
     } catch (e) {
-      print(e);
+      print('❌ Sign-in error: $e');
     }
   }
 
@@ -111,7 +100,9 @@ class _CalendarEventScreenState extends State<CalendarEventScreen> {
 
       if (response != null) {
         print('✅ API Response: ${response.body}');
-      } else {}
+      } else {
+        print('❌ API Error: } - response.body}');
+      }
     } catch (e) {
       print('❌ Error making API call: $e');
     }
@@ -160,69 +151,69 @@ class _CalendarEventScreenState extends State<CalendarEventScreen> {
   //   }
   // }
 
-  // Future<List<GoogleAPI.Event>> getGoogleEventsData() async {
-  //   await _googleSignIn.disconnect();
+  Future<List<GoogleAPI.Event>> getGoogleEventsData() async {
+    await _googleSignIn.disconnect();
 
-  //   final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-  //   if (googleUser == null) {
-  //     throw Exception('User cancelled sign-in');
-  //   }
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) {
+      throw Exception('User cancelled sign-in');
+    }
 
-  //   print("Auth headers: ${await googleUser.authHeaders}");
+    print("Auth headers: ${await googleUser.authHeaders}");
 
-  //   final GoogleHttpClient httpClient = GoogleHttpClient(
-  //     await googleUser.authHeaders,
-  //   );
+    final GoogleHttpClient httpClient = GoogleHttpClient(
+      await googleUser.authHeaders,
+    );
 
-  //   final GoogleAPI.CalendarApi calendarApi = GoogleAPI.CalendarApi(httpClient);
-  //   print(
-  //       "google callendar api data result ${calendarApi.events.list('primary')}");
-  //   final GoogleAPI.Events calEvents = await calendarApi.events.list("primary");
+    final GoogleAPI.CalendarApi calendarApi = GoogleAPI.CalendarApi(httpClient);
+    print(
+        "google callendar api data result ${calendarApi.events.list('primary')}");
+    final GoogleAPI.Events calEvents = await calendarApi.events.list("primary");
 
-  //   final List<GoogleAPI.Event> appointments = <GoogleAPI.Event>[];
-  //   if (calEvents.items != null) {
-  //     for (final event in calEvents.items!) {
-  //       if (event.start == null) continue;
-  //       appointments.add(event);
-  //     }
-  //   }
+    final List<GoogleAPI.Event> appointments = <GoogleAPI.Event>[];
+    if (calEvents.items != null) {
+      for (final event in calEvents.items!) {
+        if (event.start == null) continue;
+        appointments.add(event);
+      }
+    }
 
-  //   return appointments;
-  // }
+    return appointments;
+  }
 
-  // Future<void> _openGoogleCalendar() async {
-  //   if (Platform.isAndroid) {
-  //     final intent = AndroidIntent(
-  //       action: 'android.intent.action.VIEW',
-  //       data: 'content://com.android.calendar/time/',
-  //       flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-  //     );
-  //     try {
-  //       await intent.launch();
-  //       await Future.delayed(Duration(seconds: 5));
-  //       await getGoogleEventsData();
-  //     } catch (e) {
-  //       print('Error launching Google Calendar: $e');
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Failed to open Google Calendar: $e')),
-  //       );
-  //     }
-  //   } else {
-  //     print('Opening Google Calendar not supported on this platform');
-  //     await getGoogleEventsData();
-  //   }
-  // }
+  Future<void> _openGoogleCalendar() async {
+    if (Platform.isAndroid) {
+      final intent = AndroidIntent(
+        action: 'android.intent.action.VIEW',
+        data: 'content://com.android.calendar/time/',
+        flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+      );
+      try {
+        await intent.launch();
+        await Future.delayed(Duration(seconds: 5));
+        await getGoogleEventsData();
+      } catch (e) {
+        print('Error launching Google Calendar: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to open Google Calendar: $e')),
+        );
+      }
+    } else {
+      print('Opening Google Calendar not supported on this platform');
+      await getGoogleEventsData();
+    }
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _googleSignIn.signInSilently().then((account) {
-  //     if (account != null) {
-  //       _account = account;
-  //       getGoogleEventsData();
-  //     }
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.signInSilently().then((account) {
+      if (account != null) {
+        _account = account;
+        getGoogleEventsData();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +224,7 @@ class _CalendarEventScreenState extends State<CalendarEventScreen> {
         child: Column(
           children: [
             InkWell(
-              onTap: googleSignin,
+              onTap: _openGoogleCalendar,
               child: Container(
                 height: 50,
                 width: 50,
@@ -253,7 +244,7 @@ class _CalendarEventScreenState extends State<CalendarEventScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: googleSignin,
+              onPressed: login,
               child: Text('Sync Calendar Events'),
             ),
             SizedBox(height: 16),

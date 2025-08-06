@@ -51,10 +51,17 @@ class CustomCalender extends StatelessWidget {
       ),
       readOnly: true,
       onTap: () async {
+        // DateTime? pickedDate = await showDatePicker(
+        //   context: context,
+        //   initialDate: DateTime.now(),
+        //   firstDate: DateTime(1950),
+        //   lastDate: DateTime(2100),
+        // );
+
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(1950),
+          firstDate: DateTime.now(),
           lastDate: DateTime(2100),
         );
 

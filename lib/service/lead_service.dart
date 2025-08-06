@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:intl/intl.dart';
@@ -13,6 +14,8 @@ import 'package:task_management/helper/db_helper.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:task_management/model/LeadNoteModel.dart';
+import 'package:task_management/model/added_document_lead_list_model.dart';
+import 'package:task_management/model/document_type_list_model.dart';
 import 'package:task_management/model/follow_ups_list_model.dart';
 import 'package:task_management/model/followups_type_list_model.dart';
 import 'package:task_management/model/home_lead_model.dart';
@@ -26,7 +29,9 @@ import 'package:task_management/model/product_list_model.dart';
 import 'package:task_management/model/quotation_item.dart';
 import 'package:task_management/model/quotation_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
+import 'package:task_management/model/session_list_model.dart';
 import 'package:task_management/model/source_list_model.dart';
+import 'package:task_management/model/uploaded_document_list_model.dart';
 import 'package:task_management/model/user_report_model.dart';
 
 class LeadService {
@@ -92,7 +97,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/store-leads',
+        ApiConstant.baseUrl + ApiConstant.store_leads,
         data: formData,
         options: Options(
           validateStatus: (s) => s != null && s < 500,
@@ -101,7 +106,6 @@ class LeadService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Save to database after successful API call
         await DatabaseHelper.instance.insertStatus(status: "online");
 
         CustomToast().showCustomToast(response.data['message']);
@@ -166,7 +170,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/update-leads',
+        ApiConstant.baseUrl + ApiConstant.update_leads,
         data: formData,
         options: Options(
           validateStatus: (s) => s != null && s < 500,
@@ -188,7 +192,52 @@ class LeadService {
     }
   }
 
-  Future<LeedListModel?> leadsListApi(int? id) async {
+  Future<bool> assignFollowup(
+      RxList<ResponsiblePersonData> personid, int? followupId) async {
+    try {
+      final token = StorageHelper.getToken();
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.options.contentType = 'multipart/form-data';
+
+      String ids = personid
+          .map((e) => e.id.toString())
+          .toList()
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .replaceAll(' ', '');
+
+      final Map<String, dynamic> formDataMap = {
+        'follow_up_id': followupId.toString(),
+        'assigned_to': ids.toString(),
+      };
+
+      final formData = FormData.fromMap(formDataMap);
+
+      final response = await _dio.post(
+        '${ApiConstant.baseUrl + ApiConstant.assign_followup}',
+        data: formData,
+        options: Options(
+          validateStatus: (s) => s != null && s < 500,
+          receiveDataWhenStatusError: true,
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        CustomToast().showCustomToast(response.data['message']);
+        return true;
+      } else {
+        print("Error: ${response.data}");
+        CustomToast().showCustomToast("Failed to add lead");
+        return true;
+      }
+    } catch (e) {
+      print("Add lead error: $e");
+      return false;
+    }
+  }
+
+  Future<LeedListModel?> leadsListApi(int? id, String leadTypeValue) async {
     try {
       final token = StorageHelper.getToken();
       print("Token wiuye873 38798e3s79j9used: $id");
@@ -200,16 +249,62 @@ class LeadService {
         requestHeader: true,
         error: true,
       ));
+      var leadSelectedtype = "";
+      if (leadTypeValue == "Created by me") {
+        leadSelectedtype = 'created_by_me';
+      } else if (leadTypeValue == "Assigned to me") {
+        leadSelectedtype = 'assigned_to_me';
+      } else if (leadTypeValue == "Added to me") {
+        leadSelectedtype = 'added_to_me';
+      }
+
+      print("kjdh8743 3iu843 ${leadSelectedtype}");
       var url =
-          "https://taskmaster.electionmaster.in/public/api/leads-list?user_id=$userId";
+          "${ApiConstant.baseUrl + ApiConstant.leads_list}?user_id=$userId";
       final response = await _dio.get(
-        id == null || id == "null"
-            ? 'https://taskmaster.electionmaster.in/public/api/leads-list?user_id=$userId'
-            : "$url&status=$id",
+        ((id == null || id == "null") &&
+                (leadSelectedtype.isEmpty || leadSelectedtype == ""))
+            ? '${ApiConstant.baseUrl + ApiConstant.leads_list}?user_id=$userId'
+            : ((id != null || id != "null") &&
+                    (leadSelectedtype.isEmpty || leadSelectedtype == ""))
+                ? "$url&status=$id"
+                : ((id == null || id == "null") &&
+                        (leadSelectedtype.isNotEmpty || leadSelectedtype != ""))
+                    ? "$url&type=$leadSelectedtype"
+                    : "$url&status=$id&type=$leadSelectedtype",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return LeedListModel.fromJson(response.data);
+      } else {
+        print("Unexpected response: ${response.data}");
+        CustomToast().showCustomToast(response.data['message']);
+        return null;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return null;
+    }
+  }
+
+  Future<AddedDocumentLeadModel?> addedDocumentLeadList() async {
+    try {
+      final token = StorageHelper.getToken();
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+      final response = await _dio.get(
+        ApiConstant.baseUrl + ApiConstant.added_document_lead_list,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return AddedDocumentLeadModel.fromJson(response.data);
       } else {
         print("Unexpected response: ${response.data}");
         CustomToast().showCustomToast(response.data['message']);
@@ -237,7 +332,39 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/source-list",
+        ApiConstant.baseUrl + ApiConstant.source_list,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return SourseListModel.fromJson(response.data);
+      } else {
+        print("Unexpected response: ${response.data}");
+        CustomToast().showCustomToast(response.data['message']);
+        return null;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return null;
+    }
+  }
+
+  Future<SourseListModel?> addedLeadList() async {
+    try {
+      final token = StorageHelper.getToken();
+      print("Token used: $token");
+
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      final response = await _dio.get(
+        ApiConstant.baseUrl + ApiConstant.source_list,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -269,7 +396,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/lead-status-list",
+        ApiConstant.baseUrl + ApiConstant.lead_status_list,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -306,8 +433,9 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-          "https://taskmaster.electionmaster.in/public/api/lead-details",
-          data: formData);
+        ApiConstant.baseUrl + ApiConstant.lead_details,
+        data: formData,
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return LeadDetailsModel.fromJson(response.data);
@@ -343,9 +471,8 @@ class LeadService {
       };
       final formData = FormData.fromMap(formDataMap);
 
-      final response = await _dio.post(
-          "https://taskmaster.electionmaster.in/public/api/home-lead",
-          data: formData);
+      final response = await _dio
+          .post(ApiConstant.baseUrl + ApiConstant.home_lead, data: formData);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return HomeLeadsModel.fromJson(response.data);
@@ -364,7 +491,6 @@ class LeadService {
 
   Future<HomeLeadsModel?> userleadHomeApi(homeAdminUserId) async {
     try {
-      // final userId = StorageHelper.getId();
       final token = StorageHelper.getToken();
       print("Token used: $token");
 
@@ -381,9 +507,8 @@ class LeadService {
       };
       final formData = FormData.fromMap(formDataMap);
 
-      final response = await _dio.post(
-          "https://taskmaster.electionmaster.in/public/api/home-lead",
-          data: formData);
+      final response = await _dio
+          .post(ApiConstant.baseUrl + ApiConstant.home_lead, data: formData);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return HomeLeadsModel.fromJson(response.data);
@@ -402,7 +527,6 @@ class LeadService {
 
   Future<UserReportModel?> userReportApi(homeAdminUserId) async {
     try {
-      // final userId = StorageHelper.getId();
       final token = StorageHelper.getToken();
       print("Token used: $token");
 
@@ -420,7 +544,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-          "https://taskmaster.electionmaster.in/public/api/get-user-report",
+          ApiConstant.baseUrl + ApiConstant.get_user_report,
           data: formData);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -452,7 +576,7 @@ class LeadService {
       ));
 
       final response = await _dio.delete(
-        "https://taskmaster.electionmaster.in/public/api/delete-lead",
+        ApiConstant.baseUrl + ApiConstant.delete_lead,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -490,7 +614,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        "https://taskmaster.electionmaster.in/public/api/lead-followup-list",
+        ApiConstant.baseUrl + ApiConstant.lead_followup_list,
         data: formData,
       );
 
@@ -524,7 +648,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/followup-type-list?lead_id=$leadId",
+        "${ApiConstant.baseUrl + ApiConstant.followup_type_list}?lead_id=$leadId",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -556,7 +680,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/visit-list",
+        ApiConstant.baseUrl + ApiConstant.followup_type_list,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -588,7 +712,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/visit-type-list",
+        ApiConstant.baseUrl + ApiConstant.visit_type_list,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -635,7 +759,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/store-follow-ups',
+        ApiConstant.baseUrl + ApiConstant.store_follow_ups,
         data: formData,
       );
 
@@ -713,12 +837,22 @@ class LeadService {
         'address_line2': officeAddress.toString(),
         'city_town': city.toString(),
         'id': leadId.toString(),
-        'follow_up_date': followupDate.toString(),
-        'follow_up_time': followupTime.toString(),
-        'follow_up_type': followupType,
         'reminder': reminder,
       };
 
+      print("data value in form data 87y9822 ${formDataMap}");
+      if (followupDate.isNotEmpty) {
+        formDataMap['follow_up_date'] = followupDate;
+      }
+      if (followupTime.isNotEmpty) {
+        formDataMap['follow_up_time'] = followupTime;
+      }
+      if (reminder.isNotEmpty) {
+        formDataMap['reminder'] = reminder;
+      }
+      if (followupType != null) {
+        formDataMap['follow_up_type'] = followupType;
+      }
       if (pickedFile.path.isNotEmpty) {
         final fileName = pickedFile.path.split('/').last;
         formDataMap['image'] = await MultipartFile.fromFile(
@@ -737,7 +871,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/update-lead-details',
+        ApiConstant.baseUrl + ApiConstant.update_lead_details,
         data: formData,
       );
 
@@ -795,7 +929,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/store-visit',
+        ApiConstant.baseUrl + ApiConstant.store_visit,
         data: formData,
       );
 
@@ -829,7 +963,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/products-list",
+        ApiConstant.baseUrl + ApiConstant.products_list,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -895,7 +1029,7 @@ class LeadService {
       print("Payload: $data");
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/store-quotation',
+        ApiConstant.baseUrl + ApiConstant.store_quotation,
         data: data,
       );
 
@@ -925,7 +1059,7 @@ class LeadService {
       _dio.options.contentType = Headers.jsonContentType;
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/change-lead-status',
+        ApiConstant.baseUrl + ApiConstant.change_lead_status,
         data: {
           "status": status,
           "id": leadId,
@@ -970,7 +1104,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/store-lead-contacts',
+        ApiConstant.baseUrl + ApiConstant.store_lead_contacts,
         data: formData,
       );
 
@@ -980,6 +1114,105 @@ class LeadService {
       } else {
         print("Error: ${response.data}");
         CustomToast().showCustomToast("Failed to add lead");
+        return false;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return false;
+    }
+  }
+
+  Future<bool> documentUploading(
+    RxList<int> documentId,
+    RxList<File> ducument,
+    leadId,
+    quotationId,
+  ) async {
+    try {
+      final token = StorageHelper.getToken();
+      final userId = StorageHelper.getId();
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.options.contentType = 'multipart/form-data';
+
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      final Map<String, dynamic> formDataMap = {
+        "lead_id": leadId,
+        "user_id": userId,
+        "quotation_id": quotationId,
+      };
+      print('ir4u8r4 498ur84 ${formDataMap}');
+      for (int i = 0; i < ducument.length; i++) {
+        final file = ducument[i];
+        final fileName = file.path.split('/').last;
+
+        formDataMap['documents[$i][document_type]'] = documentId[i].toString();
+        formDataMap['documents[$i][file]'] = await MultipartFile.fromFile(
+          file.path,
+          filename: fileName,
+        );
+      }
+
+      final formData = FormData.fromMap(formDataMap);
+
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.upload_lead_document,
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        CustomToast().showCustomToast(response.data['message']);
+        return true;
+      } else {
+        print("Error: ${response.data}");
+        CustomToast().showCustomToast("Failed to upload documents");
+        return false;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return false;
+    }
+  }
+
+  Future<bool> approveDocument(int? documentId) async {
+    try {
+      final token = StorageHelper.getToken();
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.options.contentType = 'multipart/form-data';
+      print('j9e38e 3ue83 ${documentId}');
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      final Map<String, dynamic> formDataMap = {
+        "document_id": documentId,
+      };
+
+      final formData = FormData.fromMap(formDataMap);
+
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.approve_lead_document,
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        CustomToast().showCustomToast(response.data['message']);
+        return true;
+      } else {
+        print("Error: ${response.data}");
+        CustomToast().showCustomToast("Failed to upload documents");
         return false;
       }
     } on DioException catch (e) {
@@ -1004,11 +1237,118 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/list-quotation?lead_id=$leadId",
+        "${ApiConstant.baseUrl + ApiConstant.list_quotation}?lead_id=$leadId",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return QuotationListModel.fromJson(response.data);
+      } else {
+        print("Unexpected response: ${response.data}");
+        CustomToast().showCustomToast(response.data['message']);
+        return null;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return null;
+    }
+  }
+
+  Future<SessionListModel?> sessionListApi(leadId) async {
+    try {
+      final token = StorageHelper.getToken();
+
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      final Map<String, dynamic> formDataMap = {
+        "lead_id": leadId,
+        // "quotation_id": quotationid,
+      };
+
+      final formData = FormData.fromMap(formDataMap);
+
+      final response = await _dio.post(
+          ApiConstant.baseUrl + ApiConstant.get_lead_document,
+          data: formData);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return SessionListModel.fromJson(response.data);
+      } else {
+        print("Unexpected response: ${response.data}");
+        CustomToast().showCustomToast(response.data['message']);
+        return null;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return null;
+    }
+  }
+
+  Future<DocumentTypeListModel?> documentTypeList() async {
+    try {
+      final token = StorageHelper.getToken();
+
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      final response = await _dio.get(
+        ApiConstant.baseUrl + ApiConstant.get_document_types,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return DocumentTypeListModel.fromJson(response.data);
+      } else {
+        print("Unexpected response: ${response.data}");
+        CustomToast().showCustomToast(response.data['message']);
+        return null;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return null;
+    }
+  }
+
+  Future<UploadedDocumentListModel?> leadDocumentList(int leadId) async {
+    try {
+      final token = StorageHelper.getToken();
+
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      print("iu4r84 4r948ur98 49849 ${leadId}");
+      final Map<String, dynamic> formMapData = {
+        "lead_id": leadId,
+      };
+      final formData = FormData.fromMap(formMapData);
+
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.get_lead_document,
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return UploadedDocumentListModel.fromJson(response.data);
       } else {
         print("Unexpected response: ${response.data}");
         CustomToast().showCustomToast(response.data['message']);
@@ -1036,7 +1376,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/lead-contacts-list?lead_id=$leadId",
+        "${ApiConstant.baseUrl + ApiConstant.lead_contacts_list}?lead_id=$leadId",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1085,7 +1425,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/store-lead-notes',
+        ApiConstant.baseUrl + ApiConstant.store_lead_notes,
         data: formData,
       );
 
@@ -1119,7 +1459,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/lead-notes-list?lead_id=$leadId",
+        "${ApiConstant.baseUrl + ApiConstant.lead_notes_list}?lead_id=$leadId",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1149,7 +1489,7 @@ class LeadService {
       );
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/lead-notes-important',
+        ApiConstant.baseUrl + ApiConstant.lead_notes_important,
         data: formData,
       );
 
@@ -1193,7 +1533,7 @@ class LeadService {
 
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/send-lead-discussion',
+        ApiConstant.baseUrl + ApiConstant.send_lead_discussion,
         data: formData,
       );
 
@@ -1223,7 +1563,7 @@ class LeadService {
       ));
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/lead-discussion-list?lead_id=$leadId",
+        "${ApiConstant.baseUrl + ApiConstant.lead_discussion_list}?lead_id=$leadId",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1249,7 +1589,7 @@ class LeadService {
       _dio.options.headers["Authorization"] = "Bearer $token";
 
       final response = await _dio.get(
-        "https://taskmaster.electionmaster.in/public/api/download-quotation/$id",
+        "${ApiConstant.baseUrl + ApiConstant.download_quotation}/$id",
         options: Options(
           responseType: ResponseType.bytes,
         ),
@@ -1304,7 +1644,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/update-lead-people',
+        ApiConstant.baseUrl + ApiConstant.update_lead_people,
         data: formData,
       );
 
@@ -1356,14 +1696,8 @@ class LeadService {
       String formattedTime =
           DateFormat('hh:mm a').format(dt).toString().toUpperCase();
       String formattedDate = DateFormat('dd/MM/yyyy').format(dt);
-      print("trwstrtdwr 76t26r6w2f6f6 $image");
-      print("trwstrtdwr 76t26r6w2f6f6 2 $latitude");
-      print("trwstrtdwr 76t26r6w2f6f6 3 $longitude");
-      print("trwstrtdwr 76t26r6w2f6f6 4 $id");
-      print("trwstrtdwr 76t26r6w2f6f6 5 $status");
-      print("trwstrtdwr 76t26r6w2f6f6 5 $remark");
-      print("trwstrtdwr 76t26r6w2f6f6 7 $formattedTime");
-      // print(formattedTime);
+      print(formattedDate);
+      print(formattedTime);
       _dio.interceptors.add(LogInterceptor(
         requestBody: true,
         responseBody: true,
@@ -1417,7 +1751,7 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        'https://taskmaster.electionmaster.in/public/api/change-lead-meetings-status',
+        ApiConstant.baseUrl + ApiConstant.change_lead_meeting_status,
         data: formData,
       );
 
@@ -1473,7 +1807,104 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-        "https://taskmaster.electionmaster.in/public/api/store-follow-ups",
+        ApiConstant.baseUrl + ApiConstant.store_follow_ups,
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        CustomToast().showCustomToast(response.data['message']);
+        return true;
+      } else {
+        print("Error: ${response.data}");
+        CustomToast().showCustomToast("Failed to add lead");
+        return false;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return false;
+    }
+  }
+
+  Future<bool> markitingManagerApproving(
+      leadId, String remark, int status) async {
+    try {
+      final token = StorageHelper.getToken();
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.options.contentType = 'multipart/form-data';
+
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      print("euh8 398ue93 e983ue93 ${leadId}");
+      print("euh8 398ue93 e983ue93 ${remark}");
+      print("euh8 398ue93 e983ue93 ${status}");
+
+      final Map<String, dynamic> formDataMap = {
+        'lead_id': leadId,
+        'manager_remarks': remark,
+        'status': status,
+      };
+      final formData = FormData.fromMap(formDataMap);
+
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.manager_approve_lead_document,
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        CustomToast().showCustomToast(response.data['message']);
+        return true;
+      } else {
+        print("Error: ${response.data}");
+        CustomToast().showCustomToast("Failed to add lead");
+        return false;
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return false;
+    }
+  }
+
+  Future<bool> branchHeadManagerApproving(
+      leadId, String remark, int status, File attachment) async {
+    try {
+      final token = StorageHelper.getToken();
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.options.contentType = 'multipart/form-data';
+
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+      ));
+
+      final Map<String, dynamic> formDataMap = {
+        'lead_id': leadId,
+        'branchhead_remarks': remark,
+        'status': status,
+      };
+
+      if (attachment.path.isNotEmpty) {
+        final fileName = attachment.path.split('/').last;
+        formDataMap['branchhead_agreement'] = await MultipartFile.fromFile(
+          attachment.path,
+          filename: fileName,
+        );
+      }
+
+      final formData = FormData.fromMap(formDataMap);
+
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.branchhead_approve_lead_document,
         data: formData,
       );
 

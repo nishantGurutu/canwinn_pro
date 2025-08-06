@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:task_management/api/api_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/data/model/visit_type_list.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
 import 'package:task_management/helper/db_helper.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/LeadNoteModel.dart';
+import 'package:task_management/model/added_document_lead_list_model.dart';
+import 'package:task_management/model/document_type_list_model.dart';
 import 'package:task_management/model/follow_ups_list_model.dart';
 import 'package:task_management/model/followups_type_list_model.dart';
 import 'package:task_management/model/get_list_modules.dart';
@@ -25,16 +28,25 @@ import 'package:task_management/model/product_list_model.dart';
 import 'package:task_management/model/quotation_item.dart';
 import 'package:task_management/model/quotation_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
+import 'package:task_management/model/session_list_model.dart';
 import 'package:task_management/model/source_list_model.dart';
+import 'package:task_management/model/uploaded_document_list_model.dart'
+    show UploadedDocumentData;
 import 'package:task_management/service/lead_service.dart';
 import 'package:task_management/view/screen/meeting/meeting_form.dart';
 import 'package:task_management/view/widgets/pdf_screen.dart';
 
 class LeadController extends GetxController {
   var isImageLoading = false.obs;
+  var isAllLeadSelected = true.obs;
+  var isUploadedDocumentLeadSelected = false.obs;
+  RxList<bool> isDocumentCheckBoxSelected = <bool>[].obs;
   var selectedUserType = ''.obs;
   RxList<String> addressTypeList =
       ["Site Address", "Office Address", "Other"].obs;
+  RxList<String> leadTypeList =
+      ["Created by me", "Assigned to me", "Added to me"].obs;
+  RxString selectedLeadType = "".obs;
   RxList<String> leadfilterType = ["Male", "Female"].obs;
   RxList<String> quotationType = ["Rental", "Sales"].obs;
   RxList<String> genderList = ["Male", "Female"].obs;
@@ -269,7 +281,7 @@ class LeadController extends GetxController {
     );
     if (result != null) {
       Get.back();
-      await leadsList(selectedLeadStatusData.value?.id);
+      await leadsList(selectedLeadStatusData.value?.id, selectedLeadType.value);
     } else {}
     isLeadAdding.value = false;
   }
@@ -303,7 +315,20 @@ class LeadController extends GetxController {
         id: id);
     if (result) {
       Get.back();
-      await leadsList(selectedLeadStatusData.value?.id);
+      await leadsList(selectedLeadStatusData.value?.id, selectedLeadType.value);
+    } else {}
+    isLeadUpdating.value = false;
+  }
+
+  var isFollowUp = false.obs;
+  Future<void> assignFollowup(
+      {required RxList<ResponsiblePersonData> personid,
+      int? followupId}) async {
+    isLeadUpdating.value = true;
+    final result = await LeadService().assignFollowup(personid, followupId);
+    if (result) {
+      Get.back();
+      await leadsList(selectedLeadStatusData.value?.id, selectedLeadType.value);
     } else {}
     isLeadUpdating.value = false;
   }
@@ -312,14 +337,16 @@ class LeadController extends GetxController {
   RxList<LeadListData> leadsListData = <LeadListData>[].obs;
   RxList<LeadStatusData> selectedStatusPerLead = <LeadStatusData>[].obs;
 
-  Future<void> leadsList(int? id) async {
+  Future<void> leadsList(int? id, String leadTypeValue) async {
     isLeadLoading.value = true;
     try {
-      final result = await LeadService().leadsListApi(id);
+      final result = await LeadService().leadsListApi(id, leadTypeValue);
       final offlineLeads = await DatabaseHelper.instance.getLeads();
       final db = await DatabaseHelper.instance.database;
 
       if (result != null && result.data != null) {
+        isLeadLoading.value = false;
+        isLeadLoading.refresh();
         for (var onlineLead in result.data!) {
           if (onlineLead.phone != null &&
               onlineLead.phone!.isNotEmpty &&
@@ -371,6 +398,15 @@ class LeadController extends GetxController {
       selectedStatusPerLead.addAll(
         List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()),
       );
+
+      for (int i = 0; i < leadsListData.length; i++) {
+        for (int j = 0; j < leadStatusData.length; j++) {
+          if (leadsListData[i].status == leadStatusData[j].id) {
+            selectedStatusPerLead[i] = leadStatusData[j];
+            break;
+          }
+        }
+      }
       for (int i = 0; i < leadsListData.length; i++) {
         for (int j = 0; j < leadStatusData.length; j++) {
           if (leadsListData[i].status == leadStatusData[j].id) {
@@ -388,6 +424,31 @@ class LeadController extends GetxController {
       );
     } finally {
       isLeadLoading.value = false;
+    }
+  }
+
+  RxList<AddedDocumentLeadData> addedDocumentLeadDataList =
+      <AddedDocumentLeadData>[].obs;
+  var isAddedDocumentLeadLoading = false.obs;
+  Future<void> addedDocumentLeadList() async {
+    isAddedDocumentLeadLoading.value = true;
+    try {
+      final result = await LeadService().addedDocumentLeadList();
+
+      if (result != null && result.data != null) {
+        isAddedDocumentLeadLoading.value = false;
+        isAddedDocumentLeadLoading.refresh();
+        addedDocumentLeadDataList.assignAll(result.data!);
+      }
+    } catch (e) {
+      debugPrint("Error fetching leads: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to fetch leads: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isAddedDocumentLeadLoading.value = false;
     }
   }
 
@@ -422,7 +483,6 @@ class LeadController extends GetxController {
   Future<void> offLineStatusdata({String? status}) async {
     final result = await DatabaseHelper.instance.getLeadStatus();
     leadStatusData.assignAll(result);
-    // print('kdje93 fiyr874 ${leadStatusData[0].name}');
     refresh();
     if (status != null) {
       for (var val in leadStatusData) {
@@ -433,8 +493,7 @@ class LeadController extends GetxController {
         }
       }
       print('lead selected id from home ${selectedLeadStatusData.value?.id}');
-      // await getOflineLeadList();
-      await leadsList(selectedLeadStatusData.value?.id);
+      await leadsList(selectedLeadStatusData.value?.id, selectedLeadType.value);
     }
   }
 
@@ -462,6 +521,8 @@ class LeadController extends GetxController {
 
   RxList<LeadStatusData> leadStatusData = <LeadStatusData>[].obs;
   Rx<LeadStatusData?> selectedLeadStatusData = Rx<LeadStatusData?>(null);
+  Rx<LeadStatusData?> selectedLeadStatusDropdawnData =
+      Rx<LeadStatusData?>(null);
   Rx<LeadStatusData?> addselectedLeadStatusData = Rx<LeadStatusData?>(null);
   Rx<LeadStatusData?> selectedLeadStatusUpdateData = Rx<LeadStatusData?>(null);
   Future<void> statusListApi({required status}) async {
@@ -484,7 +545,8 @@ class LeadController extends GetxController {
           }
         }
         print('lead selected id from home ${selectedLeadStatusData.value?.id}');
-        await leadsList(selectedLeadStatusData.value?.id);
+        await leadsList(
+            selectedLeadStatusData.value?.id, selectedLeadType.value);
       }
       isStatusListLoading.value = false;
     } else {}
@@ -499,6 +561,7 @@ class LeadController extends GetxController {
     if (result != null) {
       leadDetails.value = result.data;
       await sourceList(source: leadDetails.value?.source);
+      await offLineStatusdata(status: leadDetails.value?.status.toString());
       selectedGender.value = leadDetails.value?.gender ?? "";
     }
     isLeadDetailsLoading.value = false;
@@ -533,7 +596,6 @@ class LeadController extends GetxController {
         if (dt.followUpDate != null && dt.followUpTime != null) {
           try {
             String dateInput = "${dt.followUpDate} ${dt.followUpTime}";
-
             DateTime? dateTime;
             try {
               DateFormat inputFormat = DateFormat("dd-MM-yyyy h:mm a", 'en_US');
@@ -541,7 +603,6 @@ class LeadController extends GetxController {
             } catch (e) {
               print("Error parsing with lowercase AM/PM: $e");
             }
-
             if (dateTime == null) {
               try {
                 DateFormat inputFormat =
@@ -751,6 +812,7 @@ class LeadController extends GetxController {
     final result = await LeadService().productListApi();
     if (result != null) {
       productListData.assignAll(result.data!);
+      refresh();
     }
     isProductLoading.value = false;
   }
@@ -788,7 +850,7 @@ class LeadController extends GetxController {
     if (result != null) {
       Get.back();
       selectedLeadStatusUpdateData.value = null;
-      await leadsList(selectedLeadStatusData.value?.id);
+      await leadsList(selectedLeadStatusData.value?.id, selectedLeadType.value);
     } else {}
     isStatusUpdating.value = false;
   }
@@ -812,6 +874,39 @@ class LeadController extends GetxController {
     isStatusUpdating.value = false;
   }
 
+  RxList<int> documentIdList = <int>[].obs;
+  RxList<File> documentUplodedList = <File>[].obs;
+  var isDocumentUploading = false.obs;
+  Future<void> documentUploading(
+      {required RxList<int> documentId,
+      required RxList<File> ducument,
+      required leadId,
+      required quotationId}) async {
+    isDocumentUploading.value = true;
+    final result = await LeadService().documentUploading(
+      documentId,
+      ducument,
+      leadId,
+      quotationId,
+    );
+    if (result != null) {
+      Get.back();
+      selectedLeadStatusUpdateData.value = null;
+    } else {}
+    isDocumentUploading.value = false;
+  }
+
+  var isSingleDocumentUploading = false.obs;
+  Future<void> approveDocument({int? documentId, required leadId}) async {
+    isSingleDocumentUploading.value = true;
+    final result = await LeadService().approveDocument(documentId);
+    if (result != null) {
+      await leadDocumentList(leadId: leadId, from: "approve");
+      isSingleDocumentUploading.value = false;
+    } else {}
+    isSingleDocumentUploading.value = false;
+  }
+
   RxList<QuotationListData> quotationListData = <QuotationListData>[].obs;
   var isQuotationLoading = false.obs;
   Future<void> quotationListApi({required leadId, String? leadNumber}) async {
@@ -821,6 +916,72 @@ class LeadController extends GetxController {
       quotationListData.assignAll(result.data!);
     } else {}
     isQuotationLoading.value = false;
+  }
+
+  RxList<SessionListData> sessionListData = <SessionListData>[].obs;
+  var issessionLoading = false.obs;
+  Future<void> sessionListApi({required leadId}) async {
+    issessionLoading.value = true;
+    final result = await LeadService().sessionListApi(leadId);
+    if (result != null) {
+      if (result.data!.isNotEmpty) {
+        sessionListData.assignAll(result.data!);
+      }
+    } else {}
+    issessionLoading.value = false;
+  }
+
+  RxList<DocumentTypeListData> documentTypeListData =
+      <DocumentTypeListData>[].obs;
+  var isDocumentTypeLoading = false.obs;
+  Future<void> documentType() async {
+    isDocumentTypeLoading.value = true;
+    final result = await LeadService().documentTypeList();
+    if (result != null) {
+      isDocumentCheckBoxSelected.clear();
+      if (result.data!.isNotEmpty) {
+        documentTypeListData.assignAll(result.data!);
+        isDocumentTypeLoading.value = false;
+        isDocumentTypeLoading.refresh();
+        documentIdList.addAll(List.filled(documentTypeListData.length, 0));
+        documentUplodedList
+            .addAll(List.filled(documentTypeListData.length, File('')));
+        isDocumentCheckBoxSelected
+            .addAll(List.filled(documentTypeListData.length, false));
+      }
+    } else {}
+    isDocumentTypeLoading.value = false;
+  }
+
+  RxList<UploadedDocumentData> leadDocumentListData =
+      <UploadedDocumentData>[].obs;
+  var isDocumentListLoading = false.obs;
+  Future<void> leadDocumentList(
+      {required int leadId, required String from}) async {
+    if (from == 'initstate') {
+      isDocumentListLoading.value = true;
+    }
+    final result = await LeadService().leadDocumentList(leadId);
+    if (result != null) {
+      if (result.status == true) {
+        isDocumentCheckBoxSelected.clear();
+        leadDocumentListData.assignAll(result.data!);
+        isDocumentListLoading.value = false;
+        isDocumentListLoading.refresh();
+        isDocumentCheckBoxSelected
+            .addAll(List.filled(leadDocumentListData.length, false));
+        for (int i = 0; i < leadDocumentListData.length; i++) {
+          if (leadDocumentListData[i].status == 1) {
+            isDocumentCheckBoxSelected[i] = true;
+          } else {
+            isDocumentCheckBoxSelected[i] = false;
+          }
+        }
+        isDocumentListLoading.value = false;
+        documentTypeListData.refresh();
+      }
+    } else {}
+    isDocumentListLoading.value = false;
   }
 
   RxList<LeadContactData> leadContactData = <LeadContactData>[].obs;
@@ -853,7 +1014,8 @@ class LeadController extends GetxController {
       );
 
       if (result != null) {
-        await leadsList(selectedLeadStatusData.value?.id);
+        await leadsList(
+            selectedLeadStatusData.value?.id, selectedLeadType.value);
         debugPrint("Offline lead ${lead.leadName} synced successfully.");
       } else {
         debugPrint("Failed to sync offline lead: ${lead.leadName}");
@@ -982,15 +1144,33 @@ class LeadController extends GetxController {
     isQuotationDownloading.value = true;
 
     final Uint8List? pdfData = await LeadService().downloadQuotationApi(id!);
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/quotation_$quotationNumber.pdf';
+    if (pdfData != null) {
+      final directory = await getApplicationDocumentsDirectory();
 
-    final file = File(filePath);
-    await file.writeAsBytes(pdfData!);
-    CustomToast().showCustomToast("Quotation downloaded successfully.");
-    Get.to(() => PDFScreen(file: file));
-    print('✅ PDF saved to $filePath');
+      String replaceSlac = '';
+      if ((quotationNumber ?? "").contains("/")) {
+        replaceSlac = (quotationNumber ?? "").replaceAll("/", "_");
+      } else {
+        replaceSlac = quotationNumber ?? "";
+      }
 
+      final folderPath = '${directory.path}/quotation_$replaceSlac';
+      final folder = Directory(folderPath);
+
+      if (!await folder.exists()) {
+        await folder.create(recursive: true);
+      }
+
+      final filePath = '$folderPath/quotation.pdf';
+
+      final file = File(filePath);
+      await file.writeAsBytes(pdfData);
+
+      CustomToast().showCustomToast("Quotation downloaded successfully.");
+      Get.to(() => PDFScreen(file: file));
+
+      print('✅ PDF saved to $filePath');
+    }
     isQuotationDownloading.value = false;
   }
 
@@ -1057,8 +1237,6 @@ class LeadController extends GetxController {
     isLeadVisitStatusChanging.value = false;
   }
 
-  //ksjhkjs
-
   RxBool isLoading = false.obs;
   RxList<GetListLeadMetting> meetingList = <GetListLeadMetting>[].obs;
 
@@ -1108,9 +1286,11 @@ class LeadController extends GetxController {
 
     try {
       final token = await StorageHelper.getToken();
+      print("lead id in lead meeting list ${leadId}");
       _dio.options.headers["Authorization"] = "Bearer $token";
+      var url = ApiConstant.baseUrl + ApiConstant.lead_meetings_list;
       final response = await _dio.get(
-        'https://taskmaster.electionmaster.in/public/api/lead-meetings-list?lead_id=$leadId',
+        leadId != null ? '$url?lead_id=$leadId' : url,
       );
 
       print("Response status: ${response.statusCode}");
@@ -1223,7 +1403,7 @@ class LeadController extends GetxController {
       final token = await StorageHelper.getToken();
 
       final response = await dio.post(
-        'https://taskmaster.electionmaster.in/public/api/change-lead-meetings-status',
+        ApiConstant.baseUrl + ApiConstant.change_lead_meeting_status,
         data: {
           "id": id.toString(),
           "meeting_mom": meetingMom,
@@ -1269,6 +1449,37 @@ class LeadController extends GetxController {
       await followUpsListApi(leadId: leadId);
     } else {}
     isPeopleAdding.value = false;
+  }
+
+  var isMarketingManagerApproving = false.obs;
+  Future<void> approveMarketingManager(
+      {required leadId, required String remark, required int status}) async {
+    isMarketingManagerApproving.value = true;
+    final result =
+        await LeadService().markitingManagerApproving(leadId, remark, status);
+    if (result != null) {
+      Get.back();
+      // Get.back();
+      // await followUpsListApi(leadId: leadId);
+    } else {}
+    isMarketingManagerApproving.value = false;
+  }
+
+  var isBranchHeadManagerApproving = false.obs;
+  Future<void> branchheadManagerApproving(
+      {required leadId,
+      required String remark,
+      required int status,
+      required File attachment}) async {
+    isBranchHeadManagerApproving.value = true;
+    final result = await LeadService()
+        .branchHeadManagerApproving(leadId, remark, status, attachment);
+    if (result != null) {
+      Get.back();
+      // Get.back();
+      // await followUpsListApi(leadId: leadId);
+    } else {}
+    isBranchHeadManagerApproving.value = false;
   }
 
   RxList<String> timeList = <String>[

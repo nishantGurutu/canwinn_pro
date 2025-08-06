@@ -1,19 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/controller/bottom_bar_navigation_controller.dart';
 import 'package:task_management/controller_binding.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
@@ -110,22 +107,22 @@ Future<void> main() async {
   );
 }
 
-Future<void> initializeService() async {
-  final service = FlutterBackgroundService();
-  await service.configure(
-    androidConfiguration: AndroidConfiguration(
-      onStart: onStart,
-      autoStart: true,
-      autoStartOnBoot: true,
-      isForegroundMode: true,
-    ),
-    iosConfiguration: IosConfiguration(
-      autoStart: true,
-      onForeground: onStart,
-      onBackground: onIosBackground,
-    ),
-  );
-}
+// Future<void> initializeService() async {
+//   final service = FlutterBackgroundService();
+//   await service.configure(
+//     androidConfiguration: AndroidConfiguration(
+//       onStart: onStart,
+//       autoStart: true,
+//       autoStartOnBoot: true,
+//       isForegroundMode: true,
+//     ),
+//     iosConfiguration: IosConfiguration(
+//       autoStart: true,
+//       onForeground: onStart,
+//       onBackground: onIosBackground,
+//     ),
+//   );
+// }
 
 // Future<bool> _handleLocationPermissionAndGPS() async {
 //   if (!await _requestLocationPermission()) {
@@ -178,7 +175,6 @@ Future<void> initializeService() async {
 //       return false;
 //     }
 //   }
-
 //   return true;
 // }
 
@@ -206,80 +202,80 @@ Future<bool> _isGPSEnabled() async {
   return true;
 }
 
-@pragma('vm:entry-point')
-Future<bool> onIosBackground(ServiceInstance service) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  DartPluginRegistrant.ensureInitialized();
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  await preferences.reload();
-  final log = preferences.getStringList('log') ?? <String>[];
-  log.add(DateTime.now().toIso8601String());
-  await preferences.setStringList('log', log);
-  return true;
-}
+// @pragma('vm:entry-point')
+// Future<bool> onIosBackground(ServiceInstance service) async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   DartPluginRegistrant.ensureInitialized();
+//   SharedPreferences preferences = await SharedPreferences.getInstance();
+//   await preferences.reload();
+//   final log = preferences.getStringList('log') ?? <String>[];
+//   log.add(DateTime.now().toIso8601String());
+//   await preferences.setStringList('log', log);
+//   return true;
+// }
 
-@pragma('vm:entry-point')
-void onStart(ServiceInstance service) async {
-  DartPluginRegistrant.ensureInitialized();
+// @pragma('vm:entry-point')
+// void onStart(ServiceInstance service) async {
+//   DartPluginRegistrant.ensureInitialized();
 
-  if (service is AndroidServiceInstance) {
-    service.on('setAsForeground').listen((event) {
-      service.setAsForegroundService();
-    });
+//   if (service is AndroidServiceInstance) {
+//     service.on('setAsForeground').listen((event) {
+//       service.setAsForegroundService();
+//     });
 
-    service.on('setAsBackground').listen((event) {
-      service.setAsBackgroundService();
-    });
-  }
+//     service.on('setAsBackground').listen((event) {
+//       service.setAsBackgroundService();
+//     });
+//   }
 
-  Timer.periodic(const Duration(seconds: 5), (timer) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+//   Timer.periodic(const Duration(seconds: 5), (timer) async {
+//     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    // Fetch current location
-    geolocator.Position? position;
-    try {
-      position = await geolocator.Geolocator.getCurrentPosition(
-        // ignore: deprecated_member_use
-        desiredAccuracy: geolocator.LocationAccuracy.high,
-      );
-    } catch (e) {
-      print('Failed to get location: $e');
-    }
+//     // Fetch current location
+//     geolocator.Position? position;
+//     try {
+//       position = await geolocator.Geolocator.getCurrentPosition(
+//         // ignore: deprecated_member_use
+//         desiredAccuracy: geolocator.LocationAccuracy.high,
+//       );
+//     } catch (e) {
+//       print('Failed to get location: $e');
+//     }
 
-    // Add log with timestamp and location info
-    final log = preferences.getStringList('log') ?? <String>[];
-    final currentTime = DateTime.now().toIso8601String();
-    final locationInfo = position != null
-        ? 'Lat: ${position.latitude}, Lon: ${position.longitude}'
-        : 'Location not available';
+//     // Add log with timestamp and location info
+//     final log = preferences.getStringList('log') ?? <String>[];
+//     final currentTime = DateTime.now().toIso8601String();
+//     final locationInfo = position != null
+//         ? 'Lat: ${position.latitude}, Lon: ${position.longitude}'
+//         : 'Location not available';
 
-    log.add('$currentTime - $locationInfo');
-    _storeLocationInDb(lat: position?.latitude, lon: position?.longitude);
+//     log.add('$currentTime - $locationInfo');
+//     _storeLocationInDb(lat: position?.latitude, lon: position?.longitude);
 
-    // preferences.setString("token", loginModel.data?.token ?? "");
+//     // preferences.setString("token", loginModel.data?.token ?? "");
 
-    // await LocationTrackingService().syncLocationsToApi();
+//     // await LocationTrackingService().syncLocationsToApi();
 
-    // await LocationTrackingService().syncLocationsToApi();
-    await preferences.setStringList('log', log);
+//     // await LocationTrackingService().syncLocationsToApi();
+//     await preferences.setStringList('log', log);
 
-    // Fluttertoast.showToast(
-    //   msg: "FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo'",
-    //   toastLength: Toast.LENGTH_SHORT,
-    //   gravity: ToastGravity.CENTER,
-    //   timeInSecForIosWeb: 1,
-    //   backgroundColor: Colors.red,
-    //   textColor: Colors.white,
-    //   fontSize: 16.0,
-    // );
-    print('FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo');
+//     // Fluttertoast.showToast(
+//     //   msg: "FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo'",
+//     //   toastLength: Toast.LENGTH_SHORT,
+//     //   gravity: ToastGravity.CENTER,
+//     //   timeInSecForIosWeb: 1,
+//     //   backgroundColor: Colors.red,
+//     //   textColor: Colors.white,
+//     //   fontSize: 16.0,
+//     // );
+//     print('FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo');
 
-    service.invoke('update', {
-      "current_date": currentTime,
-      "location": locationInfo,
-    });
-  });
-}
+//     service.invoke('update', {
+//       "current_date": currentTime,
+//       "location": locationInfo,
+//     });
+//   });
+// }
 
 DatabaseHelper _dbHelper = DatabaseHelper.instance;
 Future<void> _storeLocationInDb({double? lat, double? lon}) async {
@@ -293,6 +289,8 @@ Future<void> _storeLocationInDb({double? lat, double? lon}) async {
     print('Error storing location in database: $e');
   }
 }
+
+// End location service
 
 Location location = Location();
 LocationData? _currentPosition;

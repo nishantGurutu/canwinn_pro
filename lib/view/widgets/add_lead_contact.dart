@@ -39,124 +39,126 @@ class _AddLeadContactShetState extends State<AddLeadContactShet> {
       ),
       width: double.infinity,
       height: 300.h,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Add Contact',
-                      style: heading6,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TaskCustomTextField(
-                            controller: nameController,
-                            textCapitalization: TextCapitalization.sentences,
-                            data: "Name",
-                            hintText: "Name",
-                            labelText: "Name",
-                            index: 0,
-                            focusedIndexNotifier: focusedIndexNotifier,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.h,
-                        ),
-                        Expanded(
-                          child: TaskCustomTextField(
-                            controller: phoneController,
-                            textCapitalization: TextCapitalization.sentences,
-                            keyboardType: TextInputType.number,
-                            maxLength: 10,
-                            data: "Phone",
-                            hintText: "Phone",
-                            labelText: "Phone",
-                            index: 1,
-                            focusedIndexNotifier: focusedIndexNotifier,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    TaskCustomTextField(
-                      controller: emailController,
-                      textCapitalization: TextCapitalization.none,
-                      data: "Email",
-                      hintText: "Email",
-                      labelText: "Email",
-                      index: 2,
-                      focusedIndexNotifier: focusedIndexNotifier,
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    TaskCustomTextField(
-                      controller: designationController,
-                      textCapitalization: TextCapitalization.none,
-                      data: "Designation",
-                      hintText: "Designation",
-                      labelText: "Designation",
-                      index: 3,
-                      focusedIndexNotifier: focusedIndexNotifier,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                CustomButton(
-                  onPressed: () async {
-                    await taskController.addContact(
-                        leadId: widget.leadId,
-                        name: nameController.text,
-                        phone: phoneController.text,
-                        email: emailController.text,
-                        designation: designationController.text);
-                    clearFormFields();
-                  },
-                  text: Text(
-                    "Add",
-                    style: TextStyle(
-                      color: whiteColor,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Add Contact',
+                        style: heading6,
+                      ),
+                    ],
                   ),
-                  width: double.infinity,
-                  color: primaryColor,
-                  height: 45.h,
-                ),
-              ],
-            ),
-            Positioned(
-              top: 1.h,
-              right: 5.w,
-              child: InkWell(
-                onTap: () {
-                  Get.back();
-                },
-                child: Container(
-                  child: Icon(
-                    Icons.close,
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TaskCustomTextField(
+                              controller: nameController,
+                              textCapitalization: TextCapitalization.sentences,
+                              data: "Name",
+                              hintText: "Name",
+                              labelText: "Name",
+                              index: 0,
+                              focusedIndexNotifier: focusedIndexNotifier,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.h,
+                          ),
+                          Expanded(
+                            child: TaskCustomTextField(
+                              controller: phoneController,
+                              textCapitalization: TextCapitalization.sentences,
+                              keyboardType: TextInputType.number,
+                              maxLength: 10,
+                              data: "Phone",
+                              hintText: "Phone",
+                              labelText: "Phone",
+                              index: 1,
+                              focusedIndexNotifier: focusedIndexNotifier,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      TaskCustomTextField(
+                        controller: emailController,
+                        textCapitalization: TextCapitalization.none,
+                        data: "Email",
+                        hintText: "Email",
+                        labelText: "Email",
+                        index: 2,
+                        focusedIndexNotifier: focusedIndexNotifier,
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      TaskCustomTextField(
+                        controller: designationController,
+                        textCapitalization: TextCapitalization.none,
+                        data: "Designation",
+                        hintText: "Designation",
+                        labelText: "Designation",
+                        index: 3,
+                        focusedIndexNotifier: focusedIndexNotifier,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  CustomButton(
+                    onPressed: () async {
+                      await taskController.addContact(
+                          leadId: widget.leadId,
+                          name: nameController.text,
+                          phone: phoneController.text,
+                          email: emailController.text,
+                          designation: designationController.text);
+                      clearFormFields();
+                    },
+                    text: Text(
+                      "Add",
+                      style: TextStyle(
+                        color: whiteColor,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    width: double.infinity,
+                    color: primaryColor,
+                    height: 45.h,
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 1.h,
+                right: 5.w,
+                child: InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Container(
+                    child: Icon(
+                      Icons.close,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

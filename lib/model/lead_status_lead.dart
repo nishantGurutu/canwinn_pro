@@ -7,7 +7,9 @@ class LeadStatusListModel {
 
   LeadStatusListModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    message = json['message'];
+    if (json['message'] != null) {
+      message = json['message'];
+    }
     if (json['data'] != null) {
       data = <LeadStatusData>[];
       json['data'].forEach((v) {

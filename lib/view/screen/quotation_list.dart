@@ -5,16 +5,24 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/controller/lead_controller.dart';
+import 'package:task_management/helper/storage_helper.dart';
+import 'package:task_management/model/lead_details_model.dart';
 import 'package:task_management/model/quotation_list_model.dart';
 import 'package:task_management/view/screen/create_quotation.dart';
 import 'package:task_management/view/screen/update_quotation.dart';
+import 'package:task_management/view/widgets/document_list_bottom_sheet.dart';
 
 class QuotationListScreen extends StatefulWidget {
   final dynamic leadId;
   final String? leadNumber;
   final String from;
+  final Rx<LeadDetailsData?> leadDetails;
   const QuotationListScreen(
-      {super.key, required this.leadId, this.leadNumber, required this.from});
+      {super.key,
+      required this.leadId,
+      this.leadNumber,
+      required this.from,
+      required this.leadDetails});
 
   @override
   State<QuotationListScreen> createState() => _QuotationListScreenState();
@@ -26,8 +34,8 @@ class _QuotationListScreenState extends State<QuotationListScreen> {
   @override
   void initState() {
     super.initState();
-    print('lead id in overview quotation ${widget.leadId}');
-
+    // print(
+    //     'lead id in overview quotation ${widget.leadDetails.value!.assignedTo!}');
     Future.microtask(() {
       leadController.quotationListApi(leadId: widget.leadId);
     });
@@ -107,10 +115,10 @@ class _QuotationListScreenState extends State<QuotationListScreen> {
                             width: 15.w,
                           ),
                           InkWell(
-                            onTap: () {
+                            onTap: () async {
                               if (leadController.isQuotationDownloading.value ==
                                   false) {
-                                leadController.downloadQuotation(
+                                await leadController.downloadQuotation(
                                     quotation.id, quotation.quotationNumber);
                               }
                             },
@@ -121,11 +129,76 @@ class _QuotationListScreenState extends State<QuotationListScreen> {
                           )
                         ],
                       ),
-                      SizedBox(height: 6),
+                      SizedBox(height: 6.h),
                       Text(
                         "Quotation: ${quotation.quotationNumber}",
                         style: TextStyle(color: Colors.grey.shade700),
                       ),
+                      SizedBox(height: 6.h),
+                      if ((widget.leadDetails.value?.assignedTo ?? "")
+                          .toString()
+                          .contains(StorageHelper.getId().toString()))
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom),
+                                    child: DocumentListBotomsheet(
+                                      from: "quotation",
+                                      leadId: widget.leadId,
+                                      quotationId: leadController
+                                          .quotationListData[index].id,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: 30.h,
+                                width: 140.w,
+                                decoration: BoxDecoration(
+                                  color: lightBlue,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.r),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Accept",
+                                    style: TextStyle(
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 30.h,
+                              width: 140.w,
+                              decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.r),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Not Accept",
+                                  style: TextStyle(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),

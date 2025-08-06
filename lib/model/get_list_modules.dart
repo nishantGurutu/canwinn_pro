@@ -1,11 +1,11 @@
 class GetLeadListModule {
   bool? status;
-  String? message;
+  dynamic message;
   List<GetListLeadMetting>? data;
 
   GetLeadListModule({this.status, this.message, this.data});
 
-  GetLeadListModule.fromJson(Map<String, dynamic> json) {
+  GetLeadListModule.fromJson(Map<dynamic, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
@@ -16,8 +16,8 @@ class GetLeadListModule {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
@@ -28,34 +28,34 @@ class GetLeadListModule {
 }
 
 class GetListLeadMetting {
-  int? id;
-  int? userId;
-  int? leadId;
-  String? meetingTitle;
-  int? visitType;
-  String? meetingDate;
-  String? meetingTime;
-  String? meetingVenue;
+  dynamic id;
+  dynamic userId;
+  dynamic leadId;
+  dynamic meetingTitle;
+  dynamic visitType;
+  dynamic meetingDate;
+  dynamic meetingTime;
+  dynamic meetingVenue;
   dynamic attendPerson;
-  String? meetingLink;
-  String? startMeetingDate;
-  String? startMeetingTime;
-  String? endMeetingDate;
-  String? endMeetingTime;
-  String? outLatitude;
-  String? outLongitude;
-  String? latitude;
-  String? longitude;
-  String? meetingMom;
-  String? selfieImage;
-  String? reminder;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
-  String? leadsName;
-  String? leadNumber;
-  String? leadsPhoneNumber;
-  String? statusText;
+  dynamic meetingLink;
+  dynamic startMeetingDate;
+  dynamic startMeetingTime;
+  dynamic endMeetingDate;
+  dynamic endMeetingTime;
+  dynamic outLatitude;
+  dynamic outLongitude;
+  dynamic latitude;
+  dynamic longitude;
+  dynamic meetingMom;
+  dynamic selfieImage;
+  dynamic reminder;
+  dynamic status;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic leadsName;
+  dynamic leadNumber;
+  dynamic leadsPhoneNumber;
+  dynamic statusText;
 
   GetListLeadMetting(
       {this.id,
@@ -87,7 +87,7 @@ class GetListLeadMetting {
       this.leadsPhoneNumber,
       this.statusText});
 
-  GetListLeadMetting.fromJson(Map<String, dynamic> json) {
+  GetListLeadMetting.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     leadId = json['lead_id'];
@@ -118,8 +118,8 @@ class GetListLeadMetting {
     statusText = json['status_text'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     data['id'] = this.id;
     data['user_id'] = this.userId;
     data['lead_id'] = this.leadId;

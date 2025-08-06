@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String deviceToken = "";
   String androidVersion = 'Unknown';
   String modelName = 'Unknown';
-  String appVersion = '1.0.0+7';
+  String appVersion = '1.0.0+2';
   @override
   void initState() {
     super.initState();

@@ -99,12 +99,11 @@ class TaskService {
       dynamic id) async {
     try {
       var token = StorageHelper.getToken();
-      // var assignedDept = StorageHelper.getAssignedDept();
       var url = "${ApiConstant.baseUrl + ApiConstant.responsiblePersonList}";
 
-      // if (assignedDept != null && assignedDept.isNotEmpty) {
-      //   url += "?user_id=$id";
-      // }
+      if (id != null && id.isNotEmpty) {
+        url += "?user_id=$id";
+      }
 
       print('Responsible person API URL: $url');
 

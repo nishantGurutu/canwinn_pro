@@ -233,14 +233,6 @@ class TaskContactList extends StatelessWidget {
     }
   }
 
-  // Future<void> _launchEmail() async {
-  //   final url = Uri.parse(
-  //       'mailto:nishantkr405@gmail.com?subject=${Uri.encodeFull('ueyue')}&body=${Uri.encodeFull('jeyy')}');
-  //   if (await canLaunchUrl(url)) {
-  //     await launchUrl(url);
-  //   }
-  // }
-
   Future<void> callWhatsApp(String? phoneNumber) async {
     var androidUrl = "whatsapp://send?phone=+91$phoneNumber}";
     var iosUrl = "https://wa.me/$phoneNumber}";

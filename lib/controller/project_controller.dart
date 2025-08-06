@@ -36,6 +36,7 @@ class ProjectController extends GetxController {
     final result = await ProjectService().projectDetailsApi(id);
     if (result != null) {
       projectDetails.value = result;
+      await projectListApi();
     } else {}
     isProjectDetailsLoading.value = false;
   }
@@ -168,7 +169,7 @@ class ProjectController extends GetxController {
         departmentId,
         dueTime);
     Get.back();
-      await allProjectListApi();
+    await allProjectListApi();
     isProjectAdding.value = false;
   }
 
@@ -221,8 +222,6 @@ class ProjectController extends GetxController {
     isProjectDeleting.value = false;
   }
 
-
-
   // Project Responsible person list data
 
   RxMap<int, bool> responsiblePersonSelectedCheckBox2 = <int, bool>{}.obs;
@@ -237,7 +236,7 @@ class ProjectController extends GetxController {
   RxList<bool> responsiblePersonSelectedCheckBox = <bool>[].obs;
   RxList<bool> reviewerCheckBox = <bool>[].obs;
   Rx<ResponsiblePersonData?> selectedResponsiblePersonData =
-  Rx<ResponsiblePersonData?>(null);
+      Rx<ResponsiblePersonData?>(null);
   RxList<int> selectedResponsiblePersonId = <int>[].obs;
   RxList<bool> selectedSharedListPerson = <bool>[].obs;
   var fromPage = ''.obs;

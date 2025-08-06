@@ -25,24 +25,24 @@ class LeadDetailsModel {
 }
 
 class LeadDetailsData {
-  int? id;
-  String? leadNumber;
-  int? userId;
-  String? leadName;
-  String? leadType;
-  String? company;
-  String? phone;
-  String? email;
-  int? source;
+  dynamic id;
+  dynamic leadNumber;
+  dynamic userId;
+  dynamic leadName;
+  dynamic leadType;
+  dynamic company;
+  dynamic phone;
+  dynamic email;
+  dynamic source;
   dynamic designation;
   dynamic gender;
-  int? status;
+  dynamic status;
   dynamic noOfProject;
-  String? description;
+  dynamic description;
   dynamic regionalOfc;
   dynamic referenceDetails;
-  String? image;
-  String? audio;
+  dynamic image;
+  dynamic audio;
   dynamic type;
   dynamic addressType;
   dynamic addressLine1;
@@ -53,18 +53,19 @@ class LeadDetailsData {
   dynamic country;
   dynamic state;
   dynamic visitingCard;
-  String? latitude;
-  String? longitude;
-  String? peopleAdded;
-  String? assignedTo;
-  int? isDeleted;
-  String? createdAt;
-  String? updatedAt;
-  String? sourceName;
-  String? statusName;
-  String? ownerName;
+  dynamic latitude;
+  dynamic longitude;
+  dynamic peopleAdded;
+  dynamic assignedTo;
+  dynamic isDeleted;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic sourceName;
+  dynamic statusName;
+  dynamic ownerName;
   List<AssignedToUsers>? assignedToUsers;
   List<AssignedToUsers>? addedUsers;
+  List<ApprovalData>? approvalData;
 
   LeadDetailsData(
       {this.id,
@@ -106,7 +107,8 @@ class LeadDetailsData {
       this.statusName,
       this.ownerName,
       this.assignedToUsers,
-      this.addedUsers});
+      this.addedUsers,
+      this.approvalData});
 
   LeadDetailsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -159,6 +161,12 @@ class LeadDetailsData {
         addedUsers!.add(new AssignedToUsers.fromJson(v));
       });
     }
+    if (json['approval_data'] != null) {
+      approvalData = <ApprovalData>[];
+      json['approval_data'].forEach((v) {
+        approvalData!.add(new ApprovalData.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -208,6 +216,10 @@ class LeadDetailsData {
     if (this.addedUsers != null) {
       data['addedUsers'] = this.addedUsers!.map((v) => v.toJson()).toList();
     }
+    if (this.approvalData != null) {
+      data['approval_data'] =
+          this.approvalData!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -230,6 +242,63 @@ class AssignedToUsers {
     data['id'] = this.id;
     data['name'] = this.name;
     data['image'] = this.image;
+    return data;
+  }
+}
+
+class ApprovalData {
+  int? id;
+  String? managerStatus;
+  String? managerRemarks;
+  String? managerName;
+  String? managerTime;
+  String? branchheadStatus;
+  String? branchheadRemarks;
+  String? brancheadTime;
+  String? branchheadAgreement;
+  String? branchheadName;
+  String? submittedAt;
+
+  ApprovalData(
+      {this.id,
+      this.managerStatus,
+      this.managerRemarks,
+      this.managerName,
+      this.managerTime,
+      this.branchheadStatus,
+      this.branchheadRemarks,
+      this.brancheadTime,
+      this.branchheadAgreement,
+      this.branchheadName,
+      this.submittedAt});
+
+  ApprovalData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    managerStatus = json['manager_status'];
+    managerRemarks = json['manager_remarks'];
+    managerName = json['manager_name'];
+    managerTime = json['manager_time'];
+    branchheadStatus = json['branchhead_status'];
+    branchheadRemarks = json['branchhead_remarks'];
+    brancheadTime = json['branchead_time'];
+    branchheadAgreement = json['branchhead_agreement'];
+    branchheadName = json['branchhead_name'];
+    submittedAt = json['submitted_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['manager_status'] = this.managerStatus;
+    data['manager_remarks'] = this.managerRemarks;
+    data['manager_name'] = this.managerName;
+    data['manager_time'] = this.managerTime;
+    data['branchhead_status'] = this.branchheadStatus;
+    data['branchhead_remarks'] = this.branchheadRemarks;
+    data['branchead_time'] = this.brancheadTime;
+    data['branchhead_agreement'] = this.branchheadAgreement;
+    data['branchhead_name'] = this.branchheadName;
+    data['submitted_at'] = this.submittedAt;
     return data;
   }
 }

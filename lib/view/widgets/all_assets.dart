@@ -50,45 +50,6 @@ class _AllAssetsListState extends State<AllAssetsList> {
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 100.w,
-                          child: Center(
-                            child: Text(
-                              'Sr no.',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 100.w,
-                          child: Text(
-                            'Name',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 90.w,
-                          child: Center(
-                            child: Text(
-                              'User Name',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30.w,
-                          child: Center(
-                            child: Text(
-                              '',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
                     profileController.allocatedAssignList.isEmpty
                         ? Expanded(
                             child: Center(
@@ -100,165 +61,214 @@ class _AllAssetsListState extends State<AllAssetsList> {
                               ),
                             ),
                           )
-                        : Expanded(
-                            child: ListView.builder(
-                              itemCount:
-                                  profileController.allocatedAssignList.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        await showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          builder: (context) => Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom),
-                                            child: assetsDetails(
-                                                context,
-                                                profileController
-                                                        .allocatedAssignList[
-                                                    index]),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: whiteColor,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.r),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: lightGreyColor
-                                                  .withOpacity(0.2),
-                                              blurRadius: 13.0,
-                                              spreadRadius: 2,
-                                              blurStyle: BlurStyle.normal,
-                                              offset: Offset(0, 4),
+                        : Column(
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 100.w,
+                                    child: Center(
+                                      child: Text(
+                                        'Sr no.',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 100.w,
+                                    child: Text(
+                                      'Name',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 90.w,
+                                    child: Center(
+                                      child: Text(
+                                        'User Name',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 30.w,
+                                    child: Center(
+                                      child: Text(
+                                        '',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: profileController
+                                      .allocatedAssignList.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () async {
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              builder: (context) => Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: assetsDetails(
+                                                    context,
+                                                    profileController
+                                                            .allocatedAssignList[
+                                                        index]),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: whiteColor,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(5.r),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: lightGreyColor
+                                                      .withOpacity(0.2),
+                                                  blurRadius: 13.0,
+                                                  spreadRadius: 2,
+                                                  blurStyle: BlurStyle.normal,
+                                                  offset: Offset(0, 4),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 5.h),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5.h),
+                                              child: Column(
                                                 children: [
-                                                  SizedBox(
-                                                    width: 30.w,
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 3.w),
-                                                      child: Text(
-                                                        '${index + 1}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            fontSize: 16),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 30.w,
+                                                        child: Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      3.w),
+                                                          child: Text(
+                                                            '${index + 1}',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 120.w,
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 3.w),
-                                                      child: Text(
-                                                        '${profileController.allocatedAssignList[index]['asset_name'] ?? ""}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            fontSize: 16),
+                                                      SizedBox(
+                                                        width: 120.w,
+                                                        child: Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      3.w),
+                                                          child: Text(
+                                                            '${profileController.allocatedAssignList[index]['asset_name'] ?? ""}',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 120.w,
-                                                    child: Text(
-                                                      '${profileController.allocatedAssignList[index]['assigned_user'] ?? ""}',
-                                                      textAlign: TextAlign.left,
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 20.w,
-                                                    child: Center(
-                                                      child: PopupMenuButton(
-                                                        itemBuilder: (context) {
-                                                          return [
-                                                            // PopupMenuItem(
-                                                            //   onTap: () {
-                                                            //     // showModalBottomSheet(
-                                                            //     //   isDismissible:
-                                                            //     //       true,
-                                                            //     //   context:
-                                                            //     //       context,
-                                                            //     //   isScrollControlled:
-                                                            //     //       true,
-                                                            //     //   builder:
-                                                            //     //       (context) =>
-                                                            //     //           editBottomSheet(
+                                                      SizedBox(
+                                                        width: 120.w,
+                                                        child: Text(
+                                                          '${profileController.allocatedAssignList[index]['assigned_user'] ?? ""}',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                              fontSize: 16),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 20.w,
+                                                        child: Center(
+                                                          child:
+                                                              PopupMenuButton(
+                                                            itemBuilder:
+                                                                (context) {
+                                                              return [
+                                                                // PopupMenuItem(
+                                                                //   onTap: () {
+                                                                //     // showModalBottomSheet(
+                                                                //     //   isDismissible:
+                                                                //     //       true,
+                                                                //     //   context:
+                                                                //     //       context,
+                                                                //     //   isScrollControlled:
+                                                                //     //       true,
+                                                                //     //   builder:
+                                                                //     //       (context) =>
+                                                                //     //           editBottomSheet(
 
-                                                            //     //   ),
-                                                            //     // );
-                                                            //   },
-                                                            //   child: Text(edit),
-                                                            // ),
-                                                            PopupMenuItem(
-                                                              onTap: () async {
-                                                                if (profileController
-                                                                        .isAllocatedAssestAssignDeleting
-                                                                        .value ==
-                                                                    false) {
-                                                                  await profileController
-                                                                      .deleteAllocatedAssignAssets(
-                                                                    profileController
-                                                                            .allocatedAssignList[
-                                                                        index]['id'],
-                                                                    profileController
-                                                                            .allocatedAssignList[index]
-                                                                        [
-                                                                        'allocation_date'],
-                                                                    profileController
-                                                                            .allocatedAssignList[index]
-                                                                        [
-                                                                        'release_date'],
-                                                                  );
-                                                                }
-                                                              },
-                                                              child:
-                                                                  Text(delete),
-                                                            ),
-                                                          ];
-                                                        },
+                                                                //     //   ),
+                                                                //     // );
+                                                                //   },
+                                                                //   child: Text(edit),
+                                                                // ),
+                                                                PopupMenuItem(
+                                                                  onTap:
+                                                                      () async {
+                                                                    if (profileController
+                                                                            .isAllocatedAssestAssignDeleting
+                                                                            .value ==
+                                                                        false) {
+                                                                      await profileController
+                                                                          .deleteAllocatedAssignAssets(
+                                                                        profileController.allocatedAssignList[index]
+                                                                            [
+                                                                            'id'],
+                                                                        profileController.allocatedAssignList[index]
+                                                                            [
+                                                                            'allocation_date'],
+                                                                        profileController.allocatedAssignList[index]
+                                                                            [
+                                                                            'release_date'],
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                      delete),
+                                                                ),
+                                                              ];
+                                                            },
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                   ],
                 ),

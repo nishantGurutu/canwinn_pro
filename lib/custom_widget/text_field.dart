@@ -54,6 +54,9 @@ class CustomTextField extends StatelessWidget {
       style:
           enable == false ? changeTextColor(rubikRegular, darkGreyColor) : null,
       validator: (value) {
+        if (data == "Reminder") {
+          return null;
+        }
         if (value!.isEmpty) {
           return "Please Enter $data";
         }

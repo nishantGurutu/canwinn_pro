@@ -64,38 +64,155 @@ class _AddAssetsState extends State<AddAssets> {
       child: Obx(
         () => profileController.assetsTypeListLoading.value == true
             ? Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Assign Assets',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 45.h,
-                          width: 160.w,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            border: Border.all(color: lightBorderColor),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(14.r),
+            : SafeArea(
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Assign Assets',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 45.h,
+                            width: 160.w,
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              border: Border.all(color: lightBorderColor),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(14.r),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 8.w),
+                              child: DropdownMenu<AssetsTypeData>(
+                                controller: assetsTypeController,
+                                width: double.infinity,
+                                trailingIcon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: primaryColor,
+                                  height: 8.h,
+                                ),
+                                selectedTrailingIcon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: primaryColor,
+                                  height: 8.h,
+                                ),
+                                menuHeight: 350.h,
+                                hintText: "Assets Type",
+                                requestFocusOnTap: true,
+                                enableSearch: true,
+                                enableFilter: true,
+                                inputDecorationTheme: InputDecorationTheme(
+                                    border: InputBorder.none),
+                                menuStyle: MenuStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(
+                                          whiteColor),
+                                ),
+                                onSelected: (AssetsTypeData? value) async {
+                                  if (value != null) {
+                                    profileController
+                                        .selectedAssetsTypeData.value = value;
+                                    await profileController
+                                        .assetsListApi(value.id);
+                                  }
+                                },
+                                dropdownMenuEntries: profileController
+                                    .assetsTypeListData
+                                    .map<DropdownMenuEntry<AssetsTypeData>>(
+                                        (AssetsTypeData menu) {
+                                  return DropdownMenuEntry<AssetsTypeData>(
+                                    value: menu,
+                                    label: menu.name ?? '',
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 8.w),
-                            child: DropdownMenu<AssetsTypeData>(
-                              controller: assetsTypeController,
+                          Container(
+                            height: 45.h,
+                            width: 160.w,
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              border: Border.all(color: lightBorderColor),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(14.r),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 8.w),
+                              child: DropdownMenu<AssetsListData>(
+                                controller: assetsController,
+                                width: double.infinity,
+                                trailingIcon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: primaryColor,
+                                  height: 8.h,
+                                ),
+                                selectedTrailingIcon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: primaryColor,
+                                  height: 8.h,
+                                ),
+                                menuHeight: 350.h,
+                                hintText: "Select User",
+                                requestFocusOnTap: true,
+                                enableSearch: true,
+                                enableFilter: true,
+                                inputDecorationTheme: InputDecorationTheme(
+                                    border: InputBorder.none),
+                                menuStyle: MenuStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(
+                                          whiteColor),
+                                ),
+                                onSelected: (AssetsListData? value) async {
+                                  if (value != null) {
+                                    profileController
+                                        .selectedAssetsListData.value = value;
+                                  }
+                                },
+                                dropdownMenuEntries: profileController
+                                    .assetsListData
+                                    .map<DropdownMenuEntry<AssetsListData>>(
+                                        (AssetsListData menu) {
+                                  return DropdownMenuEntry<AssetsListData>(
+                                    value: menu,
+                                    label: menu.assetName ?? '',
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+                      Container(
+                        height: 45.h,
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          border: Border.all(color: lightBorderColor),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(14.r),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8.w),
+                          child: Obx(
+                            () => DropdownMenu<ResponsiblePersonData>(
+                              controller: selectUserController,
                               width: double.infinity,
                               trailingIcon: Image.asset(
                                 'assets/images/png/Vector 3.png',
@@ -108,7 +225,7 @@ class _AddAssetsState extends State<AddAssets> {
                                 height: 8.h,
                               ),
                               menuHeight: 350.h,
-                              hintText: "Assets Type",
+                              hintText: "User List",
                               requestFocusOnTap: true,
                               enableSearch: true,
                               enableFilter: true,
@@ -116,22 +233,19 @@ class _AddAssetsState extends State<AddAssets> {
                                   border: InputBorder.none),
                               menuStyle: MenuStyle(
                                 backgroundColor:
-                                    WidgetStateProperty.all<Color>(
-                                        whiteColor),
+                                    WidgetStateProperty.all<Color>(whiteColor),
                               ),
-                              onSelected: (AssetsTypeData? value) async {
+                              onSelected: (ResponsiblePersonData? value) async {
                                 if (value != null) {
-                                  profileController
-                                      .selectedAssetsTypeData.value = value;
-                                  await profileController
-                                      .assetsListApi(value.id);
+                                  profileController.selectedUser.value = value;
                                 }
                               },
-                              dropdownMenuEntries: profileController
-                                  .assetsTypeListData
-                                  .map<DropdownMenuEntry<AssetsTypeData>>(
-                                      (AssetsTypeData menu) {
-                                return DropdownMenuEntry<AssetsTypeData>(
+                              dropdownMenuEntries:
+                                  taskController.responsiblePersonList.map<
+                                          DropdownMenuEntry<
+                                              ResponsiblePersonData>>(
+                                      (ResponsiblePersonData menu) {
+                                return DropdownMenuEntry<ResponsiblePersonData>(
                                   value: menu,
                                   label: menu.name ?? '',
                                 );
@@ -139,169 +253,59 @@ class _AddAssetsState extends State<AddAssets> {
                             ),
                           ),
                         ),
-                        Container(
-                          height: 45.h,
-                          width: 160.w,
-                          decoration: BoxDecoration(
+                      ),
+                      SizedBox(height: 15.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomCalender(
+                              hintText: allocateDate,
+                              controller: allocateDateController,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Expanded(
+                            child: CustomCalender(
+                              hintText: releaseDate,
+                              controller: releaseDateController,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+                      CustomButton(
+                        onPressed: () async {
+                          // if (profileController.isAssestAssigning.value ==
+                          //     false) {
+                          await profileController.assignAssets(
+                            profileController.selectedAssetsTypeData.value,
+                            profileController.selectedAssetsListData.value,
+                            profileController.selectedUser.value,
+                            allocateDateController.text,
+                            releaseDateController.text,
+                          );
+                          // }/
+                          //  else {
+                          //   CustomToast()
+                          //       .showCustomToast("Please select assets.");
+                          // }
+                        },
+                        text: Text(
+                          assigneButton,
+                          style: TextStyle(
                             color: whiteColor,
-                            border: Border.all(color: lightBorderColor),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(14.r),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 8.w),
-                            child: DropdownMenu<AssetsListData>(
-                              controller: assetsController,
-                              width: double.infinity,
-                              trailingIcon: Image.asset(
-                                'assets/images/png/Vector 3.png',
-                                color: primaryColor,
-                                height: 8.h,
-                              ),
-                              selectedTrailingIcon: Image.asset(
-                                'assets/images/png/Vector 3.png',
-                                color: primaryColor,
-                                height: 8.h,
-                              ),
-                              menuHeight: 350.h,
-                              hintText: "Select User",
-                              requestFocusOnTap: true,
-                              enableSearch: true,
-                              enableFilter: true,
-                              inputDecorationTheme: InputDecorationTheme(
-                                  border: InputBorder.none),
-                              menuStyle: MenuStyle(
-                                backgroundColor:
-                                    WidgetStateProperty.all<Color>(
-                                        whiteColor),
-                              ),
-                              onSelected: (AssetsListData? value) async {
-                                if (value != null) {
-                                  profileController
-                                      .selectedAssetsListData.value = value;
-                                }
-                              },
-                              dropdownMenuEntries: profileController
-                                  .assetsListData
-                                  .map<DropdownMenuEntry<AssetsListData>>(
-                                      (AssetsListData menu) {
-                                return DropdownMenuEntry<AssetsListData>(
-                                  value: menu,
-                                  label: menu.assetName ?? '',
-                                );
-                              }).toList(),
-                            ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 15.h),
-                    Container(
-                      height: 45.h,
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border.all(color: lightBorderColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(14.r),
-                        ),
+                        width: double.infinity,
+                        color: primaryColor,
+                        height: 45.h,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 8.w),
-                        child: Obx(
-                          () => DropdownMenu<ResponsiblePersonData>(
-                            controller: selectUserController,
-                            width: double.infinity,
-                            trailingIcon: Image.asset(
-                              'assets/images/png/Vector 3.png',
-                              color: primaryColor,
-                              height: 8.h,
-                            ),
-                            selectedTrailingIcon: Image.asset(
-                              'assets/images/png/Vector 3.png',
-                              color: primaryColor,
-                              height: 8.h,
-                            ),
-                            menuHeight: 350.h,
-                            hintText: "User List",
-                            requestFocusOnTap: true,
-                            enableSearch: true,
-                            enableFilter: true,
-                            inputDecorationTheme:
-                                InputDecorationTheme(border: InputBorder.none),
-                            menuStyle: MenuStyle(
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(whiteColor),
-                            ),
-                            onSelected: (ResponsiblePersonData? value) async {
-                              if (value != null) {
-                                profileController.selectedUser.value = value;
-                              }
-                            },
-                            dropdownMenuEntries: taskController
-                                .responsiblePersonList
-                                .map<DropdownMenuEntry<ResponsiblePersonData>>(
-                                    (ResponsiblePersonData menu) {
-                              return DropdownMenuEntry<ResponsiblePersonData>(
-                                value: menu,
-                                label: menu.name ?? '',
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomCalender(
-                            hintText: allocateDate,
-                            controller: allocateDateController,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Expanded(
-                          child: CustomCalender(
-                            hintText: releaseDate,
-                            controller: releaseDateController,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15.h),
-                    CustomButton(
-                      onPressed: () async {
-                        // if (profileController.isAssestAssigning.value ==
-                        //     false) {
-                        await profileController.assignAssets(
-                          profileController.selectedAssetsTypeData.value,
-                          profileController.selectedAssetsListData.value,
-                          profileController.selectedUser.value,
-                          allocateDateController.text,
-                          releaseDateController.text,
-                        );
-                        // }/
-                        //  else {
-                        //   CustomToast()
-                        //       .showCustomToast("Please select assets.");
-                        // }
-                      },
-                      text: Text(
-                        assigneButton,
-                        style: TextStyle(
-                          color: whiteColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      width: double.infinity,
-                      color: primaryColor,
-                      height: 45.h,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
       ),

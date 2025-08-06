@@ -11,7 +11,6 @@ import 'package:task_management/model/chat_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/model/send_message_model.dart';
 import 'package:task_management/service/chat_service.dart';
-import 'package:task_management/service/task_service.dart';
 
 class ChatController extends GetxController {
   var chatModel = ChatListModel().obs;
@@ -39,10 +38,14 @@ class ChatController extends GetxController {
     }
     final result = await ChatService().chatServiceApi();
     if (result != null) {
+      isChatLoading.value = false;
       chatModel.value = result;
+
       isLongPressed.clear();
       totalUnsenMessage.value = 0;
       chatList.assignAll(chatModel.value.data!);
+      chatList.refresh();
+      isChatLoading.refresh();
       isLongPressed.addAll(List<bool>.filled(chatList.length, false));
       isChatLoading.value = false;
       for (var chat in chatList) {
@@ -60,42 +63,6 @@ class ChatController extends GetxController {
       await chatListApi('');
     } else {}
     isChatLoading.value = false;
-  }
-
-  var isChatHistoryLoading = false.obs;
-  var chatHistoryModel = ChatHistoryModel().obs;
-  RxList<ChatHistoryData> chatHistoryList = <ChatHistoryData>[].obs;
-
-  RxBool hasMoreMessages = true.obs;
-  RxInt pageCountValue = 1.obs;
-  RxInt prePageCount = 1.obs;
-  Future<void> chatHistoryListApi(
-    String? chatId,
-    int pageCount,
-    String fromRoute,
-  ) async {
-    if (fromRoute == 'initstate') {
-      isChatHistoryLoading.value = true;
-    }
-
-    final result = await ChatService().chatHistoryServiceApi(chatId, pageCount);
-
-    if (result != null && result.data!.isNotEmpty) {
-      if ((result.data?.length ?? 0) >= 20) {
-        prePageCount.value = pageCount;
-        chatHistoryList.assignAll(result.data!.reversed.toList());
-      } else {
-        pageCountValue.value = prePageCount.value;
-        chatHistoryList.addAll(result.data!.reversed.toList());
-      }
-    } else {
-      if (fromRoute == 'initstate') {
-        hasMoreMessages.value = false;
-      }
-    }
-    if (fromRoute == 'initstate') {
-      isChatHistoryLoading.value = false;
-    }
   }
 
   RxList<int> selectedChatId = <int>[].obs;
@@ -119,7 +86,47 @@ class ChatController extends GetxController {
     final eventData = jsonDecode(event.data);
     final newMessage = ChatHistoryModel.fromJson(eventData);
     chatHistoryList.add(newMessage.data as ChatHistoryData);
-    refresh();
+    chatHistoryList.refresh();
+  }
+
+  var isChatHistoryLoading = false.obs;
+  var chatHistoryModel = ChatHistoryModel().obs;
+  RxList<ChatHistoryData> chatHistoryList = <ChatHistoryData>[].obs;
+
+  RxBool hasMoreMessages = true.obs;
+  RxInt pageCountValue = 1.obs;
+  RxInt prePageCount = 1.obs;
+  Future<void> chatHistoryListApi(
+    String? chatId,
+    int pageCount,
+    String fromRoute,
+  ) async {
+    if (fromRoute == 'initstate') {
+      isChatHistoryLoading.value = true;
+    }
+
+    final result = await ChatService().chatHistoryServiceApi(chatId, pageCount);
+
+    if (result != null && result.data!.isNotEmpty) {
+      List<ChatHistoryData> newMessages = result.data!.reversed.toList();
+
+      if (fromRoute == 'initstate') {
+        chatHistoryList.assignAll(newMessages);
+      } else {
+        chatHistoryList.insertAll(0, newMessages);
+      }
+      chatHistoryList.refresh();
+      hasMoreMessages.refresh();
+      isChatHistoryLoading.refresh();
+      hasMoreMessages.value = result.data!.length >= 20;
+      prePageCount.value = pageCount;
+    } else {
+      hasMoreMessages.value = false;
+    }
+
+    if (fromRoute == 'initstate') {
+      isChatHistoryLoading.value = false;
+    }
   }
 
   Future<void> sendMessageApi(String? userId, String text, String? chatId,
@@ -137,6 +144,7 @@ class ChatController extends GetxController {
   }
 
   var selectedMessage = "".obs;
+  Rx<File> selectedFile = File('').obs;
   var selectedMessageId = "".obs;
   var selectedParentMessageSender = "".obs;
   Future<void> updateMessageData(
@@ -149,13 +157,19 @@ class ChatController extends GetxController {
       required String messageId,
       required String parrent_message_sender_name,
       required String selectedMessage}) async {
+    DateTime inputDateTime = DateTime.now();
+
+    String displayDate = getDisplayDate(inputDateTime);
+    String dt = DateFormat.Hm().format(DateTime.now());
+    print('oiwejui49 3i9u $displayDate');
     final newMessage = await ChatHistoryData(
       message: message,
       senderId: StorageHelper.getId(),
       senderName: name,
       senderEmail: "",
       attachment: attachment.path,
-      createdAt: DateFormat.Hm().format(DateTime.now()),
+      createdAt: dt,
+      createdDate: displayDate,
       parentSenderName: parrent_message_sender_name,
       parentMessageId: messageId.isNotEmpty ? int.parse(messageId) : 0,
       parentMessage: selectedMessage,
@@ -170,6 +184,25 @@ class ChatController extends GetxController {
       attachment,
       messageId: messageId,
     );
+  }
+
+  String getDisplayDate(DateTime inputDateTime) {
+    final now = DateTime.now();
+
+    // Remove Time (only Date part)
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(Duration(days: 1));
+    final inputDate =
+        DateTime(inputDateTime.year, inputDateTime.month, inputDateTime.day);
+
+    if (inputDate == today) {
+      return 'Today';
+    } else if (inputDate == yesterday) {
+      return 'Yesterday';
+    } else {
+      // Format as "dd MMM yyyy"
+      return DateFormat('dd MMM yyyy').format(inputDateTime);
+    }
   }
 
   RxList<int> selectedMemberId = <int>[].obs;
@@ -226,37 +259,5 @@ class ChatController extends GetxController {
       isMemberLoading.value = false;
     }
     isMemberLoading.value = false;
-  }
-
-  // RxMap<int, bool> responsiblePersonSelectedCheckBox2 = <int, bool>{}.obs;
-  // RxMap<int, bool> toAssignedPersonCheckBox = <int, bool>{}.obs;
-  // RxMap<int, bool> reviewerCheckBox2 = <int, bool>{}.obs;
-  var isResponsiblePersonLoading = false.obs;
-  RxBool selectAll = false.obs;
-  RxList<ResponsiblePersonData> responsiblePersonList =
-      <ResponsiblePersonData>[].obs;
-  RxList<bool> selectedLongPress = <bool>[].obs;
-  RxList<bool> responsiblePersonSelectedCheckBox = <bool>[].obs;
-  RxList<bool> reviewerCheckBox = <bool>[].obs;
-  Rx<ResponsiblePersonData?> selectedResponsiblePersonData =
-      Rx<ResponsiblePersonData?>(null);
-  RxList<int> selectedResponsiblePersonId = <int>[].obs;
-  RxList<bool> selectedSharedListPerson = <bool>[].obs;
-  var fromPage = ''.obs;
-  var makeSelectedPersonValue = ''.obs;
-  var responsiblePersonListModel = ResponsiblePersonListModel().obs;
-  Future<void> responsiblePersonListApi(dynamic id, String fromPage) async {
-    Future.microtask(() {
-      isResponsiblePersonLoading.value = true;
-    });
-    final result = await TaskService().responsiblePersonListApi(id);
-    if (result != null) {
-      responsiblePersonList.assignAll(result.data!);
-
-      Future.microtask(() {
-        isResponsiblePersonLoading.value = false;
-      });
-      refresh();
-    }
   }
 }

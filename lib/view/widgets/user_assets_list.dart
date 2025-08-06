@@ -38,149 +38,169 @@ class UserAssetsList extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 40.w,
-                  child: Center(
-                    child: Text(
-                      'Sr no.',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 120.w,
-                  child: Text(
-                    'Name',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                SizedBox(
-                  width: 120.w,
-                  child: Center(
-                    child: Text(
-                      'Allocation Date',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10.h),
             Obx(
               () => allocatedAssetsList.isEmpty
                   ? Expanded(
                       child: Center(
-                        child: Text(
-                          "No Assets Assign",
-                          style: TextStyle(
-                              fontSize: 16.sp, fontWeight: FontWeight.w500),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/image/png/Finance-removebg-preview.png',
+                              height: 100.h,
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              "No Assets Assign",
+                              style: TextStyle(
+                                  fontSize: 16.sp, fontWeight: FontWeight.w500),
+                            ),
+                          ],
                         ),
                       ),
                     )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: allocatedAssetsList.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  await showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom),
-                                      child: assetsDetails(
-                                          context, allocatedAssetsList[index]),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5.r),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: lightGreyColor.withOpacity(0.2),
-                                        blurRadius: 13.0,
-                                        spreadRadius: 2,
-                                        blurStyle: BlurStyle.normal,
-                                        offset: Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 5.h),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5.w),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                width: 40.w,
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 3.w),
-                                                  child: Text(
-                                                    '${allocatedAssetsList[index].assetSerialNo ?? ''}',
-                                                    textAlign: TextAlign.start,
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 120.w,
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 3.w),
-                                                  child: Text(
-                                                    '${allocatedAssetsList[index].assetName ?? ''}',
-                                                    textAlign: TextAlign.start,
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 120.w,
-                                                child: Center(
-                                                  child: Text(
-                                                    '${allocatedAssetsList[index].allocationDate ?? ''}',
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                  : Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 40.w,
+                              child: Center(
+                                child: Text(
+                                  'Sr no.',
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ),
-                              SizedBox(
-                                height: 10.h,
+                            ),
+                            SizedBox(
+                              width: 120.w,
+                              child: Text(
+                                'Name',
+                                style: TextStyle(fontSize: 16),
                               ),
-                            ],
-                          );
-                        },
-                      ),
+                            ),
+                            SizedBox(
+                              width: 120.w,
+                              child: Center(
+                                child: Text(
+                                  'Allocation Date',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: allocatedAssetsList.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      await showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom),
+                                          child: assetsDetails(context,
+                                              allocatedAssetsList[index]),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: whiteColor,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5.r),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                lightGreyColor.withOpacity(0.2),
+                                            blurRadius: 13.0,
+                                            spreadRadius: 2,
+                                            blurStyle: BlurStyle.normal,
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 5.h),
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5.w),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 40.w,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 3.w),
+                                                      child: Text(
+                                                        '${allocatedAssetsList[index].assetSerialNo ?? ''}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 120.w,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 3.w),
+                                                      child: Text(
+                                                        '${allocatedAssetsList[index].assetName ?? ''}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 120.w,
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${allocatedAssetsList[index].allocationDate ?? ''}',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
             )
           ],

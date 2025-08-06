@@ -95,14 +95,11 @@ class _MessageScreenState extends State<MessageScreen> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       chatController.pageCountValue.value += 1;
-      chatController.chatHistoryListApi(
-          widget.chatId, chatController.pageCountValue.value, '');
-      print('scroll controller listining');
-    } else if (_scrollController.position.pixels ==
-        _scrollController.position.minScrollExtent) {
-      chatController.pageCountValue.value -= 1;
-      chatController.chatHistoryListApi(
-          widget.chatId, chatController.pageCountValue.value, '');
+      await chatController.chatHistoryListApi(
+        widget.chatId,
+        chatController.pageCountValue.value,
+        'pagination',
+      );
     }
   }
 
@@ -185,10 +182,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                       child: chatController.groupmessagePicPath
                                               .value.isNotEmpty
                                           ? InkWell(
-                                              onTap: () {
-                                                // openFile(chatController
-                                                //     .groupmessagePicPath.value);
-                                              },
+                                              onTap: () {},
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(22.5),
@@ -295,19 +289,27 @@ class _MessageScreenState extends State<MessageScreen> {
                                   reverse: true,
                                   child: Obx(
                                     () => Column(
-                                      children: chatController.chatHistoryList
-                                          .map((chat) {
+                                      children: List.generate(
+                                          chatController.chatHistoryList.length,
+                                          (index) {
+                                        final chat = chatController
+                                            .chatHistoryList[index];
                                         final isCurrentUser =
                                             chat.senderId == loggedInUserId;
-                                        isCreatedDateShow.value = chat
-                                                .createdDate
-                                                .toString()
-                                                .toLowerCase() ==
-                                            previousCreateddate
-                                                .toString()
-                                                .toLowerCase();
-                                        previousCreateddate =
-                                            chat.createdDate.toString();
+                                        final currentDate =
+                                            chat.createdDate?.split(' ')[0] ??
+                                                '';
+                                        String previousDate = '';
+                                        if (index > 0) {
+                                          previousDate = chatController
+                                                  .chatHistoryList[index - 1]
+                                                  .createdDate
+                                                  ?.split(' ')[0] ??
+                                              '';
+                                        }
+                                        final bool showDateHeader =
+                                            index == 0 ||
+                                                currentDate != previousDate;
                                         return Padding(
                                           padding:
                                               EdgeInsets.only(bottom: 12.h),
@@ -323,63 +325,18 @@ class _MessageScreenState extends State<MessageScreen> {
                                                       .selectedParentMessageSender
                                                       .value =
                                                   chat.senderName.toString();
-                                              print(
-                                                  "\n Right Swipe Data --> ${chatController.selectedMessage.value}");
                                             },
-                                            // swipeSensitivity: 20,
                                             child: Column(
                                               children: [
-                                                isCreatedDateShow.value == false
-                                                    ? Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: isCreatedDateShow
-                                                                          .value ==
-                                                                      false
-                                                                  ? Color(
-                                                                      0xff27B1A2)
-                                                                  : lightSecondaryColor,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .all(
-                                                                Radius.circular(
-                                                                    5.r),
-                                                              ),
-                                                            ),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          8,
-                                                                      vertical:
-                                                                          4),
-                                                              child: Text(
-                                                                "${chat.createdDate ?? ''}",
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        whiteColor,
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                                maxLines:
-                                                                    100000,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : SizedBox(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    if (showDateHeader)
+                                                      timeContainer(
+                                                          chat.createdDate),
+                                                  ],
+                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       isCurrentUser
@@ -426,7 +383,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                           context)
                                                                       .size
                                                                       .width *
-                                                                  0.9,
+                                                                  0.7,
                                                             ),
                                                             decoration:
                                                                 BoxDecoration(
@@ -441,7 +398,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         11.r),
-                                                                topRight: Radius
+                                                                bottomRight: Radius
                                                                     .circular(
                                                                         11.r),
                                                                 bottomLeft: isCurrentUser
@@ -450,12 +407,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                             .r)
                                                                     : Radius
                                                                         .zero,
-                                                                bottomRight:
-                                                                    isCurrentUser
-                                                                        ? Radius
-                                                                            .zero
-                                                                        : Radius.circular(
-                                                                            11.r),
                                                               ),
                                                             ),
                                                             child: Stack(
@@ -464,11 +415,10 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                   padding:
                                                                       EdgeInsets
                                                                           .only(
-                                                                    left: 6.w,
-                                                                    right: 10.w,
-                                                                    top: 5.h,
-                                                                    bottom:
-                                                                        15.h,
+                                                                    left: 3.w,
+                                                                    right: 3.w,
+                                                                    top: 3.h,
+                                                                    bottom: 3.h,
                                                                   ),
                                                                   child: Column(
                                                                     crossAxisAlignment:
@@ -491,7 +441,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                           decoration:
                                                                               BoxDecoration(
                                                                             borderRadius:
-                                                                                BorderRadius.circular(10.r),
+                                                                                BorderRadius.circular(5.r),
                                                                             color:
                                                                                 dotColor,
                                                                           ),
@@ -507,12 +457,12 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                                               children: [
                                                                                 Text(
-                                                                                  '${chat.parentSenderName}',
+                                                                                  '${chat.parentSenderName ?? ''}',
                                                                                   textAlign: TextAlign.left,
                                                                                   style: TextStyle(fontSize: 12.sp, color: textColor),
                                                                                 ),
                                                                                 Text(
-                                                                                  '${chat.parentMessage}',
+                                                                                  '${chat.parentMessage ?? ''}',
                                                                                   textAlign: TextAlign.left,
                                                                                   style: TextStyle(fontSize: 12.sp, color: textColor),
                                                                                 ),
@@ -542,9 +492,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                       child: getFilePreview(chat.attachment!),
                                                                                     ),
                                                                                   ),
-                                                                            SizedBox(
-                                                                              height: 6.h,
-                                                                            ),
                                                                           ],
                                                                         ),
                                                                       if (chat.message !=
@@ -553,15 +500,32 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                               .isNotEmpty)
                                                                         Column(
                                                                           children: [
-                                                                            Text(
-                                                                              "${chat.message}",
-                                                                              style: changeTextColor(heading8, Colors.black),
-                                                                              maxLines: 100000,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 5.h,
-                                                                            ),
+                                                                            (chat.message?.split(" ").length ?? 0) > 3
+                                                                                ? Padding(
+                                                                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Text(
+                                                                                          "${chat.message ?? ''}",
+                                                                                          style: changeTextColor(heading8, Colors.black),
+                                                                                          maxLines: 100000,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          height: 15.h,
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  )
+                                                                                : Padding(
+                                                                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                                                                    child: Text(
+                                                                                      "${chat.message ?? ''}              ",
+                                                                                      style: changeTextColor(heading8, Colors.black),
+                                                                                      maxLines: 100000,
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  ),
                                                                           ],
                                                                         ),
                                                                     ],
@@ -585,7 +549,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                         color: Colors
                                                                             .black,
                                                                         fontSize:
-                                                                            14,
+                                                                            10.sp,
                                                                       ),
                                                                     ),
                                                                   )
@@ -685,7 +649,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   child: Stack(
                                                     children: [
                                                       Text(
-                                                          '${chatController.selectedMessage.value}'),
+                                                          '${chatController.selectedMessage.value ?? ''}'),
                                                       Container(
                                                         width: double.infinity,
                                                         decoration:
@@ -720,7 +684,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                '${chatController.selectedParentMessageSender.value}',
+                                                                '${chatController.selectedParentMessageSender.value ?? ''}',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -731,7 +695,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                         textColor),
                                                               ),
                                                               Text(
-                                                                '${chatController.selectedMessage.value}',
+                                                                '${chatController.selectedMessage.value ?? ''}',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -923,6 +887,27 @@ class _MessageScreenState extends State<MessageScreen> {
                     ],
                   ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget timeContainer(String? createdDate) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xff27B1A2),
+        borderRadius: BorderRadius.all(
+          Radius.circular(5.r),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Text(
+          "${createdDate ?? ''}",
+          style: TextStyle(
+              color: whiteColor, fontSize: 16, fontWeight: FontWeight.w500),
+          maxLines: 100000,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -1185,7 +1170,7 @@ class _MessageScreenState extends State<MessageScreen> {
       }
 
       chatController.isMessagePicUploading.value = false;
-      Get.back();
+      // Get.back();
       if (from == 'group') {
         await chatController.updateGroupIconApi(widget.chatId);
       }

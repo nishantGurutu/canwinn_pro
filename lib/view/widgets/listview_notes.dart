@@ -47,6 +47,7 @@ class ListViewNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Grouping notes by formatted date
     Map<String, List> groupedNotes = {};
     for (var note in notesList) {
       final createdAt =

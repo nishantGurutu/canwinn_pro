@@ -81,7 +81,27 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
     officeaddressController.text = '${widget.leadDetails.addressLine2 ?? ""}';
     designationController.text = widget.leadDetails.designation ?? "";
     cityController.text = widget.leadDetails.cityTown ?? '';
+    noofprojectController.text = widget.leadDetails.noOfProject ?? "";
+    regionalOfficeController.text = widget.leadDetails.regionalOfc ?? "";
+    // if (widget.leadDetails.re == 'Referrals') {
+    refdetailsController.text = widget.leadDetails.referenceDetails ?? "";
+    // }
+    leadController.selectedUserType.value = widget.leadDetails.type ?? '';
+    siteaddressController.text = widget.leadDetails.addressLine1 ?? '';
+    officeaddressController.text = widget.leadDetails.addressLine2 ?? '';
+    cityController.text = widget.leadDetails.cityTown ?? '';
+    leadController.pickedVisitingCard.value =
+        widget.leadDetails.visitingCard ?? '';
+    leadController.pickedImage.value = widget.leadDetails.image ?? '';
+    // dateController.text = widget.leadDetails. ?? '';
     isLoading.value = false;
+  }
+
+  @override
+  void dispose() {
+    leadController.selectedFollowUpsTypeListData.value = null;
+    leadController.selectedSourceListData.value = null;
+    super.dispose();
   }
 
   @override
@@ -320,6 +340,39 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                         SizedBox(
                           height: 10.h,
                         ),
+                        Obx(
+                          () => leadController.selectedSourceListData.value
+                                      ?.sourceName ==
+                                  'Referrals'
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Reference Details",
+                                      style: TextStyle(fontSize: 14.sp),
+                                    ),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    TaskCustomTextField(
+                                      controller: refdetailsController,
+                                      textCapitalization:
+                                          TextCapitalization.none,
+                                      keyboardType: TextInputType.emailAddress,
+                                      data: 'reference',
+                                      hintText: 'Reference details',
+                                      labelText: 'Reference details',
+                                      index: 18,
+                                      focusedIndexNotifier:
+                                          focusedIndexNotifier,
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(),
+                        ),
                         Text(
                           "No of project",
                           style: TextStyle(fontSize: 14.sp),
@@ -451,26 +504,6 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          "Reference Details",
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        TaskCustomTextField(
-                          controller: refdetailsController,
-                          textCapitalization: TextCapitalization.none,
-                          keyboardType: TextInputType.emailAddress,
-                          data: 'reference',
-                          hintText: 'Reference details',
-                          labelText: 'Reference details',
-                          index: 18,
-                          focusedIndexNotifier: focusedIndexNotifier,
                         ),
                         SizedBox(
                           height: 10.h,
@@ -873,16 +906,32 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                                                 ),
                                               ],
                                             )
-                                          : ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12.r),
-                                              child: Image.file(
-                                                leadController.pickedFile.value,
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                              ),
-                                            )),
+                                          : leadController.pickedImage.value
+                                                  .contains("https")
+                                              ? ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.r),
+                                                  child: Image.network(
+                                                    leadController
+                                                        .pickedImage.value,
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                  ),
+                                                )
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.r),
+                                                  child: Image.file(
+                                                    leadController
+                                                        .pickedFile.value,
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                  ),
+                                                )),
                                 ),
                               ),
                             )),
@@ -935,11 +984,15 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                                           ),
                                         ],
                                       )
-                                    : Image.file(
-                                        leadController
-                                            .pickedVisitingFile.value!,
-                                        fit: BoxFit.cover,
-                                      ),
+                                    : leadController.pickedVisitingCard.value
+                                            .contains("https")
+                                        ? Image.network(leadController
+                                            .pickedVisitingCard.value)
+                                        : Image.file(
+                                            leadController
+                                                .pickedVisitingFile.value,
+                                            fit: BoxFit.cover,
+                                          ),
                               ),
                             ),
                           ),

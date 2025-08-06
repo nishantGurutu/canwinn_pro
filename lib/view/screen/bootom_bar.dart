@@ -18,6 +18,7 @@ import 'package:task_management/controller/bottom_bar_navigation_controller.dart
 import 'package:task_management/controller/chat_controller.dart';
 import 'package:task_management/controller/document_controller.dart';
 import 'package:task_management/controller/home_controller.dart';
+import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/controller/notification_controller.dart';
 import 'package:task_management/controller/priority_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
@@ -76,6 +77,7 @@ class _BottomNavigationBarExampleState
   final UserPageControlelr userPageControlelr = Get.put(UserPageControlelr());
   var profilePicPath = ''.obs;
   final HomeController homeController = Get.put(HomeController());
+  final LeadController leadController = Get.put(LeadController());
   @override
   void initState() {
     super.initState();
@@ -85,88 +87,24 @@ class _BottomNavigationBarExampleState
   var isLoading = false.obs;
   Future<void> callApi() async {
     isLoading.value = true;
-
-    try {
-      await notificationController.notificationListApi('');
-    } catch (e, s) {
-      debugPrint('Error in notificationListApi: $e\n$s');
-    }
-
-    try {
-      await homeController.homeDataApi(StorageHelper.getId());
-    } catch (e, s) {
-      debugPrint('Error in homeDataApi: $e\n$s');
-    }
-
-    try {
-      await homeController.leadHomeApi();
-    } catch (e, s) {
-      debugPrint('Error in leadHomeApi: $e\n$s');
-    }
-
-    if (StorageHelper.getType() == 1) {
-      try {
-        await homeController.userReportApi(StorageHelper.getId());
-      } catch (e, s) {
-        debugPrint('Error in userReportApi: $e\n$s');
-      }
-    }
-
-    try {
-      await homeController.taskResponsiblePersonListApi(
-        StorageHelper.getDepartmentId(),
-        "",
-      );
-    } catch (e, s) {
-      debugPrint('Error in taskResponsiblePersonListApi: $e\n$s');
-    }
-
-    try {
-      await taskController.allProjectListApi();
-    } catch (e, s) {
-      debugPrint('Error in allProjectListApi: $e\n$s');
-    }
-
-    try {
-      await taskController.responsiblePersonListApi(
-        StorageHelper.getDepartmentId(),
-        "",
-      );
-    } catch (e, s) {
-      debugPrint('Error in responsiblePersonListApi: $e\n$s');
-    }
-
-    try {
-      await priorityController.priorityApi();
-    } catch (e, s) {
-      debugPrint('Error in priorityApi: $e\n$s');
-    }
-
+    await notificationController.notificationListApi('');
+    await homeController.homeDataApi(StorageHelper.getId());
+    await homeController.leadHomeApi();
+    // if (StorageHelper.getAssignedDept() != null) {
+    await homeController.userReportApi(StorageHelper.getId());
+    // }
+    await homeController.taskResponsiblePersonListApi(
+        StorageHelper.getAssignedDept(), "");
+    await leadController.statusListApi(status: '');
+    await leadController.sourceList(source: '');
     isLoading.value = false;
-
-    try {
-      await LocationHandler.determinePosition(context);
-    } catch (e, s) {
-      debugPrint('Error in determinePosition: $e\n$s');
-    }
-
+    await LocationHandler.determinePosition(context);
     homeController.isButtonVisible.value = true;
-
-    try {
-      await userPageControlelr.roleListApi(StorageHelper.getDepartmentId());
-    } catch (e, s) {
-      debugPrint('Error in roleListApi: $e\n$s');
-    }
-
+    await userPageControlelr.roleListApi(StorageHelper.getDepartmentId());
     print('s value in tasklist api 1 ${widget.from}');
     debugPrint('s value in tasklist api 2 ${widget.payloadData}');
-
     if (widget.from == "reminder") {
-      try {
-        await profileController.dailyTaskList(context, 'reminder', '');
-      } catch (e, s) {
-        debugPrint('Error in dailyTaskList reminder: $e\n$s');
-      }
+      await profileController.dailyTaskList(context, 'reminder', '');
     }
 
     if (widget.from == "true") {
@@ -187,21 +125,14 @@ class _BottomNavigationBarExampleState
       }
     }
 
-    try {
-      profilePicPath.value = await StorageHelper.getImage() ?? "";
-    } catch (e, s) {
-      debugPrint('Error fetching profile image: $e\n$s');
-    }
+    profilePicPath.value = await StorageHelper.getImage() ?? "";
+    await priorityController.priorityApi();
+    await taskController.allProjectListApi();
+    await taskController.responsiblePersonListApi(
+        StorageHelper.getDepartmentId(), "");
 
-    try {
-      await SosPusherConfig().initPusher(
-        _onPusherEvent,
-        channelName: "test-channel",
-        context: context,
-      );
-    } catch (e, s) {
-      debugPrint('Error in SosPusherConfig init: $e\n$s');
-    }
+    await SosPusherConfig().initPusher(_onPusherEvent,
+        channelName: "test-channel", context: context);
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
@@ -284,6 +215,7 @@ class _BottomNavigationBarExampleState
     return Obx(
       () => isLoading.value == true &&
               bottomBarController.isUpdating.value == true &&
+              profileController.isdepartmentListLoading.value == true &&
               priorityController.isPriorityLoading.value == true &&
               projectController.isAllProjectCalling.value == true &&
               notificationController.isNotificationLoading.value == true &&
@@ -411,13 +343,14 @@ class _BottomNavigationBarExampleState
                         width: 32.w,
                         decoration: BoxDecoration(
                           color: Color(0xff1d9c03),
+                          // color: darkBlue,
                           borderRadius: BorderRadius.all(
                             Radius.circular(16.r),
                           ),
                         ),
                         child: Center(
                           child: Text(
-                            '${CustomTextConvert().getNameChar(StorageHelper.getName())}',
+                            '${CustomTextConvert().getNameChar(StorageHelper.getName() ?? "")}',
                             style: TextStyle(
                               color: whiteColor,
                               fontSize: 16,

@@ -1,6 +1,6 @@
 // String splashLogo = "assets/images/png/schotest-logo-circle.png";
 String splashLogo = "assets/images/png/Layer_x0020_1.png";
-// String splashLogo = "assets/images/png/canvin-logo-image.png";
+// String splashLogo = "assets/image/svg/winntus_onesuite.png";
 String welcome_logo = "assets/images/svg/Frame.svg";
 String menu_logo = "assets/images/png/menu.png";
 String assignedTaskLogo = "assets/images/png/assigned_task.png";

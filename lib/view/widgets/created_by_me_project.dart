@@ -26,7 +26,6 @@ class CreatedByMeProject extends StatefulWidget {
       this.priorityController,
       this.homeController,
       {super.key});
-
   @override
   State<CreatedByMeProject> createState() => _CreatedByMeProjectState();
 }
@@ -179,14 +178,15 @@ class _CreatedByMeProjectState extends State<CreatedByMeProject> {
                                                 .viewInsets
                                                 .bottom),
                                         child: AddTask(
-                                            widget.priorityController
-                                                .priorityList,
-                                            widget.projectController
-                                                .allProjectDataList,
-                                            widget.taskController
-                                                .responsiblePersonList,
-                                            widget.createdProjectList[index].id,
-                                            ""),
+                                          widget
+                                              .priorityController.priorityList,
+                                          widget.projectController
+                                              .allProjectDataList,
+                                          widget.taskController
+                                              .responsiblePersonList,
+                                          widget.createdProjectList[index].id,
+                                          '',
+                                        ),
                                       ),
                                     );
                                     return;

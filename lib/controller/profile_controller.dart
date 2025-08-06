@@ -32,25 +32,25 @@ class ProfileController extends GetxController {
   var nameTextEditingController = TextEditingController().obs;
   var emailTextEditingController = TextEditingController().obs;
   var departmentTextEditingController = TextEditingController().obs;
+  var departmentIdTextEditingController = TextEditingController().obs;
   var mobileTextEditingController = TextEditingController().obs;
   var dobTextEditingController = TextEditingController().obs;
   var anniversaryDateController = TextEditingController().obs;
   var genderDateController = TextEditingController().obs;
-
   final HomeController homeController = Get.put(HomeController());
   var profilePicPath = "".obs;
   var isPicUpdated = false.obs;
   Rx<File> pickedFile = File('').obs;
   RxList<String> anniversaryList = <String>["DOB", "Marriage Anniversary"].obs;
   RxList<String> genderList = <String>["Male", "Female"].obs;
-  RxString? selectedGender = ''.obs;
+  RxString? selectedGender = "".obs;
   RxString? selectedAnniversary = ''.obs;
   var isProfileUpdating = false.obs;
   Future<void> updateProfile(
     String name,
     String email,
     String mobile,
-    int? departmentId,
+    String? departmentId,
     int? id,
     String? value,
     String dob,
@@ -89,6 +89,7 @@ class ProfileController extends GetxController {
     final result = await ProfileService().userDetails();
     if (result != null) {
       isUserDetailsLoading.value = false;
+      isUserDetailsLoading.refresh();
       userProfileModel.value = result;
       dataFromImagePicker.value = false;
       assetsList.clear();
@@ -100,6 +101,7 @@ class ProfileController extends GetxController {
             .assignAll(userProfileModel.value!.data!.allocatedAssets!);
       }
       profilePicPath.value = '';
+      await departmentList(null);
       await Future.delayed(Duration(milliseconds: 100));
       profilePicPath.value = userProfileModel.value?.data?.image ?? '';
       profilePicPath.refresh();
@@ -113,16 +115,23 @@ class ProfileController extends GetxController {
           userProfileModel.value?.data?.dob ?? "";
       anniversaryDateController.value.text =
           userProfileModel.value?.data?.anniversaryDate ?? "";
+      if (userProfileModel.value?.data?.departmentId != null) {
+        departmentIdTextEditingController.value.text =
+            userProfileModel.value?.data?.departmentId.toString() ?? "";
+      }
       selectedAnniversary?.value =
           userProfileModel.value?.data?.anniversaryType ?? "";
       profilePicPath.value = userProfileModel.value?.data?.image ?? "";
       genderDateController.value.text =
           userProfileModel.value?.data?.gender ?? "";
 
+      selectedGender?.value = userProfileModel.value?.data?.gender ?? "";
+
       StorageHelper.setName(userProfileModel.value?.data?.name ?? '');
       StorageHelper.setEmail(userProfileModel.value?.data?.email ?? '');
       StorageHelper.setPhone(userProfileModel.value?.data?.phone ?? '');
-      StorageHelper.setRole(userProfileModel.value?.data?.role ?? 0);
+      StorageHelper.setRole(
+          userProfileModel.value?.data?.role.toString() ?? '');
       StorageHelper.setDepartmentId(
           userProfileModel.value?.data?.departmentId ?? 0);
       StorageHelper.setGender(userProfileModel.value?.data?.gender ?? '');
@@ -150,9 +159,9 @@ class ProfileController extends GetxController {
   Rx<DepartmentListData?> selectedDepartMentListData =
       Rx<DepartmentListData?>(null);
   RxList<DepartmentListData> departmentDataList = <DepartmentListData>[].obs;
-  Future<void> departmentList(dynamic? selectedProjectId) async {
+  Future<void> departmentList(dynamic selectedProjectId) async {
     isdepartmentListLoading.value = true;
-    final result = await ProfileService().departmentList();
+    final result = await ProfileService().departmentList(selectedProjectId);
     if (result != null) {
       selectedDepartMentListData.value = null;
       departmentDataList.clear();
@@ -174,7 +183,7 @@ class ProfileController extends GetxController {
         if (userProfileModel.value?.data?.departmentId.toString() ==
             deptId.id.toString()) {
           departmentTextEditingController.value.text = deptId.name ?? '';
-          userPageControlelr.roleListApi(
+          await userPageControlelr.roleListApi(
             selectedDepartMentListData.value?.id,
           );
           return;
@@ -398,15 +407,7 @@ class ProfileController extends GetxController {
                               ),
                               InkWell(
                                 onTap: () async {
-                                  // if (selectedDateTextController
-                                  //     .text.isNotEmpty) {
-                                  //   await previousSubmittedTaskLoading(
-                                  //       selectedDateTextController.text);
-                                  // } else {
-                                  //   CustomToast()
-                                  //       .showCustomToast('Please select date.');
-                                  // }
-                                  downloadReport(
+                                  await downloadReport(
                                       date: selectedDateTextController.text);
                                 },
                                 child: SizedBox(
@@ -431,11 +432,11 @@ class ProfileController extends GetxController {
     );
   }
 
-  var pdfFile = ''.obs;
   var isQuotationDownloading = false.obs;
 
   Future<void> downloadReport({required String date}) async {
     isQuotationDownloading.value = true;
+    print('download report data value ${date}');
 
     final Uint8List? pdfData = await ProfileService().downloadReportApi(date);
     if (pdfData != null && pdfData.isNotEmpty) {
@@ -448,17 +449,11 @@ class ProfileController extends GetxController {
           '${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}-${now.year}_${now.second}';
       final fileName = 'report_${formattedDate}.pdf';
       final filePath = '$folderPath/$fileName';
-      // final filePath = '${directory.path}/quotation.pdf';
-
       final file = File(filePath);
       await file.writeAsBytes(pdfData);
       CustomToast().showCustomToast("Report downloaded successfuly.");
       Get.back();
-      print('✅ PDF saved to $filePath');
-    } else {
-      print("❌ Failed to download PDF");
     }
-
     isQuotationDownloading.value = false;
   }
 
@@ -548,8 +543,9 @@ class ProfileController extends GetxController {
     final result = await ProfileService().assignAssetsList();
     if (result != null) {
       isAssestAssigningList.value = false;
-
-      allocatedAssignList.assignAll(result['allocated_assets']);
+      if (result['allocated_assets'] != null) {
+        allocatedAssignList.assignAll(result['allocated_assets']);
+      }
     }
     isAssestAssigningList.value = false;
   }

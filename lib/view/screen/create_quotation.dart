@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:task_management/constant/color_constant.dart';
-import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/customExpensetextfiel.dart';
 import 'package:task_management/view/widgets/add_item.dart';
+import 'package:task_management/view/widgets/custom_calender.dart';
 
 class CreateQuotationScreen extends StatefulWidget {
   final dynamic leadId;
@@ -50,6 +49,8 @@ class _CreateQuotationScreenState extends State<CreateQuotationScreen> {
   void initState() {
     leadController.selectedQuotation.value = '';
     leadTextController.text = widget.leadNumber ?? '';
+    print("lead data in all lead ${widget.leadId}");
+    print("lead data in all lead ${widget.leadNumber}");
     leadController.items.clear();
     Future.microtask(() {
       leadController.productListApi();
@@ -123,60 +124,64 @@ class _CreateQuotationScreenState extends State<CreateQuotationScreen> {
                             fontSize: 14.sp, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 5.h),
-                      TextField(
+                      CustomCalender(
+                        hintText: 'Transaction Date',
                         controller: transactionDateController,
-                        decoration: InputDecoration(
-                          fillColor: whiteColor,
-                          filled: true,
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.all(9.0),
-                            child: Image.asset(
-                              'assets/images/png/callender.png',
-                              color: secondaryColor,
-                              height: 8.sp,
-                            ),
-                          ),
-                          hintText: 'Transaction Date',
-                          hintStyle: rubikRegular,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: lightBorderColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: lightBorderColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: lightBorderColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: secondaryColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 0.w, vertical: 10.h),
-                        ),
-                        readOnly: true,
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            lastDate: DateTime(2100),
-                          );
-
-                          if (pickedDate != null) {
-                            String formattedDate =
-                                DateFormat('dd-MM-yyyy').format(pickedDate);
-                            transactionDateController.text = formattedDate;
-                          }
-                        },
                       ),
+                      // TextField(
+                      //   controller: transactionDateController,
+                      //   decoration: InputDecoration(
+                      //     fillColor: whiteColor,
+                      //     filled: true,
+                      //     prefixIcon: Padding(
+                      //       padding: const EdgeInsets.all(9.0),
+                      //       child: Image.asset(
+                      //         'assets/images/png/callender.png',
+                      //         color: secondaryColor,
+                      //         height: 8.sp,
+                      //       ),
+                      //     ),
+                      //     hintText: 'Transaction Date',
+                      //     hintStyle: rubikRegular,
+                      //     border: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: lightBorderColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: lightBorderColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     disabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: lightBorderColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     focusedBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: secondaryColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     contentPadding: EdgeInsets.symmetric(
+                      //         horizontal: 0.w, vertical: 10.h),
+                      //   ),
+                      //   readOnly: true,
+                      //   onTap: () async {
+                      //     DateTime? pickedDate = await showDatePicker(
+                      //       context: context,
+                      //       initialDate: DateTime.now(),
+                      //       firstDate: DateTime(1950),
+                      //       lastDate: DateTime(2100),
+                      //     );
+
+                      //     if (pickedDate != null) {
+                      //       String formattedDate =
+                      //           DateFormat('dd-MM-yyyy').format(pickedDate);
+                      //       transactionDateController.text = formattedDate;
+                      //     }
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
@@ -191,60 +196,64 @@ class _CreateQuotationScreenState extends State<CreateQuotationScreen> {
                             fontSize: 14.sp, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 5.h),
-                      TextField(
+                      CustomCalender(
+                        hintText: 'Valid Till',
                         controller: validTillController,
-                        decoration: InputDecoration(
-                          fillColor: whiteColor,
-                          filled: true,
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.all(9.0),
-                            child: Image.asset(
-                              'assets/images/png/callender.png',
-                              color: secondaryColor,
-                              height: 8.sp,
-                            ),
-                          ),
-                          hintText: 'Valid Till',
-                          hintStyle: rubikRegular,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: lightBorderColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: lightBorderColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: lightBorderColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: secondaryColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.r)),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 0.w, vertical: 10.h),
-                        ),
-                        readOnly: true,
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            lastDate: DateTime(2100),
-                          );
-
-                          if (pickedDate != null) {
-                            String formattedDate =
-                                DateFormat('dd-MM-yyyy').format(pickedDate);
-                            validTillController.text = formattedDate;
-                          }
-                        },
                       ),
+                      // TextField(
+                      //   controller: validTillController,
+                      //   decoration: InputDecoration(
+                      //     fillColor: whiteColor,
+                      //     filled: true,
+                      //     prefixIcon: Padding(
+                      //       padding: const EdgeInsets.all(9.0),
+                      //       child: Image.asset(
+                      //         'assets/images/png/callender.png',
+                      //         color: secondaryColor,
+                      //         height: 8.sp,
+                      //       ),
+                      //     ),
+                      //     hintText: 'Valid Till',
+                      //     hintStyle: rubikRegular,
+                      //     border: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: lightBorderColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: lightBorderColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     disabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: lightBorderColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     focusedBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(color: secondaryColor),
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(8.r)),
+                      //     ),
+                      //     contentPadding: EdgeInsets.symmetric(
+                      //         horizontal: 0.w, vertical: 10.h),
+                      //   ),
+                      //   readOnly: true,
+                      //   onTap: () async {
+                      //     DateTime? pickedDate = await showDatePicker(
+                      //       context: context,
+                      //       initialDate: DateTime.now(),
+                      //       firstDate: DateTime(1950),
+                      //       lastDate: DateTime(2100),
+                      //     );
+
+                      //     if (pickedDate != null) {
+                      //       String formattedDate =
+                      //           DateFormat('dd-MM-yyyy').format(pickedDate);
+                      //       validTillController.text = formattedDate;
+                      //     }
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

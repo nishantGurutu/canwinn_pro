@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/controller/home_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
-import 'package:task_management/custom_widget/custom_caches_manager.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/all_project_list_model.dart';
@@ -46,7 +45,7 @@ class TaskController extends GetxController {
   var allProjectListModel = AllProjectListModel().obs;
   Rx<CreatedByMe?> selectedAllProjectListData = Rx<CreatedByMe?>(null);
   RxList<CreatedByMe> allProjectDataList = <CreatedByMe>[].obs;
-  Future<void> allProjectListApi() async {
+  Future<void> allProjectListApi({int? projectId}) async {
     isAllProjectCalling.value = true;
     final result = await ProjectService().allProjectListApi();
     if (result != null) {
@@ -89,7 +88,8 @@ class TaskController extends GetxController {
         for (int i = 0;
             i < (allProjectListModel.value.createdByMe?.length ?? 0);
             i++) {
-          allProjectDataList.add(allProjectListModel.value.createdByMe![i]);
+          allProjectDataList
+              .add(allProjectListModel.value.createdByMe?[i] ?? CreatedByMe());
         }
         for (int i = 0;
             i < (allProjectListModel.value.assignedToMe?.length ?? 0);
@@ -97,11 +97,22 @@ class TaskController extends GetxController {
           allProjectDataList.add(allProjectListModel.value.assignedToMe![i]);
         }
       }
-      selectedAllProjectListData.value = allProjectDataList.first;
-      await profileController
-          .departmentList(selectedAllProjectListData.value!.id);
+
+      if (projectId != null) {
+        for (int i = 0; i < allProjectDataList.length; i++) {
+          if (projectId == allProjectDataList[i].id) {
+            selectedAllProjectListData.value = allProjectDataList[i];
+          }
+        }
+      } else {
+        selectedAllProjectListData.value = allProjectDataList.first;
+      }
       allProjectDataList.refresh();
       selectedAllProjectListData.refresh();
+      isAllProjectCalling.value = false;
+      isAllProjectCalling.refresh();
+      await profileController
+          .departmentList(selectedAllProjectListData.value?.id ?? 0);
     }
     isAllProjectCalling.value = false;
   }
@@ -152,34 +163,8 @@ class TaskController extends GetxController {
     }
 
     try {
-      // Generate a unique cache key based on input parameters
-      // final cacheKey =
-      //     'task_list_${selectedTaskValue}_${assignValue}_${date}_${userId}';
-
-      // // Try to get cached data first
-      // final cachedFile =
-      //     await CustomCacheManager.instance.getFileFromCache(cacheKey);
-
-      // Map<String, dynamic>? result;
-
-      // if (cachedFile != null && cachedFile.file.existsSync()) {
-      //   // Read cached data
-      //   final cachedData = await cachedFile.file.readAsString();
-      //   result = jsonDecode(cachedData);
-      // } else {
-      // Fetch from API if no cache or cache is stale
       var result = await TaskService().taskListApi(
           selectedTaskValue, assignValue, pagevalue.value, date, userId ?? "");
-
-      // if (result != null) {
-      //   // Cache the new API response
-      //   await CustomCacheManager.instance.putFile(
-      //     cacheKey,
-      //     utf8.encode(jsonEncode(result)),
-      //     fileExtension: 'json',
-      //   );
-      // }
-      // }
 
       if (result != null) {
         checkAllTaskList.clear();
@@ -396,6 +381,7 @@ class TaskController extends GetxController {
       selectedResponsiblePersonData.value = null;
       responsiblePersonListModel.value = result;
       isResponsiblePersonLoading.value = false;
+      isResponsiblePersonLoading.refresh();
       responsiblePersonList.clear();
       if (fromPage.toString() == "add_meeting") {
         responsiblePersonList.add(
@@ -409,6 +395,7 @@ class TaskController extends GetxController {
       for (var person in responsiblePersonListModel.value.data!) {
         responsiblePersonList.add(person);
       }
+      responsiblePersonList.refresh();
       selectedSharedListPerson
           .addAll(List<bool>.filled(responsiblePersonList.length, false));
       responsiblePersonSelectedCheckBox
