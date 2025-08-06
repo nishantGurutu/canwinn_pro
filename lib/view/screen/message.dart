@@ -337,16 +337,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                           chat.createdDate),
                                                   ],
                                                 ),
-                                                Text(
-                                                  "${chat.id ?? ''}",
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                  maxLines: 100000,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       isCurrentUser
