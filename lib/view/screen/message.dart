@@ -337,6 +337,16 @@ class _MessageScreenState extends State<MessageScreen> {
                                                           chat.createdDate),
                                                   ],
                                                 ),
+                                                Text(
+                                                  "${chat.id ?? ''}",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                  maxLines: 100000,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       isCurrentUser
@@ -479,7 +489,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                             chat.attachment.toString().contains(".m4a")
                                                                                 ? CustomAudioPlayer(
                                                                                     audioUrl: chat.attachment!,
-                                                                                    chatId: chat.id.toString(),
+                                                                                    chatId: index.toString(),
                                                                                   )
                                                                                 : Container(
                                                                                     constraints: BoxConstraints(
