@@ -75,6 +75,15 @@ class AttendenceService {
         "Authorization": "Bearer $token",
         "Content-Type": "multipart/form-data",
       };
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        error: true,
+        logPrint: (object) {
+          print('Add lead log print data value ${object}');
+        },
+      ));
 
       final Map<String, dynamic> formDataMap = {
         'check_out':
@@ -90,7 +99,7 @@ class AttendenceService {
         );
       }
       if (StorageHelper.getType() == 3) {
-        formDataMap['user_id'] = searchText.toString();
+        formDataMap['user_id'] = StorageHelper.getId();
       }
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(

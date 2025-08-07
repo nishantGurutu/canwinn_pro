@@ -15,7 +15,6 @@ import 'package:task_management/view/screen/attendence/apply_leave.dart';
 import 'package:task_management/view/screen/attendence/attendence_screen.dart';
 import 'package:task_management/view/screen/attendence/expense_claim.dart';
 import 'package:task_management/view/screen/attendence/widget/camera_view.dart';
-import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:task_management/view/screen/human_gate_pass.dart';
 
 class CheckinScreen extends StatefulWidget {
