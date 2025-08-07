@@ -380,8 +380,7 @@ class TaskController extends GetxController {
     if (result != null) {
       selectedResponsiblePersonData.value = null;
       responsiblePersonListModel.value = result;
-      isResponsiblePersonLoading.value = false;
-      isResponsiblePersonLoading.refresh();
+
       responsiblePersonList.clear();
       if (fromPage.toString() == "add_meeting") {
         responsiblePersonList.add(
@@ -396,6 +395,7 @@ class TaskController extends GetxController {
         responsiblePersonList.add(person);
       }
       responsiblePersonList.refresh();
+
       selectedSharedListPerson
           .addAll(List<bool>.filled(responsiblePersonList.length, false));
       responsiblePersonSelectedCheckBox
@@ -416,6 +416,8 @@ class TaskController extends GetxController {
       for (var person in responsiblePersonList) {
         responsiblePersonSelectedCheckBox2[person.id] = false;
       }
+      isResponsiblePersonLoading.value = false;
+      isResponsiblePersonLoading.refresh();
       await userLogActivity(responsiblePersonList.first.id);
     }
     Future.microtask(() {

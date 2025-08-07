@@ -603,35 +603,39 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            width: 90.w,
-                                            decoration: BoxDecoration(
-                                              color: newTaskList[index]
-                                                              ['priority_name']
-                                                          ?.toLowerCase() ==
-                                                      'medium'
-                                                  ? Color(0xffFF8700)
-                                                  : newTaskList[index][
-                                                                  'priority_name']
-                                                              ?.toLowerCase() ==
-                                                          'low'
-                                                      ? Color(0xffFFCD57)
-                                                      : Color(0xffFF0005),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(12.r),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              // width: 90.w,
+                                              decoration: BoxDecoration(
+                                                color: newTaskList[index][
+                                                                'priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'medium'
+                                                    ? Color(0xffFF8700)
+                                                    : newTaskList[index][
+                                                                    'priority_name']
+                                                                ?.toLowerCase() ==
+                                                            'low'
+                                                        ? Color(0xffFFCD57)
+                                                        : Color(0xffFF0005),
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.r),
+                                                ),
                                               ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 8.w,
-                                                  vertical: 2.h),
-                                              child: Center(
-                                                child: Text(
-                                                  '${newTaskList[index]['priority_name']}',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: whiteColor,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.w,
+                                                    vertical: 2.h),
+                                                child: Center(
+                                                  child: Text(
+                                                    '${newTaskList[index]['priority_name']}',
+                                                    style: TextStyle(
+                                                      fontSize: 13.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: whiteColor,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -640,43 +644,46 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                           SizedBox(
                                             width: 10.w,
                                           ),
-                                          Container(
-                                            width: 90.w,
-                                            decoration: BoxDecoration(
-                                              color: newTaskList[index][
-                                                              'effective_status']
-                                                          .toString()
-                                                          .toLowerCase() ==
-                                                      "pending"
-                                                  ? Color(0xffD045FF)
-                                                  : newTaskList[index][
-                                                                  'effective_status']
-                                                              .toString()
-                                                              .toLowerCase() ==
-                                                          "progress"
-                                                      ? Color.fromARGB(
-                                                          95, 16, 129, 18)
-                                                      : Color(0xff0086FF),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(12.r),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: newTaskList[index][
+                                                                'effective_status']
+                                                            .toString()
+                                                            .toLowerCase() ==
+                                                        "pending"
+                                                    ? Color(0xffD045FF)
+                                                    : newTaskList[index][
+                                                                    'effective_status']
+                                                                .toString()
+                                                                .toLowerCase() ==
+                                                            "progress"
+                                                        ? Color.fromARGB(
+                                                            95, 16, 129, 18)
+                                                        : Color(0xff0086FF),
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.r),
+                                                ),
                                               ),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 8.w,
-                                                  vertical: 2.h),
-                                              child: Center(
-                                                child: Text(
-                                                  '${newTaskList[index]['effective_status'].toString()}',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: whiteColor),
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.w,
+                                                    vertical: 2.h),
+                                                child: Center(
+                                                  child: Text(
+                                                    '${newTaskList[index]['effective_status'].toString()}',
+                                                    style: TextStyle(
+                                                        fontSize: 13.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: whiteColor),
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
+                                          Expanded(flex: 3, child: Container())
                                         ],
                                       ),
                                       SizedBox(height: 10.h),

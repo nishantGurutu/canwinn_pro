@@ -48,6 +48,7 @@ class ChatController extends GetxController {
       isChatLoading.refresh();
       isLongPressed.addAll(List<bool>.filled(chatList.length, false));
       isChatLoading.value = false;
+      isChatLoading.refresh();
       for (var chat in chatList) {
         totalUnsenMessage.value += chat.unseenMessages!;
       }

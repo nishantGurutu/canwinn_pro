@@ -477,6 +477,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                               .isNotEmpty)
                                                                         Column(
                                                                           children: [
+                                                                            // Text("slected chat ${chat.attachment}"),
                                                                             chat.attachment.toString().contains(".m4a")
                                                                                 ? CustomAudioPlayer(
                                                                                     audioUrl: chat.attachment!,
@@ -816,162 +817,67 @@ class _MessageScreenState extends State<MessageScreen> {
                                         ),
                                       ),
                                       SizedBox(width: 10.w),
-                                      messageTextEditingController
-                                              .value.text.isEmpty
-                                          ? InkWell(
-                                              onTap: () async {
-                                                if (messageTextEditingController
-                                                        .value
-                                                        .text
-                                                        .isNotEmpty ||
-                                                    chatController
-                                                        .messagePicPath
-                                                        .value
-                                                        .isNotEmpty ||
-                                                    attachment
-                                                        .path.isNotEmpty) {
-                                                  String selectedMessage =
-                                                      chatController
-                                                          .selectedMessage
-                                                          .value = '';
-                                                  chatController.selectedMessage
-                                                      .value = "";
-                                                  String message =
-                                                      messageTextEditingController
-                                                          .value.text;
+                                      InkWell(
+                                        onTap: () async {
+                                          if (messageTextEditingController
+                                                  .value.text.isNotEmpty ||
+                                              chatController.messagePicPath
+                                                  .value.isNotEmpty ||
+                                              attachment.path.isNotEmpty) {
+                                            String selectedMessage =
+                                                chatController
+                                                    .selectedMessage.value = '';
+                                            chatController
+                                                .selectedMessage.value = "";
+                                            String message =
+                                                messageTextEditingController
+                                                    .value.text;
 
-                                                  messageTextEditingController
-                                                      .value
-                                                      .clear();
-                                                  chatController.messagePicPath
-                                                      .value = '';
-                                                  chatController.pickedFile
-                                                      .value = File('');
-                                                  String selectedMessageId =
-                                                      chatController
-                                                          .selectedMessageId
-                                                          .value;
-                                                  String selectedMessageSender =
-                                                      chatController
-                                                          .selectedParentMessageSender
-                                                          .value;
-                                                  chatController
-                                                      .selectedMessageId
-                                                      .value = "";
-                                                  chatController
-                                                      .selectedParentMessageSender
-                                                      .value = '';
-                                                  await chatController
-                                                      .updateMessageData(
-                                                    message: message,
-                                                    attachment: attachment,
-                                                    name: widget.name,
-                                                    userId: widget.userId ?? "",
-                                                    chatId: widget.chatId ?? "",
-                                                    fromPage: widget.fromPage,
-                                                    messageId:
-                                                        selectedMessageId,
-                                                    parrent_message_sender_name:
-                                                        selectedMessageSender,
-                                                    selectedMessage:
-                                                        selectedMessage,
-                                                  );
-                                                  attachment = File('');
-                                                }
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.all(8.w),
-                                                decoration: BoxDecoration(
-                                                  color: primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          23.r),
-                                                ),
-                                                child: VoiceRecorderButton(
-                                                  onRecordingComplete:
-                                                      (File audioFile) async {
-                                                    attachment = audioFile;
-                                                  },
-                                                  micColor: whiteColor,
-                                                ),
-                                              ),
-                                            )
-                                          : InkWell(
-                                              onTap: () async {
-                                                if (messageTextEditingController
-                                                        .value
-                                                        .text
-                                                        .isNotEmpty ||
-                                                    chatController
-                                                        .messagePicPath
-                                                        .value
-                                                        .isNotEmpty ||
-                                                    attachment
-                                                        .path.isNotEmpty) {
-                                                  String selectedMessage =
-                                                      chatController
-                                                          .selectedMessage
-                                                          .value = '';
-                                                  chatController.selectedMessage
-                                                      .value = "";
-                                                  String message =
-                                                      messageTextEditingController
-                                                          .value.text;
-
-                                                  messageTextEditingController
-                                                      .value
-                                                      .clear();
-                                                  chatController.messagePicPath
-                                                      .value = '';
-                                                  chatController.pickedFile
-                                                      .value = File('');
-                                                  String selectedMessageId =
-                                                      chatController
-                                                          .selectedMessageId
-                                                          .value;
-                                                  String selectedMessageSender =
-                                                      chatController
-                                                          .selectedParentMessageSender
-                                                          .value;
-                                                  chatController
-                                                      .selectedMessageId
-                                                      .value = "";
-                                                  chatController
-                                                      .selectedParentMessageSender
-                                                      .value = '';
-                                                  await chatController
-                                                      .updateMessageData(
-                                                    message: message,
-                                                    attachment: attachment,
-                                                    name: widget.name,
-                                                    userId: widget.userId ?? "",
-                                                    chatId: widget.chatId ?? "",
-                                                    fromPage: widget.fromPage,
-                                                    messageId:
-                                                        selectedMessageId,
-                                                    parrent_message_sender_name:
-                                                        selectedMessageSender,
-                                                    selectedMessage:
-                                                        selectedMessage,
-                                                  );
-                                                  attachment = File('');
-                                                }
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.all(10.w),
-                                                decoration: BoxDecoration(
-                                                  color: primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          23.r),
-                                                ),
-                                                child: Icon(Icons.send,
-                                                    color: whiteColor,
-                                                    size: 20.h),
-                                              ),
-                                            ),
-
-                                      // ass
+                                            messageTextEditingController.value
+                                                .clear();
+                                            chatController
+                                                .messagePicPath.value = '';
+                                            chatController.pickedFile.value =
+                                                File('');
+                                            String selectedMessageId =
+                                                chatController
+                                                    .selectedMessageId.value;
+                                            String selectedMessageSender =
+                                                chatController
+                                                    .selectedParentMessageSender
+                                                    .value;
+                                            chatController
+                                                .selectedMessageId.value = "";
+                                            chatController
+                                                .selectedParentMessageSender
+                                                .value = '';
+                                            await chatController
+                                                .updateMessageData(
+                                              message: message,
+                                              attachment: attachment,
+                                              name: widget.name,
+                                              userId: widget.userId ?? "",
+                                              chatId: widget.chatId ?? "",
+                                              fromPage: widget.fromPage,
+                                              messageId: selectedMessageId,
+                                              parrent_message_sender_name:
+                                                  selectedMessageSender,
+                                              selectedMessage: selectedMessage,
+                                            );
+                                            attachment = File('');
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(10.w),
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(23.r),
+                                          ),
+                                          child: Icon(Icons.send,
+                                              color: whiteColor, size: 20.h),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1034,128 +940,114 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-  // void openFile(String file) {
-  //   String fileExtension = file.split('.').last.toLowerCase();
-
-  //   if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
-  //     Get.to(NetworkImageScreen(file: file));
-  //   } else {
-  //     Get.to(
-  //       () => NetworkPDFScreen(
-  //         file: file,
-  //       ),
-  //     );
-  //   }
-  // }
-
   Future<void> showAlertDialog(
     BuildContext context,
     String from,
   ) async {
     return showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.all(10.sp),
-            child: Container(
-              width: double.infinity,
-              height: 140.h,
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            uploadFile(from);
-                          },
-                          child: Container(
-                            height: 40.h,
-                            width: 130.w,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.r),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/png/gallery-icon-removebg-preview.png',
-                                  height: 20.h,
-                                  color: whiteColor,
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  'Gallery',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: whiteColor),
-                                )
-                              ],
+      context: context,
+      builder: (BuildContext builderContext) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.all(10.sp),
+          child: Container(
+            width: double.infinity,
+            height: 140.h,
+            decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(15.r),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          uploadFile(from);
+                        },
+                        child: Container(
+                          height: 40.h,
+                          width: 130.w,
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.r),
                             ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // uploadFile();
-                            takeAttachment(ImageSource.camera, from);
-                          },
-                          child: Container(
-                            height: 40.h,
-                            width: 130.w,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.r),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/png/gallery-icon-removebg-preview.png',
+                                height: 20.h,
+                                color: whiteColor,
                               ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.camera,
-                                  color: whiteColor,
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  'Camera',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: whiteColor),
-                                )
-                              ],
-                            ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              Text(
+                                'Gallery',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: whiteColor),
+                              )
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                  ],
-                ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          takeAttachment(ImageSource.camera, from);
+                        },
+                        child: Container(
+                          height: 40.h,
+                          width: 130.w,
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.r),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.camera,
+                                color: whiteColor,
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              Text(
+                                'Camera',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: whiteColor),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget getFilePreview(String url) {

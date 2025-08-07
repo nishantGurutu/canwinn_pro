@@ -23,9 +23,15 @@ class SelectContact extends StatefulWidget {
 class _SelectContactState extends State<SelectContact> {
   final TaskController taskController = Get.put(TaskController());
   final ChatController chatController = Get.find();
+  RxList<ResponsiblePersonData> filteredList = <ResponsiblePersonData>[].obs;
   @override
   void initState() {
-    taskController.responsiblePersonListApi('', "");
+    taskController.responsiblePersonListApi('', "").then(
+      (value) {
+        filteredList.assignAll(RxList<ResponsiblePersonData>(
+            taskController.responsiblePersonList));
+      },
+    );
     super.initState();
   }
 
@@ -45,28 +51,28 @@ class _SelectContactState extends State<SelectContact> {
   final TextEditingController searchAssignController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    RxList<ResponsiblePersonData> filteredList =
-        RxList<ResponsiblePersonData>(taskController.responsiblePersonList);
-    return Obx((){ return Scaffold(
-        backgroundColor: whiteColor,
-        appBar: AppBar(
+    return Obx(
+      () {
+        return Scaffold(
           backgroundColor: whiteColor,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+          appBar: AppBar(
+            backgroundColor: whiteColor,
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+            ),
+            title: Text(
+              selectContact,
+              style: TextStyle(
+                  color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
           ),
-          title: Text(
-            selectContact,
-            style: TextStyle(
-                color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-        ),
-        body:   taskController.isResponsiblePersonLoading.value == true
+          body: taskController.isResponsiblePersonLoading.value == true
               ? Center(child: CircularProgressIndicator())
               : Column(
                   children: [
@@ -135,14 +141,17 @@ class _SelectContactState extends State<SelectContact> {
                             color: searchBackgroundColor,
                           ),
                           counterText: "",
-                          border: OutlineInputBorder(borderSide: BorderSide.none),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.all(Radius.circular(30.r)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.r)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.all(Radius.circular(30.r)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.r)),
                           ),
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 10.w, vertical: 10.h),
@@ -209,8 +218,8 @@ class _SelectContactState extends State<SelectContact> {
                                                       Radius.circular(20.r),
                                                     ),
                                                   ),
-                                                  child:
-                                                      Image.asset(backgroundLogo),
+                                                  child: Image.asset(
+                                                      backgroundLogo),
                                                 );
                                               },
                                             ),
@@ -264,8 +273,7 @@ class _SelectContactState extends State<SelectContact> {
                     ),
                   ],
                 ),
-
-          );
+        );
       },
     );
   }

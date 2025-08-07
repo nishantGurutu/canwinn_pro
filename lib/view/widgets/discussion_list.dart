@@ -30,8 +30,10 @@ class DiscussionList extends StatelessWidget {
             onChanged: (value) {
               rxFilteredList.value = chatController.chatList
                   .where((person) =>
-              person.name?.toLowerCase().contains(value.toLowerCase()) ??
-                  false)
+                      person.name
+                          ?.toLowerCase()
+                          .contains(value.toLowerCase()) ??
+                      false)
                   .toList();
             },
             decoration: InputDecoration(
@@ -52,14 +54,14 @@ class DiscussionList extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(30.r)),
               ),
               contentPadding:
-              EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             ),
           ),
         ),
         SizedBox(height: 5.h),
         Expanded(
           child: Obx(
-                () => ListView.builder(
+            () => ListView.builder(
               itemCount: rxFilteredList.length + 1,
               itemBuilder: (context, index) {
                 if (index >= rxFilteredList.length) {
@@ -71,7 +73,7 @@ class DiscussionList extends StatelessWidget {
                 return InkWell(
                   onLongPress: () {
                     chatController.isLongPressed[index] =
-                    !chatController.isLongPressed[index];
+                        !chatController.isLongPressed[index];
                     if (chatController.selectedChatId.contains(item.chatId)) {
                       chatController.selectedChatId.remove(item.chatId ?? 0);
                     } else {
@@ -80,16 +82,16 @@ class DiscussionList extends StatelessWidget {
                   },
                   onTap: () {
                     Get.to(() => MessageScreen(
-                      item.name,
-                      item.chatId.toString(),
-                      item.userId.toString(),
-                      'chat_list',
-                      item.members,
-                      item.type.toString(),
-                      item.image.toString(),
-                      item.groupIcon.toString(),
-                      "",
-                    ));
+                          item.name,
+                          item.chatId.toString(),
+                          item.userId.toString(),
+                          'chat_list',
+                          item.members,
+                          item.type.toString(),
+                          item.image.toString(),
+                          item.groupIcon.toString(),
+                          "",
+                        ));
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -107,34 +109,34 @@ class DiscussionList extends StatelessWidget {
                               ),
                               child: item.type?.toLowerCase() == 'group'
                                   ? ClipRRect(
-                                borderRadius:
-                                BorderRadius.circular(22.5.h),
-                                child: Image.network(
-                                  '${item.groupIcon}',
-                                  fit: BoxFit.cover,
-                                  errorBuilder:
-                                      (context, error, stackTrace) {
-                                    return Image.asset(backgroundLogo);
-                                  },
-                                ),
-                              )
+                                      borderRadius:
+                                          BorderRadius.circular(22.5.h),
+                                      child: Image.network(
+                                        '${item.groupIcon}',
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(backgroundLogo);
+                                        },
+                                      ),
+                                    )
                                   : InkWell(
-                                onTap: () {
-                                  openFile(item.image ?? "");
-                                },
-                                child: ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.circular(22.5.h),
-                                  child: Image.network(
-                                    '${item.image}',
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) {
-                                      return Image.asset(backgroundLogo);
-                                    },
-                                  ),
-                                ),
-                              ),
+                                      onTap: () {
+                                        openFile(item.image ?? "");
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(22.5.h),
+                                        child: Image.network(
+                                          '${item.image}',
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(backgroundLogo);
+                                          },
+                                        ),
+                                      ),
+                                    ),
                             ),
                             SizedBox(width: 8.w),
                             Expanded(
@@ -143,7 +145,7 @@ class DiscussionList extends StatelessWidget {
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Text(
