@@ -83,7 +83,7 @@ class _CameraViewState extends State<CameraView> {
             Get.back();
             await attendenceController.attendencePunchout(
                 pickedFile.value,
-                address ?? "",
+                widget.address ?? "",
                 widget.latitude,
                 widget.longitude,
                 widget.attendenceTime,
@@ -115,48 +115,51 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: double.infinity,
-          child: controller == null
-              ? Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(40)),
-                  ),
-                )
-              : CameraPreview(controller!),
-        ),
-        Positioned(
-          right: 5.w,
-          left: 290.w,
-          top: 25.h,
-          child: GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: const Icon(
-              Icons.close,
-              size: 35,
-              color: Colors.white,
+    return SafeArea(
+      child: Stack(
+        children: [
+          SizedBox(
+            height: double.infinity,
+            child: controller == null
+                ? Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(40)),
+                    ),
+                  )
+                : CameraPreview(controller!),
+          ),
+          Positioned(
+            right: 5.w,
+            left: 290.w,
+            top: 25.h,
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: const Icon(
+                Icons.close,
+                size: 35,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-        Positioned(
-          right: 145.w,
-          left: 145.w,
-          bottom: 30.h,
-          child: GestureDetector(
-            onTap: () async {
-              captureImage(address: widget.address);
-            },
-            child: Image.asset("assets/images/png/Image-Capture.png"),
+          Positioned(
+            right: 145.w,
+            left: 145.w,
+            bottom: 30.h,
+            child: GestureDetector(
+              onTap: () async {
+                print('e3u98e3 e8 7ye487 ${widget.address}');
+                captureImage(address: widget.address);
+              },
+              child: Image.asset("assets/images/png/Image-Capture.png"),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

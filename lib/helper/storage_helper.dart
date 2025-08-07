@@ -37,6 +37,7 @@ class StorageHelper {
   static const String _assignedDept = "assigned_dept";
   static const String _isHead = "is_head";
   static const String _folder_id = "folder_id";
+  static const String _userLocationAddress = "location_address";
 
   // Set methods
   static Future<void> setId(int id) async =>
@@ -99,6 +100,8 @@ class StorageHelper {
       await _preferences?.setString(_keyIsPunchinDate, isPunchinDate);
   static Future<void> setAssignedDept(String asssignedDept) async =>
       await _preferences?.setString(_assignedDept, asssignedDept);
+  static Future<void> setUserLocation(String locationAddress) async =>
+      await _preferences?.setString(_userLocationAddress, locationAddress);
 
   // Get methods
   static dynamic getId() => _preferences?.getInt(_keyId);
@@ -136,4 +139,6 @@ class StorageHelper {
   static dynamic getIsCurrentDate() =>
       _preferences?.getString(_keyIsCurrentdate);
   static dynamic getIsPunchin() => _preferences?.getString(_keyIsPunchin);
+  static dynamic getUserLocation() =>
+      _preferences?.getString(_userLocationAddress);
 }

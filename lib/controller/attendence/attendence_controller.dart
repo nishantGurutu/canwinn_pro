@@ -2,12 +2,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:task_management/component/location_handler.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/attendence_list_model.dart';
 import 'package:task_management/model/attendence_user_details.dart';
 import 'package:task_management/model/leave_list_model.dart';
 import 'package:task_management/model/leave_type_model.dart';
 import 'package:task_management/service/attendence/attendence_service.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
 
 class AttendenceController extends GetxController {
   var isPunchin = false.obs;
@@ -18,14 +20,14 @@ class AttendenceController extends GetxController {
   Future<void> attendencePunching(
       File pickedFile,
       String address,
-      String latitude,
-      String longitude,
+      String latitude1,
+      String longitude1,
       String attendenceTime,
       String searchText,
       File imageValue) async {
     isAttendencePunching.value = true;
-    final result = await AttendenceService().attendencePunching(
-        imageValue, address, latitude, longitude, attendenceTime, searchText);
+    final result = await AttendenceService().attendencePunching(imageValue,
+        address, latitude.value, longitude.value, attendenceTime, searchText);
     if (result != null) {
       isPunchin.value = true;
       isAttendencePunching.value = false;
@@ -44,18 +46,56 @@ class AttendenceController extends GetxController {
     isAttendencePunching.value = false;
   }
 
+  RxString latitude = ''.obs;
+  RxString longitude = ''.obs;
+  RxString? locationString = ''.obs;
+  RxBool isCheckingLoading = false.obs;
+  RxString attendenceTime = ''.obs;
+  Future<void> getUserLocation(BuildContext context) async {
+    isCheckingLoading.value = true;
+    try {
+      await LocationHandler.determinePosition(context);
+      List<geocoding.Placemark> placeMarks =
+          await geocoding.placemarkFromCoordinates(
+              LocationHandler.position!.latitude,
+              LocationHandler.position!.longitude);
+      var latLon =
+          'Lat: ${LocationHandler.position?.latitude}, Lng: ${LocationHandler.position?.longitude}';
+      latitude.value = "${LocationHandler.position?.latitude}";
+      longitude.value = "${LocationHandler.position?.longitude}";
+      locationString?.value = placeMarks.isNotEmpty
+          ? "${placeMarks.first.name ?? ""}, ${placeMarks.first.subLocality ?? ""}, ${placeMarks.first.subAdministrativeArea ?? ""}, ${placeMarks.first.locality ?? ""}, ${placeMarks.first.postalCode ?? ""}, ${placeMarks.first.country ?? ""}"
+          : '';
+      StorageHelper.setUserLocation(locationString?.value ?? "");
+      isCheckingLoading.value = false;
+      print("User position: $placeMarks");
+      print("User position: $latitude");
+      print("User position: $longitude");
+    } catch (e) {
+      isCheckingLoading.value = false;
+      print("Error getting location: $e");
+      locationString?.value = "Failed to get location.";
+    }
+    isCheckingLoading.value = false;
+  }
+
   var isAttendencePunchout = false.obs;
   Future<void> attendencePunchout(
       File pickedFile,
       String address,
-      String latitude,
-      String longitude,
+      String latitude1,
+      String longitude1,
       String attendenceTime,
       String searchText,
       File imageValue) async {
     isAttendencePunchout.value = true;
     final result = await AttendenceService().attendencePunchout(
-        imageValue, address, latitude, longitude, attendenceTime, searchText);
+        imageValue,
+        locationString?.value ?? "",
+        latitude.value,
+        longitude.value,
+        attendenceTime,
+        searchText);
     if (result != null) {
       isPunchin.value = false;
       isAttendencePunchout.value = false;

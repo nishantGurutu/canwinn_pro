@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:task_management/api/api_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/helper/storage_helper.dart';
@@ -24,16 +25,13 @@ class AttendenceService {
         "Authorization": "Bearer $token",
         "Content-Type": "multipart/form-data",
       };
-      print('attendence data 1 $pickedFile');
-      print('attendence data 2 $addressData');
-      print('attendence data 3 $latitude');
-      print('attendence data 4 $longitude');
-      print('attendence data 5 $attendenceTime');
+
       final Map<String, dynamic> formDataMap = {
-        'check_in': attendenceTime.toString(),
+        'check_in':
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
         'check_in_latitude': latitude.toString(),
         'check_in_longitude': longitude.toString(),
-        'check_in_address': addressData.toString(),
+        'check_in_address': StorageHelper.getUserLocation().toString(),
       };
       if (pickedFile.path.isNotEmpty) {
         formDataMap['check_in_image'] = await MultipartFile.fromFile(
@@ -78,16 +76,12 @@ class AttendenceService {
         "Content-Type": "multipart/form-data",
       };
 
-      print('attendence data 1 $pickedFile');
-      print('attendence data 2 $addressData');
-      print('attendence data 3 $latitude');
-      print('attendence data 4 $longitude');
-      print('attendence data 5 $attendenceTime');
       final Map<String, dynamic> formDataMap = {
-        'check_out': attendenceTime.toString(),
+        'check_out':
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
         'check_out_latitude': latitude.toString(),
         'check_out_longitude': longitude.toString(),
-        'check_out_address': addressData.toString(),
+        'check_out_address': StorageHelper.getUserLocation().toString(),
       };
       if (pickedFile.path.isNotEmpty) {
         formDataMap['check_out_image'] = await MultipartFile.fromFile(

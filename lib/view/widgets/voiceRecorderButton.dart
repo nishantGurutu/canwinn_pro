@@ -6,10 +6,7 @@ import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class VoiceRecorderButton extends StatefulWidget {
-  /// This will return the recorded audio file (use it to upload)
   final Function(File recordedAudioFile) onRecordingComplete;
-
-  /// Optional: show/hide icon size or colors
   final double iconSize;
   final Color micColor;
   final Color stopColor;
@@ -48,15 +45,14 @@ class _VoiceRecorderButtonState extends State<VoiceRecorderButton> {
         widget.onRecordingComplete(recordedFile);
         _recordedFilePath = path;
 
-        // Optional: play the audio
         await _audioPlayer.play(DeviceFileSource(path));
       } else {
-        debugPrint("❌ Recorded file not found at path: $path");
+        debugPrint("Recorded file not found at path: $path");
       }
     } else {
       final hasPermission = await _audioRecorder.hasPermission();
       if (!hasPermission) {
-        debugPrint("❌ Microphone permission not granted.");
+        debugPrint("Microphone permission not granted.");
         return;
       }
 
@@ -83,13 +79,15 @@ class _VoiceRecorderButtonState extends State<VoiceRecorderButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => GestureDetector(
-          onTap: _toggleRecording,
-          child: Icon(
-            isRecording.value ? Icons.stop_circle : Icons.mic,
-            size: widget.iconSize,
-            color: isRecording.value ? widget.stopColor : widget.micColor,
-          ),
-        ));
+    return Obx(
+      () => GestureDetector(
+        onTap: _toggleRecording,
+        child: Icon(
+          isRecording.value ? Icons.stop_circle : Icons.mic,
+          size: widget.iconSize,
+          color: isRecording.value ? widget.stopColor : widget.micColor,
+        ),
+      ),
+    );
   }
 }

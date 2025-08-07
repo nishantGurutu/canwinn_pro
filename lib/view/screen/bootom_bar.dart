@@ -81,12 +81,14 @@ class _BottomNavigationBarExampleState
   @override
   void initState() {
     super.initState();
+
     callApi();
   }
 
   var isLoading = false.obs;
   Future<void> callApi() async {
     isLoading.value = true;
+
     await notificationController.notificationListApi('');
     await homeController.homeDataApi(StorageHelper.getId());
     await homeController.leadHomeApi();
@@ -98,7 +100,7 @@ class _BottomNavigationBarExampleState
     await leadController.statusListApi(status: '');
     await leadController.sourceList(source: '');
     isLoading.value = false;
-    await LocationHandler.determinePosition(context);
+
     homeController.isButtonVisible.value = true;
     await userPageControlelr.roleListApi(StorageHelper.getDepartmentId());
     print('s value in tasklist api 1 ${widget.from}');

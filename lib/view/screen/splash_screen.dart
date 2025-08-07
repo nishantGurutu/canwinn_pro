@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Image.asset(
                 splashLogo,
-                height: 120.h,
+                height: 100.h,
               ),
             ],
           ),

@@ -40,7 +40,8 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
-  TextEditingController messageTextEditingController = TextEditingController();
+  Rx<TextEditingController> messageTextEditingController =
+      Rx<TextEditingController>(TextEditingController());
   final ChatController chatController = Get.put(ChatController());
   ScrollController _scrollController = ScrollController();
 
@@ -629,241 +630,350 @@ class _MessageScreenState extends State<MessageScreen> {
                             ),
                             Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: borderColor),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.r))),
-                                        child: Obx(
-                                          () => Column(
-                                            children: [
-                                              if (chatController
-                                                      .selectedMessage.value !=
-                                                  "")
-                                                Padding(
-                                                  padding: EdgeInsets.all(6.0),
-                                                  child: Stack(
-                                                    children: [
-                                                      Text(
-                                                          '${chatController.selectedMessage.value ?? ''}'),
-                                                      Container(
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10.r),
+                                Obx(
+                                  () => Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: borderColor),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20.r))),
+                                          child: Obx(
+                                            () => Column(
+                                              children: [
+                                                if (chatController
+                                                        .selectedMessage
+                                                        .value !=
+                                                    "")
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.all(6.0),
+                                                    child: Stack(
+                                                      children: [
+                                                        Text(
+                                                            '${chatController.selectedMessage.value ?? ''}'),
+                                                        Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10.r),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10.r),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10.r),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10.r),
+                                                                  ),
+                                                                  color:
+                                                                      dotColor),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 8.w,
+                                                                    top: 8.h,
+                                                                    bottom:
+                                                                        8.h),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  '${chatController.selectedParentMessageSender.value ?? ''}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12.sp,
+                                                                      color:
+                                                                          textColor),
                                                                 ),
-                                                                color:
-                                                                    dotColor),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 8.w,
-                                                                  top: 8.h,
-                                                                  bottom: 8.h),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                '${chatController.selectedParentMessageSender.value ?? ''}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12.sp,
-                                                                    color:
-                                                                        textColor),
-                                                              ),
-                                                              Text(
-                                                                '${chatController.selectedMessage.value ?? ''}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12.sp,
-                                                                    color:
-                                                                        textColor),
-                                                              ),
-                                                            ],
+                                                                Text(
+                                                                  '${chatController.selectedMessage.value ?? ''}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12.sp,
+                                                                      color:
+                                                                          textColor),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Positioned(
-                                                        right: 5.w,
-                                                        top: 3.h,
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            chatController
-                                                                .selectedMessage
-                                                                .value = "";
-                                                          },
-                                                          child: Icon(
-                                                              Icons.close,
-                                                              color: textColor,
-                                                              size: 16.h),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              TextFormField(
-                                                controller:
-                                                    messageTextEditingController,
-                                                textCapitalization:
-                                                    TextCapitalization
-                                                        .sentences,
-                                                decoration: InputDecoration(
-                                                  prefixIcon: InkWell(
-                                                    onTap: () {
-                                                      FocusScope.of(context)
-                                                          .unfocus();
-                                                      setState(() {
-                                                        _isEmojiPickerVisible =
-                                                            !_isEmojiPickerVisible;
-                                                      });
-                                                    },
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 9.sp,
-                                                          bottom: 9.sp,
-                                                          left: 9.sp),
-                                                      child: Image.asset(
-                                                        'assets/image/png/imoji_icon_chat.png',
-                                                        height: 12.sp,
-                                                      ),
+                                                        Positioned(
+                                                          right: 5.w,
+                                                          top: 3.h,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              chatController
+                                                                  .selectedMessage
+                                                                  .value = "";
+                                                            },
+                                                            child: Icon(
+                                                                Icons.close,
+                                                                color:
+                                                                    textColor,
+                                                                size: 16.h),
+                                                          ),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                  suffixIcon: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          showAlertDialog(
-                                                              context, 'chat');
-                                                        },
-                                                        child: Icon(
-                                                            Icons.attachment),
+                                                TextFormField(
+                                                  controller:
+                                                      messageTextEditingController
+                                                          .value,
+                                                  textCapitalization:
+                                                      TextCapitalization
+                                                          .sentences,
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: InkWell(
+                                                      onTap: () {
+                                                        FocusScope.of(context)
+                                                            .unfocus();
+                                                        setState(() {
+                                                          _isEmojiPickerVisible =
+                                                              !_isEmojiPickerVisible;
+                                                        });
+                                                      },
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 9.sp,
+                                                                bottom: 9.sp,
+                                                                left: 9.sp),
+                                                        child: Image.asset(
+                                                          'assets/image/png/imoji_icon_chat.png',
+                                                          height: 12.sp,
+                                                        ),
                                                       ),
-                                                      SizedBox(width: 8.w),
-                                                      VoiceRecorderButton(
-                                                        onRecordingComplete: (File
-                                                            audioFile) async {
-                                                          attachment =
-                                                              audioFile;
-                                                        },
-                                                      ),
-                                                      SizedBox(width: 8.w),
-                                                    ],
+                                                    ),
+                                                    suffixIcon: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            showAlertDialog(
+                                                                context,
+                                                                'chat');
+                                                          },
+                                                          child: Icon(
+                                                              Icons.attachment),
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                        VoiceRecorderButton(
+                                                          onRecordingComplete: (File
+                                                              audioFile) async {
+                                                            attachment =
+                                                                audioFile;
+                                                          },
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                      ],
+                                                    ),
+                                                    hintText: writeYourMessage,
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide:
+                                                          BorderSide.none,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.r),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide:
+                                                          BorderSide.none,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.r),
+                                                    ),
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8.h,
+                                                            horizontal: 0.w),
                                                   ),
-                                                  hintText: writeYourMessage,
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide.none,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.r),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide.none,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.r),
-                                                  ),
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 8.h,
-                                                          horizontal: 0.w),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 10.w),
-                                    InkWell(
-                                      onTap: () async {
-                                        if (messageTextEditingController
-                                                .text.isNotEmpty ||
-                                            chatController.messagePicPath.value
-                                                .isNotEmpty ||
-                                            attachment.path.isNotEmpty) {
-                                          String selectedMessage =
-                                              chatController
-                                                  .selectedMessage.value = '';
-                                          chatController.selectedMessage.value =
-                                              "";
-                                          String message =
-                                              messageTextEditingController.text;
+                                      SizedBox(width: 10.w),
+                                      messageTextEditingController
+                                              .value.text.isEmpty
+                                          ? InkWell(
+                                              onTap: () async {
+                                                if (messageTextEditingController
+                                                        .value
+                                                        .text
+                                                        .isNotEmpty ||
+                                                    chatController
+                                                        .messagePicPath
+                                                        .value
+                                                        .isNotEmpty ||
+                                                    attachment
+                                                        .path.isNotEmpty) {
+                                                  String selectedMessage =
+                                                      chatController
+                                                          .selectedMessage
+                                                          .value = '';
+                                                  chatController.selectedMessage
+                                                      .value = "";
+                                                  String message =
+                                                      messageTextEditingController
+                                                          .value.text;
 
-                                          messageTextEditingController.clear();
-                                          chatController.messagePicPath.value =
-                                              '';
-                                          chatController.pickedFile.value =
-                                              File('');
-                                          String selectedMessageId =
-                                              chatController
-                                                  .selectedMessageId.value;
-                                          String selectedMessageSender =
-                                              chatController
-                                                  .selectedParentMessageSender
-                                                  .value;
-                                          chatController
-                                              .selectedMessageId.value = "";
-                                          chatController
-                                              .selectedParentMessageSender
-                                              .value = '';
-                                          await chatController
-                                              .updateMessageData(
-                                            message: message,
-                                            attachment: attachment,
-                                            name: widget.name,
-                                            userId: widget.userId ?? "",
-                                            chatId: widget.chatId ?? "",
-                                            fromPage: widget.fromPage,
-                                            messageId: selectedMessageId,
-                                            parrent_message_sender_name:
-                                                selectedMessageSender,
-                                            selectedMessage: selectedMessage,
-                                          );
-                                          attachment = File('');
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10.w),
-                                        decoration: BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(23.r),
-                                        ),
-                                        child: Icon(Icons.send,
-                                            color: whiteColor, size: 20.h),
-                                      ),
-                                    ),
-                                  ],
+                                                  messageTextEditingController
+                                                      .value
+                                                      .clear();
+                                                  chatController.messagePicPath
+                                                      .value = '';
+                                                  chatController.pickedFile
+                                                      .value = File('');
+                                                  String selectedMessageId =
+                                                      chatController
+                                                          .selectedMessageId
+                                                          .value;
+                                                  String selectedMessageSender =
+                                                      chatController
+                                                          .selectedParentMessageSender
+                                                          .value;
+                                                  chatController
+                                                      .selectedMessageId
+                                                      .value = "";
+                                                  chatController
+                                                      .selectedParentMessageSender
+                                                      .value = '';
+                                                  await chatController
+                                                      .updateMessageData(
+                                                    message: message,
+                                                    attachment: attachment,
+                                                    name: widget.name,
+                                                    userId: widget.userId ?? "",
+                                                    chatId: widget.chatId ?? "",
+                                                    fromPage: widget.fromPage,
+                                                    messageId:
+                                                        selectedMessageId,
+                                                    parrent_message_sender_name:
+                                                        selectedMessageSender,
+                                                    selectedMessage:
+                                                        selectedMessage,
+                                                  );
+                                                  attachment = File('');
+                                                }
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(8.w),
+                                                decoration: BoxDecoration(
+                                                  color: primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          23.r),
+                                                ),
+                                                child: VoiceRecorderButton(
+                                                  onRecordingComplete:
+                                                      (File audioFile) async {
+                                                    attachment = audioFile;
+                                                  },
+                                                  micColor: whiteColor,
+                                                ),
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () async {
+                                                if (messageTextEditingController
+                                                        .value
+                                                        .text
+                                                        .isNotEmpty ||
+                                                    chatController
+                                                        .messagePicPath
+                                                        .value
+                                                        .isNotEmpty ||
+                                                    attachment
+                                                        .path.isNotEmpty) {
+                                                  String selectedMessage =
+                                                      chatController
+                                                          .selectedMessage
+                                                          .value = '';
+                                                  chatController.selectedMessage
+                                                      .value = "";
+                                                  String message =
+                                                      messageTextEditingController
+                                                          .value.text;
+
+                                                  messageTextEditingController
+                                                      .value
+                                                      .clear();
+                                                  chatController.messagePicPath
+                                                      .value = '';
+                                                  chatController.pickedFile
+                                                      .value = File('');
+                                                  String selectedMessageId =
+                                                      chatController
+                                                          .selectedMessageId
+                                                          .value;
+                                                  String selectedMessageSender =
+                                                      chatController
+                                                          .selectedParentMessageSender
+                                                          .value;
+                                                  chatController
+                                                      .selectedMessageId
+                                                      .value = "";
+                                                  chatController
+                                                      .selectedParentMessageSender
+                                                      .value = '';
+                                                  await chatController
+                                                      .updateMessageData(
+                                                    message: message,
+                                                    attachment: attachment,
+                                                    name: widget.name,
+                                                    userId: widget.userId ?? "",
+                                                    chatId: widget.chatId ?? "",
+                                                    fromPage: widget.fromPage,
+                                                    messageId:
+                                                        selectedMessageId,
+                                                    parrent_message_sender_name:
+                                                        selectedMessageSender,
+                                                    selectedMessage:
+                                                        selectedMessage,
+                                                  );
+                                                  attachment = File('');
+                                                }
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(10.w),
+                                                decoration: BoxDecoration(
+                                                  color: primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          23.r),
+                                                ),
+                                                child: Icon(Icons.send,
+                                                    color: whiteColor,
+                                                    size: 20.h),
+                                              ),
+                                            ),
+
+                                      // ass
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -871,12 +981,13 @@ class _MessageScreenState extends State<MessageScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.h,
+                        height: 5.h,
                       ),
                       Offstage(
                         offstage: !_isEmojiPickerVisible,
                         child: EmojiPicker(
-                          textEditingController: messageTextEditingController,
+                          textEditingController:
+                              messageTextEditingController.value,
                           config: Config(
                             height: 250.h,
                             emojiViewConfig: EmojiViewConfig(
