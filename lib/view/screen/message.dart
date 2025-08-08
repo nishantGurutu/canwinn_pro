@@ -481,16 +481,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                     audioUrl: chat.attachment!,
                                                                                     chatId: index.toString(),
                                                                                   )
-                                                                                : Container(
-                                                                                    constraints: BoxConstraints(
-                                                                                      maxHeight: MediaQuery.of(context).size.width * 0.7,
-                                                                                    ),
-                                                                                    child: InkWell(
-                                                                                      onTap: () {
-                                                                                        openFile(chat.attachment!);
-                                                                                      },
-                                                                                      child: getFilePreview(chat.attachment!),
-                                                                                    ),
+                                                                                : InkWell(
+                                                                                    onTap: () {
+                                                                                      openFile(chat.attachment!);
+                                                                                    },
+                                                                                    child: getFilePreview(chat.attachment!),
                                                                                   ),
                                                                           ],
                                                                         ),
@@ -1056,11 +1051,14 @@ class _MessageScreenState extends State<MessageScreen> {
         child: url.toString().contains('https')
             ? Image.network(
                 url,
+                fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) =>
                     Icon(Icons.broken_image),
               )
             : Image.file(
-                File(url),
+                File(
+                  url,
+                ),
                 errorBuilder: (context, error, stackTrace) =>
                     Icon(Icons.broken_image),
               ),
