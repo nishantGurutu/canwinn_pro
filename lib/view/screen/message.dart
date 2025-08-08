@@ -479,7 +479,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                             chat.attachment.toString().contains(".m4a")
                                                                                 ? CustomAudioPlayer(
                                                                                     audioUrl: chat.attachment!,
-                                                                                    chatId: chat.id.toString(),
+                                                                                    chatId: index.toString(),
                                                                                   )
                                                                                 : Container(
                                                                                     constraints: BoxConstraints(
