@@ -42,10 +42,12 @@ class ImageScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: whiteColor,
-      body: Container(
-        color: backgroundColor,
-        child: Center(
-          child: Image.file(file),
+      body: SafeArea(
+        child: Container(
+          color: backgroundColor,
+          child: Center(
+            child: Image.file(file),
+          ),
         ),
       ),
     );
@@ -133,9 +135,11 @@ class NetworkImageScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        color: backgroundColor,
-        child: Center(child: Image.network(file.toString())),
+      body: SafeArea(
+        child: Container(
+          color: backgroundColor,
+          child: Center(child: Image.network(file.toString())),
+        ),
       ),
     );
   }

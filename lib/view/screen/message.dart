@@ -103,6 +103,16 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
+  void scrollToIndex(int index) {
+    double itemHeight = 60.0;
+
+    _scrollController.animateTo(
+      itemHeight * index,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
   RxBool isCreatedDateShow = false.obs;
 
   final imojiscrollController = ScrollController();
@@ -728,6 +738,14 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 textCapitalization:
                                                     TextCapitalization
                                                         .sentences,
+                                                keyboardType:
+                                                    TextInputType.multiline,
+                                                textInputAction: TextInputAction
+                                                    .newline, // Show Enter key
+                                                minLines:
+                                                    1, // Start with one line
+                                                maxLines:
+                                                    null, // Grow as needed
                                                 decoration: InputDecoration(
                                                   prefixIcon: InkWell(
                                                     onTap: () {
@@ -792,7 +810,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                           vertical: 8.h,
                                                           horizontal: 0.w),
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
                                         ),
