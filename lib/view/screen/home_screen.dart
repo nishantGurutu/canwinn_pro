@@ -32,14 +32,11 @@ import 'package:task_management/model/home_lead_model.dart';
 import 'package:task_management/model/home_secreen_data_model.dart';
 import 'package:task_management/model/lead_contact_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
-import 'package:task_management/view/screen/add_lead.dart';
 import 'package:task_management/view/screen/all_followups.dart';
 import 'package:task_management/view/screen/bootom_bar.dart';
-import 'package:task_management/view/screen/follow_ups.dart';
 import 'package:task_management/view/screen/leads_list.dart';
 import 'package:task_management/view/screen/meeting/get_meeting.dart'
     show GetMeetingList;
-import 'package:task_management/view/screen/meeting/meeting_form.dart';
 import 'package:task_management/view/screen/task_screen.dart';
 import 'package:task_management/view/widgets/add_task.dart';
 import 'package:task_management/view/widgets/admin_user_list.dart';

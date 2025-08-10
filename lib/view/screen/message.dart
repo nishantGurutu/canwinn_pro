@@ -103,15 +103,29 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-  void scrollToIndex(int index) {
-    double itemHeight = 60.0;
+  // void scrollToIndex(dynamic index) {
+  //   double itemHeight = 60.0;
+  //   _scrollController.animateTo(
+  //     index.toDouble(),
+  //     duration: Duration(milliseconds: 500),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
 
-    _scrollController.animateTo(
-      itemHeight * index,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-  }
+  final Map<int, GlobalKey> messageKeys = {};
+  // void scrollToIndex(int messageId) {
+  //   final chatList = chatController.chatHistoryList;
+  //   int index = chatList.indexWhere((msg) => msg.id == messageId);
+  //   if (index == -1) return;
+  //   final key = messageKeys[chatList[index].id];
+  //   if (key != null && key.currentContext != null) {
+  //     Scrollable.ensureVisible(
+  //       key.currentContext!,
+  //       duration: const Duration(milliseconds: 500),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   }
+  // }
 
   RxBool isCreatedDateShow = false.obs;
 
@@ -304,6 +318,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                           (index) {
                                         final chat = chatController
                                             .chatHistoryList[index];
+                                        messageKeys.putIfAbsent(
+                                            chat.id ?? 0, () => GlobalKey());
                                         final isCurrentUser =
                                             chat.senderId == loggedInUserId;
                                         final currentDate =
@@ -336,237 +352,240 @@ class _MessageScreenState extends State<MessageScreen> {
                                                       .value =
                                                   chat.senderName.toString();
                                             },
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    if (showDateHeader)
-                                                      timeContainer(
-                                                          chat.createdDate),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      isCurrentUser
-                                                          ? MainAxisAlignment
-                                                              .end
-                                                          : MainAxisAlignment
-                                                              .start,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
+                                            child: InkWell(
+                                              onTap: () {
+                                                // scrollToIndex(
+                                                //     chat.parentMessageId ?? 0);
+                                                // print(
+                                                //     'iuey83 3ieu38ye 3387y83 ${chat.parentMessageId}');
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      if (showDateHeader)
+                                                        timeContainer(
+                                                            chat.createdDate),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
                                                         isCurrentUser
-                                                            ? SizedBox()
-                                                            : Text(
-                                                                "${chat.senderName ?? ''}",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                                maxLines:
-                                                                    100000,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
+                                                            ? MainAxisAlignment
+                                                                .end
+                                                            : MainAxisAlignment
+                                                                .start,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          isCurrentUser
+                                                              ? SizedBox()
+                                                              : Text(
+                                                                  "${chat.senderName ?? ''}",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500),
+                                                                  maxLines:
+                                                                      100000,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                          SizedBox(
+                                                            height: 3.h,
+                                                          ),
+                                                          GestureDetector(
+                                                            onLongPress: () {
+                                                              chatController
+                                                                  .isChatOptionOpenAppbar
+                                                                  .value = true;
+                                                            },
+                                                            child: Container(
+                                                              constraints:
+                                                                  BoxConstraints(
+                                                                minWidth: 70.w,
+                                                                maxWidth: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.7,
                                                               ),
-                                                        SizedBox(
-                                                          height: 3.h,
-                                                        ),
-                                                        GestureDetector(
-                                                          onLongPress: () {
-                                                            chatController
-                                                                .isChatOptionOpenAppbar
-                                                                .value = true;
-                                                          },
-                                                          child: Container(
-                                                            constraints:
-                                                                BoxConstraints(
-                                                              minWidth: 70.w,
-                                                              maxWidth: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.7,
-                                                            ),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: isCurrentUser
-                                                                  ? Color(
-                                                                      0xffF1F1F1)
-                                                                  : Color(
-                                                                      0xffEFF7FF),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        11.r),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        11.r),
-                                                                bottomLeft: isCurrentUser
-                                                                    ? Radius
-                                                                        .circular(11
-                                                                            .r)
-                                                                    : Radius
-                                                                        .zero,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: isCurrentUser
+                                                                    ? Color(
+                                                                        0xffF1F1F1)
+                                                                    : Color(
+                                                                        0xffEFF7FF),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          11.r),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          11.r),
+                                                                  bottomLeft: isCurrentUser
+                                                                      ? Radius
+                                                                          .circular(11
+                                                                              .r)
+                                                                      : Radius
+                                                                          .zero,
+                                                                ),
                                                               ),
-                                                            ),
-                                                            child: Stack(
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .only(
-                                                                    left: 3.w,
-                                                                    right: 3.w,
-                                                                    top: 3.h,
-                                                                    bottom: 3.h,
-                                                                  ),
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      if (chat.parentMessageId != null &&
-                                                                          chat.parentMessageId !=
-                                                                              "null" &&
-                                                                          chat.parentMessageId !=
-                                                                              0)
-                                                                        Container(
-                                                                          constraints:
-                                                                              BoxConstraints(
-                                                                            minWidth:
-                                                                                70.w,
-                                                                            maxWidth:
-                                                                                MediaQuery.of(context).size.width * 0.9,
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5.r),
-                                                                            color:
-                                                                                dotColor,
-                                                                          ),
-                                                                          child:
-                                                                              Padding(
-                                                                            padding: EdgeInsets.only(
-                                                                                top: 4.h,
-                                                                                bottom: 4.h,
-                                                                                left: 8.w,
-                                                                                right: 8.w),
+                                                              child: Stack(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .only(
+                                                                      left: 3.w,
+                                                                      right:
+                                                                          3.w,
+                                                                      top: 3.h,
+                                                                      bottom:
+                                                                          3.h,
+                                                                    ),
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        if (chat.parentMessageId != null &&
+                                                                            chat.parentMessageId !=
+                                                                                "null" &&
+                                                                            chat.parentMessageId !=
+                                                                                0)
+                                                                          Container(
+                                                                            constraints:
+                                                                                BoxConstraints(
+                                                                              minWidth: 70.w,
+                                                                              maxWidth: MediaQuery.of(context).size.width * 0.9,
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5.r),
+                                                                              color: dotColor,
+                                                                            ),
                                                                             child:
-                                                                                Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                Text(
-                                                                                  '${chat.parentSenderName ?? ''}',
-                                                                                  textAlign: TextAlign.left,
-                                                                                  style: TextStyle(fontSize: 12.sp, color: textColor),
-                                                                                ),
-                                                                                Text(
-                                                                                  '${chat.parentMessage ?? ''}',
-                                                                                  textAlign: TextAlign.left,
-                                                                                  style: TextStyle(fontSize: 12.sp, color: textColor),
-                                                                                ),
-                                                                              ],
+                                                                                Padding(
+                                                                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h, left: 8.w, right: 8.w),
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    '${chat.parentSenderName ?? ''}',
+                                                                                    textAlign: TextAlign.left,
+                                                                                    style: TextStyle(fontSize: 12.sp, color: textColor),
+                                                                                  ),
+                                                                                  Text(
+                                                                                    '${chat.parentMessage ?? ''}',
+                                                                                    textAlign: TextAlign.left,
+                                                                                    style: TextStyle(fontSize: 12.sp, color: textColor),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                      if (chat.attachment !=
-                                                                              null &&
-                                                                          chat.attachment!
-                                                                              .isNotEmpty)
-                                                                        Column(
-                                                                          children: [
-                                                                            chat.attachment.toString().contains(".m4a")
-                                                                                ? CustomAudioPlayer(
-                                                                                    audioUrl: chat.attachment!,
-                                                                                    chatId: index.toString(),
-                                                                                  )
-                                                                                : InkWell(
-                                                                                    onTap: () {
-                                                                                      openFile(chat.attachment!);
-                                                                                    },
-                                                                                    child: getFilePreview(chat.attachment!),
-                                                                                  ),
-                                                                          ],
-                                                                        ),
-                                                                      if (chat.message !=
+                                                                        if (chat.attachment !=
+                                                                                null &&
+                                                                            chat.attachment!.isNotEmpty)
+                                                                          Column(
+                                                                            children: [
+                                                                              chat.attachment.toString().contains(".m4a")
+                                                                                  ? CustomAudioPlayer(
+                                                                                      audioUrl: chat.attachment!,
+                                                                                      chatId: index.toString(),
+                                                                                    )
+                                                                                  : InkWell(
+                                                                                      onTap: () {
+                                                                                        openFile(chat.attachment!);
+                                                                                      },
+                                                                                      child: getFilePreview(chat.attachment!),
+                                                                                    ),
+                                                                            ],
+                                                                          ),
+                                                                        if (chat.message !=
+                                                                                null &&
+                                                                            chat.message!.isNotEmpty)
+                                                                          Column(
+                                                                            children: [
+                                                                              (chat.message?.split(" ").length ?? 0) > 3
+                                                                                  ? Padding(
+                                                                                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                                                                      child: Column(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            "${chat.message ?? ''}",
+                                                                                            style: changeTextColor(heading8, Colors.black),
+                                                                                            maxLines: 100000,
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            height: 15.h,
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    )
+                                                                                  : Padding(
+                                                                                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                                                                      child: Text(
+                                                                                        "${chat.message ?? ''}              ",
+                                                                                        style: changeTextColor(heading8, Colors.black),
+                                                                                        maxLines: 100000,
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                      ),
+                                                                                    ),
+                                                                            ],
+                                                                          ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  if (chat.message !=
                                                                               null &&
                                                                           chat.message!
-                                                                              .isNotEmpty)
-                                                                        Column(
-                                                                          children: [
-                                                                            (chat.message?.split(" ").length ?? 0) > 3
-                                                                                ? Padding(
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                                                                    child: Column(
-                                                                                      children: [
-                                                                                        Text(
-                                                                                          "${chat.message ?? ''}",
-                                                                                          style: changeTextColor(heading8, Colors.black),
-                                                                                          maxLines: 100000,
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                        ),
-                                                                                        SizedBox(
-                                                                                          height: 15.h,
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  )
-                                                                                : Padding(
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                                                                    child: Text(
-                                                                                      "${chat.message ?? ''}              ",
-                                                                                      style: changeTextColor(heading8, Colors.black),
-                                                                                      maxLines: 100000,
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                    ),
-                                                                                  ),
-                                                                          ],
+                                                                              .isNotEmpty ||
+                                                                      chat.attachment !=
+                                                                          null)
+                                                                    Positioned(
+                                                                      bottom:
+                                                                          3.h,
+                                                                      right:
+                                                                          7.w,
+                                                                      child:
+                                                                          Text(
+                                                                        DateConverter.convertTo12HourFormat(chat.createdAt ??
+                                                                            ""),
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              10.sp,
                                                                         ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                if (chat.message !=
-                                                                            null &&
-                                                                        chat.message!
-                                                                            .isNotEmpty ||
-                                                                    chat.attachment !=
-                                                                        null)
-                                                                  Positioned(
-                                                                    bottom: 3.h,
-                                                                    right: 7.w,
-                                                                    child: Text(
-                                                                      DateConverter.convertTo12HourFormat(
-                                                                          chat.createdAt ??
-                                                                              ""),
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            10.sp,
                                                                       ),
-                                                                    ),
-                                                                  )
-                                                              ],
+                                                                    )
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );
