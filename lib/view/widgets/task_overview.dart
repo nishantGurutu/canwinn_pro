@@ -92,7 +92,7 @@ class TaskOverview extends StatelessWidget {
               child: Container(
                 width: 100.w,
                 decoration: BoxDecoration(
-                  color: selectedTabColor,
+                  color: darkBlue,
                   borderRadius: BorderRadius.all(
                     Radius.circular(7),
                   ),
@@ -148,7 +148,7 @@ class TaskOverview extends StatelessWidget {
               child: Container(
                 width: 100.w,
                 decoration: BoxDecoration(
-                  color: selectedTabColor,
+                  color: darkBlue,
                   borderRadius: BorderRadius.all(
                     Radius.circular(7),
                   ),
@@ -204,7 +204,7 @@ class TaskOverview extends StatelessWidget {
               child: Container(
                 width: 100.w,
                 decoration: BoxDecoration(
-                  color: selectedTabColor,
+                  color: darkBlue,
                   borderRadius: BorderRadius.all(
                     Radius.circular(7),
                   ),

@@ -282,511 +282,16 @@ class _ToDoListState extends State<ToDoList> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget editBottomSheet(
       String? title, int? priority, int? tags, String? description, int? id) {
-    return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20.r))),
-        width: double.infinity,
-        height: 540.h,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 5.h,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 15.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    editTodo,
-                    style: changeTextColor(rubikBlack, darkGreyColor),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: Icon(Icons.close),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextField(
-                      controller: editTitleTextEditingController,
-                      textCapitalization: TextCapitalization.sentences,
-                      hintText: todoTitle,
-                      keyboardType: TextInputType.emailAddress,
-                      data: todoTitle,
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 160.w,
-                          child: DropdownButtonHideUnderline(
-                            child: Obx(
-                              () => DropdownButton2<TagData>(
-                                isExpanded: true,
-                                hint: Text(
-                                  "Select Tag",
-                                  style: changeTextColor(
-                                      rubikRegular, darkGreyColor),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                items: todoController.tagList
-                                    .map(
-                                      (TagData item) =>
-                                          DropdownMenuItem<TagData>(
-                                        value: item,
-                                        child: Text(
-                                          item.tagName ?? '',
-                                          style: changeTextColor(
-                                              rubikRegular, Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                                value: todoController.selectedTagData.value,
-                                onChanged: (TagData? value) {},
-                                buttonStyleData: ButtonStyleData(
-                                  height: 45.h,
-                                  width: double.infinity,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 10.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    border: Border.all(color: lightBorderColor),
-                                    color: whiteColor,
-                                  ),
-                                ),
-                                iconStyleData: IconStyleData(
-                                  icon: Image.asset(
-                                    'assets/images/png/Vector 3.png',
-                                    color: secondaryColor,
-                                    height: 8.h,
-                                  ),
-                                  iconSize: 14,
-                                  iconEnabledColor: lightGreyColor,
-                                  iconDisabledColor: lightGreyColor,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: 200.h,
-                                  width: 160.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14.r),
-                                      color: whiteColor,
-                                      border:
-                                          Border.all(color: lightBorderColor)),
-                                  scrollbarTheme: ScrollbarThemeData(
-                                    radius: const Radius.circular(40),
-                                    thickness:
-                                        WidgetStateProperty.all<double>(6),
-                                    thumbVisibility:
-                                        WidgetStateProperty.all<bool>(true),
-                                  ),
-                                ),
-                                menuItemStyleData: MenuItemStyleData(
-                                  height: 40.h,
-                                  padding: EdgeInsets.only(left: 14, right: 14),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 160.w,
-                          child: DropdownButtonHideUnderline(
-                            child: Obx(
-                              () => DropdownButton2<PriorityData>(
-                                isExpanded: true,
-                                hint: Text(
-                                  "Select Priority",
-                                  style: changeTextColor(
-                                      rubikRegular, darkGreyColor),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                items: priorityController.priorityList
-                                    .map(
-                                      (PriorityData item) =>
-                                          DropdownMenuItem<PriorityData>(
-                                        value: item,
-                                        child: Text(
-                                          item.priorityName ?? '',
-                                          style: changeTextColor(
-                                              rubikRegular, Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                                value: priorityController
-                                    .selectedPriorityData.value,
-                                onChanged: (PriorityData? value) {
-                                  priorityController
-                                      .selectedPriorityData.value = value;
-                                },
-                                buttonStyleData: ButtonStyleData(
-                                  height: 45.h,
-                                  width: double.infinity,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 10.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    border: Border.all(color: lightBorderColor),
-                                    color: whiteColor,
-                                  ),
-                                ),
-                                iconStyleData: IconStyleData(
-                                  icon: Image.asset(
-                                    'assets/images/png/Vector 3.png',
-                                    color: secondaryColor,
-                                    height: 8.h,
-                                  ),
-                                  iconSize: 14,
-                                  iconEnabledColor: lightGreyColor,
-                                  iconDisabledColor: lightGreyColor,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: 200.h,
-                                  width: 160.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14.r),
-                                      color: whiteColor,
-                                      border:
-                                          Border.all(color: lightBorderColor)),
-                                  scrollbarTheme: ScrollbarThemeData(
-                                    radius: const Radius.circular(40),
-                                    thickness:
-                                        WidgetStateProperty.all<double>(6),
-                                    thumbVisibility:
-                                        WidgetStateProperty.all<bool>(true),
-                                  ),
-                                ),
-                                menuItemStyleData: MenuItemStyleData(
-                                  height: 40.h,
-                                  padding: EdgeInsets.only(left: 14, right: 14),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    CustomTextField(
-                      controller: editDescriptionTextEditingController,
-                      textCapitalization: TextCapitalization.sentences,
-                      hintText: description,
-                      keyboardType: TextInputType.emailAddress,
-                      maxLine: 3,
-                      data: description,
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 161.w,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                alertDate,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 3.w,
-                              ),
-                              CustomCalender(
-                                hintText: dateFormate,
-                                controller: dueDateController,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 161.w,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                alertTime,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 3.w,
-                              ),
-                              CustomTimer(
-                                hintText: alertTime,
-                                controller: dueTimeController,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 160.w,
-                          child: CustomTextField(
-                            controller: editTimeTextEditingController,
-                            textCapitalization: TextCapitalization.none,
-                            hintText: alarmReminder,
-                            keyboardType: TextInputType.number,
-                            prefixIcon: Icon(Icons.lock_clock),
-                            data: alarmReminder,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 160.w,
-                          child: Obx(
-                            () => DropdownButtonHideUnderline(
-                              child: DropdownButton2<String>(
-                                isExpanded: true,
-                                items:
-                                    todoController.timeList.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Roboto',
-                                        color: darkGreyColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  );
-                                }).toList(),
-                                value:
-                                    todoController.selectedTime!.value.isEmpty
-                                        ? null
-                                        : todoController.selectedTime?.value,
-                                onChanged: (String? value) {
-                                  todoController.selectedTime?.value =
-                                      value ?? '';
-                                },
-                                buttonStyleData: ButtonStyleData(
-                                  height: 50.h,
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.only(
-                                      left: 14, right: 14),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    border: Border.all(color: lightBorderColor),
-                                    color: whiteColor,
-                                  ),
-                                ),
-                                hint: Text(
-                                  'Select type',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Roboto',
-                                    color: darkGreyColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                iconStyleData: IconStyleData(
-                                  icon: Image.asset(
-                                    'assets/images/png/Vector 3.png',
-                                    color: secondaryColor,
-                                    height: 8.h,
-                                  ),
-                                  iconSize: 14,
-                                  iconEnabledColor: lightGreyColor,
-                                  iconDisabledColor: lightGreyColor,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: 200,
-                                  width: 330,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14.r),
-                                      color: whiteColor,
-                                      border:
-                                          Border.all(color: lightBorderColor)),
-                                  offset: const Offset(0, 0),
-                                  scrollbarTheme: ScrollbarThemeData(
-                                    radius: const Radius.circular(40),
-                                    thickness:
-                                        WidgetStateProperty.all<double>(6),
-                                    thumbVisibility:
-                                        WidgetStateProperty.all<bool>(true),
-                                  ),
-                                ),
-                                menuItemStyleData: const MenuItemStyleData(
-                                  height: 40,
-                                  padding: EdgeInsets.only(left: 14, right: 14),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        selectAttachmentDialog(context);
-                      },
-                      child: Container(
-                        height: 35.h,
-                        width: 200.w,
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          border: Border.all(color: lightBorderColor),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.r),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/png/attachment-icon.png',
-                              width: 35.w,
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Text(
-                              'Add Attachment',
-                              style: TextStyle(
-                                  color: textColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            height: 35.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              color: borderColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.r),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                cancel,
-                                style:
-                                    changeTextColor(rubikRegular, whiteColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              todoController.editTodoApi(
-                                editTitleTextEditingController.text,
-                                todoController.selectedTagData.value?.id,
-                                priorityController
-                                    .selectedPriorityData.value?.id,
-                                editDescriptionTextEditingController.text,
-                                id,
-                                dueDateController.text,
-                                dueTimeController.text,
-                                editTimeTextEditingController.text,
-                                todoController.selectedTime?.value,
-                              );
-                            }
-                          },
-                          child: Container(
-                            height: 35.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.r),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                edit,
-                                style:
-                                    changeTextColor(rubikRegular, whiteColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  final TextEditingController dueTimeController = TextEditingController();
-  final TextEditingController dueDateController = TextEditingController();
-  Widget addTodoBotomsheet() {
-    return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20.r))),
-        width: double.infinity,
-        height: 540.h,
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20.r))),
+          width: double.infinity,
+          height: 540.h,
           child: Column(
             children: [
               SizedBox(
@@ -798,7 +303,7 @@ class _ToDoListState extends State<ToDoList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      addTodo,
+                      editTodo,
                       style: changeTextColor(rubikBlack, darkGreyColor),
                     ),
                     IconButton(
@@ -821,7 +326,7 @@ class _ToDoListState extends State<ToDoList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextField(
-                        controller: todoController.titleTextEditingController,
+                        controller: editTitleTextEditingController,
                         textCapitalization: TextCapitalization.sentences,
                         hintText: todoTitle,
                         keyboardType: TextInputType.emailAddress,
@@ -835,25 +340,156 @@ class _ToDoListState extends State<ToDoList> {
                         children: [
                           SizedBox(
                             width: 160.w,
-                            child: CustomDropdown<TagData>(
-                              items: todoController.tagList,
-                              itemLabel: (item) => item.tagName ?? '',
-                              onChanged: (value) {
-                                todoController.selectedTagData.value = value;
-                              },
-                              hintText: selectTag,
+                            child: DropdownButtonHideUnderline(
+                              child: Obx(
+                                () => DropdownButton2<TagData>(
+                                  isExpanded: true,
+                                  hint: Text(
+                                    "Select Tag",
+                                    style: changeTextColor(
+                                        rubikRegular, darkGreyColor),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  items: todoController.tagList
+                                      .map(
+                                        (TagData item) =>
+                                            DropdownMenuItem<TagData>(
+                                          value: item,
+                                          child: Text(
+                                            item.tagName ?? '',
+                                            style: changeTextColor(
+                                                rubikRegular, Colors.black),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  value: todoController.selectedTagData.value,
+                                  onChanged: (TagData? value) {},
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 45.h,
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w,
+                                      vertical: 10.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14.r),
+                                      border: Border.all(color: lightBorderColor),
+                                      color: whiteColor,
+                                    ),
+                                  ),
+                                  iconStyleData: IconStyleData(
+                                    icon: Image.asset(
+                                      'assets/images/png/Vector 3.png',
+                                      color: secondaryColor,
+                                      height: 8.h,
+                                    ),
+                                    iconSize: 14,
+                                    iconEnabledColor: lightGreyColor,
+                                    iconDisabledColor: lightGreyColor,
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    maxHeight: 200.h,
+                                    width: 160.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14.r),
+                                        color: whiteColor,
+                                        border:
+                                            Border.all(color: lightBorderColor)),
+                                    scrollbarTheme: ScrollbarThemeData(
+                                      radius: const Radius.circular(40),
+                                      thickness:
+                                          WidgetStateProperty.all<double>(6),
+                                      thumbVisibility:
+                                          WidgetStateProperty.all<bool>(true),
+                                    ),
+                                  ),
+                                  menuItemStyleData: MenuItemStyleData(
+                                    height: 40.h,
+                                    padding: EdgeInsets.only(left: 14, right: 14),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(
                             width: 160.w,
-                            child: CustomDropdown<PriorityData>(
-                              items: priorityController.priorityList,
-                              itemLabel: (item) => item.priorityName ?? '',
-                              onChanged: (value) {
-                                priorityController.selectedPriorityData.value =
-                                    value;
-                              },
-                              hintText: selectPriority,
+                            child: DropdownButtonHideUnderline(
+                              child: Obx(
+                                () => DropdownButton2<PriorityData>(
+                                  isExpanded: true,
+                                  hint: Text(
+                                    "Select Priority",
+                                    style: changeTextColor(
+                                        rubikRegular, darkGreyColor),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  items: priorityController.priorityList
+                                      .map(
+                                        (PriorityData item) =>
+                                            DropdownMenuItem<PriorityData>(
+                                          value: item,
+                                          child: Text(
+                                            item.priorityName ?? '',
+                                            style: changeTextColor(
+                                                rubikRegular, Colors.black),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  value: priorityController
+                                      .selectedPriorityData.value,
+                                  onChanged: (PriorityData? value) {
+                                    priorityController
+                                        .selectedPriorityData.value = value;
+                                  },
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 45.h,
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w,
+                                      vertical: 10.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14.r),
+                                      border: Border.all(color: lightBorderColor),
+                                      color: whiteColor,
+                                    ),
+                                  ),
+                                  iconStyleData: IconStyleData(
+                                    icon: Image.asset(
+                                      'assets/images/png/Vector 3.png',
+                                      color: secondaryColor,
+                                      height: 8.h,
+                                    ),
+                                    iconSize: 14,
+                                    iconEnabledColor: lightGreyColor,
+                                    iconDisabledColor: lightGreyColor,
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    maxHeight: 200.h,
+                                    width: 160.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14.r),
+                                        color: whiteColor,
+                                        border:
+                                            Border.all(color: lightBorderColor)),
+                                    scrollbarTheme: ScrollbarThemeData(
+                                      radius: const Radius.circular(40),
+                                      thickness:
+                                          WidgetStateProperty.all<double>(6),
+                                      thumbVisibility:
+                                          WidgetStateProperty.all<bool>(true),
+                                    ),
+                                  ),
+                                  menuItemStyleData: MenuItemStyleData(
+                                    height: 40.h,
+                                    padding: EdgeInsets.only(left: 14, right: 14),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -862,8 +498,7 @@ class _ToDoListState extends State<ToDoList> {
                         height: 10.h,
                       ),
                       CustomTextField(
-                        controller:
-                            todoController.descriptionTextEditingController,
+                        controller: editDescriptionTextEditingController,
                         textCapitalization: TextCapitalization.sentences,
                         hintText: description,
                         keyboardType: TextInputType.emailAddress,
@@ -871,7 +506,7 @@ class _ToDoListState extends State<ToDoList> {
                         data: description,
                       ),
                       SizedBox(
-                        height: 15.h,
+                        height: 10.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -884,8 +519,7 @@ class _ToDoListState extends State<ToDoList> {
                                 Text(
                                   alertDate,
                                   style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
+                                      fontSize: 15, fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
                                   height: 3.w,
@@ -905,8 +539,7 @@ class _ToDoListState extends State<ToDoList> {
                                 Text(
                                   alertTime,
                                   style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
+                                      fontSize: 15, fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
                                   height: 3.w,
@@ -921,15 +554,7 @@ class _ToDoListState extends State<ToDoList> {
                         ],
                       ),
                       SizedBox(
-                        height: 15.h,
-                      ),
-                      Text(
-                        'Before Due',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: 5.h,
+                        height: 10.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -937,8 +562,7 @@ class _ToDoListState extends State<ToDoList> {
                           SizedBox(
                             width: 160.w,
                             child: CustomTextField(
-                              controller:
-                                  todoController.timeTextEditingController,
+                              controller: editTimeTextEditingController,
                               textCapitalization: TextCapitalization.none,
                               hintText: alarmReminder,
                               keyboardType: TextInputType.number,
@@ -952,8 +576,8 @@ class _ToDoListState extends State<ToDoList> {
                               () => DropdownButtonHideUnderline(
                                 child: DropdownButton2<String>(
                                   isExpanded: true,
-                                  items: todoController.timeList
-                                      .map((String item) {
+                                  items:
+                                      todoController.timeList.map((String item) {
                                     return DropdownMenuItem<String>(
                                       value: item,
                                       child: Text(
@@ -978,13 +602,13 @@ class _ToDoListState extends State<ToDoList> {
                                         value ?? '';
                                   },
                                   buttonStyleData: ButtonStyleData(
+                                    height: 50.h,
                                     width: double.infinity,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10.w, vertical: 4.h),
+                                    padding: const EdgeInsets.only(
+                                        left: 14, right: 14),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14.r),
-                                      border:
-                                          Border.all(color: lightBorderColor),
+                                      border: Border.all(color: lightBorderColor),
                                       color: whiteColor,
                                     ),
                                   ),
@@ -1010,14 +634,13 @@ class _ToDoListState extends State<ToDoList> {
                                     iconDisabledColor: lightGreyColor,
                                   ),
                                   dropdownStyleData: DropdownStyleData(
-                                    maxHeight: 200.h,
-                                    width: 160.w,
+                                    maxHeight: 200,
+                                    width: 330,
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(14.r),
+                                        borderRadius: BorderRadius.circular(14.r),
                                         color: whiteColor,
-                                        border: Border.all(
-                                            color: lightBorderColor)),
+                                        border:
+                                            Border.all(color: lightBorderColor)),
                                     offset: const Offset(0, 0),
                                     scrollbarTheme: ScrollbarThemeData(
                                       radius: const Radius.circular(40),
@@ -1027,9 +650,9 @@ class _ToDoListState extends State<ToDoList> {
                                           WidgetStateProperty.all<bool>(true),
                                     ),
                                   ),
-                                  menuItemStyleData: MenuItemStyleData(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10.w, vertical: 3.h),
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                    padding: EdgeInsets.only(left: 14, right: 14),
                                   ),
                                 ),
                               ),
@@ -1081,7 +704,9 @@ class _ToDoListState extends State<ToDoList> {
                       Row(
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Get.back();
+                            },
                             child: Container(
                               height: 35.h,
                               width: 80.w,
@@ -1105,36 +730,19 @@ class _ToDoListState extends State<ToDoList> {
                           ),
                           InkWell(
                             onTap: () {
-                              if (todoController.isTodoAdding.value == false) {
-                                if (_formKey.currentState!.validate()) {
-                                  if (todoController.isTodoAdding.value ==
-                                      false) {
-                                    if ((todoController.selectedTime?.value ??
-                                            "")
-                                        .isNotEmpty) {
-                                      todoController.addTodoApi(
-                                        todoController
-                                            .titleTextEditingController.text,
-                                        todoController
-                                            .selectedTagData.value?.id,
-                                        priorityController
-                                            .selectedPriorityData.value?.id,
-                                        todoController
-                                            .descriptionTextEditingController
-                                            .text,
-                                        dueTimeController.text,
-                                        dueDateController.text,
-                                        todoController
-                                            .timeTextEditingController.text,
-                                        todoController.selectedTime?.value ??
-                                            "",
-                                      );
-                                    } else {
-                                      CustomToast().showCustomToast(
-                                          "Please select reminder type");
-                                    }
-                                  }
-                                }
+                              if (_formKey.currentState!.validate()) {
+                                todoController.editTodoApi(
+                                  editTitleTextEditingController.text,
+                                  todoController.selectedTagData.value?.id,
+                                  priorityController
+                                      .selectedPriorityData.value?.id,
+                                  editDescriptionTextEditingController.text,
+                                  id,
+                                  dueDateController.text,
+                                  dueTimeController.text,
+                                  editTimeTextEditingController.text,
+                                  todoController.selectedTime?.value,
+                                );
                               }
                             },
                             child: Container(
@@ -1148,7 +756,7 @@ class _ToDoListState extends State<ToDoList> {
                               ),
                               child: Center(
                                 child: Text(
-                                  submit,
+                                  edit,
                                   style:
                                       changeTextColor(rubikRegular, whiteColor),
                                 ),
@@ -1162,6 +770,402 @@ class _ToDoListState extends State<ToDoList> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  final TextEditingController dueTimeController = TextEditingController();
+  final TextEditingController dueDateController = TextEditingController();
+  Widget addTodoBotomsheet() {
+    return SafeArea(
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20.r))),
+          width: double.infinity,
+          height: 540.h,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 5.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        addTodo,
+                        style: changeTextColor(rubikBlack, darkGreyColor),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextField(
+                          controller: todoController.titleTextEditingController,
+                          textCapitalization: TextCapitalization.sentences,
+                          hintText: todoTitle,
+                          keyboardType: TextInputType.emailAddress,
+                          data: todoTitle,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 160.w,
+                              child: CustomDropdown<TagData>(
+                                items: todoController.tagList,
+                                itemLabel: (item) => item.tagName ?? '',
+                                onChanged: (value) {
+                                  todoController.selectedTagData.value = value;
+                                },
+                                hintText: selectTag,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 160.w,
+                              child: CustomDropdown<PriorityData>(
+                                items: priorityController.priorityList,
+                                itemLabel: (item) => item.priorityName ?? '',
+                                onChanged: (value) {
+                                  priorityController.selectedPriorityData.value =
+                                      value;
+                                },
+                                hintText: selectPriority,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        CustomTextField(
+                          controller:
+                              todoController.descriptionTextEditingController,
+                          textCapitalization: TextCapitalization.sentences,
+                          hintText: description,
+                          keyboardType: TextInputType.emailAddress,
+                          maxLine: 3,
+                          data: description,
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 161.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    alertDate,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    height: 3.w,
+                                  ),
+                                  CustomCalender(
+                                    hintText: dateFormate,
+                                    controller: dueDateController,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 161.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    alertTime,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    height: 3.w,
+                                  ),
+                                  CustomTimer(
+                                    hintText: alertTime,
+                                    controller: dueTimeController,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          'Before Due',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 160.w,
+                              child: CustomTextField(
+                                controller:
+                                    todoController.timeTextEditingController,
+                                textCapitalization: TextCapitalization.none,
+                                hintText: alarmReminder,
+                                keyboardType: TextInputType.number,
+                                prefixIcon: Icon(Icons.lock_clock),
+                                data: alarmReminder,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 160.w,
+                              child: Obx(
+                                () => DropdownButtonHideUnderline(
+                                  child: DropdownButton2<String>(
+                                    isExpanded: true,
+                                    items: todoController.timeList
+                                        .map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                            decoration: TextDecoration.none,
+                                            fontFamily: 'Roboto',
+                                            color: darkGreyColor,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    }).toList(),
+                                    value:
+                                        todoController.selectedTime!.value.isEmpty
+                                            ? null
+                                            : todoController.selectedTime?.value,
+                                    onChanged: (String? value) {
+                                      todoController.selectedTime?.value =
+                                          value ?? '';
+                                    },
+                                    buttonStyleData: ButtonStyleData(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w, vertical: 4.h),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14.r),
+                                        border:
+                                            Border.all(color: lightBorderColor),
+                                        color: whiteColor,
+                                      ),
+                                    ),
+                                    hint: Text(
+                                      'Select type',
+                                      style: TextStyle(
+                                        decoration: TextDecoration.none,
+                                        fontFamily: 'Roboto',
+                                        color: darkGreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    iconStyleData: IconStyleData(
+                                      icon: Image.asset(
+                                        'assets/images/png/Vector 3.png',
+                                        color: secondaryColor,
+                                        height: 8.h,
+                                      ),
+                                      iconSize: 14,
+                                      iconEnabledColor: lightGreyColor,
+                                      iconDisabledColor: lightGreyColor,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      maxHeight: 200.h,
+                                      width: 160.w,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14.r),
+                                          color: whiteColor,
+                                          border: Border.all(
+                                              color: lightBorderColor)),
+                                      offset: const Offset(0, 0),
+                                      scrollbarTheme: ScrollbarThemeData(
+                                        radius: const Radius.circular(40),
+                                        thickness:
+                                            WidgetStateProperty.all<double>(6),
+                                        thumbVisibility:
+                                            WidgetStateProperty.all<bool>(true),
+                                      ),
+                                    ),
+                                    menuItemStyleData: MenuItemStyleData(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w, vertical: 3.h),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            selectAttachmentDialog(context);
+                          },
+                          child: Container(
+                            height: 35.h,
+                            width: 200.w,
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              border: Border.all(color: lightBorderColor),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.r),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/png/attachment-icon.png',
+                                  width: 35.w,
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Text(
+                                  'Add Attachment',
+                                  style: TextStyle(
+                                      color: textColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                height: 35.h,
+                                width: 80.w,
+                                decoration: BoxDecoration(
+                                  color: borderColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5.r),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    cancel,
+                                    style:
+                                        changeTextColor(rubikRegular, whiteColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                if (todoController.isTodoAdding.value == false) {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (todoController.isTodoAdding.value ==
+                                        false) {
+                                      if ((todoController.selectedTime?.value ??
+                                              "")
+                                          .isNotEmpty) {
+                                        todoController.addTodoApi(
+                                          todoController
+                                              .titleTextEditingController.text,
+                                          todoController
+                                              .selectedTagData.value?.id,
+                                          priorityController
+                                              .selectedPriorityData.value?.id,
+                                          todoController
+                                              .descriptionTextEditingController
+                                              .text,
+                                          dueTimeController.text,
+                                          dueDateController.text,
+                                          todoController
+                                              .timeTextEditingController.text,
+                                          todoController.selectedTime?.value ??
+                                              "",
+                                        );
+                                      } else {
+                                        CustomToast().showCustomToast(
+                                            "Please select reminder type");
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              child: Container(
+                                height: 35.h,
+                                width: 80.w,
+                                decoration: BoxDecoration(
+                                  color: secondaryColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5.r),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    submit,
+                                    style:
+                                        changeTextColor(rubikRegular, whiteColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -20,6 +20,7 @@ import 'package:task_management/helper/pusher_config.dart';
 class TaskComments extends StatefulWidget {
   final int? taskId;
   final DiscussionController discussionController;
+
   const TaskComments(this.taskId, this.discussionController, {super.key});
 
   @override
@@ -32,24 +33,29 @@ class _TaskCommentsState extends State<TaskComments> {
   String previousCreateddate = "";
 
   final TaskController taskController = Get.put(TaskController());
-  final DiscussionController discussionController =
-      Get.put(DiscussionController());
+  final DiscussionController discussionController = Get.put(
+    DiscussionController(),
+  );
   ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     discussionController.taskMessageListApi(widget.taskId);
     widget.discussionController.chatIdvalue.value = widget.taskId.toString();
     if (widget.discussionController.chatIdvalue.value.isNotEmpty) {
-      PusherConfig().initPusher(widget.discussionController.onPusherEvent,
-          channelName: "task.id",
-          roomId: widget.discussionController.chatIdvalue.value);
+      PusherConfig().initPusher(
+        widget.discussionController.onPusherEvent,
+        channelName: "task.id",
+        roomId: widget.discussionController.chatIdvalue.value,
+      );
     }
   }
 
   final imojiscrollController = ScrollController();
   bool _isEmojiPickerVisible = false;
   String prevDate = '';
+
   @override
   Widget build(BuildContext context) {
     final int loggedInUserId = StorageHelper.getId();
@@ -58,357 +64,468 @@ class _TaskCommentsState extends State<TaskComments> {
         children: [
           widget.discussionController.taskMessageList.isEmpty
               ? Expanded(
-                  child: Center(
-                    child: Text(
-                      noMessage,
-                      style: changeTextColor(robotoBlack, lightGreyColor),
-                    ),
+                child: Center(
+                  child: Text(
+                    noMessage,
+                    style: changeTextColor(robotoBlack, lightGreyColor),
                   ),
-                )
+                ),
+              )
               : Expanded(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      reverse: true,
-                      child: Column(
-                        children:
-                            discussionController.taskMessageList.map((chat) {
-                          final isCurrentUser = chat.senderId == loggedInUserId;
-                          final showDate = chat.createdDate?.toLowerCase() !=
-                              prevDate.toLowerCase();
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 6.h,
+                  ),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    reverse: true,
+                    child: Column(
+                      children:
+                          discussionController.taskMessageList.map((chat) {
+                            final isCurrentUser =
+                                chat.senderId == loggedInUserId;
+                            final showDate =
+                                chat.createdDate?.toLowerCase() !=
+                                prevDate.toLowerCase();
 
-                          prevDate = chat.createdDate ?? '';
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (showDate == true)
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(0xff27B1A2),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.r),
+                            prevDate = chat.createdDate ?? '';
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (showDate == true)
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff27B1A2),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(5.r),
+                                            ),
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          child: Text(
-                                            "${chat.createdDate ?? ''}",
-                                            style: TextStyle(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            child: Text(
+                                              "${chat.createdDate ?? ''}",
+                                              style: TextStyle(
                                                 color: whiteColor,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.w500),
-                                            maxLines: 100000,
-                                            overflow: TextOverflow.ellipsis,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              maxLines: 100000,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: isCurrentUser
-                                      ? MainAxisAlignment.end
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
                                         isCurrentUser
-                                            ? SizedBox()
-                                            : Text(
+                                            ? MainAxisAlignment.end
+                                            : MainAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          isCurrentUser
+                                              ? SizedBox()
+                                              : Text(
                                                 "${chat.senderName ?? ''}",
                                                 style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                                 maxLines: 100000,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                        SizedBox(
-                                          height: 3.h,
-                                        ),
-                                        InkWell(
-                                          onLongPress: () {},
-                                          child: Container(
-                                            constraints: BoxConstraints(
-                                              minWidth: 70.w,
-                                              maxWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.75,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: isCurrentUser
-                                                  ? Color(0xffF1F1F1)
-                                                  : Color(0xffEFF7FF),
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(11.r),
-                                                topRight: Radius.circular(11.r),
-                                                bottomLeft: isCurrentUser
-                                                    ? Radius.circular(11.r)
-                                                    : Radius.zero,
-                                                bottomRight: isCurrentUser
-                                                    ? Radius.zero
-                                                    : Radius.circular(11.r),
+                                          SizedBox(height: 3.h),
+                                          InkWell(
+                                            onLongPress: () {},
+                                            child: Container(
+                                              constraints: BoxConstraints(
+                                                minWidth: 70.w,
+                                                maxWidth:
+                                                    MediaQuery.of(
+                                                      context,
+                                                    ).size.width *
+                                                    0.75,
                                               ),
-                                            ),
-                                            child: Stack(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    isCurrentUser
+                                                        ? Color(0xffF1F1F1)
+                                                        : Color(0xffEFF7FF),
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(
+                                                    11.r,
+                                                  ),
+                                                  topRight: Radius.circular(
+                                                    11.r,
+                                                  ),
+                                                  bottomLeft:
+                                                      isCurrentUser
+                                                          ? Radius.circular(
+                                                            11.r,
+                                                          )
+                                                          : Radius.zero,
+                                                  bottomRight:
+                                                      isCurrentUser
+                                                          ? Radius.zero
+                                                          : Radius.circular(
+                                                            11.r,
+                                                          ),
+                                                ),
+                                              ),
+                                              child: Stack(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
                                                       left: 6.w,
                                                       right: 10.w,
                                                       top: 5.h,
-                                                      bottom: 17.h),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      chat.attachment != null
-                                                          ? Container(
-                                                              constraints:
-                                                                  BoxConstraints(
-                                                                maxHeight: chat
-                                                                        .attachment
-                                                                        .toString()
-                                                                        .contains(
-                                                                            ".m4a")
-                                                                    ? 40.h
-                                                                    : MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.7,
+                                                      bottom: 17.h,
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        chat.attachment != null
+                                                            ? Container(
+                                                              constraints: BoxConstraints(
+                                                                maxHeight:
+                                                                    chat.attachment
+                                                                            .toString()
+                                                                            .contains(
+                                                                              ".m4a",
+                                                                            )
+                                                                        ? 40.h
+                                                                        : MediaQuery.of(
+                                                                              context,
+                                                                            ).size.width *
+                                                                            0.7,
                                                               ),
-                                                              child: chat
-                                                                      .attachment
-                                                                      .toString()
-                                                                      .contains(
-                                                                          ".m4a")
-                                                                  ? CustomAudioPlayer(
-                                                                      audioUrl:
-                                                                          chat.attachment!,
-                                                                      chatId: chat
-                                                                          .id
-                                                                          .toString(),
-                                                                    )
-                                                                  : InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        openFile(
+                                                              child:
+                                                                  chat.attachment
+                                                                          .toString()
+                                                                          .contains(
+                                                                            ".m4a",
+                                                                          )
+                                                                      ? CustomAudioPlayer(
+                                                                        audioUrl:
+                                                                            chat.attachment!,
+                                                                        chatId:
+                                                                            chat.id.toString(),
+                                                                      )
+                                                                      : InkWell(
+                                                                        onTap: () {
+                                                                          openFile(
                                                                             chat.attachment ??
                                                                                 "",
-                                                                            context);
-                                                                      },
-                                                                      child:
-                                                                          ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(11.r)),
-                                                                        child: chat.attachment.toString().contains('https')
-                                                                            ? Image.network(
-                                                                                "${chat.attachment ?? ""}",
-                                                                                errorBuilder: (context, error, stackTrace) {
-                                                                                  return SizedBox();
-                                                                                },
-                                                                              )
-                                                                            : Image.file(
-                                                                                File(chat.attachment ?? ''),
-                                                                                errorBuilder: (context, error, stackTrace) {
-                                                                                  return SizedBox();
-                                                                                },
-                                                                              ),
+                                                                            context,
+                                                                          );
+                                                                        },
+                                                                        child: ClipRRect(
+                                                                          borderRadius: BorderRadius.all(
+                                                                            Radius.circular(
+                                                                              11.r,
+                                                                            ),
+                                                                          ),
+                                                                          child:
+                                                                              chat.attachment.toString().contains(
+                                                                                    'https',
+                                                                                  )
+                                                                                  ? Image.network(
+                                                                                    "${chat.attachment ?? ""}",
+                                                                                    errorBuilder: (
+                                                                                      context,
+                                                                                      error,
+                                                                                      stackTrace,
+                                                                                    ) {
+                                                                                      return SizedBox();
+                                                                                    },
+                                                                                  )
+                                                                                  : Image.file(
+                                                                                    File(
+                                                                                      chat.attachment ??
+                                                                                          '',
+                                                                                    ),
+                                                                                    errorBuilder: (
+                                                                                      context,
+                                                                                      error,
+                                                                                      stackTrace,
+                                                                                    ) {
+                                                                                      return SizedBox();
+                                                                                    },
+                                                                                  ),
+                                                                        ),
                                                                       ),
-                                                                    ),
                                                             )
-                                                          : SizedBox(),
-                                                      Text(
-                                                        "${chat.message ?? ''}  ",
-                                                        style: changeTextColor(
-                                                          robotoRegular,
-                                                          Colors.black,
+                                                            : SizedBox(),
+                                                        Text(
+                                                          "${chat.message ?? ''}  ",
+                                                          style:
+                                                              changeTextColor(
+                                                                robotoRegular,
+                                                                Colors.black,
+                                                              ),
+                                                          maxLines: 100000,
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
                                                         ),
-                                                        maxLines: 100000,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  bottom: 3.h,
-                                                  right: 7.w,
-                                                  child: Text(
-                                                    (chat.createdAt ?? "")
-                                                        .toUpperCase(),
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
+                                                      ],
                                                     ),
                                                   ),
-                                                )
-                                              ],
+                                                  Positioned(
+                                                    bottom: 3.h,
+                                                    right: 7.w,
+                                                    child: Text(
+                                                      (chat.createdAt ?? "")
+                                                          .toUpperCase(),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                     ),
                   ),
                 ),
+              ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: Column(
               children: [
                 Obx(
-                  () => discussionController.messagePicPath.value.isNotEmpty
-                      ? Stack(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 8.h),
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              height: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                                image: DecorationImage(
-                                  image: FileImage(File(discussionController
-                                      .messagePicPath.value)),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  discussionController.messagePicPath.value =
-                                      '';
-                                  discussionController.pickedFile.value =
-                                      File('');
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(Icons.close,
-                                      color: Colors.white, size: 18),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: messageTextEditingController,
-                        textCapitalization: TextCapitalization.sentences,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        textInputAction: TextInputAction.newline,
-                        decoration: InputDecoration(
-                          prefixIcon: InkWell(
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                              setState(() {
-                                _isEmojiPickerVisible = !_isEmojiPickerVisible;
-                              });
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  top: 9.sp, bottom: 9.sp, left: 9.sp),
-                              child: Image.asset(
-                                'assets/image/png/imoji_icon_chat.png',
-                                height: 12.sp,
-                              ),
-                            ),
-                          ),
-                          suffixIcon: Row(
-                            mainAxisSize: MainAxisSize.min,
+                  () =>
+                      discussionController.messagePicPath.value.isNotEmpty
+                          ? Stack(
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  showAlertDialog(context, 'chat');
-                                },
-                                child: Icon(Icons.attachment),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 8.h),
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                height: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                      File(
+                                        discussionController
+                                            .messagePicPath
+                                            .value,
+                                      ),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                              SizedBox(width: 8.w),
-                              VoiceRecorderButton(
-                                onRecordingComplete: (File audioFile) async {
-                                  attachment = audioFile;
-                                },
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    discussionController.messagePicPath.value =
+                                        '';
+                                    discussionController
+                                        .pickedFile
+                                        .value = File('');
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              SizedBox(width: 8.w),
                             ],
-                          ),
-                          hintText: writeYourMessage,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: borderColor),
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: borderColor),
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.h, horizontal: 15.w),
-                        ),
-                      ),
+                          )
+                          : SizedBox(),
+                ),
+                SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 6.h,
                     ),
-                    SizedBox(width: 10.w),
-                    InkWell(
-                      onTap: () async {
-                        if (messageTextEditingController.text.isNotEmpty ||
-                            attachment.path.isNotEmpty) {
-                          String message = messageTextEditingController.text;
+                    child: Row(
+                      children: [
+                        // Chat Input Box
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 0.8,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 3,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                // Emoji Icon
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    setState(() {
+                                      _isEmojiPickerVisible =
+                                          !_isEmojiPickerVisible;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(6.sp),
+                                    child: Image.asset(
+                                      'assets/image/png/imoji_icon_chat.png',
+                                      height: 22.sp,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 6.w),
 
-                          messageTextEditingController.clear();
-                          widget.discussionController.messagePicPath.value = '';
-                          widget.discussionController.pickedFile.value =
-                              File('');
-                          await widget.discussionController.updateuidata(
-                            messagetext: message,
-                            attachment: attachment,
-                            taskId: widget.taskId,
-                          );
-                          attachment = File('');
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10.w),
-                        decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(23.r),
+                                // Text Field
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: messageTextEditingController,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    textInputAction: TextInputAction.newline,
+                                    decoration: InputDecoration(
+                                      hintText: writeYourMessage,
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey.shade500,
+                                        fontSize: 14.sp,
+                                      ),
+                                      border: InputBorder.none,
+                                      isCollapsed: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8.h,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // Attachment Icon
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    showAlertDialog(context, 'chat');
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(6.sp),
+                                    child: Icon(
+                                      Icons.attach_file,
+                                      color: Colors.grey.shade700,
+                                      size: 22.sp,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 4.w),
+
+                                // Voice Recorder
+                                VoiceRecorderButton(
+                                  onRecordingComplete: (File audioFile) async {
+                                    attachment = audioFile;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Icon(Icons.send, color: whiteColor, size: 20.h),
-                      ),
+
+                        SizedBox(width: 8.w),
+
+                        // Send Button
+                        InkWell(
+                          onTap: () async {
+                            if (messageTextEditingController.text.isNotEmpty ||
+                                attachment.path.isNotEmpty) {
+                              String message =
+                                  messageTextEditingController.text;
+
+                              messageTextEditingController.clear();
+                              widget.discussionController.messagePicPath.value =
+                                  '';
+                              widget
+                                  .discussionController
+                                  .pickedFile
+                                  .value = File('');
+                              await widget.discussionController.updateuidata(
+                                messagetext: message,
+                                attachment: attachment,
+                                taskId: widget.taskId,
+                              );
+                              attachment = File('');
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(23.r),
+                          child: Container(
+                            padding: EdgeInsets.all(10.w),
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(23.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: primaryColor.withOpacity(0.3),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.send,
+                              color: whiteColor,
+                              size: 20.h,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: 10.h,
-          ),
+          SizedBox(height: 10.h),
           Offstage(
             offstage: !_isEmojiPickerVisible,
             child: EmojiPicker(
@@ -416,7 +533,9 @@ class _TaskCommentsState extends State<TaskComments> {
               config: Config(
                 height: 250.h,
                 emojiViewConfig: EmojiViewConfig(
-                    emojiSizeMax: 28, backgroundColor: whiteColor),
+                  emojiSizeMax: 28,
+                  backgroundColor: whiteColor,
+                ),
               ),
             ),
           ),
@@ -428,10 +547,7 @@ class _TaskCommentsState extends State<TaskComments> {
 
   File attachment = File('');
 
-  Future<void> showAlertDialog(
-    BuildContext context,
-    String from,
-  ) async {
+  Future<void> showAlertDialog(BuildContext context, String from) async {
     return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
@@ -476,16 +592,15 @@ class _TaskCommentsState extends State<TaskComments> {
                                 height: 20.h,
                                 color: whiteColor,
                               ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
+                              SizedBox(width: 8.w),
                               Text(
                                 'Gallery',
                                 style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: whiteColor),
-                              )
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: whiteColor,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -506,29 +621,23 @@ class _TaskCommentsState extends State<TaskComments> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.camera,
-                                color: whiteColor,
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
+                              Icon(Icons.camera, color: whiteColor),
+                              SizedBox(width: 8.w),
                               Text(
                                 'Camera',
                                 style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: whiteColor),
-                              )
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: whiteColor,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
+                  SizedBox(height: 15.h),
                 ],
               ),
             ),
@@ -552,9 +661,9 @@ class _TaskCommentsState extends State<TaskComments> {
         String? filePath = result.files.single.path;
 
         if (filePath == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: File path is null')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: File path is null')));
           return;
         }
 
@@ -565,24 +674,27 @@ class _TaskCommentsState extends State<TaskComments> {
             widget.discussionController.pickedFile.value.path.toString();
         Get.back();
         print(
-            'selected file path from device is ${widget.discussionController.pickedFile.value}');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No file selected.')),
+          'selected file path from device is ${widget.discussionController.pickedFile.value}',
         );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('No file selected.')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading file: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error uploading file: $e')));
     }
   }
 
   Future<void> takeAttachment(ImageSource source, String from) async {
     try {
       attachment = File('');
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
       if (pickedImage == null) {
         return;
       }
@@ -618,18 +730,16 @@ class _TaskCommentsState extends State<TaskComments> {
     } else if (fileExtension == 'pdf') {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => PDFScreen(file: File(file)),
-        ),
+        MaterialPageRoute(builder: (context) => PDFScreen(file: File(file))),
       );
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Excel file viewing not supported yet.')),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unsupported file type.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unsupported file type.')));
     }
   }
 }

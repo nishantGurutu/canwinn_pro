@@ -145,17 +145,19 @@ class _SettingScreenState extends State<SettingScreen> {
                   maxLine: 4,
                 ),
                 SizedBox(height: 10.h),
-                CustomButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  text: Text(
-                    save,
-                    style: changeTextColor(rubikBlack, whiteColor),
+                SafeArea(
+                  child: CustomButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    text: Text(
+                      save,
+                      style: changeTextColor(rubikBlack, whiteColor),
+                    ),
+                    width: double.infinity,
+                    color: primaryColor,
+                    height: 45.h,
                   ),
-                  width: double.infinity,
-                  color: primaryColor,
-                  height: 45.h,
                 ),
                 SizedBox(height: 20.h),
               ],

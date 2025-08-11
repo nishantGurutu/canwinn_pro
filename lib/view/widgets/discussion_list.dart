@@ -39,7 +39,7 @@ class DiscussionList extends StatelessWidget {
             decoration: InputDecoration(
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.sp),
-                child: SvgPicture.asset(searchIcon),
+                child: Icon(Icons.search,size: 20,),
               ),
               hintText: 'Search here...',
               fillColor: searchBackgroundColor,

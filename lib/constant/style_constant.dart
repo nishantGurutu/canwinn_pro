@@ -118,7 +118,7 @@ TextStyle heading1 = TextStyle(
 );
 TextStyle heading2 = TextStyle(
   fontFamily: 'Poppins',
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.bold,
   fontSize: 20.sp,
 );
 TextStyle heading3 = TextStyle(
@@ -212,6 +212,15 @@ TextStyle heading14 = TextStyle(
   fontSize: 8.sp,
 );
 
-TextStyle changeTextColor(TextStyle textStyle, Color color) {
-  return textStyle.copyWith(color: color);
+TextStyle changeTextColor(
+    TextStyle textStyle,
+    Color color, {
+      FontWeight? fontWeight,
+      double? fontSize,
+    }) {
+  return textStyle.copyWith(
+    color: color,
+    fontWeight: fontWeight,
+    fontSize: fontSize,
+  );
 }

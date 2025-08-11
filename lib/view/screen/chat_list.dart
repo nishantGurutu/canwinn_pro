@@ -118,8 +118,8 @@ class _ChatListState extends State<ChatList> {
         Get.to(() => SelectContact());
       },
       child: Container(
-        height: 50.h,
-        width: 50.w,
+        height: 40.h,
+        width: 40.w,
         decoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.all(
@@ -139,7 +139,7 @@ class _ChatListState extends State<ChatList> {
           child: Icon(
             Icons.add,
             color: whiteColor,
-            size: 30.sp,
+            size: 25.sp,
           ),
         ),
       ),

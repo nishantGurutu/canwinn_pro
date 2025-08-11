@@ -67,21 +67,21 @@ class _TaskDetailsState extends State<TaskDetails> {
           : Scaffold(
               backgroundColor: whiteColor,
               appBar: AppBar(
-                backgroundColor: whiteColor,
+                backgroundColor: Colors.white,
                 automaticallyImplyLeading: false,
                 elevation: 0,
                 leading: IconButton(
                   onPressed: () {
                     Get.back();
                   },
-                  icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+                  icon: SvgPicture.asset('assets/images/svg/back_arrow.svg',color: secondaryColor,),
                 ),
                 title: Row(
                   children: [
                     Text(
                       "Task Details",
                       style: TextStyle(
-                          color: textColor,
+                          color: Colors.black87,
                           fontSize: 21,
                           fontWeight: FontWeight.bold),
                     ),
@@ -131,7 +131,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: selectedTabColor,
+                                color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.r)),
                               ),
@@ -143,7 +143,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: whiteColor,
+                                    color: secondaryColor,
                                   ),
                                 ),
                               ),
@@ -162,7 +162,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                       color: Colors.white,
                       child: TabBar(
                         labelColor: Colors.black,
-                        indicatorColor: Colors.blue,
+                        indicatorColor: secondaryColor,
                         tabs: const [
                           Tab(text: 'Overview'),
                           Tab(text: 'Attachments'),
@@ -246,7 +246,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                      border: Border.all(color: secondaryColor),
+                      border: Border.all(color: canwinnPurple),
                     ),
                     child: Padding(
                       padding:
@@ -257,7 +257,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                             height: 22.h,
                             width: 22.w,
                             decoration: BoxDecoration(
-                              color: secondaryColor,
+                              color: canwinnPurple,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(11.r),
                               ),
@@ -923,195 +923,197 @@ class _TaskDetailsState extends State<TaskDetails> {
   TextEditingController dueDateController2 = TextEditingController();
   TextEditingController dueTimeController2 = TextEditingController();
   Widget subTaskBottomSheet(BuildContext context, id) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(20.r)),
-      ),
-      width: double.infinity,
-      height: 350.h,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 15.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Add Subtask',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-              TaskCustomTextField(
-                controller: subataskController,
-                textCapitalization: TextCapitalization.sentences,
-                data: subTaskName,
-                hintText: subTaskName,
-                labelText: subTaskName,
-                index: 0,
-                focusedIndexNotifier: focusedIndexNotifier,
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 161.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          startDate,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 3.w,
-                        ),
-                        CustomCalender(
-                          hintText: dateFormate,
-                          controller: startDateController2,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 161.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          dueDate,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 3.w,
-                        ),
-                        CustomCalender(
-                          hintText: dateFormate,
-                          controller: dueDateController2,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 161.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          dueTime,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 3.w,
-                        ),
-                        CustomTimer(
-                          controller: dueTimeController2,
-                          hintText: dueTime,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 161.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          selectPriority,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 3.w,
-                        ),
-                        CustomDropdown<PriorityData>(
-                          items: priorityController.priorityList,
-                          itemLabel: (item) => item.priorityName ?? "",
-                          onChanged: (value) {
-                            priorityController.selectedPriorityData.value =
-                                value;
-                          },
-                          hintText: selectPriority,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-              Obx(
-                () => CustomButton(
-                  onPressed: () {
-                    if (taskController.isSubTaskAdding.value == false) {
-                      taskController.addSubTask(
-                        subataskController.text,
-                        startDateController2.text,
-                        dueDateController2.text,
-                        dueTimeController2.text,
-                        priorityController.selectedPriorityData.value?.id,
-                        id,
-                      );
-                    }
-                  },
-                  text: taskController.isSubTaskAdding.value == true
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(
-                              color: whiteColor,
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Text(
-                              loading,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: whiteColor),
-                            ),
-                          ],
-                        )
-                      : Text(
-                          create,
-                          style: TextStyle(color: whiteColor),
-                        ),
-                  width: double.infinity,
-                  color: primaryColor,
-                  height: 45.h,
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(20.r)),
+        ),
+        width: double.infinity,
+        height: 350.h,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 15.h,
                 ),
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Add SubTask',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                TaskCustomTextField(
+                  controller: subataskController,
+                  textCapitalization: TextCapitalization.sentences,
+                  data: subTaskName,
+                  hintText: subTaskName,
+                  labelText: subTaskName,
+                  index: 0,
+                  focusedIndexNotifier: focusedIndexNotifier,
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 161.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            startDate,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(
+                            height: 3.w,
+                          ),
+                          CustomCalender(
+                            hintText: dateFormate,
+                            controller: startDateController2,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 161.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            dueDate,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(
+                            height: 3.w,
+                          ),
+                          CustomCalender(
+                            hintText: dateFormate,
+                            controller: dueDateController2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 161.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            dueTime,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(
+                            height: 3.w,
+                          ),
+                          CustomTimer(
+                            controller: dueTimeController2,
+                            hintText: dueTime,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 161.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            selectPriority,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(
+                            height: 3.w,
+                          ),
+                          CustomDropdown<PriorityData>(
+                            items: priorityController.priorityList,
+                            itemLabel: (item) => item.priorityName ?? "",
+                            onChanged: (value) {
+                              priorityController.selectedPriorityData.value =
+                                  value;
+                            },
+                            hintText: selectPriority,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Obx(
+                  () => CustomButton(
+                    onPressed: () {
+                      if (taskController.isSubTaskAdding.value == false) {
+                        taskController.addSubTask(
+                          subataskController.text,
+                          startDateController2.text,
+                          dueDateController2.text,
+                          dueTimeController2.text,
+                          priorityController.selectedPriorityData.value?.id,
+                          id,
+                        );
+                      }
+                    },
+                    text: taskController.isSubTaskAdding.value == true
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                color: whiteColor,
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              Text(
+                                loading,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: whiteColor),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            create,
+                            style: TextStyle(color: whiteColor),
+                          ),
+                    width: double.infinity,
+                    color: canwinnPurple,
+                    height: 45.h,
+                  ),
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -239,12 +239,19 @@ class _BottomNavigationBarExampleState
                   title: Row(
                     children: [
                       Container(
+                        height: 24.h,
+                        width: 24.w,
                         child: InkWell(
                           onTap: () => _key.currentState?.openDrawer(),
-                          child: SvgPicture.asset(menuImage,
-                              color: textColor, height: 28.h),
+                          child: SvgPicture.asset(
+                            menuImage,
+                            color: textColor,
+                            height: 20.h,
+                            width: 20.w,
+                          ),
                         ),
                       ),
+
                       SizedBox(
                         width: 8.w,
                       ),
@@ -255,8 +262,8 @@ class _BottomNavigationBarExampleState
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            taskMasterGradientColor1,
-                            taskMasterGradientColor2,
+                            greenColor,
+                            Colors.black26
                           ],
                         ),
                       ),
@@ -265,24 +272,24 @@ class _BottomNavigationBarExampleState
                   actions: [
                     InkWell(
                       onTap: () async {
-                        Get.to(() => CalendarEventScreen());
-                        // if (Platform.isAndroid) {
-                        //   final intent = AndroidIntent(
-                        //     action: 'android.intent.action.VIEW',
-                        //     data: 'content://com.android.calendar/time/',
-                        //     flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-                        //   );
-                        //   await intent.launch();
-                        // } else {
-                        //   print(
-                        //       "Calendar launch not supported on this platform");
-                        // }
+                        // Get.to(() => CalendarEventScreen());
+                        if (Platform.isAndroid) {
+                          final intent = AndroidIntent(
+                            action: 'android.intent.action.VIEW',
+                            data: 'content://com.android.calendar/time/',
+                            flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+                          );
+                          await intent.launch();
+                        } else {
+                          print(
+                              "Calendar launch not supported on this platform");
+                        }
                       },
                       child: Container(
                         height: 35.h,
                         width: 35.w,
                         decoration: BoxDecoration(
-                            color: boxBackgroundColor,
+                            color: lightPrimaryColor,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(17.5.r))),
                         child: Padding(
@@ -321,7 +328,7 @@ class _BottomNavigationBarExampleState
                             height: 35.h,
                             width: 35.w,
                             decoration: BoxDecoration(
-                                color: boxBackgroundColor,
+                                color: lightPrimaryColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(17.5.r))),
                             child: Padding(
@@ -344,7 +351,7 @@ class _BottomNavigationBarExampleState
                         height: 32.h,
                         width: 32.w,
                         decoration: BoxDecoration(
-                          color: Color(0xff1d9c03),
+                          color: greenColor,
                           // color: darkBlue,
                           borderRadius: BorderRadius.all(
                             Radius.circular(16.r),
@@ -370,7 +377,7 @@ class _BottomNavigationBarExampleState
                       .elementAt(bottomBarController.currentPageIndex.value),
                 ),
                 bottomNavigationBar: BottomNavigationBar(
-                  selectedItemColor: Color(0xff1d9c03),
+                  selectedItemColor: greenColor,
                   unselectedItemColor: textColor,
                   backgroundColor: whiteColor,
                   items: [
@@ -422,7 +429,7 @@ class _BottomNavigationBarExampleState
         height: 35.h,
         width: 35.w,
         decoration: BoxDecoration(
-          color: Color(0xff1d9c03),
+          color: greenColor,
           borderRadius: BorderRadius.all(
             Radius.circular(17.5.r),
           ),
@@ -453,7 +460,7 @@ class _BottomNavigationBarExampleState
         height: 35.h,
         width: 35.w,
         decoration: BoxDecoration(
-          color: Color(0xff1d9c03),
+          color: greenColor,
           borderRadius: BorderRadius.all(
             Radius.circular(17.5.r),
           ),

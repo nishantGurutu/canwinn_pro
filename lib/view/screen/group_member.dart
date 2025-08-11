@@ -33,7 +33,7 @@ class _GroupMemberlistState extends State<GroupMemberlist> {
           onPressed: () {
             Get.back();
           },
-          icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+          icon: SvgPicture.asset('assets/images/svg/back_arrow.svg',),
         ),
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,

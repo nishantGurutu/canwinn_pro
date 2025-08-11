@@ -262,18 +262,18 @@ class _UserWiseHomeScreenState extends State<UserWiseHomeScreen>
         actions: [
           InkWell(
             onTap: () async {
-              Get.to(() => CalendarEventScreen());
-              // if (Platform.isAndroid) {
-              //   final intent = AndroidIntent(
-              //     action: 'android.intent.action.VIEW',
-              //     data: 'content://com.android.calendar/time/',
-              //     flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-              //   );
-              //   await intent.launch();
-              // } else {
-              //   print(
-              //       "Calendar launch not supported on this platform");
-              // }
+              // Get.to(() => CalendarEventScreen());
+              if (Platform.isAndroid) {
+                final intent = AndroidIntent(
+                  action: 'android.intent.action.VIEW',
+                  data: 'content://com.android.calendar/time/',
+                  flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+                );
+                await intent.launch();
+              } else {
+                print(
+                    "Calendar launch not supported on this platform");
+              }
             },
             child: Container(
               height: 35.h,

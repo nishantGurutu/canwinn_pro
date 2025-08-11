@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Positioned(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  padding: EdgeInsets.symmetric(horizontal: 25.w,vertical: 60.h),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 85.h),
                         Text(
                           loginHere,
-                          style: changeTextColor(boldText, primaryColor),
+                          style: changeTextColor(boldText, canwinnPurple),
                         ),
                         SizedBox(
                           height: 15.h,
@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Text(
                           welcomeBack,
                           textAlign: TextAlign.center,
-                          style: changeTextColor(rubikBlack, textColor),
+                          style: changeTextColor(rubikBlack, textColor,fontSize: 15),
                         ),
                         SizedBox(
                           height: 65.h,
@@ -156,7 +156,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   forgotPassword,
                                   style: changeTextColor(
-                                      regularSmallText, secondaryColor),
+                                      regularSmallText,
+                                      canwinnPurple,
+                                    fontSize: 13
+
+                                  ),
                                 ),
                               ),
                             ),
@@ -206,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style:
                                         changeTextColor(rubikBlack, whiteColor),
                                   ),
-                            color: primaryColor,
+                            color: canwinnPurple,
                             height: 45.h,
                             width: double.infinity,
                           ),

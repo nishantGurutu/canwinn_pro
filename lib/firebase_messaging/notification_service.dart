@@ -178,8 +178,8 @@ class LocalNotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+
+      // uiLscalNotificationDateInterpretation.absoluteTime,
       payload: jsonEncode({'page': s, 'taskId': notificationId}),
     );
 

@@ -1,0 +1,2 @@
+C:/Users/kumar/canwinn_pro/android/app/.cxx/Debug/6r5o4611/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/kumar/canwinn_pro/android/app/.cxx/Debug/6r5o4611/armeabi-v7a/CMakeFiles/rebuild_cache.dir

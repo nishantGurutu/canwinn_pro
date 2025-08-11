@@ -90,48 +90,50 @@ class _HumanGatePassState extends State<HumanGatePass>
             TabBar(
               controller: _tabController,
               indicatorSize: TabBarIndicatorSize.tab,
+              labelPadding: EdgeInsets.symmetric(horizontal: 8.w),
               tabs: [
                 Tab(
-                  icon: Row(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset('assets/image/svg/assignment_late.svg'),
-                      SizedBox(width: 5.w),
+                      SizedBox(width: 6.w),
                       Text(
                         'Pending',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      )
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
                     ],
                   ),
                 ),
                 Tab(
-                  icon: Row(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset('assets/image/svg/done_all (1).svg'),
-                      SizedBox(width: 5.w),
+                      SizedBox(width: 6.w),
                       Text(
                         'Approved',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      )
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
                     ],
                   ),
                 ),
                 Tab(
-                  icon: Row(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset('assets/image/svg/no_accounts.svg'),
-                      SizedBox(width: 5.w),
+                      SizedBox(width: 6.w),
                       Text(
                         'Denied',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      )
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
+
             Expanded(
               child: Obx(
                 () => employeeFormController.isGatePassloading.value == true

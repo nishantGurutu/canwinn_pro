@@ -140,151 +140,69 @@ class _MessageScreenState extends State<MessageScreen> {
       child: Obx(
         () => Scaffold(
           backgroundColor: whiteColor,
-          appBar: chatController.isChatOptionOpenAppbar.value == true
-              ? AppBar(
-                  elevation: 0,
-                  leading: IconButton(
-                    onPressed: () async {
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: backgroundColor,
+            automaticallyImplyLeading: false,
+            leadingWidth: 85.w,
+            leading: Row(
+              children: [
+                IconButton(
+                  onPressed: () async {
+                    if (chatController.isChatOptionOpenAppbar.value) {
                       chatController.isChatOptionOpenAppbar.value = false;
-                    },
-                    icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
-                  ),
-                  backgroundColor: backgroundColor,
-                  actions: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.copy,
-                      ),
-                    )
-                  ],
-                )
-              : AppBar(
-                  elevation: 0,
-                  leadingWidth: 85.w,
-                  leading: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          if (widget.navigationType == "notification") {
-                            Get.offAll(() => SplashScreen());
-                          } else {
-                            Navigator.of(context).pop(true);
-                            Get.back();
-                            await chatController.chatListApi('');
-                          }
-                        },
-                        icon: SvgPicture.asset(
-                            'assets/images/svg/back_arrow.svg'),
-                      ),
-                      SizedBox(
-                        width: 45.w,
-                        height: 45.h,
-                        child: widget.type.toString().toLowerCase() == "group"
-                            ? Obx(
-                                () => InkWell(
-                                  onTap: () {
-                                    chatController.grouppickedFile.value =
-                                        File('');
-                                    chatController.groupmessagePicPath.value =
-                                        '';
-                                    chatController.pickedFile.value = File('');
-                                    chatController.messagePicPath.value = '';
-                                    showAlertDialog(context, 'group');
-                                  },
-                                  child: Container(
-                                    height: 40.h,
-                                    width: 40.w,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF4E2FF),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(22.5),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: chatController.groupmessagePicPath
-                                              .value.isNotEmpty
-                                          ? InkWell(
-                                              onTap: () {},
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(22.5),
-                                                child: Image.file(
-                                                  File(chatController
-                                                      .groupmessagePicPath
-                                                      .value),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            )
-                                          : widget.image.isNotEmpty
-                                              ? ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          22.5),
-                                                  child: Image.network(
-                                                    widget.image,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return Image.network(
-                                                        widget.groupIcon,
-                                                        fit: BoxFit.cover,
-                                                        errorBuilder: (context,
-                                                            error, stackTrace) {
-                                                          return SizedBox();
-                                                        },
-                                                      );
-                                                    },
-                                                  ),
-                                                )
-                                              : Image.asset(
-                                                  'assets/images/png/group_icon.png',
-                                                  fit: BoxFit.cover,
-                                                  color: whiteColor,
-                                                ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(22.5),
-                                child: InkWell(
-                                  onTap: () {
-                                    openFile(widget.image);
-                                  },
-                                  child: Image.network(
-                                    widget.image,
-                                    width: 40.w,
-                                    height: 40.h,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return SizedBox();
-                                    },
-                                  ),
-                                ),
-                              ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: backgroundColor,
-                  automaticallyImplyLeading: false,
-                  title: InkWell(
-                    onTap: () {
-                      if (widget.type.toString().toLowerCase() == "group") {
-                        Get.to(GroupMemberlist(widget.chatId));
+                    } else {
+                      if (widget.navigationType == "notification") {
+                        Get.offAll(() => SplashScreen());
+                      } else {
+                        Navigator.of(context).pop(true);
+                        Get.back();
+                        await chatController.chatListApi('');
                       }
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("${widget.name}", style: rubikBlack),
-                        Text("Active", style: rubikSmall),
-                      ],
-                    ),
+                    }
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/svg/back_arrow.svg',
+                    height: 20.h,
+                    width: 20.w,
                   ),
                 ),
+                if (!chatController.isChatOptionOpenAppbar.value)
+                  SizedBox(
+                    width: 45.w,
+                    height: 45.h,
+                    child: _buildAvatar(),
+                  ),
+              ],
+            ),
+            title: chatController.isChatOptionOpenAppbar.value
+                ? null
+                : InkWell(
+              onTap: () {
+                if (widget.type?.toLowerCase() == "group") {
+                  Get.to(GroupMemberlist(widget.chatId));
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("${widget.name}", style: rubikBlack),
+                  Text("Active", style: rubikSmall),
+                ],
+              ),
+            ),
+            actions: chatController.isChatOptionOpenAppbar.value
+                ? [
+              IconButton(
+                onPressed: () {
+                  // your copy action
+                },
+                icon: Icon(Icons.copy),
+              ),
+            ]
+                : null,
+          ),
+
           body: SafeArea(
             child: chatController.isChatHistoryLoading.value == true
                 ? Center(
@@ -905,6 +823,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       SizedBox(
                         height: 10.h,
                       ),
+<<<<<<< Updated upstream
                       Offstage(
                         offstage: !_isEmojiPickerVisible,
                         child: EmojiPicker(
@@ -913,6 +832,21 @@ class _MessageScreenState extends State<MessageScreen> {
                             height: 250.h,
                             emojiViewConfig: EmojiViewConfig(
                                 emojiSizeMax: 28, backgroundColor: whiteColor),
+=======
+                      SafeArea(
+                        child: Offstage(
+                          offstage: !_isEmojiPickerVisible,
+                          child: Center(
+                            child: EmojiPicker(
+                              textEditingController:
+                                  messageTextEditingController.value,
+                              config: Config(
+                                height: 250.h,
+                                emojiViewConfig: EmojiViewConfig(
+                                    emojiSizeMax: 28, backgroundColor: whiteColor),
+                              ),
+                            ),
+>>>>>>> Stashed changes
                           ),
                         ),
                       ),
@@ -923,6 +857,61 @@ class _MessageScreenState extends State<MessageScreen> {
       ),
     );
   }
+
+  Widget _buildAvatar() {
+    if (widget.type?.toLowerCase() == "group") {
+      return Obx(() {
+        String groupImage = chatController.groupmessagePicPath.value;
+        if (groupImage.isNotEmpty) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(22.5),
+            child: Image.file(
+              File(groupImage),
+              fit: BoxFit.cover,
+            ),
+          );
+        } else if (widget.image.isNotEmpty) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(22.5),
+            child: Image.network(
+              widget.image,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) {
+                return Image.network(
+                  widget.groupIcon,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Image.asset(
+                    'assets/images/png/group_icon.png',
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return Image.asset(
+            'assets/images/png/group_icon.png',
+            fit: BoxFit.cover,
+          );
+        }
+      });
+    } else {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(22.5),
+        child: InkWell(
+          onTap: () {
+            openFile(widget.image);
+          },
+          child: Image.network(
+            widget.image,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => SizedBox(),
+          ),
+        ),
+      );
+    }
+  }
+
 
   Widget timeContainer(String? createdDate) {
     return Container(

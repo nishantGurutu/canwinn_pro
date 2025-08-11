@@ -149,7 +149,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          backgroundColor: whiteColor,
+          backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
           elevation: 0,
           leading: IconButton(
@@ -160,12 +160,12 @@ class _TaskListPageState extends State<TaskScreenPage> {
                 Get.back();
               }
             },
-            icon: SvgPicture.asset('assets/images/svg/back_arrow.svg'),
+            icon: SvgPicture.asset('assets/images/svg/back_arrow.svg',color: secondaryColor,),
           ),
           title: Text(
             task,
             style: TextStyle(
-                color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+                color: Colors.black87, fontSize: 21, fontWeight: FontWeight.bold),
           ),
           actions: [
             Padding(
@@ -194,293 +194,120 @@ class _TaskListPageState extends State<TaskScreenPage> {
                   height: 30.h,
                   width: 30.w,
                   decoration: BoxDecoration(
-                    color: primaryColor,
+                    color: secondaryColor,
                     borderRadius: BorderRadius.all(
                       Radius.circular(15.r),
                     ),
                   ),
                   child: Icon(
                     Icons.add,
-                    color: whiteColor,
+                    color: Colors.white,
                   ),
                 ),
               ),
             )
           ],
         ),
-        body: Column(
-          children: [
-            SizedBox(height: 10.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                      );
-
-                      if (pickedDate != null) {
-                        String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
-                        dueDateController.text = formattedDate;
-                        taskController.taskListApi(
-                            widget.taskType,
-                            widget.assignedType,
-                            '',
-                            dueDateController.text,
-                            widget.userId);
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border.all(color: boxBorderColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.r),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(4.h),
-                        child: Icon(
-                          Icons.calendar_month,
-                          size: 30.h,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 130.w,
-                    height: 40.h,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: boxBorderColor),
-                        borderRadius: BorderRadius.all(Radius.circular(8.r))),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                      child: Obx(
-                        () => DropdownButtonHideUnderline(
-                          child: DropdownButton2<String>(
-                            isExpanded: true,
-                            items: taskController.taskType.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Roboto',
-                                    color: darkGreyColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              );
-                            }).toList(),
-                            value: taskController.selectedTaskType.value.isEmpty
-                                ? null
-                                : taskController.selectedTaskType.value,
-                            onChanged: (String? value) {
-                              taskController.updateTaskType(value);
-                            },
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              width: double.infinity,
-                              padding:
-                                  const EdgeInsets.only(left: 14, right: 14),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.r),
-                                color: whiteColor,
-                              ),
-                            ),
-                            hint: Text(
-                              'Select Task'.tr,
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Roboto',
-                                color: darkGreyColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.sp,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            iconStyleData: IconStyleData(
-                              icon: Image.asset(
-                                'assets/images/png/Vector 3.png',
-                                color: secondaryColor,
-                                height: 8.h,
-                              ),
-                              iconSize: 14,
-                              iconEnabledColor: lightGreyColor,
-                              iconDisabledColor: lightGreyColor,
-                            ),
-                            dropdownStyleData: DropdownStyleData(
-                              maxHeight: 200.h,
-                              width: 130.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  color: whiteColor,
-                                  border: Border.all(color: boxBorderColor)),
-                              offset: const Offset(0, 0),
-                              scrollbarTheme: ScrollbarThemeData(
-                                radius: const Radius.circular(40),
-                                thickness: WidgetStateProperty.all<double>(6),
-                                thumbVisibility:
-                                    WidgetStateProperty.all<bool>(true),
-                              ),
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                              padding: EdgeInsets.only(left: 14, right: 14),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 155.w,
-                    height: 40.h,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: boxBorderColor),
-                        borderRadius: BorderRadius.all(Radius.circular(8.r))),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                      child: Obx(
-                        () => DropdownButtonHideUnderline(
-                          child: DropdownButton2<String>(
-                            isExpanded: true,
-                            items: taskController.taskSelectedType
-                                .map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Roboto',
-                                    color: darkGreyColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              );
-                            }).toList(),
-                            value: taskController
-                                    .selectedAssignedTask.value.isEmpty
-                                ? null
-                                : taskController.selectedAssignedTask.value,
-                            onChanged: (String? value) {
-                              taskController.updateAssignedTask(value);
-                            },
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              width: 155.w,
-                              padding: EdgeInsets.only(left: 14.w, right: 14.w),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                color: whiteColor,
-                              ),
-                            ),
-                            hint: Text(
-                              'Select Task Type'.tr,
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Roboto',
-                                color: darkGreyColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.sp,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            iconStyleData: IconStyleData(
-                              icon: Image.asset(
-                                'assets/images/png/Vector 3.png',
-                                color: secondaryColor,
-                                height: 8.h,
-                              ),
-                              iconSize: 14.h,
-                              iconEnabledColor: lightGreyColor,
-                              iconDisabledColor: lightGreyColor,
-                            ),
-                            dropdownStyleData: DropdownStyleData(
-                              maxHeight: 200.h,
-                              width: 155.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                color: whiteColor,
-                              ),
-                              offset: const Offset(0, 0),
-                              scrollbarTheme: ScrollbarThemeData(
-                                radius: const Radius.circular(40),
-                                thickness: WidgetStateProperty.all<double>(6),
-                                thumbVisibility:
-                                    WidgetStateProperty.all<bool>(true),
-                              ),
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                              padding: EdgeInsets.only(left: 14, right: 14),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+        body: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white, // or any background color
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
             ),
-            SizedBox(height: 5.h),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                child: Obx(
-                  () => taskController.isTaskLoading.value == true
-                      ? SizedBox(
-                          height: 700.h,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: primaryColor,
-                            ),
+          ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20.r),
+                  bottomRight: Radius.circular(20.r),
+                ),
+                child: Container(
+                  color: whiteColor,
+                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2100),
+                          );
+
+                          if (pickedDate != null) {
+                            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                            dueDateController.text = formattedDate;
+                            taskController.taskListApi(
+                              widget.taskType,
+                              widget.assignedType,
+                              '',
+                              dueDateController.text,
+                              widget.userId,
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(6.h),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: boxBorderColor),
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: whiteColor,
                           ),
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => taskController.selectedTaskType.value ==
-                                      "All Task"
-                                  ? allTaskList(taskController.allTaskList)
-                                  : taskController.selectedTaskType.value ==
-                                              "New Task" ||
-                                          taskController
-                                                  .selectedTaskType.value ==
-                                              "Past Due" ||
-                                          taskController
-                                                  .selectedTaskType.value ==
-                                              "Due Today"
-                                      ? newTaskList(taskController.newTaskList)
-                                      : taskController.selectedTaskType.value ==
-                                              "Progress"
-                                          ? progressTaskList(
-                                              taskController.progressTaskList)
-                                          : completeTaskList(
-                                              taskController.completeTaskList),
-                            ),
-                          ],
+                          child: Icon(Icons.calendar_month, size: 24.h),
                         ),
+                      ),
+
+                      buildDropdown(
+                        items: taskController.taskType,
+                        value: taskController.selectedTaskType.value,
+                        hint: 'Select Task',
+                        onChanged: (val) => taskController.updateTaskType(val),
+                        width: 130.w,
+                      ),
+
+                      buildDropdown(
+                        items: taskController.taskSelectedType,
+                        value: taskController.selectedAssignedTask.value,
+                        hint: 'Select Task Type',
+                        onChanged: (val) => taskController.updateAssignedTask(val),
+                        width: 155.w,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+
+              SizedBox(height: 5.h),
+
+              Expanded(
+                child: Obx(() {
+                  if (taskController.isTaskLoading.value) {
+                    return Center(child: CircularProgressIndicator(color: primaryColor));
+                  }
+
+                  if (taskController.selectedTaskType.value == "All Task") {
+                    return allTaskList(taskController.allTaskList);
+                  } else if (["New Task", "Past Due", "Due Today"]
+                      .contains(taskController.selectedTaskType.value)) {
+                    return newTaskList(taskController.newTaskList);
+                  } else if (taskController.selectedTaskType.value == "Progress") {
+                    return progressTaskList(taskController.progressTaskList);
+                  } else {
+                    return completeTaskList(taskController.completeTaskList);
+                  }
+                }),
+              ),
+            ],
+          ),
+        )
+
+        ,
+
       ),
     );
   }
@@ -521,8 +348,8 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Center(
                                     child: SizedBox(
-                                      width: 30,
-                                      height: 30,
+                                      width: 30.w,
+                                      height: 30.h,
                                       child: CircularProgressIndicator(
                                           strokeWidth: 2),
                                     ),
@@ -580,7 +407,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                       .toString()
                                                       .toLowerCase() !=
                                                   "0"
-                                              ? redColor
+                                              ? Colors.black87
                                               : textColor,
                                         ),
                                       ),
@@ -594,7 +421,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                       .toString()
                                                       .toLowerCase() !=
                                                   "0"
-                                              ? redColor
+                                              ? Colors.black87
                                               : textColor,
                                         ),
                                       ),
@@ -612,7 +439,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                                 'priority_name']
                                                             ?.toLowerCase() ==
                                                         'medium'
-                                                    ? Color(0xffFF8700)
+                                                    ? canwinnYellow
                                                     : newTaskList[index][
                                                                     'priority_name']
                                                                 ?.toLowerCase() ==
@@ -653,15 +480,14 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                             .toString()
                                                             .toLowerCase() ==
                                                         "pending"
-                                                    ? Color(0xffD045FF)
+                                                    ? Colors.red
                                                     : newTaskList[index][
                                                                     'effective_status']
                                                                 .toString()
                                                                 .toLowerCase() ==
                                                             "progress"
-                                                        ? Color.fromARGB(
-                                                            95, 16, 129, 18)
-                                                        : Color(0xff0086FF),
+                                                        ? Colors.orange
+                                                        : Colors.green,
                                                 borderRadius: BorderRadius.all(
                                                   Radius.circular(12.r),
                                                 ),
@@ -886,6 +712,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         leading: Image.asset(
                                           'assets/images/png/document.png',
                                           height: 20.h,
+                                          color: canwinnPurple,
                                         ),
                                         title: Text(
                                           'Change Status',
@@ -904,6 +731,65 @@ class _TaskListPageState extends State<TaskScreenPage> {
                 ),
     );
   }
+  Widget buildDropdown({
+    required List<String> items,
+    required String value,
+    required String hint,
+    required void Function(String?) onChanged,
+    required double width,
+  }) {
+    return Container(
+      width: width,
+      height: 40.h,
+      decoration: BoxDecoration(
+        border: Border.all(color: boxBorderColor),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Obx(() => DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          isExpanded: true,
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(
+                item,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14.sp, color: darkGreyColor),
+              ),
+            );
+          }).toList(),
+          value: value.isEmpty ? null : value,
+          onChanged: onChanged,
+          buttonStyleData: ButtonStyleData(
+            padding: EdgeInsets.symmetric(horizontal: 14.w),
+            decoration: BoxDecoration(color: whiteColor),
+          ),
+          hint: Text(
+            hint.tr,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14.sp, color: darkGreyColor),
+          ),
+          iconStyleData: IconStyleData(
+            icon: Image.asset(
+              'assets/images/png/Vector 3.png',
+              height: 8.h,
+              color: canwinnPurple,
+            ),
+          ),
+          dropdownStyleData: DropdownStyleData(
+            maxHeight: 200.h,
+            width: width,
+            decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: boxBorderColor),
+            ),
+          ),
+        ),
+      )),
+    );
+  }
+
 
   Widget newTaskList(RxList newTaskList) {
     return Obx(
@@ -1024,12 +910,12 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                           ['priority_name']
                                                       ?.toLowerCase() ==
                                                   'medium'
-                                              ? Color(0xffFF8700)
+                                              ?canwinnYellow
                                               : newTaskList[index]
                                                               ['priority_name']
                                                           ?.toLowerCase() ==
                                                       'low'
-                                                  ? Color(0xffFFCD57)
+                                                  ? canwinnYellow
                                                   : Color(0xffFF0005),
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(12.r),
@@ -1086,15 +972,14 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                       .toString()
                                                       .toLowerCase() ==
                                                   "pending"
-                                              ? Color(0xffD045FF)
+                                              ? Colors.red
                                               : newTaskList[index][
                                                               'effective_status']
                                                           .toString()
                                                           .toLowerCase() ==
                                                       "progress"
-                                                  ? Color.fromARGB(
-                                                      95, 16, 129, 18)
-                                                  : Color(0xff0086FF),
+                                                  ? Colors.orange
+                                                  : Colors.green,
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(12.r),
                                           ),
@@ -1317,6 +1202,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                     leading: Image.asset(
                                       'assets/images/png/document.png',
                                       height: 20.h,
+                                      color: canwinnPurple,
                                     ),
                                     title: Text(
                                       'Change Status',
@@ -1458,12 +1344,12 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                           ['priority_name']
                                                       ?.toLowerCase() ==
                                                   'medium'
-                                              ? Color(0xffFF8700)
+                                              ? canwinnYellow
                                               : newTaskList[index]
                                                               ['priority_name']
                                                           ?.toLowerCase() ==
                                                       'low'
-                                                  ? Color(0xffFFCD57)
+                                                  ? canwinnYellow
                                                   : Color(0xffFF0005),
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(12.r),
@@ -1519,15 +1405,14 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                       .toString()
                                                       .toLowerCase() ==
                                                   "pending"
-                                              ? Color(0xffD045FF)
+                                              ? Colors.red
                                               : newTaskList[index][
                                                               'effective_status']
                                                           .toString()
                                                           .toLowerCase() ==
                                                       "progress"
-                                                  ? Color.fromARGB(
-                                                      95, 16, 129, 18)
-                                                  : Color(0xff0086FF),
+                                                  ?Colors.orange
+                                                  : Colors.green,
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(12.r),
                                           ),
@@ -1750,6 +1635,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                     leading: Image.asset(
                                       'assets/images/png/document.png',
                                       height: 20.h,
+                                      color: canwinnPurple,
                                     ),
                                     title: Text(
                                       'Change Status',
@@ -1819,12 +1705,10 @@ class _TaskListPageState extends State<TaskScreenPage> {
                               initialIndex: 0,
                             ));
                           },
-                          child: Container(
+                          child:Container(
                             decoration: BoxDecoration(
                               color: whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(11.r),
-                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(11.r)),
                               boxShadow: [
                                 BoxShadow(
                                   color: lightGreyColor.withOpacity(0.1),
@@ -1836,8 +1720,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                               ],
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12.w, vertical: 10.h),
+                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1846,149 +1729,86 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                     '${newTaskList[index]['title']}',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: changeTextColor(
-                                      heading16,
-                                      newTaskList[index]['is_late_completed']
-                                                  .toString()
-                                                  .toLowerCase() !=
-                                              "0"
-                                          ? redColor
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: newTaskList[index]['is_late_completed'].toString().toLowerCase() == "1"
+                                          ? Colors.black87
+                                          : newTaskList[index]['effective_status'].toString().toLowerCase() == "complete"
+                                          ? Colors.green
                                           : textColor,
                                     ),
                                   ),
                                   SizedBox(height: 3.h),
+
                                   Text(
                                     'Task ID ${newTaskList[index]['id']}',
-                                    style: changeTextColor(
-                                      heading8,
-                                      newTaskList[index]['is_late_completed']
-                                                  .toString()
-                                                  .toLowerCase() !=
-                                              "0"
-                                          ? redColor
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: newTaskList[index]['is_late_completed'].toString().toLowerCase() == "1"
+                                          ? Colors.black87
+                                          : newTaskList[index]['effective_status'].toString().toLowerCase() == "complete"
+                                          ? Colors.green
                                           : textColor,
                                     ),
                                   ),
                                   SizedBox(height: 6.h),
+
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         width: 90.w,
                                         decoration: BoxDecoration(
-                                          color: newTaskList[index]
-                                                          ['priority_name']
-                                                      ?.toLowerCase() ==
-                                                  'medium'
+                                          color: newTaskList[index]['priority_name']?.toLowerCase() == 'medium'
                                               ? Color(0xffFF8700)
-                                              : newTaskList[index]
-                                                              ['priority_name']
-                                                          ?.toLowerCase() ==
-                                                      'low'
-                                                  ? Color(0xffFFCD57)
-                                                  : Color(0xffFF0005),
-                                          // color: newTaskList[index]
-                                          //                 ['priority_name']
-                                          //             ?.toLowerCase() ==
-                                          //         'medium'
-                                          //     ? softYellowColor
-                                          //     : newTaskList[index]
-                                          //                     ['priority_name']
-                                          //                 ?.toLowerCase() ==
-                                          //             'low'
-                                          //         ? completeBackgroundColor
-                                          //         : softredColor,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.r),
-                                          ),
+                                              : newTaskList[index]['priority_name']?.toLowerCase() == 'low'
+                                              ? Color(0xffFFCD57)
+                                              : Color(0xffFF0005),
+                                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
                                         ),
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w, vertical: 2.h),
+                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                           child: Center(
                                             child: Text(
                                               '${newTaskList[index]['priority_name']}',
                                               style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: whiteColor
-                                                  //  newTaskList[index][
-                                                  //                 'priority_name']
-                                                  //             ?.toLowerCase() ==
-                                                  //         'medium'
-                                                  //     ? mediumColor
-                                                  //     : newTaskList[index][
-                                                  //                     'priority_name']
-                                                  //                 ?.toLowerCase() ==
-                                                  //             'low'
-                                                  //         ? blueColor
-                                                  //         : slightlyDarkColor,
-                                                  ),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: whiteColor,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Container(
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          // color: newTaskList[index]
-                                          //                 ['effective_status']
-                                          //             .toString()
-                                          //             .toLowerCase() ==
-                                          //         "pending"
-                                          //     ? pendingBackgroundColor
-                                          //     : newTaskList[index][
-                                          //                     'effective_status']
-                                          //                 .toString()
-                                          //                 .toLowerCase() ==
-                                          //             "progress"
-                                          //         ? progressBackgroundColor
-                                          //         : completeBackgroundColor,
-                                          color: newTaskList[index]
-                                                          ['effective_status']
-                                                      .toString()
-                                                      .toLowerCase() ==
-                                                  "pending"
-                                              ? Color(0xffD045FF)
-                                              : newTaskList[index][
-                                                              'effective_status']
-                                                          .toString()
-                                                          .toLowerCase() ==
-                                                      "progress"
-                                                  ? Color.fromARGB(
-                                                      95, 16, 129, 18)
-                                                  : Color(0xff0086FF),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.r),
+                                      SizedBox(width: 10.w),
+
+                                      IntrinsicWidth(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: newTaskList[index]['effective_status'].toString().toLowerCase() == "pending"
+                                                ? Colors.red
+                                                : newTaskList[index]['effective_status'].toString().toLowerCase() == "progress"
+                                                ? Colors.orange
+                                                : Colors.green,
+                                            borderRadius: BorderRadius.all(Radius.circular(12.r)),
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w, vertical: 2.h),
-                                          child: Center(
-                                            child: Text(
-                                              '${newTaskList[index]['effective_status'].toString()}',
-                                              style: TextStyle(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                                            child: Center(
+                                              child: Text(
+                                                '${newTaskList[index]['effective_status'].toString()}',
+                                                style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
-                                                  color: whiteColor
-                                                  // newTaskList[index][
-                                                  //                 'effective_status']
-                                                  //             .toString()
-                                                  //             .toLowerCase() ==
-                                                  //         "pending"
-                                                  //     ? pendingColor
-                                                  //     : newTaskList[index][
-                                                  //                     'effective_status']
-                                                  //                 .toString()
-                                                  //                 .toLowerCase() ==
-                                                  //             "progress"
-                                                  //         ? elegentGreenColor
-                                                  //         : blueColor,
-                                                  ),
+                                                  color: newTaskList[index]['effective_status'].toString().toLowerCase() == 'complete'
+                                                      ? Colors.green
+                                                      : newTaskList[index]['effective_status'].toString().toLowerCase() == 'progress'
+                                                      ? Colors.orange
+                                                      : whiteColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -1996,34 +1816,32 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                     ],
                                   ),
                                   SizedBox(height: 10.h),
+
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(calenderTaskicon),
-                                            SizedBox(
-                                              width: 8.w,
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(calenderTaskicon),
+                                          SizedBox(width: 8.w),
+                                          Text(
+                                            '${newTaskList[index]['task_date']}',
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: secondaryTextColor,
                                             ),
-                                            Text(
-                                              '${newTaskList[index]['task_date']}',
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: secondaryTextColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
                           ),
+
                         ),
                       ),
                       Positioned(
@@ -2183,6 +2001,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                     leading: Image.asset(
                                       'assets/images/png/document.png',
                                       height: 20.h,
+                                      color: canwinnPurple,
                                     ),
                                     title: Text(
                                       'Change Status',

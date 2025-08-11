@@ -9,78 +9,173 @@ import 'package:task_management/view/widgets/pdf_screen.dart';
 
 class TaskAttachment extends StatelessWidget {
   final dynamic attachment;
-  const TaskAttachment(this.attachment, {super.key});
+  final String? fileName; // Optional, if you want to show file name
+  const TaskAttachment(this.attachment, {this.fileName, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20.h,
-        ),
-        Text(
-          'ATTACHMENT',
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: secondTextColor),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () {
-                openFile(attachment ?? "", context);
-              },
-              child: Container(
+    String fileUrl = attachment ?? '';
+    String fileExtension = '';
+    if (fileUrl.isNotEmpty && fileUrl.contains('.')) {
+      fileExtension = fileUrl
+          .split('.')
+          .last
+          .toLowerCase();
+    }
+
+    Widget filePreview() {
+      if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(10.r),
+          child: Image.network(
+            fileUrl,
+            fit: BoxFit.cover,
+            width: 140.w,
+            height: 100.h,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 140.w,
                 height: 100.h,
-                width: 160.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.r),
-                  ),
+                color: Colors.grey.shade200,
+                child: Center(
+                  child: Icon(
+                      Icons.broken_image, size: 40.sp, color: Colors.grey),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.r),
-                  ),
-                  child: Image.network(
-                    '${attachment ?? ''}',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20.r),
-                          ),
-                        ),
-                        child: Image.asset(backgroundLogo),
-                      );
-                    },
-                  ),
-                ),
+              );
+            },
+          ),
+        );
+      } else if (fileExtension == 'pdf') {
+        return Container(
+          width: 140.w,
+          height: 100.h,
+          decoration: BoxDecoration(
+            color: Colors.red.shade100,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Center(
+            child: Icon(Icons.picture_as_pdf, color: Colors.red, size: 50.sp),
+          ),
+        );
+      } else if (['xls', 'xlsx'].contains(fileExtension)) {
+        return Container(
+          width: 140.w,
+          height: 100.h,
+          decoration: BoxDecoration(
+            color: Colors.green.shade100,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Center(
+            child: Icon(Icons.table_chart, color: Colors.green, size: 50.sp),
+          ),
+        );
+      } else {
+        return Container(
+          width: 140.w,
+          height: 100.h,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Center(
+            child: Icon(Icons.insert_drive_file, color: Colors.grey.shade700,
+                size: 50.sp),
+          ),
+        );
+      }
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+      child: InkWell(
+        onTap: () {
+          openFile(fileUrl, context);
+        },
+        borderRadius: BorderRadius.circular(12.r),
+        child: Container(
+          padding: EdgeInsets.all(12.w),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.r),
+            // gradient: LinearGradient(
+            //   colors: [
+            //     Colors.white,
+            //     secondaryColor.withOpacity(0.1),
+            //   ],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            // ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade100,
+                blurRadius: 2,
+                // offset: Offset(0, 3),
               ),
-            ),
-          ],
+            ],
+          ),
+
+          child: Row(
+            children: [
+              filePreview(),
+              SizedBox(width: 15.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      fileName ?? 'Attachment File',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 6.h),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 8.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: Colors.purple.shade100,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Text(
+                        fileExtension.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      'Tap to open',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 
   void openFile(String file, BuildContext context) {
-    String fileExtension = file.split('.').last.toLowerCase();
+    String fileExtension = file
+        .split('.')
+        .last
+        .toLowerCase();
 
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
-      Get.to(
-        () => NetworkImageScreen(file: file),
-      );
+      Get.to(() => NetworkImageScreen(file: file));
     } else if (fileExtension == 'pdf') {
-      Get.to(
-        () => PDFScreen(file: File(file)),
-      );
+      Get.to(() => PDFScreen(file: File(file)));
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Excel file viewing not supported yet.')),

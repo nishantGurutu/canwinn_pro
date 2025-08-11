@@ -303,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Bubble(
             title: "Calender",
             iconColor: Colors.white,
-            bubbleColor: primaryColor,
+            bubbleColor: primaryColor ,
             icon: Icons.calendar_today,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () async {

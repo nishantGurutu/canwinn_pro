@@ -56,98 +56,124 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   return screens[index];
                 },
               ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        welcomeToCanwinn,
-                        style: changeTextColor(mediumSizeText, textColor),
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(LoginScreen());
-                        },
-                        child: Text(
-                          skip,
-                          style: changeTextColor(
-                              secondaryMediumSizeText, secondaryColor),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      )
-                    ],
-                  ),
-                ],
-              ),
+              // Column(
+              //   children: [
+              //     SizedBox(
+              //       height: 30.h,
+              //     ),
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         SizedBox(
+              //           width: 15,
+              //         ),
+              //         // Text(
+              //         //   welcomeToCanwinn,
+              //         //   style: changeTextColor(
+              //         //     mediumSizeText,
+              //         //     textColor,
+              //         //     fontWeight: FontWeight.bold,
+              //         //     fontSize: 18,
+              //         //   ),
+              //         // ),
+              //
+              //         // Spacer(),
+              //         // GestureDetector(
+              //         //   onTap: () {
+              //         //     Get.to(LoginScreen());
+              //         //   },
+              //         //   child: Text(
+              //         //     skip,
+              //         //     style: changeTextColor(
+              //         //         secondaryMediumSizeText, secondaryColor),
+              //         //   ),
+              //         // ),
+              //         // SizedBox(
+              //         //   width: 20.w,
+              //         // )
+              //       ],
+              //     ),
+              //   ],
+              // ),
               Padding(
-                padding: EdgeInsets.all(0),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          5,
-                          (index) => buildDot(index),
-                        ),
+                    SizedBox(height: 20.h),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        5,
+                            (index) => buildDot(index),
                       ),
                     ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Material(
-                      color: Colors.white,
-                      child: InkWell(
-                        splashColor: Colors.white,
-                        onTap: () {
-                          if (currentIndex == 4) {
+
+                    SizedBox(height: 30.h),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
                             Get.to(LoginScreen());
-                          } else {
-                            _controller.animateToPage(
-                              currentIndex + 1,
-                              duration: Duration(microseconds: 1),
-                              curve: Curves.linear,
-                            );
-                          }
-                        },
-                        child: Container(
-                          width: 100.w,
-                          height: 48.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25.r),
-                            color: primaryColor,
-                          ),
-                          child: Center(
-                            child: Text(
-                              next,
-                              textAlign: TextAlign.center,
-                              style: changeTextColor(rubikBlack, whiteColor),
+                          },
+                          child: Text(
+                            'SKIP',
+                            style: changeTextColor(
+                              secondaryMediumSizeText,
+                              canwinnPurple,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
-                      ),
+
+                        Material(
+                          color: Colors.white,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(25.r),
+                            onTap: () {
+                              if (currentIndex == 4) {
+                                Get.to(LoginScreen());
+                              } else {
+                                _controller.animateToPage(
+                                  currentIndex + 1,
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }
+                            },
+                            child: Container(
+                              width: 100.w,
+                              height: 48.h,
+                              decoration: BoxDecoration(
+                                color: canwinnPurple,
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'NEXT',
+                                  style: changeTextColor(
+                                    rubikBlack,
+                                    Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 60.h,
-                    ),
+
+                    SizedBox(height: 50.h),
                   ],
                 ),
               ),
+
             ],
           ),
         ),
@@ -171,7 +197,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               Text(
                 chatAndVideoCall,
-                style: changeTextColor(boldText, textColor),
+                style: changeTextColor(boldText, textColor,fontSize: 20),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -322,13 +348,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 60.w),
+          padding: EdgeInsets.symmetric(horizontal: 60.w,vertical: 20.h),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Image.asset(
                 splashLogo,
+                height: 210.h,
+                width: 210.w,
               ),
+
               SizedBox(
                 height: 20.h,
               ),

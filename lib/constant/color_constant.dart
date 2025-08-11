@@ -52,6 +52,10 @@ Color feedTabColor = const Color(0xffF4E2FF);
 Color meetingBoxColor = const Color(0xff8CC051);
 Color newLightTextColor = const Color(0xff727A89);
 Color activeColor = const Color(0xffFC3B00);
+const Color canwinnPurple = Color(0xFF7B3FA1);
+const Color canwinnTeal = Color(0xFF00B2A9);
+const Color canwinnYellow = Color(0xFFFDC82F);
+
 
 // Suggested color
 

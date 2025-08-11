@@ -64,7 +64,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 Text(
                                   forgotPasswordTitle,
                                   style:
-                                      changeTextColor(boldText, primaryColor),
+                                      changeTextColor(boldText, canwinnPurple,fontSize: 18),
                                 ),
                                 SizedBox(
                                   height: 15.h,
@@ -86,24 +86,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 SizedBox(
                                   height: 20.h,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Get.to(const ForgotPassword());
-                                      },
-                                      child: SizedBox(
-                                        height: 25.h,
-                                        child: Text(
-                                          forgotPassword,
-                                          style: changeTextColor(
-                                              regularSmallText, secondaryColor),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.end,
+                                //   children: [
+                                //     InkWell(
+                                //       onTap: () {
+                                //         Get.to(const ForgotPassword());
+                                //       },
+                                //       child: SizedBox(
+                                //         height: 25.h,
+                                //         child: Text(
+                                //           forgotPassword,
+                                //           style: changeTextColor(
+                                //               regularSmallText, secondaryColor),
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                                 SizedBox(
                                   height: 20.h,
                                 ),
@@ -145,11 +145,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       //   )
                                       // :
                                       Text(
-                                    signin,
+                                    forgot,
                                     style:
                                         changeTextColor(rubikBlack, whiteColor),
                                   ),
-                                  color: primaryColor,
+                                  color: canwinnPurple,
                                   height: 45.h,
                                   width: double.infinity,
                                 ),

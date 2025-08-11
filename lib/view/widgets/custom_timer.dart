@@ -21,7 +21,7 @@ class CustomTimer extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(
           Icons.access_time,
-          color: secondaryColor,
+          color: canwinnPurple,
         ),
         hintText: hintText,
         hintStyle: rubikRegular,

@@ -68,9 +68,9 @@ class _SideDrawerState extends State<SideDrawer> {
 
   RxList<AssetsSubmitModel> assetsList = <AssetsSubmitModel>[].obs;
   final TextEditingController assetsNameTextController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController assetsSrnoTextController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController quantityTextController = TextEditingController();
   final TaskController taskController = Get.find();
 
@@ -91,7 +91,7 @@ class _SideDrawerState extends State<SideDrawer> {
         child: SingleChildScrollView(
           child: SafeArea(
             child: Obx(
-              () => Column(
+                  () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
@@ -182,8 +182,8 @@ class _SideDrawerState extends State<SideDrawer> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: bottomBarController
-                                            .selectedTabIndex.value ==
-                                        0
+                                    .selectedTabIndex.value ==
+                                    0
                                     ? selectedTabColor
                                     : whiteColor,
                                 borderRadius: BorderRadius.all(
@@ -199,8 +199,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     Image.asset(
                                       dashboardIcon,
                                       color: bottomBarController
-                                                  .selectedTabIndex.value ==
-                                              0
+                                          .selectedTabIndex.value ==
+                                          0
                                           ? whiteColor
                                           : textColor,
                                       height: 18.h,
@@ -209,8 +209,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                       dashboard,
                                       style: TextStyle(
                                           color: bottomBarController
-                                                      .selectedTabIndex.value ==
-                                                  0
+                                              .selectedTabIndex.value ==
+                                              0
                                               ? whiteColor
                                               : textColor,
                                           fontSize: 18,
@@ -238,10 +238,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          1
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  1
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -255,8 +255,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     drawerTaskicon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            1
+                                        .selectedTabIndex.value ==
+                                        1
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -265,8 +265,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     task,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                1
+                                            .selectedTabIndex.value ==
+                                            1
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -287,10 +287,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          50
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  50
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -304,8 +304,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     drawerTaskicon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            50
+                                        .selectedTabIndex.value ==
+                                        50
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -314,8 +314,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     "Location Page",
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                50
+                                            .selectedTabIndex.value ==
+                                            50
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -385,10 +385,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          2
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  2
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -402,8 +402,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   Image.asset(
                                     taskIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            2
+                                        .selectedTabIndex.value ==
+                                        2
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -412,8 +412,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     iAmCanwinn,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                2
+                                            .selectedTabIndex.value ==
+                                            2
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -434,10 +434,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          3
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  3
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -451,8 +451,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     contactPhoneIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            3
+                                        .selectedTabIndex.value ==
+                                        3
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -461,8 +461,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     contacts,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                3
+                                            .selectedTabIndex.value ==
+                                            3
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -483,10 +483,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          4
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  4
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -500,8 +500,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     calenderTaskicon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            4
+                                        .selectedTabIndex.value ==
+                                        4
                                         ? whiteColor
                                         : textColor,
                                     height: 22.h,
@@ -511,8 +511,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     calendar,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                4
+                                            .selectedTabIndex.value ==
+                                            4
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -533,10 +533,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          5
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  5
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -550,8 +550,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   Image.asset(
                                     calenderIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            5
+                                        .selectedTabIndex.value ==
+                                        5
                                         ? whiteColor
                                         : textColor,
                                     height: 22.h,
@@ -561,8 +561,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     meeting,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                5
+                                            .selectedTabIndex.value ==
+                                            5
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -584,8 +584,8 @@ class _SideDrawerState extends State<SideDrawer> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: bottomBarController
-                                            .selectedTabIndex.value ==
-                                        5
+                                    .selectedTabIndex.value ==
+                                    5
                                     ? selectedTabColor
                                     : whiteColor,
                                 borderRadius: BorderRadius.all(
@@ -601,8 +601,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     Image.asset(
                                       calenderIcon,
                                       color: bottomBarController
-                                                  .selectedTabIndex.value ==
-                                              5
+                                          .selectedTabIndex.value ==
+                                          5
                                           ? whiteColor
                                           : textColor,
                                       height: 22.h,
@@ -612,8 +612,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                       vehicleManagement,
                                       style: TextStyle(
                                           color: bottomBarController
-                                                      .selectedTabIndex.value ==
-                                                  5
+                                              .selectedTabIndex.value ==
+                                              5
                                               ? whiteColor
                                               : textColor,
                                           fontSize: 18,
@@ -639,10 +639,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          6
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  6
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -656,8 +656,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     celebrationIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            6
+                                        .selectedTabIndex.value ==
+                                        6
                                         ? whiteColor
                                         : textColor,
                                     height: 22.h,
@@ -667,8 +667,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     "Event",
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                6
+                                            .selectedTabIndex.value ==
+                                            6
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -687,22 +687,24 @@ class _SideDrawerState extends State<SideDrawer> {
                             await showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
-                              builder: (context) => Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: dailyTaskListWidget(context),
+                              builder: (context) => SafeArea(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(context)
+                                          .viewInsets
+                                          .bottom),
+                                  child: dailyTaskListWidget(context),
+                                ),
                               ),
                             );
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          7
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  7
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -716,8 +718,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     checkBoxIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            7
+                                        .selectedTabIndex.value ==
+                                        7
                                         ? whiteColor
                                         : textColor,
                                     height: 22.h,
@@ -727,8 +729,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     "Submit Daily Activity",
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                7
+                                            .selectedTabIndex.value ==
+                                            7
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -748,7 +750,7 @@ class _SideDrawerState extends State<SideDrawer> {
                                 onTap: () async {
                                   Get.back();
                                   bottomBarController.selectedTabIndex.value =
-                                      8;
+                                  8;
                                   selectedAssetsList.clear();
                                   assetsList.clear();
                                   assetsNameTextController.clear();
@@ -762,9 +764,9 @@ class _SideDrawerState extends State<SideDrawer> {
                                   taskController
                                       .responsiblePersonSelectedCheckBox
                                       .addAll(List<bool>.filled(
-                                          taskController
-                                              .responsiblePersonList.length,
-                                          false));
+                                      taskController
+                                          .responsiblePersonList.length,
+                                      false));
                                   taskController.selectAll.value = false;
                                   await showModalBottomSheet(
                                     context: context,
@@ -782,8 +784,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            8
+                                        .selectedTabIndex.value ==
+                                        8
                                         ? selectedTabColor
                                         : whiteColor,
                                     borderRadius: BorderRadius.all(
@@ -799,8 +801,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                         Image.asset(
                                           calenderIcon,
                                           color: bottomBarController
-                                                      .selectedTabIndex.value ==
-                                                  8
+                                              .selectedTabIndex.value ==
+                                              8
                                               ? whiteColor
                                               : textColor,
                                           height: 22.h,
@@ -810,9 +812,9 @@ class _SideDrawerState extends State<SideDrawer> {
                                           "Assign assets",
                                           style: TextStyle(
                                               color: bottomBarController
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      8
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  8
                                                   ? whiteColor
                                                   : textColor,
                                               fontSize: 18,
@@ -828,14 +830,14 @@ class _SideDrawerState extends State<SideDrawer> {
                                 onTap: () async {
                                   Get.back();
                                   bottomBarController.selectedTabIndex.value =
-                                      26;
+                                  26;
                                   Get.to(() => AllAssetsList());
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            26
+                                        .selectedTabIndex.value ==
+                                        26
                                         ? selectedTabColor
                                         : whiteColor,
                                     borderRadius: BorderRadius.all(
@@ -851,8 +853,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                         Image.asset(
                                           calenderIcon,
                                           color: bottomBarController
-                                                      .selectedTabIndex.value ==
-                                                  26
+                                              .selectedTabIndex.value ==
+                                              26
                                               ? whiteColor
                                               : textColor,
                                           height: 22.h,
@@ -862,9 +864,9 @@ class _SideDrawerState extends State<SideDrawer> {
                                           "All assets",
                                           style: TextStyle(
                                               color: bottomBarController
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      26
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  26
                                                   ? whiteColor
                                                   : textColor,
                                               fontSize: 18,
@@ -888,10 +890,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          9
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  9
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -905,8 +907,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     previewIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            9
+                                        .selectedTabIndex.value ==
+                                        9
                                         ? whiteColor
                                         : textColor,
                                     height: 22.h,
@@ -916,8 +918,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     "Download Report",
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                9
+                                            .selectedTabIndex.value ==
+                                            9
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -938,10 +940,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          10
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  10
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -955,8 +957,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     assignementIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            10
+                                        .selectedTabIndex.value ==
+                                        10
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -965,8 +967,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     project,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                10
+                                            .selectedTabIndex.value ==
+                                            10
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -985,14 +987,14 @@ class _SideDrawerState extends State<SideDrawer> {
                                 onTap: () {
                                   Get.back();
                                   bottomBarController.selectedTabIndex.value =
-                                      11;
+                                  11;
                                   Get.to(const PageScreen());
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            11
+                                        .selectedTabIndex.value ==
+                                        11
                                         ? selectedTabColor
                                         : whiteColor,
                                     borderRadius: BorderRadius.all(
@@ -1008,8 +1010,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                         Image.asset(
                                           taskIcon,
                                           color: bottomBarController
-                                                      .selectedTabIndex.value ==
-                                                  11
+                                              .selectedTabIndex.value ==
+                                              11
                                               ? whiteColor
                                               : textColor,
                                           height: 20.h,
@@ -1019,9 +1021,9 @@ class _SideDrawerState extends State<SideDrawer> {
                                           page,
                                           style: TextStyle(
                                               color: bottomBarController
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      11
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  11
                                                   ? whiteColor
                                                   : textColor,
                                               fontSize: 18,
@@ -1044,10 +1046,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          12
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  12
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -1061,8 +1063,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     addNotesIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            12
+                                        .selectedTabIndex.value ==
+                                        12
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -1071,8 +1073,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     notes,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                12
+                                            .selectedTabIndex.value ==
+                                            12
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -1091,14 +1093,14 @@ class _SideDrawerState extends State<SideDrawer> {
                                 onTap: () {
                                   Get.back();
                                   bottomBarController.selectedTabIndex.value =
-                                      13;
+                                  13;
                                   Get.to(const UserPage());
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            13
+                                        .selectedTabIndex.value ==
+                                        13
                                         ? selectedTabColor
                                         : whiteColor,
                                     borderRadius: BorderRadius.all(
@@ -1114,8 +1116,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                         Image.asset(
                                           notesIcon,
                                           color: bottomBarController
-                                                      .selectedTabIndex.value ==
-                                                  13
+                                              .selectedTabIndex.value ==
+                                              13
                                               ? whiteColor
                                               : textColor,
                                           height: 20.h,
@@ -1124,9 +1126,9 @@ class _SideDrawerState extends State<SideDrawer> {
                                           user,
                                           style: TextStyle(
                                               color: bottomBarController
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      13
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  13
                                                   ? whiteColor
                                                   : textColor,
                                               fontSize: 18,
@@ -1149,10 +1151,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          14
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  14
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -1166,8 +1168,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   SvgPicture.asset(
                                     fastCheckIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            14
+                                        .selectedTabIndex.value ==
+                                        14
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -1176,8 +1178,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     todo,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                14
+                                            .selectedTabIndex.value ==
+                                            14
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -1197,10 +1199,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          15
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  15
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -1214,8 +1216,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   Image.asset(
                                     getPassIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            15
+                                        .selectedTabIndex.value ==
+                                        15
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -1224,8 +1226,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     gatePass,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                15
+                                            .selectedTabIndex.value ==
+                                            15
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -1237,508 +1239,508 @@ class _SideDrawerState extends State<SideDrawer> {
                           ),
                         ),
                         Obx(
-                          () => !isGatePasOpen.value
+                              () => !isGatePasOpen.value
                               ? SizedBox()
                               : Padding(
-                                  padding: EdgeInsets.only(left: 25.w),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 10.h),
-                                      InkWell(
-                                        onTap: () {
-                                          Get.back();
-                                          bottomBarController
-                                              .selectedTabIndex.value = 16;
-                                          Get.to(
-                                              StorageHelper.getDepartmentId() ==
-                                                      12
-                                                  ? const InScreenForm()
-                                                  : const OutScreen());
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
+                            padding: EdgeInsets.only(left: 25.w),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 10.h),
+                                InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                    bottomBarController
+                                        .selectedTabIndex.value = 16;
+                                    Get.to(
+                                        StorageHelper.getDepartmentId() ==
+                                            12
+                                            ? const InScreenForm()
+                                            : const OutScreen());
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: bottomBarController
+                                          .selectedTabIndex
+                                          .value ==
+                                          16
+                                          ? selectedTabColor
+                                          : whiteColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(6.r),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 10.w,
+                                          top: 7.h,
+                                          bottom: 7.h),
+                                      child: Row(
+                                        spacing: 10.w,
+                                        children: [
+                                          Image.asset(
+                                            notesIcon,
                                             color: bottomBarController
-                                                        .selectedTabIndex
-                                                        .value ==
+                                                .selectedTabIndex
+                                                .value ==
+                                                16
+                                                ? whiteColor
+                                                : textColor,
+                                            height: 20.h,
+                                          ),
+                                          Text(
+                                            create,
+                                            style: TextStyle(
+                                                color: bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
                                                     16
-                                                ? selectedTabColor
-                                                : whiteColor,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(6.r),
-                                            ),
+                                                    ? whiteColor
+                                                    : textColor,
+                                                fontSize: 18,
+                                                fontWeight:
+                                                FontWeight.w500),
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.w,
-                                                top: 7.h,
-                                                bottom: 7.h),
-                                            child: Row(
-                                              spacing: 10.w,
-                                              children: [
-                                                Image.asset(
-                                                  notesIcon,
-                                                  color: bottomBarController
-                                                              .selectedTabIndex
-                                                              .value ==
-                                                          16
-                                                      ? whiteColor
-                                                      : textColor,
-                                                  height: 20.h,
-                                                ),
-                                                Text(
-                                                  create,
-                                                  style: TextStyle(
-                                                      color: bottomBarController
-                                                                  .selectedTabIndex
-                                                                  .value ==
-                                                              16
-                                                          ? whiteColor
-                                                          : textColor,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                        ],
                                       ),
-                                      Obx(
-                                        () => !isOutScreenOpen.value
-                                            ? SizedBox()
-                                            : Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 30.w),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 10.h),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        11)
-                                                      SizedBox(height: 20.h),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        11)
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Get.back();
-                                                          bottomBarController
-                                                                  .selectedTabIndex
-                                                                  .value ==
-                                                              17;
-                                                          bottomBarController
-                                                              .selectedTabIndex
-                                                              .value = 17;
-                                                          Get.to(
-                                                              const HrScreen());
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: bottomBarController
-                                                                        .selectedTabIndex
-                                                                        .value ==
-                                                                    17
-                                                                ? selectedTabColor
-                                                                : whiteColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(
-                                                              Radius.circular(
-                                                                  6.r),
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 10.w,
-                                                                    top: 7.h,
-                                                                    bottom:
-                                                                        7.h),
-                                                            child: Row(
-                                                              spacing: 10.w,
-                                                              children: [
-                                                                Image.asset(
-                                                                  notesIcon,
-                                                                  color: bottomBarController
-                                                                              .selectedTabIndex
-                                                                              .value ==
-                                                                          17
-                                                                      ? whiteColor
-                                                                      : textColor,
-                                                                  height: 20.h,
-                                                                ),
-                                                                Text(
-                                                                  hrScreen,
-                                                                  style: TextStyle(
-                                                                      color: bottomBarController
-                                                                                  .selectedTabIndex.value ==
-                                                                              17
-                                                                          ? whiteColor
-                                                                          : textColor,
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        12)
-                                                      SizedBox(height: 10.h),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        12)
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Get.back();
-                                                          bottomBarController
-                                                                  .selectedTabIndex
-                                                                  .value ==
-                                                              18;
-                                                          Get.to(
-                                                              const SecurityScreen());
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: bottomBarController
-                                                                        .selectedTabIndex
-                                                                        .value ==
-                                                                    18
-                                                                ? selectedTabColor
-                                                                : whiteColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(
-                                                              Radius.circular(
-                                                                  6.r),
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 10.w,
-                                                                    top: 7.h,
-                                                                    bottom:
-                                                                        7.h),
-                                                            child: Row(
-                                                              spacing: 10.w,
-                                                              children: [
-                                                                Image.asset(
-                                                                  notesIcon,
-                                                                  color: bottomBarController
-                                                                              .selectedTabIndex
-                                                                              .value ==
-                                                                          18
-                                                                      ? whiteColor
-                                                                      : textColor,
-                                                                  height: 20.h,
-                                                                ),
-                                                                Text(
-                                                                  sceurityScreen,
-                                                                  style: TextStyle(
-                                                                      color: bottomBarController
-                                                                                  .selectedTabIndex.value ==
-                                                                              18
-                                                                          ? whiteColor
-                                                                          : textColor,
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                  ],
-                                                ),
-                                              ),
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      InkWell(
-                                        onTap: () {
-                                          Get.back();
-                                          bottomBarController
-                                                  .selectedTabIndex.value ==
-                                              19;
-                                          Get.to(const OutScreenChalanList());
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: bottomBarController
-                                                        .selectedTabIndex
-                                                        .value ==
-                                                    19
-                                                ? selectedTabColor
-                                                : whiteColor,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(6.r),
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.w,
-                                                top: 7.h,
-                                                bottom: 7.h),
-                                            child: Row(
-                                              spacing: 10.w,
-                                              children: [
-                                                Image.asset(
-                                                  notesIcon,
-                                                  color: bottomBarController
-                                                              .selectedTabIndex
-                                                              .value ==
-                                                          19
-                                                      ? whiteColor
-                                                      : textColor,
-                                                  height: 20.h,
-                                                ),
-                                                Text(
-                                                  approve,
-                                                  style: TextStyle(
-                                                      color: bottomBarController
-                                                                  .selectedTabIndex
-                                                                  .value ==
-                                                              19
-                                                          ? whiteColor
-                                                          : textColor,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Obx(
-                                        () => !isInScreenOpen.value
-                                            ? SizedBox()
-                                            : Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 30.w),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 20.h),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Get.back();
-                                                        bottomBarController
-                                                            .selectedTabIndex
-                                                            .value = 20;
-                                                        Get.to(
-                                                            const InScreenDepartment());
-                                                      },
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: bottomBarController
-                                                                      .selectedTabIndex
-                                                                      .value ==
-                                                                  20
-                                                              ? selectedTabColor
-                                                              : whiteColor,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(
-                                                                6.r),
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10.w,
-                                                                  top: 7.h,
-                                                                  bottom: 7.h),
-                                                          child: Row(
-                                                            spacing: 10.w,
-                                                            children: [
-                                                              Image.asset(
-                                                                notesIcon,
-                                                                color: bottomBarController
-                                                                            .selectedTabIndex
-                                                                            .value ==
-                                                                        20
-                                                                    ? whiteColor
-                                                                    : textColor,
-                                                                height: 20.h,
-                                                              ),
-                                                              Text(
-                                                                inScreenDepartment,
-                                                                style: TextStyle(
-                                                                    color: bottomBarController.selectedTabIndex.value ==
-                                                                            20
-                                                                        ? whiteColor
-                                                                        : textColor,
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        11)
-                                                      SizedBox(height: 10.h),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        11)
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Get.back();
-                                                          bottomBarController
-                                                              .selectedTabIndex
-                                                              .value = 21;
-                                                          Get.to(
-                                                              const InHrScreen());
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: bottomBarController
-                                                                        .selectedTabIndex
-                                                                        .value ==
-                                                                    21
-                                                                ? selectedTabColor
-                                                                : whiteColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(
-                                                              Radius.circular(
-                                                                  6.r),
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 10.w,
-                                                                    top: 7.h,
-                                                                    bottom:
-                                                                        7.h),
-                                                            child: Row(
-                                                              spacing: 10.w,
-                                                              children: [
-                                                                Image.asset(
-                                                                  notesIcon,
-                                                                  color: bottomBarController
-                                                                              .selectedTabIndex
-                                                                              .value ==
-                                                                          21
-                                                                      ? whiteColor
-                                                                      : textColor,
-                                                                  height: 20.h,
-                                                                ),
-                                                                Text(
-                                                                  inScreenHr,
-                                                                  style: TextStyle(
-                                                                      color: bottomBarController
-                                                                                  .selectedTabIndex.value ==
-                                                                              21
-                                                                          ? whiteColor
-                                                                          : textColor,
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        12)
-                                                      SizedBox(height: 10.h),
-                                                    if (StorageHelper
-                                                            .getDepartmentId() ==
-                                                        12)
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Get.back();
-                                                          bottomBarController
-                                                              .selectedTabIndex
-                                                              .value = 22;
-                                                          Get.to(
-                                                              const InScreenSecurity());
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: bottomBarController
-                                                                        .selectedTabIndex
-                                                                        .value ==
-                                                                    22
-                                                                ? selectedTabColor
-                                                                : whiteColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(
-                                                              Radius.circular(
-                                                                  6.r),
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 10.w,
-                                                                    top: 7.h,
-                                                                    bottom:
-                                                                        7.h),
-                                                            child: Row(
-                                                              spacing: 10.w,
-                                                              children: [
-                                                                Image.asset(
-                                                                  notesIcon,
-                                                                  color: bottomBarController
-                                                                              .selectedTabIndex
-                                                                              .value ==
-                                                                          22
-                                                                      ? selectedTabColor
-                                                                      : whiteColor,
-                                                                  height: 20.h,
-                                                                ),
-                                                                Text(
-                                                                  inScreenSecurity,
-                                                                  style: TextStyle(
-                                                                      color: bottomBarController
-                                                                                  .selectedTabIndex.value ==
-                                                                              22
-                                                                          ? selectedTabColor
-                                                                          : whiteColor,
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                  ],
-                                                ),
-                                              ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
+                                Obx(
+                                      () => !isOutScreenOpen.value
+                                      ? SizedBox()
+                                      : Padding(
+                                    padding:
+                                    EdgeInsets.only(left: 30.w),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 10.h),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            11)
+                                          SizedBox(height: 20.h),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            11)
+                                          InkWell(
+                                            onTap: () {
+                                              Get.back();
+                                              bottomBarController
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  17;
+                                              bottomBarController
+                                                  .selectedTabIndex
+                                                  .value = 17;
+                                              Get.to(
+                                                  const HrScreen());
+                                            },
+                                            child: Container(
+                                              decoration:
+                                              BoxDecoration(
+                                                color: bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
+                                                    17
+                                                    ? selectedTabColor
+                                                    : whiteColor,
+                                                borderRadius:
+                                                BorderRadius
+                                                    .all(
+                                                  Radius.circular(
+                                                      6.r),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                EdgeInsets.only(
+                                                    left: 10.w,
+                                                    top: 7.h,
+                                                    bottom:
+                                                    7.h),
+                                                child: Row(
+                                                  spacing: 10.w,
+                                                  children: [
+                                                    Image.asset(
+                                                      notesIcon,
+                                                      color: bottomBarController
+                                                          .selectedTabIndex
+                                                          .value ==
+                                                          17
+                                                          ? whiteColor
+                                                          : textColor,
+                                                      height: 20.h,
+                                                    ),
+                                                    Text(
+                                                      hrScreen,
+                                                      style: TextStyle(
+                                                          color: bottomBarController
+                                                              .selectedTabIndex.value ==
+                                                              17
+                                                              ? whiteColor
+                                                              : textColor,
+                                                          fontSize:
+                                                          18,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            12)
+                                          SizedBox(height: 10.h),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            12)
+                                          InkWell(
+                                            onTap: () {
+                                              Get.back();
+                                              bottomBarController
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  18;
+                                              Get.to(
+                                                  const SecurityScreen());
+                                            },
+                                            child: Container(
+                                              decoration:
+                                              BoxDecoration(
+                                                color: bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
+                                                    18
+                                                    ? selectedTabColor
+                                                    : whiteColor,
+                                                borderRadius:
+                                                BorderRadius
+                                                    .all(
+                                                  Radius.circular(
+                                                      6.r),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                EdgeInsets.only(
+                                                    left: 10.w,
+                                                    top: 7.h,
+                                                    bottom:
+                                                    7.h),
+                                                child: Row(
+                                                  spacing: 10.w,
+                                                  children: [
+                                                    Image.asset(
+                                                      notesIcon,
+                                                      color: bottomBarController
+                                                          .selectedTabIndex
+                                                          .value ==
+                                                          18
+                                                          ? whiteColor
+                                                          : textColor,
+                                                      height: 20.h,
+                                                    ),
+                                                    Text(
+                                                      sceurityScreen,
+                                                      style: TextStyle(
+                                                          color: bottomBarController
+                                                              .selectedTabIndex.value ==
+                                                              18
+                                                              ? whiteColor
+                                                              : textColor,
+                                                          fontSize:
+                                                          18,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                    bottomBarController
+                                        .selectedTabIndex.value ==
+                                        19;
+                                    Get.to(const OutScreenChalanList());
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: bottomBarController
+                                          .selectedTabIndex
+                                          .value ==
+                                          19
+                                          ? selectedTabColor
+                                          : whiteColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(6.r),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 10.w,
+                                          top: 7.h,
+                                          bottom: 7.h),
+                                      child: Row(
+                                        spacing: 10.w,
+                                        children: [
+                                          Image.asset(
+                                            notesIcon,
+                                            color: bottomBarController
+                                                .selectedTabIndex
+                                                .value ==
+                                                19
+                                                ? whiteColor
+                                                : textColor,
+                                            height: 20.h,
+                                          ),
+                                          Text(
+                                            approve,
+                                            style: TextStyle(
+                                                color: bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
+                                                    19
+                                                    ? whiteColor
+                                                    : textColor,
+                                                fontSize: 18,
+                                                fontWeight:
+                                                FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Obx(
+                                      () => !isInScreenOpen.value
+                                      ? SizedBox()
+                                      : Padding(
+                                    padding:
+                                    EdgeInsets.only(left: 30.w),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 20.h),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.back();
+                                            bottomBarController
+                                                .selectedTabIndex
+                                                .value = 20;
+                                            Get.to(
+                                                const InScreenDepartment());
+                                          },
+                                          child: Container(
+                                            decoration:
+                                            BoxDecoration(
+                                              color: bottomBarController
+                                                  .selectedTabIndex
+                                                  .value ==
+                                                  20
+                                                  ? selectedTabColor
+                                                  : whiteColor,
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                Radius.circular(
+                                                    6.r),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                              EdgeInsets.only(
+                                                  left: 10.w,
+                                                  top: 7.h,
+                                                  bottom: 7.h),
+                                              child: Row(
+                                                spacing: 10.w,
+                                                children: [
+                                                  Image.asset(
+                                                    notesIcon,
+                                                    color: bottomBarController
+                                                        .selectedTabIndex
+                                                        .value ==
+                                                        20
+                                                        ? whiteColor
+                                                        : textColor,
+                                                    height: 20.h,
+                                                  ),
+                                                  Text(
+                                                    inScreenDepartment,
+                                                    style: TextStyle(
+                                                        color: bottomBarController.selectedTabIndex.value ==
+                                                            20
+                                                            ? whiteColor
+                                                            : textColor,
+                                                        fontSize:
+                                                        18,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w500),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            11)
+                                          SizedBox(height: 10.h),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            11)
+                                          InkWell(
+                                            onTap: () {
+                                              Get.back();
+                                              bottomBarController
+                                                  .selectedTabIndex
+                                                  .value = 21;
+                                              Get.to(
+                                                  const InHrScreen());
+                                            },
+                                            child: Container(
+                                              decoration:
+                                              BoxDecoration(
+                                                color: bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
+                                                    21
+                                                    ? selectedTabColor
+                                                    : whiteColor,
+                                                borderRadius:
+                                                BorderRadius
+                                                    .all(
+                                                  Radius.circular(
+                                                      6.r),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                EdgeInsets.only(
+                                                    left: 10.w,
+                                                    top: 7.h,
+                                                    bottom:
+                                                    7.h),
+                                                child: Row(
+                                                  spacing: 10.w,
+                                                  children: [
+                                                    Image.asset(
+                                                      notesIcon,
+                                                      color: bottomBarController
+                                                          .selectedTabIndex
+                                                          .value ==
+                                                          21
+                                                          ? whiteColor
+                                                          : textColor,
+                                                      height: 20.h,
+                                                    ),
+                                                    Text(
+                                                      inScreenHr,
+                                                      style: TextStyle(
+                                                          color: bottomBarController
+                                                              .selectedTabIndex.value ==
+                                                              21
+                                                              ? whiteColor
+                                                              : textColor,
+                                                          fontSize:
+                                                          18,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            12)
+                                          SizedBox(height: 10.h),
+                                        if (StorageHelper
+                                            .getDepartmentId() ==
+                                            12)
+                                          InkWell(
+                                            onTap: () {
+                                              Get.back();
+                                              bottomBarController
+                                                  .selectedTabIndex
+                                                  .value = 22;
+                                              Get.to(
+                                                  const InScreenSecurity());
+                                            },
+                                            child: Container(
+                                              decoration:
+                                              BoxDecoration(
+                                                color: bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
+                                                    22
+                                                    ? selectedTabColor
+                                                    : whiteColor,
+                                                borderRadius:
+                                                BorderRadius
+                                                    .all(
+                                                  Radius.circular(
+                                                      6.r),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                EdgeInsets.only(
+                                                    left: 10.w,
+                                                    top: 7.h,
+                                                    bottom:
+                                                    7.h),
+                                                child: Row(
+                                                  spacing: 10.w,
+                                                  children: [
+                                                    Image.asset(
+                                                      notesIcon,
+                                                      color: bottomBarController
+                                                          .selectedTabIndex
+                                                          .value ==
+                                                          22
+                                                          ? selectedTabColor
+                                                          : whiteColor,
+                                                      height: 20.h,
+                                                    ),
+                                                    Text(
+                                                      inScreenSecurity,
+                                                      style: TextStyle(
+                                                          color: bottomBarController
+                                                              .selectedTabIndex.value ==
+                                                              22
+                                                              ? selectedTabColor
+                                                              : whiteColor,
+                                                          fontSize:
+                                                          18,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         SizedBox(height: 10.h),
                         InkWell(
@@ -1750,10 +1752,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          23
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  23
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -1767,8 +1769,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   Image.asset(
                                     canwinMemberIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            23
+                                        .selectedTabIndex.value ==
+                                        23
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -1777,8 +1779,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     canwinMember,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                23
+                                            .selectedTabIndex.value ==
+                                            23
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -1799,10 +1801,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          24
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  24
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -1815,8 +1817,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   Image.asset(
                                     settingIcon,
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            24
+                                        .selectedTabIndex.value ==
+                                        24
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -1826,8 +1828,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     setting,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                24
+                                            .selectedTabIndex.value ==
+                                            24
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -1847,10 +1849,10 @@ class _SideDrawerState extends State<SideDrawer> {
                           child: Container(
                             decoration: BoxDecoration(
                               color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          25
-                                      ? selectedTabColor
-                                      : whiteColor,
+                              bottomBarController.selectedTabIndex.value ==
+                                  25
+                                  ? selectedTabColor
+                                  : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
@@ -1863,8 +1865,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                   Image.asset(
                                     "assets/images/png/logout-04.png",
                                     color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            25
+                                        .selectedTabIndex.value ==
+                                        25
                                         ? whiteColor
                                         : textColor,
                                     height: 20.h,
@@ -1874,8 +1876,8 @@ class _SideDrawerState extends State<SideDrawer> {
                                     logout,
                                     style: TextStyle(
                                         color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                25
+                                            .selectedTabIndex.value ==
+                                            25
                                             ? whiteColor
                                             : textColor,
                                         fontSize: 18,
@@ -1921,6 +1923,7 @@ class _SideDrawerState extends State<SideDrawer> {
       ),
       width: double.infinity,
       height: 610.h,
+<<<<<<< Updated upstream
       child: SafeArea(
         child: Obx(
           () => profileController.isDailyTaskLoading.value == true
@@ -2254,15 +2257,337 @@ class _SideDrawerState extends State<SideDrawer> {
                     ],
                   ),
                 ),
+=======
+      child: Obx(
+            () => profileController.isDailyTaskLoading.value == true
+            ? Center(child: CircularProgressIndicator())
+            : Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Submit Daily Task',
+                    style: TextStyle(
+                        fontSize: 17.sp, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+              profileController.isDailyTaskLoading.value == true
+                  ? Center(
+                child: CircularProgressIndicator(
+                  color: whiteColor,
+                ),
+              )
+                  : Expanded(
+                child: ListView.builder(
+                  itemCount:
+                  profileController.dailyTaskDataList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(11.r),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                lightGreyColor.withOpacity(0.2),
+                                blurRadius: 13.0,
+                                spreadRadius: 2,
+                                blurStyle: BlurStyle.normal,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 8.h),
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      '${index + 1}.',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight:
+                                          FontWeight.w500),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Container(
+                                      width: 260.w,
+                                      child: Text(
+                                        maxLines: 2,
+                                        overflow:
+                                        TextOverflow.ellipsis,
+                                        '${profileController.dailyTaskDataList[index].taskName}',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight:
+                                            FontWeight.w500),
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Obx(
+                                          () => SizedBox(
+                                        height: 20.h,
+                                        width: 20.w,
+                                        child: Checkbox(
+                                          value: profileController
+                                              .dailyTaskListCheckbox[
+                                          index],
+                                          onChanged: (value) {
+                                            if (profileController
+                                                .isDailyTaskSubmitting
+                                                .value ==
+                                                false) {
+                                              if (profileController
+                                                  .timeControllers[
+                                              index]
+                                                  .text
+                                                  .isNotEmpty &&
+                                                  profileController
+                                                      .remarkControllers[
+                                                  index]
+                                                      .text
+                                                      .isNotEmpty) {
+                                                profileController
+                                                    .dailyTaskListCheckbox[
+                                                index] = value!;
+                                                if (value) {
+                                                  final taskId =
+                                                      profileController
+                                                          .dailyTaskDataList[
+                                                      index]
+                                                          .id;
+
+                                                  profileController
+                                                      .dailyTaskSubmitList
+                                                      .add(
+                                                    DailyTaskSubmitModel(
+                                                        taskId:
+                                                        taskId ??
+                                                            0,
+                                                        doneTime: profileController
+                                                            .timeControllers[
+                                                        index]
+                                                            .text,
+                                                        remarks: profileController
+                                                            .remarkControllers[
+                                                        index]
+                                                            .text),
+                                                  );
+                                                } else {
+                                                  final taskId =
+                                                      profileController
+                                                          .dailyTaskDataList[
+                                                      index]
+                                                          .id;
+                                                  profileController
+                                                      .dailyTaskSubmitList
+                                                      .removeWhere(
+                                                        (task) =>
+                                                    task.taskId ==
+                                                        taskId,
+                                                  );
+                                                }
+                                              } else {
+                                                CustomToast()
+                                                    .showCustomToast(
+                                                    "Please select time & remarks.");
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 120.w,
+                                      child: TextFormField(
+                                        controller: profileController
+                                            .timeControllers[index],
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(
+                                            Icons.access_time,
+                                            color: secondaryColor,
+                                          ),
+                                          hintText: timeFormate,
+                                          hintStyle: rubikRegular,
+                                          fillColor:
+                                          lightSecondaryColor,
+                                          filled: true,
+                                          // enabled: false,
+
+                                          border:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                lightSecondaryColor),
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(
+                                                    16.r)),
+                                          ),
+                                          enabledBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                lightSecondaryColor),
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(
+                                                    16.r)),
+                                          ),
+                                          disabledBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                lightSecondaryColor),
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(
+                                                    16.r)),
+                                          ),
+                                          focusedBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                lightSecondaryColor),
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(
+                                                    16.r)),
+                                          ),
+                                          contentPadding:
+                                          EdgeInsets.symmetric(
+                                              horizontal: 10.w,
+                                              vertical: 10.h),
+                                        ),
+                                        readOnly: true,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    InkWell(
+                                      onTap: () {
+                                        remarkShowAlertDialog(
+                                            context, index);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                          lightSecondaryColor,
+                                          borderRadius:
+                                          BorderRadius.all(
+                                              Radius.circular(
+                                                  11.r)),
+                                        ),
+                                        width: 180.w,
+                                        height: 40.h,
+                                        child: Center(
+                                          child: Text(
+                                            '${profileController.remarkControllers[index].text.isEmpty ? "Add Remark" : profileController.remarkControllers[index].text}',
+                                            style: TextStyle(
+                                                fontSize: 15.sp,
+                                                fontWeight:
+                                                FontWeight.w400,
+                                                color: textColor),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Obx(
+                    () => CustomButton(
+                  onPressed: () {
+                    if (profileController.isDailyTaskSubmitting.value ==
+                        false) {
+                      if (profileController
+                          .dailyTaskSubmitList.isNotEmpty) {
+                        profileController.submitDailyTask(
+                            profileController.dailyTaskSubmitList,
+                            context);
+                        profileController.timeControllers.clear();
+                        profileController.remarkControllers.clear();
+                      } else {
+                        CustomToast()
+                            .showCustomToast("Please select daily task.");
+                      }
+                    }
+                  },
+                  text: profileController.isDailyTaskSubmitting.value ==
+                      true
+                      ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                          child: CircularProgressIndicator(
+                            color: whiteColor,
+                          )),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      Text(
+                        'Loading...',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: whiteColor),
+                      ),
+                    ],
+                  )
+                      : Text(
+                    submit,
+                    style: TextStyle(
+                      color: whiteColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  width: double.infinity,
+                  color: primaryColor,
+                  height: 45.h,
+                ),
+              ),
+            ],
+          ),
+>>>>>>> Stashed changes
         ),
       ),
     );
   }
 
   Future<void> remarkShowAlertDialog(
-    BuildContext context,
-    int index,
-  ) async {
+      BuildContext context,
+      int index,
+      ) async {
     return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
@@ -2451,120 +2776,120 @@ class _SideDrawerState extends State<SideDrawer> {
             SizedBox(height: 10.h),
             profileController.isDailyTaskLoading.value == true
                 ? Center(
-                    child: CircularProgressIndicator(
-                      color: whiteColor,
-                    ),
-                  )
+              child: CircularProgressIndicator(
+                color: whiteColor,
+              ),
+            )
                 : Obx(
-                    () => Expanded(
-                      child: ListView.builder(
-                        itemCount: assetsList.length,
-                        itemBuilder: (context, index) {
-                          String srNumberString =
-                              assetsList[index].serialNo.join(", ");
+                  () => Expanded(
+                child: ListView.builder(
+                  itemCount: assetsList.length,
+                  itemBuilder: (context, index) {
+                    String srNumberString =
+                    assetsList[index].serialNo.join(", ");
 
-                          return Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(0),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: lightGreyColor.withOpacity(0.2),
-                                      blurRadius: 13.0,
-                                      spreadRadius: 2,
-                                      blurStyle: BlurStyle.normal,
-                                      offset: Offset(0, 4),
+                    return Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: lightGreyColor.withOpacity(0.2),
+                                blurRadius: 13.0,
+                                spreadRadius: 2,
+                                blurStyle: BlurStyle.normal,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 8.h),
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 110.w,
+                                      child: Text(
+                                        '$srNumberString',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Container(
+                                      width: 110.w,
+                                      child: Text(
+                                        '${assetsList[index].name ?? ""}',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Container(
+                                      width: 40.w,
+                                      child: Center(
+                                        child: Text(
+                                          '${assetsList[index].qty ?? ""}',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight:
+                                              FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Spacer(),
+                                    Obx(
+                                          () => SizedBox(
+                                        height: 20.h,
+                                        width: 20.w,
+                                        child: Checkbox(
+                                          value:
+                                          assetsListCheckbox[index],
+                                          onChanged: (value) {
+                                            assetsListCheckbox[index] =
+                                            value!;
+                                            if (value) {
+                                              if (!selectedAssetsList
+                                                  .contains(assetsList[
+                                              index])) {
+                                                selectedAssetsList.add(
+                                                    assetsList[index]);
+                                              }
+                                            } else {
+                                              selectedAssetsList.remove(
+                                                  assetsList[index]);
+                                            }
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10.w, vertical: 8.h),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 110.w,
-                                            child: Text(
-                                              '$srNumberString',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10.w),
-                                          Container(
-                                            width: 110.w,
-                                            child: Text(
-                                              '${assetsList[index].name ?? ""}',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10.w),
-                                          Container(
-                                            width: 40.w,
-                                            child: Center(
-                                              child: Text(
-                                                '${assetsList[index].qty ?? ""}',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10.w),
-                                          Spacer(),
-                                          Obx(
-                                            () => SizedBox(
-                                              height: 20.h,
-                                              width: 20.w,
-                                              child: Checkbox(
-                                                value:
-                                                    assetsListCheckbox[index],
-                                                onChanged: (value) {
-                                                  assetsListCheckbox[index] =
-                                                      value!;
-                                                  if (value) {
-                                                    if (!selectedAssetsList
-                                                        .contains(assetsList[
-                                                            index])) {
-                                                      selectedAssetsList.add(
-                                                          assetsList[index]);
-                                                    }
-                                                  } else {
-                                                    selectedAssetsList.remove(
-                                                        assetsList[index]);
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 10.h),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
             CustomButton(
               onPressed: () async {
                 if (selectedAssetsList.isNotEmpty) {
