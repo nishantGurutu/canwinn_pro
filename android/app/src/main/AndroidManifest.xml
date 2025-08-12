@@ -51,12 +51,8 @@
             android:turnScreenOn="true"
             android:showWhenLocked="true"
             android:launchMode="singleTop"
-<<<<<<< Updated upstream
-            android:taskAffinity=""  
-=======
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
->>>>>>> Stashed changes
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:enableOnBackInvokedCallback="true"
