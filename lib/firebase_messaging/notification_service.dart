@@ -32,11 +32,14 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
-  debugPrint('Notification(${notificationResponse.id}) action tapped: '
-      '${notificationResponse.actionId} with payload: ${notificationResponse.payload}');
+  debugPrint(
+    'Notification(${notificationResponse.id}) action tapped: '
+    '${notificationResponse.actionId} with payload: ${notificationResponse.payload}',
+  );
   if (notificationResponse.input?.isNotEmpty ?? false) {
     debugPrint(
-        'Notification action tapped with input: ${notificationResponse.input}');
+      'Notification action tapped with input: ${notificationResponse.input}',
+    );
   }
   if (notificationResponse.payload != null) {
     LocalNotificationService.handleNavigation(notificationResponse.payload);
@@ -58,9 +61,9 @@ class LocalNotificationService {
 
     const InitializationSettings initializationSettings =
         InitializationSettings(
-      android: androidInitializationSettings,
-      iOS: iosInitializationSettings,
-    );
+          android: androidInitializationSettings,
+          iOS: iosInitializationSettings,
+        );
 
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'your_channel_id',
@@ -74,7 +77,8 @@ class LocalNotificationService {
 
     await _notificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(channel);
 
     await _notificationsPlugin.initialize(
@@ -88,22 +92,23 @@ class LocalNotificationService {
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       debugPrint('Firebase notification clicked (background): ${message.data}');
       handleNavigation(jsonEncode(message.data));
     });
 
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
+    FirebaseMessaging.instance.getInitialMessage().then((
+      RemoteMessage? message,
+    ) {
       if (message != null) {
         debugPrint(
-            'Firebase notification clicked (terminated): ${message.data}');
+          'Firebase notification clicked (terminated): ${message.data}',
+        );
         handleNavigation(jsonEncode(message.data));
       }
     });
@@ -118,22 +123,24 @@ class LocalNotificationService {
   }
 
   static Future<void> createAndDisplayNotification(
-      RemoteMessage message) async {
+    RemoteMessage message,
+  ) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       const AndroidNotificationDetails androidDetails =
           AndroidNotificationDetails(
-        'pushnotificationapp',
-        'Push Notification App',
-        channelDescription: 'This channel is for push notifications',
-        importance: Importance.max,
-        priority: Priority.high,
-        sound: RawResourceAndroidNotificationSound('notificationtone'),
-        fullScreenIntent: true,
-      );
+            'pushnotificationapp',
+            'Push Notification App',
+            channelDescription: 'This channel is for push notifications',
+            importance: Importance.max,
+            priority: Priority.high,
+            sound: RawResourceAndroidNotificationSound('notificationtone'),
+            fullScreenIntent: true,
+          );
 
-      const NotificationDetails notificationDetails =
-          NotificationDetails(android: androidDetails);
+      const NotificationDetails notificationDetails = NotificationDetails(
+        android: androidDetails,
+      );
 
       await _notificationsPlugin.show(
         id,
@@ -161,9 +168,16 @@ class LocalNotificationService {
     await _notificationsPlugin.zonedSchedule(
       notificationId,
       '$title $s reminder',
-      '${s.contains('task') ? "Task is due!" : s.contains('sos') ? "SOS Reminder" : s.contains('event') ? "Event Reminder" : "Calendar Reminder"}',
-      tz.TZDateTime.now(tz.local)
-          .add(Duration(milliseconds: millisecondsUntilNotification)),
+      '${s.contains('task')
+          ? "Task is due!"
+          : s.contains('sos')
+          ? "SOS Reminder"
+          : s.contains('event')
+          ? "Event Reminder"
+          : "Calendar Reminder"}',
+      tz.TZDateTime.now(
+        tz.local,
+      ).add(Duration(milliseconds: millisecondsUntilNotification)),
       NotificationDetails(
         android: AndroidNotificationDetails(
           'your_channel_id',
@@ -178,13 +192,16 @@ class LocalNotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       // uiLscalNotificationDateInterpretation.absoluteTime,
       payload: jsonEncode({'page': s, 'taskId': notificationId}),
     );
 
     Future.delayed(
-        Duration(milliseconds: millisecondsUntilNotification), () {});
+      Duration(milliseconds: millisecondsUntilNotification),
+      () {},
+    );
   }
   // {sendername: IT Administrator, senderid: 97, productid: 8, type: emi_reminder, title: EMI Due Reminder, message: EMI of 12000 due today for vehicle 789456 on 2025-07-15}
   // kiej8d99 payload data in push service {"sendername":"IT Administrator","senderid":"97","productid":"1","type":"lead","title":"Lead meeting is created","message":"Lead meeting for this lead Kallo is created"}
@@ -220,7 +237,8 @@ class LocalNotificationService {
       String? taskId = payloadData['taskId'].toString();
 
       if (payloadData['type'] == "chat") {
-        Get.to(() => MessageScreen(
+        Get.to(
+          () => MessageScreen(
             payloadData['sendername'].toString(),
             payloadData['productid'].toString(),
             payloadData['senderid'].toString(),
@@ -229,81 +247,106 @@ class LocalNotificationService {
             '',
             '',
             '',
-            ''));
+            '',
+          ),
+        );
       } else if (payloadData['type'] == "dailymsg") {
         StorageHelper.setDailyMessage(true);
         Get.put<BottomBarController>(BottomBarController())
             .currentPageIndex
             .value = 0;
-// lead_meeting
-        Get.to(() =>
-            BottomNavigationBarExample(from: 'true', payloadData: payloadData));
+        // lead_meeting
+        Get.to(
+          () => BottomNavigationBarExample(
+            from: 'true',
+            payloadData: payloadData,
+          ),
+        );
       } else if (payloadData['type'] == "leadquotation") {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 2,
-              leadNumber: '',
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 2,
+            leadNumber: '',
+          ),
+        );
       } else if (payloadData['type'] == "leadchat") {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 3,
-              leadNumber: '',
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 3,
+            leadNumber: '',
+          ),
+        );
       } else if (payloadData['type'].toString() == "lead_followup") {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'],
-              index: 1,
-              leadNumber: payloadData['senderid'],
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'],
+            index: 1,
+            leadNumber: payloadData['senderid'],
+          ),
+        );
       } else if (payloadData['type'].toString() == "task") {
-        Get.to(() => TaskDetails(
-              taskId: int.parse(payloadData['productid'].toString()),
-              assignedStatus: '',
-              initialIndex: 0,
-            ));
+        Get.to(
+          () => TaskDetails(
+            taskId: int.parse(payloadData['productid'].toString()),
+            assignedStatus: '',
+            initialIndex: 0,
+          ),
+        );
       } else if (payloadData['type'].toString().contains("todo")) {
         Get.to(() => ToDoList(''));
       } else if (payloadData['type'].toString() == "meeting") {
         Get.to(() => MeetingListScreen());
       } else if (payloadData['type'].toString() == "gatepass") {
-        Get.to(() => HumanGatepassDetails(
-              payloadData['productid'].toString(),
-              from: 'notification',
-            ));
+        Get.to(
+          () => HumanGatepassDetails(
+            payloadData['productid'].toString(),
+            from: 'notification',
+          ),
+        );
       } else if (payloadData['type'].toString() == "lead") {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 0,
-              leadNumber: '',
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 0,
+            leadNumber: '',
+          ),
+        );
       } else if (payloadData['type'].toString() == 'leadchat') {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 3,
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 3,
+          ),
+        );
       } else if (payloadData['type'].toString() == 'lead_note') {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 5,
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 5,
+          ),
+        );
       } else if (payloadData['type'].toString() == 'lead_visit') {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 6,
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 6,
+          ),
+        );
       } else if (payloadData['type'].toString() == 'lead' &&
           payloadData['title'].toString().contains('Lead notes')) {
-        Get.to(LeadNoteScreen(
-          leadId: payloadData['productid'].toString(),
-          index: 4,
-        ));
+        Get.to(
+          LeadNoteScreen(leadId: payloadData['productid'].toString(), index: 4),
+        );
       } else if (payloadData['type'].toString() == 'lead' &&
           payloadData['title'].toString().contains('Lead contact')) {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['productid'].toString(),
-              index: 0,
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['productid'].toString(),
+            index: 0,
+          ),
+        );
       } else if (payloadData['type'].toString() == 'lead' &&
           payloadData['title'].toString().contains('Lead meeting')) {
         Get.to(
@@ -327,16 +370,14 @@ class LocalNotificationService {
           ),
         );
       } else if (payloadData['type'].toString() == 'lead_note') {
-        Get.to(LeadNoteScreen(
-          leadId: payloadData['productid'].toString(),
-          index: 4,
-        ));
+        Get.to(
+          LeadNoteScreen(leadId: payloadData['productid'].toString(), index: 4),
+        );
       } else if (payloadData['type'].toString() == 'lead' &&
           payloadData['title'].toString().contains('Lead notes')) {
-        Get.to(LeadNoteScreen(
-          leadId: payloadData['productid'].toString(),
-          index: 4,
-        ));
+        Get.to(
+          LeadNoteScreen(leadId: payloadData['productid'].toString(), index: 4),
+        );
       } else if (payloadData['type'].toString() == 'lead' &&
           payloadData['title'].toString().contains('change lead')) {
         Get.to(
@@ -354,36 +395,50 @@ class LocalNotificationService {
       } else if (payloadData['type'].toString().contains("challan")) {
         Get.to(() => InChalanDetails(payloadData['productid'.toString()]));
       } else if (payloadData['type'].toString().contains("out_challan")) {
-        Get.to(() =>
-            ChalanDetails(payloadData['productid'.toString()], 'notification'));
+        Get.to(
+          () => ChalanDetails(
+            payloadData['productid'.toString()],
+            'notification',
+          ),
+        );
       } else if (payloadData['type'].toString().contains("project")) {
         Get.to(() => Project(''));
       } else if (payloadData['type'].toString() == "emi_reminder") {
-        Get.to(() => VehicalDetails(
-              vehicleId: int.parse(payloadData['productid'].toString()),
-            ));
+        Get.to(
+          () => VehicalDetails(
+            vehicleId: int.parse(payloadData['productid'].toString()),
+          ),
+        );
       } else if (payloadData['type'] == "note") {
         Get.to(() => NotesFolder());
       } else if (page.toString() == 'task') {
-        Get.to(() => TaskDetails(
-              taskId: int.parse(taskId.toString()),
-              assignedStatus: '',
-              initialIndex: 0,
-            ));
+        Get.to(
+          () => TaskDetails(
+            taskId: int.parse(taskId.toString()),
+            assignedStatus: '',
+            initialIndex: 0,
+          ),
+        );
       } else if (page.toString() == 'daily-task') {
         Get.put<BottomBarController>(BottomBarController())
             .currentPageIndex
             .value = 0;
-        Get.put<ProfileController>(ProfileController())
-            .dailyTaskList(Get.context!, 'reminder', payloadData['taskId']);
-        Get.to(() => BottomNavigationBarExample(
-            from: 'reminder', payloadData: payloadData));
+        Get.put<ProfileController>(
+          ProfileController(),
+        ).dailyTaskList(Get.context!, 'reminder', payloadData['taskId']);
+        Get.to(
+          () => BottomNavigationBarExample(
+            from: 'reminder',
+            payloadData: payloadData,
+          ),
+        );
       } else if (page.toString().contains('event')) {
         Get.put<BottomBarController>(BottomBarController())
             .currentPageIndex
             .value = 2;
-        Get.to(() =>
-            BottomNavigationBarExample(from: '', payloadData: payloadData));
+        Get.to(
+          () => BottomNavigationBarExample(from: '', payloadData: payloadData),
+        );
       } else if (page.toString() == 'meeting') {
         Get.to(() => MeetingListScreen());
       } else if (page.toString().contains('calender')) {
@@ -391,15 +446,19 @@ class LocalNotificationService {
       } else if (page.toString().contains('todo')) {
         Get.to(() => ToDoList(''));
       } else if (page.toString() == 'lead_meeting') {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['taskId'].toString(),
-              index: 6,
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['taskId'].toString(),
+            index: 6,
+          ),
+        );
       } else if (page.toString().contains('followup')) {
-        Get.to(() => LeadOverviewScreen(
-              leadId: payloadData['taskId'].toString(),
-              index: 1,
-            ));
+        Get.to(
+          () => LeadOverviewScreen(
+            leadId: payloadData['taskId'].toString(),
+            index: 1,
+          ),
+        );
       }
     } catch (e) {
       debugPrint("Error decoding navigation payload: $e");

@@ -31,9 +31,18 @@ class MessageScreen extends StatefulWidget {
   final String image;
   final String groupIcon;
   final String? navigationType;
-  const MessageScreen(this.name, this.chatId, this.userId, this.fromPage,
-      this.members, this.type, this.image, this.groupIcon, this.navigationType,
-      {super.key});
+  const MessageScreen(
+    this.name,
+    this.chatId,
+    this.userId,
+    this.fromPage,
+    this.members,
+    this.type,
+    this.image,
+    this.groupIcon,
+    this.navigationType, {
+    super.key,
+  });
 
   @override
   State<MessageScreen> createState() => _MessageScreenState();
@@ -53,10 +62,16 @@ class _MessageScreenState extends State<MessageScreen> {
     chatController.chatIdvalue.value = widget.chatId.toString();
     _scrollController.addListener(_scrollListener);
     chatController.chatHistoryListApi(
-        widget.chatId, chatController.pageCountValue.value, 'initstate');
+      widget.chatId,
+      chatController.pageCountValue.value,
+      'initstate',
+    );
     if (chatController.chatIdvalue.value.isNotEmpty) {
-      PusherConfig().initPusher(chatController.onPusherEvent,
-          channelName: "chat", roomId: chatController.chatIdvalue.value);
+      PusherConfig().initPusher(
+        chatController.onPusherEvent,
+        channelName: "chat",
+        roomId: chatController.chatIdvalue.value,
+      );
     }
   }
 
@@ -73,6 +88,8 @@ class _MessageScreenState extends State<MessageScreen> {
     chatController.chatIdvalue.value = '';
     super.dispose();
   }
+
+  final Map<int, GlobalKey> messageKeys = {};
 
   String previousCreateddate = "";
 
@@ -103,26 +120,39 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-  // void scrollToIndex(dynamic index) {
-  //   double itemHeight = 60.0;
-  //   _scrollController.animateTo(
-  //     index.toDouble(),
-  //     duration: Duration(milliseconds: 500),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
+  var highlightedMessageId = Rx<int?>(null);
 
-  final Map<int, GlobalKey> messageKeys = {};
-  // void scrollToIndex(int messageId) {
-  //   final chatList = chatController.chatHistoryList;
-  //   int index = chatList.indexWhere((msg) => msg.id == messageId);
-  //   if (index == -1) return;
-  //   final key = messageKeys[chatList[index].id];
+  void highlightMessage(int messageId) {
+    highlightedMessageId.value = messageId;
+    Future.delayed(Duration(seconds: 1), () {
+      if (highlightedMessageId.value == messageId) {
+        highlightedMessageId.value = null; // remove highlight
+      }
+    });
+  }
+
+  void scrollToMessage(int messageId) {
+    final key = messageKeys[messageId];
+    if (key != null && key.currentContext != null) {
+      Scrollable.ensureVisible(
+        key.currentContext!,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        alignment: 0.3,
+      ).then((_) {
+        highlightMessage(messageId); // trigger highlight
+      });
+    }
+  }
+
+  // void scrollToMessage(int messageId) {
+  //   final key = messageKeys[messageId];
   //   if (key != null && key.currentContext != null) {
   //     Scrollable.ensureVisible(
   //       key.currentContext!,
-  //       duration: const Duration(milliseconds: 500),
+  //       duration: Duration(milliseconds: 500),
   //       curve: Curves.easeInOut,
+  //       alignment: 0.3, // 0.0 = top, 1.0 = bottom
   //     );
   //   }
   // }
@@ -168,690 +198,805 @@ class _MessageScreenState extends State<MessageScreen> {
                   ),
                 ),
                 if (!chatController.isChatOptionOpenAppbar.value)
-                  SizedBox(
-                    width: 45.w,
-                    height: 45.h,
-                    child: _buildAvatar(),
-                  ),
+                  SizedBox(width: 45.w, height: 45.h, child: _buildAvatar()),
               ],
             ),
-            title: chatController.isChatOptionOpenAppbar.value
-                ? null
-                : InkWell(
-              onTap: () {
-                if (widget.type?.toLowerCase() == "group") {
-                  Get.to(GroupMemberlist(widget.chatId));
-                }
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("${widget.name}", style: rubikBlack),
-                  Text("Active", style: rubikSmall),
-                ],
-              ),
-            ),
-            actions: chatController.isChatOptionOpenAppbar.value
-                ? [
-              IconButton(
-                onPressed: () {
-                  // your copy action
-                },
-                icon: Icon(Icons.copy),
-              ),
-            ]
-                : null,
+            title:
+                chatController.isChatOptionOpenAppbar.value
+                    ? null
+                    : InkWell(
+                      onTap: () {
+                        if (widget.type?.toLowerCase() == "group") {
+                          Get.to(GroupMemberlist(widget.chatId));
+                        }
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("${widget.name}", style: rubikBlack),
+                          Text("Active", style: rubikSmall),
+                        ],
+                      ),
+                    ),
+            actions:
+                chatController.isChatOptionOpenAppbar.value
+                    ? [
+                      IconButton(
+                        onPressed: () {
+                          // your copy action
+                        },
+                        icon: Icon(Icons.copy),
+                      ),
+                    ]
+                    : null,
           ),
 
           body: SafeArea(
-            child: chatController.isChatHistoryLoading.value == true
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
-                  )
-                : Column(
-                    children: [
-                      chatController.chatHistoryList.isEmpty
-                          ? Expanded(
+            child:
+                chatController.isChatHistoryLoading.value == true
+                    ? Center(
+                      child: CircularProgressIndicator(color: primaryColor),
+                    )
+                    : Column(
+                      children: [
+                        chatController.chatHistoryList.isEmpty
+                            ? Expanded(
                               child: Center(
                                 child: Text(
                                   noMessage,
                                   style: changeTextColor(
-                                      robotoBlack, lightGreyColor),
+                                    robotoBlack,
+                                    lightGreyColor,
+                                  ),
                                 ),
                               ),
                             )
-                          : Expanded(
+                            : Expanded(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 12.w, vertical: 6.h),
+                                  horizontal: 12.w,
+                                  vertical: 6.h,
+                                ),
                                 child: SingleChildScrollView(
                                   controller: _scrollController,
                                   reverse: true,
                                   child: Obx(
                                     () => Column(
-                                      children: List.generate(
-                                          chatController.chatHistoryList.length,
-                                          (index) {
-                                        final chat = chatController
-                                            .chatHistoryList[index];
-                                        messageKeys.putIfAbsent(
-                                            chat.id ?? 0, () => GlobalKey());
-                                        final isCurrentUser =
-                                            chat.senderId == loggedInUserId;
-                                        final currentDate =
-                                            chat.createdDate?.split(' ')[0] ??
+                                      children:
+                                          List.generate(chatController.chatHistoryList.length, (
+                                            index,
+                                          ) {
+                                            final chat =
+                                                chatController
+                                                    .chatHistoryList[index];
+                                            final isCurrentUser =
+                                                chat.senderId == loggedInUserId;
+                                            final currentDate =
+                                                chat.createdDate?.split(
+                                                  ' ',
+                                                )[0] ??
                                                 '';
-                                        String previousDate = '';
-                                        if (index > 0) {
-                                          previousDate = chatController
-                                                  .chatHistoryList[index - 1]
-                                                  .createdDate
-                                                  ?.split(' ')[0] ??
-                                              '';
-                                        }
-                                        final bool showDateHeader =
-                                            index == 0 ||
+
+                                            messageKeys.putIfAbsent(
+                                              chat.id ?? 0,
+                                              () => GlobalKey(),
+                                            );
+                                            String previousDate = '';
+                                            if (index > 0) {
+                                              previousDate =
+                                                  chatController
+                                                      .chatHistoryList[index -
+                                                          1]
+                                                      .createdDate
+                                                      ?.split(' ')[0] ??
+                                                  '';
+                                            }
+                                            final bool showDateHeader =
+                                                index == 0 ||
                                                 currentDate != previousDate;
-                                        return Padding(
-                                          padding:
-                                              EdgeInsets.only(bottom: 12.h),
-                                          child: SwipeTo(
-                                            key: ValueKey(chat.id),
-                                            onRightSwipe: (details) {
-                                              chatController
-                                                      .selectedMessage.value =
-                                                  chat.message.toString();
-                                              chatController.selectedMessageId
-                                                  .value = chat.id.toString();
-                                              chatController
+                                            return Padding(
+                                              key: messageKeys[chat.id],
+                                              padding: EdgeInsets.only(
+                                                bottom: 12.h,
+                                              ),
+                                              child: SwipeTo(
+                                                key: ValueKey(chat.id),
+                                                onRightSwipe: (details) {
+                                                  chatController
+                                                          .selectedMessage
+                                                          .value =
+                                                      chat.message.toString();
+                                                  chatController
+                                                          .selectedMessageId
+                                                          .value =
+                                                      chat.id.toString();
+                                                  chatController
                                                       .selectedParentMessageSender
-                                                      .value =
-                                                  chat.senderName.toString();
-                                            },
-                                            child: InkWell(
-                                              onTap: () {
-                                                // scrollToIndex(
-                                                //     chat.parentMessageId ?? 0);
-                                                // print(
-                                                //     'iuey83 3ieu38ye 3387y83 ${chat.parentMessageId}');
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      if (showDateHeader)
-                                                        timeContainer(
-                                                            chat.createdDate),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        isCurrentUser
-                                                            ? MainAxisAlignment
-                                                                .end
-                                                            : MainAxisAlignment
-                                                                .start,
-                                                    children: [
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
+                                                      .value = chat.senderName
+                                                          .toString();
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        if (showDateHeader)
+                                                          timeContainer(
+                                                            chat.createdDate,
+                                                          ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
                                                           isCurrentUser
-                                                              ? SizedBox()
-                                                              : Text(
+                                                              ? MainAxisAlignment
+                                                                  .end
+                                                              : MainAxisAlignment
+                                                                  .start,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            isCurrentUser
+                                                                ? SizedBox()
+                                                                : Text(
                                                                   "${chat.senderName ?? ''}",
                                                                   style: TextStyle(
-                                                                      fontSize:
-                                                                          16,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                  ),
                                                                   maxLines:
                                                                       100000,
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
                                                                 ),
-                                                          SizedBox(
-                                                            height: 3.h,
-                                                          ),
-                                                          GestureDetector(
-                                                            onLongPress: () {
-                                                              chatController
-                                                                  .isChatOptionOpenAppbar
-                                                                  .value = true;
-                                                            },
-                                                            child: Container(
-                                                              constraints:
-                                                                  BoxConstraints(
-                                                                minWidth: 70.w,
-                                                                maxWidth: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.7,
-                                                              ),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: isCurrentUser
-                                                                    ? Color(
-                                                                        0xffF1F1F1)
-                                                                    : Color(
-                                                                        0xffEFF7FF),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          11.r),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          11.r),
-                                                                  bottomLeft: isCurrentUser
-                                                                      ? Radius
-                                                                          .circular(11
-                                                                              .r)
-                                                                      : Radius
-                                                                          .zero,
-                                                                ),
-                                                              ),
-                                                              child: Stack(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding:
-                                                                        EdgeInsets
-                                                                            .only(
-                                                                      left: 3.w,
-                                                                      right:
-                                                                          3.w,
-                                                                      top: 3.h,
-                                                                      bottom:
-                                                                          3.h,
+                                                            SizedBox(
+                                                              height: 3.h,
+                                                            ),
+                                                            Container(
+                                                              child: GestureDetector(
+                                                                onLongPress: () {
+                                                                  chatController
+                                                                      .isChatOptionOpenAppbar
+                                                                      .value = true;
+                                                                },
+                                                                child: Container(
+                                                                  constraints: BoxConstraints(
+                                                                    minWidth:
+                                                                        70.w,
+                                                                    maxWidth:
+                                                                        MediaQuery.of(
+                                                                          context,
+                                                                        ).size.width *
+                                                                        0.7,
+                                                                  ),
+                                                                  decoration: BoxDecoration(
+                                                                    color:
+                                                                        isCurrentUser
+                                                                            ? Color(
+                                                                              0xffF1F1F1,
+                                                                            )
+                                                                            : Color(
+                                                                              0xffEFF7FF,
+                                                                            ),
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                            11.r,
+                                                                          ),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                            11.r,
+                                                                          ),
+                                                                      bottomLeft:
+                                                                          isCurrentUser
+                                                                              ? Radius.circular(
+                                                                                11.r,
+                                                                              )
+                                                                              : Radius.zero,
                                                                     ),
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
+                                                                  ),
+                                                                  child: GestureDetector(
+                                                                    onTap: () {
+                                                                      scrollToMessage(
+                                                                        chat.parentMessageId ??
+                                                                            0,
+                                                                      );
+                                                                    },
+                                                                    child: Stack(
                                                                       children: [
-                                                                        if (chat.parentMessageId != null &&
-                                                                            chat.parentMessageId !=
-                                                                                "null" &&
-                                                                            chat.parentMessageId !=
-                                                                                0)
-                                                                          Container(
-                                                                            constraints:
-                                                                                BoxConstraints(
-                                                                              minWidth: 70.w,
-                                                                              maxWidth: MediaQuery.of(context).size.width * 0.9,
-                                                                            ),
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              borderRadius: BorderRadius.circular(5.r),
-                                                                              color: dotColor,
-                                                                            ),
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h, left: 8.w, right: 8.w),
-                                                                              child: Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: [
-                                                                                  Text(
-                                                                                    '${chat.parentSenderName ?? ''}',
-                                                                                    textAlign: TextAlign.left,
-                                                                                    style: TextStyle(fontSize: 12.sp, color: textColor),
+                                                                        Padding(
+                                                                          padding: EdgeInsets.only(
+                                                                            left:
+                                                                                3.w,
+                                                                            right:
+                                                                                3.w,
+                                                                            top:
+                                                                                3.h,
+                                                                            bottom:
+                                                                                3.h,
+                                                                          ),
+                                                                          child: Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              if (chat.parentMessageId !=
+                                                                                      null &&
+                                                                                  chat.parentMessageId !=
+                                                                                      "null" &&
+                                                                                  chat.parentMessageId !=
+                                                                                      0)
+                                                                                Container(
+                                                                                  constraints: BoxConstraints(
+                                                                                    minWidth:
+                                                                                        70.w,
+                                                                                    maxWidth:
+                                                                                        MediaQuery.of(
+                                                                                          context,
+                                                                                        ).size.width *
+                                                                                        0.9,
                                                                                   ),
-                                                                                  Text(
-                                                                                    '${chat.parentMessage ?? ''}',
-                                                                                    textAlign: TextAlign.left,
-                                                                                    style: TextStyle(fontSize: 12.sp, color: textColor),
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(
+                                                                                      5.r,
+                                                                                    ),
+                                                                                    color:
+                                                                                        dotColor,
                                                                                   ),
-                                                                                ],
+                                                                                  child: Padding(
+                                                                                    padding: EdgeInsets.only(
+                                                                                      top:
+                                                                                          4.h,
+                                                                                      bottom:
+                                                                                          4.h,
+                                                                                      left:
+                                                                                          8.w,
+                                                                                      right:
+                                                                                          8.w,
+                                                                                    ),
+                                                                                    child: Column(
+                                                                                      crossAxisAlignment:
+                                                                                          CrossAxisAlignment.start,
+                                                                                      children: [
+                                                                                        Text(
+                                                                                          '${chat.parentSenderName ?? ''}',
+                                                                                          textAlign:
+                                                                                              TextAlign.left,
+                                                                                          style: TextStyle(
+                                                                                            fontSize:
+                                                                                                12.sp,
+                                                                                            color:
+                                                                                                textColor,
+                                                                                          ),
+                                                                                        ),
+                                                                                        Text(
+                                                                                          '${chat.parentMessage ?? ''}',
+                                                                                          textAlign:
+                                                                                              TextAlign.left,
+                                                                                          style: TextStyle(
+                                                                                            fontSize:
+                                                                                                12.sp,
+                                                                                            color:
+                                                                                                textColor,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              if (chat.attachment !=
+                                                                                      null &&
+                                                                                  chat.attachment!.isNotEmpty)
+                                                                                Column(
+                                                                                  children: [
+                                                                                    chat.attachment.toString().contains(
+                                                                                          ".m4a",
+                                                                                        )
+                                                                                        ? CustomAudioPlayer(
+                                                                                          audioUrl:
+                                                                                              chat.attachment!,
+                                                                                          chatId:
+                                                                                              index.toString(),
+                                                                                        )
+                                                                                        : InkWell(
+                                                                                          onTap: () {
+                                                                                            openFile(
+                                                                                              chat.attachment!,
+                                                                                            );
+                                                                                          },
+                                                                                          child: getFilePreview(
+                                                                                            chat.attachment!,
+                                                                                          ),
+                                                                                        ),
+                                                                                  ],
+                                                                                ),
+                                                                              if (chat.message !=
+                                                                                      null &&
+                                                                                  chat.message!.isNotEmpty)
+                                                                                Column(
+                                                                                  children: [
+                                                                                    (chat.message
+                                                                                                    ?.split(
+                                                                                                      " ",
+                                                                                                    )
+                                                                                                    .length ??
+                                                                                                0) >
+                                                                                            3
+                                                                                        ? Padding(
+                                                                                          padding: EdgeInsets.symmetric(
+                                                                                            horizontal:
+                                                                                                4.w,
+                                                                                          ),
+                                                                                          child: Column(
+                                                                                            children: [
+                                                                                              Text(
+                                                                                                "${chat.message ?? ''}",
+                                                                                                style: changeTextColor(
+                                                                                                  heading8,
+                                                                                                  Colors.black,
+                                                                                                ),
+                                                                                                maxLines:
+                                                                                                    100000,
+                                                                                                overflow:
+                                                                                                    TextOverflow.ellipsis,
+                                                                                              ),
+                                                                                              SizedBox(
+                                                                                                height:
+                                                                                                    15.h,
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        )
+                                                                                        : Padding(
+                                                                                          padding: EdgeInsets.symmetric(
+                                                                                            horizontal:
+                                                                                                4.w,
+                                                                                          ),
+                                                                                          child: Text(
+                                                                                            "${chat.message ?? ''}              ",
+                                                                                            style: changeTextColor(
+                                                                                              heading8,
+                                                                                              Colors.black,
+                                                                                            ),
+                                                                                            maxLines:
+                                                                                                100000,
+                                                                                            overflow:
+                                                                                                TextOverflow.ellipsis,
+                                                                                          ),
+                                                                                        ),
+                                                                                  ],
+                                                                                ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        if (chat.message !=
+                                                                                    null &&
+                                                                                chat.message!.isNotEmpty ||
+                                                                            chat.attachment !=
+                                                                                null)
+                                                                          Positioned(
+                                                                            bottom:
+                                                                                3.h,
+                                                                            right:
+                                                                                7.w,
+                                                                            child: Text(
+                                                                              DateConverter.convertTo12HourFormat(
+                                                                                chat.createdAt ??
+                                                                                    "",
+                                                                              ),
+                                                                              style: TextStyle(
+                                                                                color:
+                                                                                    Colors.black,
+                                                                                fontSize:
+                                                                                    10.sp,
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                        if (chat.attachment !=
-                                                                                null &&
-                                                                            chat.attachment!.isNotEmpty)
-                                                                          Column(
-                                                                            children: [
-                                                                              chat.attachment.toString().contains(".m4a")
-                                                                                  ? CustomAudioPlayer(
-                                                                                      audioUrl: chat.attachment!,
-                                                                                      chatId: index.toString(),
-                                                                                    )
-                                                                                  : InkWell(
-                                                                                      onTap: () {
-                                                                                        openFile(chat.attachment!);
-                                                                                      },
-                                                                                      child: getFilePreview(chat.attachment!),
-                                                                                    ),
-                                                                            ],
-                                                                          ),
-                                                                        if (chat.message !=
-                                                                                null &&
-                                                                            chat.message!.isNotEmpty)
-                                                                          Column(
-                                                                            children: [
-                                                                              (chat.message?.split(" ").length ?? 0) > 3
-                                                                                  ? Padding(
-                                                                                      padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                                                                      child: Column(
-                                                                                        children: [
-                                                                                          Text(
-                                                                                            "${chat.message ?? ''}",
-                                                                                            style: changeTextColor(heading8, Colors.black),
-                                                                                            maxLines: 100000,
-                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                          ),
-                                                                                          SizedBox(
-                                                                                            height: 15.h,
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    )
-                                                                                  : Padding(
-                                                                                      padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                                                                      child: Text(
-                                                                                        "${chat.message ?? ''}              ",
-                                                                                        style: changeTextColor(heading8, Colors.black),
-                                                                                        maxLines: 100000,
-                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                      ),
-                                                                                    ),
-                                                                            ],
                                                                           ),
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  if (chat.message !=
-                                                                              null &&
-                                                                          chat.message!
-                                                                              .isNotEmpty ||
-                                                                      chat.attachment !=
-                                                                          null)
-                                                                    Positioned(
-                                                                      bottom:
-                                                                          3.h,
-                                                                      right:
-                                                                          7.w,
-                                                                      child:
-                                                                          Text(
-                                                                        DateConverter.convertTo12HourFormat(chat.createdAt ??
-                                                                            ""),
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              10.sp,
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                ],
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
+                                            );
+                                          }).toList(),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => chatController
-                                      .messagePicPath.value.isNotEmpty
-                                  ? Stack(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 8.h),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.7,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            image: DecorationImage(
-                                              image: FileImage(File(
-                                                  chatController
-                                                      .messagePicPath.value)),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              chatController
-                                                  .messagePicPath.value = '';
-                                              chatController.pickedFile.value =
-                                                  File('');
-                                            },
-                                            child: Container(
-                                              padding: EdgeInsets.all(4),
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                shape: BoxShape.circle,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Column(
+                            children: [
+                              Obx(
+                                () =>
+                                    chatController
+                                            .messagePicPath
+                                            .value
+                                            .isNotEmpty
+                                        ? Stack(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                bottom: 8.h,
                                               ),
-                                              child: Icon(Icons.close,
-                                                  color: Colors.white,
-                                                  size: 18),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : SizedBox(),
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: borderColor),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.r))),
-                                        child: Obx(
-                                          () => Column(
-                                            children: [
-                                              if (chatController
-                                                      .selectedMessage.value !=
-                                                  "")
-                                                Padding(
-                                                  padding: EdgeInsets.all(6.0),
-                                                  child: Stack(
-                                                    children: [
-                                                      Text(
-                                                          '${chatController.selectedMessage.value ?? ''}'),
-                                                      Container(
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10.r),
-                                                                ),
-                                                                color:
-                                                                    dotColor),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 8.w,
-                                                                  top: 8.h,
-                                                                  bottom: 8.h),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                '${chatController.selectedParentMessageSender.value ?? ''}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12.sp,
-                                                                    color:
-                                                                        textColor),
-                                                              ),
-                                                              Text(
-                                                                '${chatController.selectedMessage.value ?? ''}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12.sp,
-                                                                    color:
-                                                                        textColor),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        right: 5.w,
-                                                        top: 3.h,
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            chatController
-                                                                .selectedMessage
-                                                                .value = "";
-                                                          },
-                                                          child: Icon(
-                                                              Icons.close,
-                                                              color: textColor,
-                                                              size: 16.h),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              TextFormField(
-                                                controller:
-                                                    messageTextEditingController,
-                                                textCapitalization:
-                                                    TextCapitalization
-                                                        .sentences,
-                                                keyboardType:
-                                                    TextInputType.multiline,
-                                                textInputAction: TextInputAction
-                                                    .newline, // Show Enter key
-                                                minLines:
-                                                    1, // Start with one line
-                                                maxLines:
-                                                    null, // Grow as needed
-                                                decoration: InputDecoration(
-                                                  prefixIcon: InkWell(
-                                                    onTap: () {
-                                                      FocusScope.of(context)
-                                                          .unfocus();
-                                                      setState(() {
-                                                        _isEmojiPickerVisible =
-                                                            !_isEmojiPickerVisible;
-                                                      });
-                                                    },
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 9.sp,
-                                                          bottom: 9.sp,
-                                                          left: 9.sp),
-                                                      child: Image.asset(
-                                                        'assets/image/png/imoji_icon_chat.png',
-                                                        height: 12.sp,
-                                                      ),
+                                              width:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width *
+                                                  0.7,
+                                              height:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                image: DecorationImage(
+                                                  image: FileImage(
+                                                    File(
+                                                      chatController
+                                                          .messagePicPath
+                                                          .value,
                                                     ),
                                                   ),
-                                                  suffixIcon: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          showAlertDialog(
-                                                              context, 'chat');
-                                                        },
-                                                        child: Icon(
-                                                            Icons.attachment),
-                                                      ),
-                                                      SizedBox(width: 8.w),
-                                                      VoiceRecorderButton(
-                                                        onRecordingComplete: (File
-                                                            audioFile) async {
-                                                          attachment =
-                                                              audioFile;
-                                                        },
-                                                      ),
-                                                      SizedBox(width: 8.w),
-                                                    ],
-                                                  ),
-                                                  hintText: writeYourMessage,
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide.none,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.r),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide.none,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.r),
-                                                  ),
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 8.h,
-                                                          horizontal: 0.w),
+                                                  fit: BoxFit.cover,
                                                 ),
-                                              )
-                                            ],
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  chatController
+                                                      .messagePicPath
+                                                      .value = '';
+                                                  chatController
+                                                      .pickedFile
+                                                      .value = File('');
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(4),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                        : SizedBox(),
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: borderColor,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(20.r),
+                                            ),
+                                          ),
+                                          child: Obx(
+                                            () => Column(
+                                              children: [
+                                                if (chatController
+                                                        .selectedMessage
+                                                        .value !=
+                                                    "")
+                                                  Padding(
+                                                    padding: EdgeInsets.all(
+                                                      6.0,
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        Text(
+                                                          '${chatController.selectedMessage.value ?? ''}',
+                                                        ),
+                                                        Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft:
+                                                                  Radius.circular(
+                                                                    10.r,
+                                                                  ),
+                                                              topRight:
+                                                                  Radius.circular(
+                                                                    10.r,
+                                                                  ),
+                                                              bottomLeft:
+                                                                  Radius.circular(
+                                                                    10.r,
+                                                                  ),
+                                                              bottomRight:
+                                                                  Radius.circular(
+                                                                    10.r,
+                                                                  ),
+                                                            ),
+                                                            color: dotColor,
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                  left: 8.w,
+                                                                  top: 8.h,
+                                                                  bottom: 8.h,
+                                                                ),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  '${chatController.selectedParentMessageSender.value ?? ''}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        12.sp,
+                                                                    color:
+                                                                        textColor,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${chatController.selectedMessage.value ?? ''}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        12.sp,
+                                                                    color:
+                                                                        textColor,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          right: 5.w,
+                                                          top: 3.h,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              chatController
+                                                                  .selectedMessage
+                                                                  .value = "";
+                                                            },
+                                                            child: Icon(
+                                                              Icons.close,
+                                                              color: textColor,
+                                                              size: 16.h,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                TextFormField(
+                                                  controller:
+                                                      messageTextEditingController,
+                                                  textCapitalization:
+                                                      TextCapitalization
+                                                          .sentences,
+                                                  keyboardType:
+                                                      TextInputType.multiline,
+                                                  textInputAction:
+                                                      TextInputAction.newline,
+                                                  minLines: 1,
+                                                  maxLines: null,
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: InkWell(
+                                                      onTap: () {
+                                                        FocusScope.of(
+                                                          context,
+                                                        ).unfocus();
+                                                        setState(() {
+                                                          _isEmojiPickerVisible =
+                                                              !_isEmojiPickerVisible;
+                                                        });
+                                                      },
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                              top: 9.sp,
+                                                              bottom: 9.sp,
+                                                              left: 9.sp,
+                                                            ),
+                                                        child: Image.asset(
+                                                          'assets/image/png/imoji_icon_chat.png',
+                                                          height: 12.sp,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    suffixIcon: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            showAlertDialog(
+                                                              context,
+                                                              'chat',
+                                                            );
+                                                          },
+                                                          child: Icon(
+                                                            Icons.attachment,
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                        VoiceRecorderButton(
+                                                          onRecordingComplete: (
+                                                            File audioFile,
+                                                          ) async {
+                                                            attachment =
+                                                                audioFile;
+                                                          },
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                      ],
+                                                    ),
+                                                    hintText: writeYourMessage,
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                20.r,
+                                                              ),
+                                                        ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                20.r,
+                                                              ),
+                                                        ),
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                          vertical: 8.h,
+                                                          horizontal: 0.w,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 10.w),
-                                    InkWell(
-                                      onTap: () async {
-                                        if (messageTextEditingController
-                                                .text.isNotEmpty ||
-                                            chatController.messagePicPath.value
-                                                .isNotEmpty ||
-                                            attachment.path.isNotEmpty) {
-                                          String selectedMessage =
+                                      SizedBox(width: 10.w),
+                                      InkWell(
+                                        onTap: () async {
+                                          if (messageTextEditingController
+                                                  .text
+                                                  .isNotEmpty ||
                                               chatController
-                                                  .selectedMessage.value = '';
-                                          chatController.selectedMessage.value =
-                                              "";
-                                          String message =
-                                              messageTextEditingController.text;
+                                                  .messagePicPath
+                                                  .value
+                                                  .isNotEmpty ||
+                                              attachment.path.isNotEmpty) {
+                                            String selectedMessage =
+                                                chatController
+                                                    .selectedMessage
+                                                    .value = '';
+                                            chatController
+                                                .selectedMessage
+                                                .value = "";
+                                            String message =
+                                                messageTextEditingController
+                                                    .text;
 
-                                          messageTextEditingController.clear();
-                                          chatController.messagePicPath.value =
-                                              '';
-                                          chatController.pickedFile.value =
-                                              File('');
-                                          String selectedMessageId =
-                                              chatController
-                                                  .selectedMessageId.value;
-                                          String selectedMessageSender =
-                                              chatController
-                                                  .selectedParentMessageSender
-                                                  .value;
-                                          chatController
-                                              .selectedMessageId.value = "";
-                                          chatController
-                                              .selectedParentMessageSender
-                                              .value = '';
-                                          await chatController
-                                              .updateMessageData(
-                                            message: message,
-                                            attachment: attachment,
-                                            name: widget.name,
-                                            userId: widget.userId ?? "",
-                                            chatId: widget.chatId ?? "",
-                                            fromPage: widget.fromPage,
-                                            messageId: selectedMessageId,
-                                            parrent_message_sender_name:
-                                                selectedMessageSender,
-                                            selectedMessage: selectedMessage,
-                                          );
-                                          attachment = File('');
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10.w),
-                                        decoration: BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(23.r),
+                                            messageTextEditingController
+                                                .clear();
+                                            chatController
+                                                .messagePicPath
+                                                .value = '';
+                                            chatController
+                                                .pickedFile
+                                                .value = File('');
+                                            String selectedMessageId =
+                                                chatController
+                                                    .selectedMessageId
+                                                    .value;
+                                            String selectedMessageSender =
+                                                chatController
+                                                    .selectedParentMessageSender
+                                                    .value;
+                                            chatController
+                                                .selectedMessageId
+                                                .value = "";
+                                            chatController
+                                                .selectedParentMessageSender
+                                                .value = '';
+                                            await chatController
+                                                .updateMessageData(
+                                                  message: message,
+                                                  attachment: attachment,
+                                                  name: widget.name,
+                                                  userId: widget.userId ?? "",
+                                                  chatId: widget.chatId ?? "",
+                                                  fromPage: widget.fromPage,
+                                                  messageId: selectedMessageId,
+                                                  parrent_message_sender_name:
+                                                      selectedMessageSender,
+                                                  selectedMessage:
+                                                      selectedMessage,
+                                                );
+                                            attachment = File('');
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(10.w),
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius: BorderRadius.circular(
+                                              23.r,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.send,
+                                            color: whiteColor,
+                                            size: 20.h,
+                                          ),
                                         ),
-                                        child: Icon(Icons.send,
-                                            color: whiteColor, size: 20.h),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-<<<<<<< Updated upstream
-                      Offstage(
-                        offstage: !_isEmojiPickerVisible,
-                        child: EmojiPicker(
-                          textEditingController: messageTextEditingController,
-                          config: Config(
-                            height: 250.h,
-                            emojiViewConfig: EmojiViewConfig(
-                                emojiSizeMax: 28, backgroundColor: whiteColor),
-=======
-                      SafeArea(
-                        child: Offstage(
-                          offstage: !_isEmojiPickerVisible,
-                          child: Center(
-                            child: EmojiPicker(
-                              textEditingController:
-                                  messageTextEditingController.value,
-                              config: Config(
-                                height: 250.h,
-                                emojiViewConfig: EmojiViewConfig(
-                                    emojiSizeMax: 28, backgroundColor: whiteColor),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
->>>>>>> Stashed changes
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(height: 10.h),
+                        Offstage(
+                          offstage: !_isEmojiPickerVisible,
+                          child: EmojiPicker(
+                            textEditingController: messageTextEditingController,
+                            config: Config(
+                              height: 250.h,
+                              emojiViewConfig: EmojiViewConfig(
+                                emojiSizeMax: 28,
+                                backgroundColor: whiteColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
           ),
         ),
       ),
@@ -865,10 +1010,7 @@ class _MessageScreenState extends State<MessageScreen> {
         if (groupImage.isNotEmpty) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(22.5),
-            child: Image.file(
-              File(groupImage),
-              fit: BoxFit.cover,
-            ),
+            child: Image.file(File(groupImage), fit: BoxFit.cover),
           );
         } else if (widget.image.isNotEmpty) {
           return ClipRRect(
@@ -880,10 +1022,11 @@ class _MessageScreenState extends State<MessageScreen> {
                 return Image.network(
                   widget.groupIcon,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Image.asset(
-                    'assets/images/png/group_icon.png',
-                    fit: BoxFit.cover,
-                  ),
+                  errorBuilder:
+                      (_, __, ___) => Image.asset(
+                        'assets/images/png/group_icon.png',
+                        fit: BoxFit.cover,
+                      ),
                 );
               },
             ),
@@ -912,21 +1055,21 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-
   Widget timeContainer(String? createdDate) {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xff27B1A2),
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.r),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(5.r)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Text(
           "${createdDate ?? ''}",
           style: TextStyle(
-              color: whiteColor, fontSize: 16, fontWeight: FontWeight.w500),
+            color: whiteColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
           maxLines: 100000,
           overflow: TextOverflow.ellipsis,
         ),
@@ -958,114 +1101,105 @@ class _MessageScreenState extends State<MessageScreen> {
   //   }
   // }
 
-  Future<void> showAlertDialog(
-    BuildContext context,
-    String from,
-  ) async {
+  Future<void> showAlertDialog(BuildContext context, String from) async {
     return showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.all(10.sp),
-            child: Container(
-              width: double.infinity,
-              height: 140.h,
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            uploadFile(from);
-                          },
-                          child: Container(
-                            height: 40.h,
-                            width: 130.w,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.r),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/png/gallery-icon-removebg-preview.png',
-                                  height: 20.h,
-                                  color: whiteColor,
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  'Gallery',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: whiteColor),
-                                )
-                              ],
+      context: context,
+      builder: (BuildContext builderContext) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.all(10.sp),
+          child: Container(
+            width: double.infinity,
+            height: 140.h,
+            decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(15.r),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          uploadFile(from);
+                        },
+                        child: Container(
+                          height: 40.h,
+                          width: 130.w,
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.r),
                             ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // uploadFile();
-                            takeAttachment(ImageSource.camera, from);
-                          },
-                          child: Container(
-                            height: 40.h,
-                            width: 130.w,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.r),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/png/gallery-icon-removebg-preview.png',
+                                height: 20.h,
+                                color: whiteColor,
                               ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.camera,
+                              SizedBox(width: 8.w),
+                              Text(
+                                'Gallery',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
                                   color: whiteColor,
                                 ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  'Camera',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: whiteColor),
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                  ],
-                ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // uploadFile();
+                          takeAttachment(ImageSource.camera, from);
+                        },
+                        child: Container(
+                          height: 40.h,
+                          width: 130.w,
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.r),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.camera, color: whiteColor),
+                              SizedBox(width: 8.w),
+                              Text(
+                                'Camera',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: whiteColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.h),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget getFilePreview(String url) {
@@ -1074,33 +1208,27 @@ class _MessageScreenState extends State<MessageScreen> {
     if (["jpg", "jpeg", "png", "gif", "webp"].contains(fileExtension)) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(11.r),
-        child: url.toString().contains('https')
-            ? Image.network(
-                url,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    Icon(Icons.broken_image),
-              )
-            : Image.file(
-                File(
+        child:
+            url.toString().contains('https')
+                ? Image.network(
                   url,
+                  fit: BoxFit.cover,
+                  errorBuilder:
+                      (context, error, stackTrace) => Icon(Icons.broken_image),
+                )
+                : Image.file(
+                  File(url),
+                  errorBuilder:
+                      (context, error, stackTrace) => Icon(Icons.broken_image),
                 ),
-                errorBuilder: (context, error, stackTrace) =>
-                    Icon(Icons.broken_image),
-              ),
       );
     } else if (fileExtension == "pdf") {
       return Container(
         padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(11.r),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(11.r)),
         child: Row(
           children: [
-            Image.asset(
-              "assets/image/png/pdf.png",
-              height: 25.h,
-            ),
+            Image.asset("assets/image/png/pdf.png", height: 25.h),
             SizedBox(width: 10),
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 200.w),
@@ -1108,7 +1236,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 "${url.split('/').last.toLowerCase()}",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -1130,9 +1258,9 @@ class _MessageScreenState extends State<MessageScreen> {
         String? filePath = result.files.single.path;
 
         if (filePath == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: File path is null')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: File path is null')));
           return;
         }
 
@@ -1156,24 +1284,27 @@ class _MessageScreenState extends State<MessageScreen> {
           await chatController.updateGroupIconApi(widget.chatId);
         }
         print(
-            'selected file path from device is ${chatController.pickedFile.value}');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No file selected.')),
+          'selected file path from device is ${chatController.pickedFile.value}',
         );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('No file selected.')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading file: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error uploading file: $e')));
     }
   }
 
   Future<void> takeAttachment(ImageSource source, String from) async {
     try {
       attachment = File('');
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
 
       if (pickedImage == null) {
         return;
