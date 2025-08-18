@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
-import 'package:task_management/component/location_handler.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/dialog_class.dart';
 import 'package:task_management/constant/image_constant.dart';
@@ -30,7 +29,6 @@ import 'package:task_management/custom_widget/gradient_text.dart';
 import 'package:task_management/helper/sos_pusher.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/view/screen/attendence/checkin_screen.dart';
-import 'package:task_management/view/screen/callender_event_screen.dart';
 import 'package:task_management/view/screen/chat_list.dart';
 import 'package:task_management/view/screen/document.dart';
 import 'package:task_management/view/screen/home_screen.dart';
@@ -42,8 +40,11 @@ import 'package:task_management/view/widgets/drawer.dart';
 class BottomNavigationBarExample extends StatefulWidget {
   final String? from;
   final Map<String, dynamic> payloadData;
-  const BottomNavigationBarExample(
-      {super.key, this.from, required this.payloadData});
+  const BottomNavigationBarExample({
+    super.key,
+    this.from,
+    required this.payloadData,
+  });
 
   @override
   State<BottomNavigationBarExample> createState() =>
@@ -64,16 +65,18 @@ class _BottomNavigationBarExampleState
     bottomBarController.currentPageIndex.value = index;
   }
 
-  final BottomBarController bottomBarController =
-      Get.put(BottomBarController());
+  final BottomBarController bottomBarController = Get.put(
+    BottomBarController(),
+  );
   final DocumentController documentController = Get.put(DocumentController());
   final ChatController chatController = Get.put(ChatController());
   final TaskController taskController = Get.put(TaskController());
   final PriorityController priorityController = Get.put(PriorityController());
   final ProjectController projectController = Get.put(ProjectController());
   final ProfileController profileController = Get.put(ProfileController());
-  final NotificationController notificationController =
-      Get.put(NotificationController());
+  final NotificationController notificationController = Get.put(
+    NotificationController(),
+  );
   final UserPageControlelr userPageControlelr = Get.put(UserPageControlelr());
   var profilePicPath = ''.obs;
   final HomeController homeController = Get.put(HomeController());
@@ -96,7 +99,9 @@ class _BottomNavigationBarExampleState
     await homeController.userReportApi(StorageHelper.getId());
     // }
     await homeController.taskResponsiblePersonListApi(
-        StorageHelper.getAssignedDept(), "");
+      StorageHelper.getAssignedDept(),
+      "",
+    );
     await leadController.statusListApi(status: '');
     await leadController.sourceList(source: '');
     isLoading.value = false;
@@ -112,11 +117,7 @@ class _BottomNavigationBarExampleState
     if (widget.from == "true") {
       DateTime dt = DateTime.now();
       if (widget.payloadData['type'].toString() == "sos") {
-        ShowDialogFunction().sosMsg(
-          context,
-          widget.payloadData["message"],
-          dt,
-        );
+        ShowDialogFunction().sosMsg(context, widget.payloadData["message"], dt);
       } else {
         ShowDialogFunction().dailyMessage(
           context,
@@ -131,10 +132,15 @@ class _BottomNavigationBarExampleState
     await priorityController.priorityApi();
     await taskController.allProjectListApi();
     await taskController.responsiblePersonListApi(
-        StorageHelper.getDepartmentId(), "");
+      StorageHelper.getDepartmentId(),
+      "",
+    );
 
-    await SosPusherConfig().initPusher(_onPusherEvent,
-        channelName: "test-channel", context: context);
+    await SosPusherConfig().initPusher(
+      _onPusherEvent,
+      channelName: "test-channel",
+      context: context,
+    );
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
@@ -161,23 +167,24 @@ class _BottomNavigationBarExampleState
     if (!_isBackButtonPressed) {
       return await showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Confirm Exit'),
-              content: Text('Are you sure you want to exit the app?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('Cancel'),
+            builder:
+                (context) => AlertDialog(
+                  title: Text('Confirm Exit'),
+                  content: Text('Are you sure you want to exit the app?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                        SystemNavigator.pop();
+                      },
+                      child: Text('Confirm'),
+                    ),
+                  ],
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                    SystemNavigator.pop();
-                  },
-                  child: Text('Confirm'),
-                ),
-              ],
-            ),
           ) ??
           false;
     } else {
@@ -215,190 +222,208 @@ class _BottomNavigationBarExampleState
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => isLoading.value == true &&
-              bottomBarController.isUpdating.value == true &&
-              profileController.isdepartmentListLoading.value == true &&
-              priorityController.isPriorityLoading.value == true &&
-              projectController.isAllProjectCalling.value == true &&
-              notificationController.isNotificationLoading.value == true &&
-              chatController.isChatLoading.value == true
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : WillPopScope(
-              onWillPop: _onWillPop,
-              child: Scaffold(
-                key: _key,
-                drawer: Obx(
-                  () =>
-                      SideDrawer(userPageControlelr.selectedRoleListData.value),
-                ),
-                appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  backgroundColor: whiteColor,
-                  title: Row(
-                    children: [
-                      Container(
-                        height: 24.h,
-                        width: 24.w,
-                        child: InkWell(
-                          onTap: () => _key.currentState?.openDrawer(),
-                          child: SvgPicture.asset(
-                            menuImage,
-                            color: textColor,
-                            height: 20.h,
-                            width: 20.w,
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(
-                        width: 8.w,
-                      ),
-                      GradientText(
-                        taskMaster,
-                        style: heading2,
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            greenColor,
-                            Colors.black26
-                          ],
-                        ),
-                      ),
-                    ],
+      () =>
+          isLoading.value == true &&
+                  bottomBarController.isUpdating.value == true &&
+                  profileController.isdepartmentListLoading.value == true &&
+                  priorityController.isPriorityLoading.value == true &&
+                  projectController.isAllProjectCalling.value == true &&
+                  notificationController.isNotificationLoading.value == true &&
+                  chatController.isChatLoading.value == true
+              ? Center(child: CircularProgressIndicator())
+              : WillPopScope(
+                onWillPop: _onWillPop,
+                child: Scaffold(
+                  key: _key,
+                  drawer: Obx(
+                    () => SideDrawer(
+                      userPageControlelr.selectedRoleListData.value,
+                    ),
                   ),
-                  actions: [
-                    InkWell(
-                      onTap: () async {
-                        // Get.to(() => CalendarEventScreen());
-                        if (Platform.isAndroid) {
-                          final intent = AndroidIntent(
-                            action: 'android.intent.action.VIEW',
-                            data: 'content://com.android.calendar/time/',
-                            flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-                          );
-                          await intent.launch();
-                        } else {
-                          print(
-                              "Calendar launch not supported on this platform");
-                        }
-                      },
-                      child: Container(
-                        height: 35.h,
-                        width: 35.w,
-                        decoration: BoxDecoration(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    backgroundColor: whiteColor,
+                    title: Row(
+                      children: [
+                        Container(
+                          height: 24.h,
+                          width: 24.w,
+                          child: InkWell(
+                            onTap: () => _key.currentState?.openDrawer(),
+                            child: SvgPicture.asset(
+                              menuImage,
+                              color: textColor,
+                              height: 20.h,
+                              width: 20.w,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: 8.w),
+                        GradientText(
+                          taskMaster,
+                          style: heading2,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [greenColor, Colors.black26],
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      InkWell(
+                        onTap: () async {
+                          // Get.to(() => CalendarEventScreen());
+                          if (Platform.isAndroid) {
+                            final intent = AndroidIntent(
+                              action: 'android.intent.action.VIEW',
+                              data: 'content://com.android.calendar/time/',
+                              flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+                            );
+                            await intent.launch();
+                          } else {
+                            print(
+                              "Calendar launch not supported on this platform",
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: 35.h,
+                          width: 35.w,
+                          decoration: BoxDecoration(
                             color: lightPrimaryColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(17.5.r))),
-                        child: Padding(
-                          padding: EdgeInsets.all(7.sp),
-                          child: Image.asset(
-                            'assets/images/png/calendar_icon.png',
-                            height: 25.h,
-                            fit: BoxFit.cover,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(17.5.r),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(7.sp),
+                            child: Image.asset(
+                              'assets/images/png/calendar_icon.png',
+                              height: 25.h,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        chatController.deleteChat();
-                      },
-                      child: Obx(
-                        () => chatController.isLongPressed.contains(true)
-                            ? Icon(Icons.delete)
-                            : SizedBox(),
+                      InkWell(
+                        onTap: () {
+                          chatController.deleteChat();
+                        },
+                        child: Obx(
+                          () =>
+                              chatController.isLongPressed.contains(true)
+                                  ? Icon(Icons.delete)
+                                  : SizedBox(),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 12.w),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => NotificationPage());
-                      },
-                      child: Obx(
-                        () => Badge(
-                          isLabelVisible: notificationController
-                                  .unreadNotificationCount.value >
-                              0,
-                          label: Text(
-                              '${notificationController.unreadNotificationCount.value}'),
-                          child: Container(
-                            height: 35.h,
-                            width: 35.w,
-                            decoration: BoxDecoration(
+                      SizedBox(width: 12.w),
+                      InkWell(
+                        onTap: () {
+                          Get.to(() => NotificationPage());
+                        },
+                        child: Obx(
+                          () => Badge(
+                            isLabelVisible:
+                                notificationController
+                                    .unreadNotificationCount
+                                    .value >
+                                0,
+                            label: Text(
+                              '${notificationController.unreadNotificationCount.value}',
+                            ),
+                            child: Container(
+                              height: 35.h,
+                              width: 35.w,
+                              decoration: BoxDecoration(
                                 color: lightPrimaryColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(17.5.r))),
-                            child: Padding(
-                              padding: EdgeInsets.all(7.sp),
-                              child: SvgPicture.asset(
-                                notificationImageSvg,
-                                height: 20.h,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(17.5.r),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(7.sp),
+                                child: SvgPicture.asset(
+                                  notificationImageSvg,
+                                  height: 20.h,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 18.w),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => ProfilePage());
-                      },
-                      child: Container(
-                        height: 32.h,
-                        width: 32.w,
-                        decoration: BoxDecoration(
-                          color: greenColor,
-                          // color: darkBlue,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(16.r),
+                      SizedBox(width: 18.w),
+                      InkWell(
+                        onTap: () {
+                          Get.to(() => ProfilePage());
+                        },
+                        child: Container(
+                          height: 32.h,
+                          width: 32.w,
+                          decoration: BoxDecoration(
+                            color: greenColor,
+                            // color: darkBlue,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.r),
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${CustomTextConvert().getNameChar(StorageHelper.getName() ?? "")}',
-                            style: TextStyle(
-                              color: whiteColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                          child: Center(
+                            child: Text(
+                              '${CustomTextConvert().getNameChar(StorageHelper.getName() ?? "")}',
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(width: 12.w),
+                    ],
+                  ),
+                  body: Center(
+                    child: _widgetOptions.elementAt(
+                      bottomBarController.currentPageIndex.value,
                     ),
-                    SizedBox(width: 12.w),
-                  ],
-                ),
-                body: Center(
-                  child: _widgetOptions
-                      .elementAt(bottomBarController.currentPageIndex.value),
-                ),
-                bottomNavigationBar: BottomNavigationBar(
-                  selectedItemColor: greenColor,
-                  unselectedItemColor: textColor,
-                  backgroundColor: whiteColor,
-                  items: [
-                    _buildBottomNavItem('assets/images/png/home-logo.png',
-                        'assets/images/png/white_home.png', 'Home'),
-                    _buildBottomNavItem('assets/images/png/Message square.png',
-                        'assets/images/png/WHITE_CHAT.png', 'Discussion'),
-                    _attendanceBottomNavItem('assets/image/svg/add_icon.svg',
-                        'assets/image/svg/add_icon.svg', 'Attendance'),
-                    _buildBottomNavItem(
+                  ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    selectedItemColor: greenColor,
+                    unselectedItemColor: textColor,
+                    backgroundColor: whiteColor,
+                    items: [
+                      _buildBottomNavItem(
+                        'assets/images/png/home-logo.png',
+                        'assets/images/png/white_home.png',
+                        'Home',
+                      ),
+                      _buildBottomNavItem(
+                        'assets/images/png/Message square.png',
+                        'assets/images/png/WHITE_CHAT.png',
+                        'Discussion',
+                      ),
+                      _attendanceBottomNavItem(
+                        'assets/image/svg/add_icon.svg',
+                        'assets/image/svg/add_icon.svg',
+                        'Attendance',
+                      ),
+                      _buildBottomNavItem(
                         'assets/images/png/line-chart-up-01.png',
                         'assets/images/png/line-chart-up-01 (1).png',
-                        'Report'),
-                    _buildBottomNavItem('assets/images/png/grid-01.png',
-                        'assets/images/png/grid-01 (1).png', 'Files'),
-                  ],
-                  currentIndex: bottomBarController.currentPageIndex.value,
-                  onTap: _onItemTapped,
+                        'Report',
+                      ),
+                      _buildBottomNavItem(
+                        'assets/images/png/grid-01.png',
+                        'assets/images/png/grid-01 (1).png',
+                        'Files',
+                      ),
+                    ],
+                    currentIndex: bottomBarController.currentPageIndex.value,
+                    onTap: _onItemTapped,
+                  ),
                 ),
               ),
-            ),
     );
   }
 
@@ -418,29 +443,22 @@ class _BottomNavigationBarExampleState
   }
 
   BottomNavigationBarItem _buildBottomNavItem(
-      String iconPath, String activeIconPath, String label) {
+    String iconPath,
+    String activeIconPath,
+    String label,
+  ) {
     return BottomNavigationBarItem(
-      icon: Image.asset(
-        iconPath,
-        color: textColor,
-        height: 20.h,
-      ),
+      icon: Image.asset(iconPath, color: textColor, height: 20.h),
       activeIcon: Container(
         height: 35.h,
         width: 35.w,
         decoration: BoxDecoration(
           color: greenColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(17.5.r),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(17.5.r)),
         ),
         child: Padding(
           padding: EdgeInsets.all(10),
-          child: Image.asset(
-            activeIconPath,
-            color: whiteColor,
-            height: 20.h,
-          ),
+          child: Image.asset(activeIconPath, color: whiteColor, height: 20.h),
         ),
       ),
       label: label,
@@ -449,28 +467,22 @@ class _BottomNavigationBarExampleState
   }
 
   BottomNavigationBarItem _attendanceBottomNavItem(
-      String iconPath, String activeIconPath, String label) {
+    String iconPath,
+    String activeIconPath,
+    String label,
+  ) {
     return BottomNavigationBarItem(
-      icon: SvgPicture.asset(
-        iconPath,
-        color: textColor,
-        height: 20.h,
-      ),
+      icon: SvgPicture.asset(iconPath, color: textColor, height: 20.h),
       activeIcon: Container(
         height: 35.h,
         width: 35.w,
         decoration: BoxDecoration(
           color: greenColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(17.5.r),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(17.5.r)),
         ),
         child: Padding(
           padding: EdgeInsets.all(10),
-          child: SvgPicture.asset(
-            activeIconPath,
-            color: whiteColor,
-          ),
+          child: SvgPicture.asset(activeIconPath, color: whiteColor),
         ),
       ),
       label: label,

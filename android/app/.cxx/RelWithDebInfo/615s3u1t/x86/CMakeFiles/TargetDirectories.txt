@@ -1,0 +1,2 @@
+C:/canwinn/task_management/Live/task_management/task_management/android/app/.cxx/RelWithDebInfo/615s3u1t/x86/CMakeFiles/edit_cache.dir
+C:/canwinn/task_management/Live/task_management/task_management/android/app/.cxx/RelWithDebInfo/615s3u1t/x86/CMakeFiles/rebuild_cache.dir

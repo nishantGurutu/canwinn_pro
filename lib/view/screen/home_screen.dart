@@ -88,8 +88,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(milliseconds: 260),
     );
-    final curvedAnimation =
-        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    final curvedAnimation = CurvedAnimation(
+      curve: Curves.easeInOut,
+      parent: _animationController,
+    );
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     super.initState();
   }
@@ -107,8 +109,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     if (dt.toString() != StorageHelper.getIsCurrentDate().toString()) {
       await homeController.onetimeMsglist().then((_) {
         if (homeController.onTimemsg.value.isNotEmpty) {
-          openOneTimeMsg(homeController.onTimemsg.value,
-              homeController.onTimemsgUrl.value);
+          openOneTimeMsg(
+            homeController.onTimemsg.value,
+            homeController.onTimemsgUrl.value,
+          );
         }
       });
     }
@@ -190,13 +194,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   onTap: () {
                     List<String> listSplitDt = dt.toString().split(' ');
                     StorageHelper.setIsCurrentDate(
-                        listSplitDt.first.toString());
+                      listSplitDt.first.toString(),
+                    );
                     Get.back();
                   },
-                  child: Icon(
-                    Icons.close,
-                    size: 30,
-                  ),
+                  child: Icon(Icons.close, size: 30),
                 ),
               ),
             ],
@@ -219,9 +221,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     await cacheManager.removeFile('$cacheKey');
 
     await homeController.homeDataApi('');
-    // } else if (homeController.isTabIndexSelected.value == 1) {
     await homeController.leadHomeApi();
-    // }
   }
 
   @override
@@ -235,75 +235,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             _animationController.reverse();
           }
         },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Container(
-                //   color: whiteColor,
-                //   child: TabBar(
-                //     controller: _tabController,
-                //     isScrollable: false,
-                //     onTap: (value) {
-                //       homeController.isTabIndexSelected.value = value;
-                //       if (_animationController.isCompleted) {
-                //         _animationController.reverse();
-                //       }
-                //     },
-                //     indicatorSize: TabBarIndicatorSize.tab,
-                //     tabs: [
-                //       Tab(
-                //         icon: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             SvgPicture.asset(
-                //                 'assets/image/svg/assignment_late.svg'),
-                //             SizedBox(width: 5.w),
-                //             Text(
-                //               'Task',
-                //               style: TextStyle(
-                //                   fontSize: 16, fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //       Tab(
-                //         icon: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             SvgPicture.asset('assets/image/svg/done_all (1).svg'),
-                //             SizedBox(width: 5.w),
-                //             Text(
-                //               'Lead',
-                //               style: TextStyle(
-                //                   fontSize: 16, fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Expanded(
-                //   child: TabBarView(
-                //     controller: _tabController,
-                //     children: [
-                //       _buildHomeLeadContent(),
-                //     ],
-                //   ),
-                // ),
-                _buildHomeContent(),
-              ],
-            ),
-          ),
-        ),
+        child: SafeArea(child: _buildHomeContent()),
       ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
           Bubble(
             title: "Calender",
             iconColor: Colors.white,
-            bubbleColor: primaryColor ,
+            bubbleColor: primaryColor,
             icon: Icons.calendar_today,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () async {
@@ -329,18 +268,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                builder: (context) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: AddTask(
-                    priorityController.priorityList,
-                    taskController.allProjectDataList,
-                    taskController.responsiblePersonList,
-                    0,
-                    "",
-                  ),
-                ),
+                builder:
+                    (context) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: AddTask(
+                        priorityController.priorityList,
+                        taskController.allProjectDataList,
+                        taskController.responsiblePersonList,
+                        0,
+                        "",
+                      ),
+                    ),
               );
               _animationController.reverse();
             },
@@ -364,66 +304,57 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       onRefresh: onrefresher,
       child: SingleChildScrollView(
         controller: _scrollController,
-        child: Obx(
-          () {
-            return Column(
-              children: [
-                if (homeController.anniversaryListData.isNotEmpty)
-                  AutoScrollList(homeController.anniversaryListData),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10.h,
+        child: Obx(() {
+          return Column(
+            children: [
+              if (homeController.anniversaryListData.isNotEmpty)
+                AutoScrollList(homeController.anniversaryListData),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    todaySummary(
+                      homeController.homeDataModel.value?.newTask ?? 0,
+                      homeController.homeDataModel.value?.dueTodayTask ?? 0,
+                    ),
+                    SizedBox(height: 10.h),
+                    dailyActivityAndPending(),
+                    SizedBox(height: 10.h),
+                    summary(),
+                    if (StorageHelper.getAssignedDept() != null)
+                      SizedBox(height: 10.h),
+                    if (homeController.userReportDataList.isNotEmpty)
+                      AdminUserList(
+                        (homeController.homeDataModel.value?.users ?? []).obs,
+                        taskController,
+                        homeController,
                       ),
-                      todaySummary(
-                        homeController.homeDataModel.value?.newTask ?? 0,
-                        homeController.homeDataModel.value?.dueTodayTask ?? 0,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      dailyActivityAndPending(),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      summary(),
-                      if (StorageHelper.getAssignedDept() != null)
-                        SizedBox(height: 10.h),
-                      if (homeController.userReportDataList.isNotEmpty)
-                        AdminUserList(
-                          (homeController.homeDataModel.value?.users ?? []).obs,
-                          taskController,
-                          homeController,
-                        ),
-                      SizedBox(height: 10.h),
-                      HomeTask(
-                          (homeController.homeDataModel.value?.tasklist ?? [])
-                              .obs,
-                          taskController),
-                      SizedBox(height: 10.h),
-                      discussion(
-                          (homeController.homeDataModel.value?.chatlist ?? [])
-                              .obs,
-                          (homeController.homeDataModel.value?.latestComments ??
-                                  [])
-                              .obs),
-                      SizedBox(height: 10.h),
-                      pinedData(
-                          (homeController.homeDataModel.value?.pinnedNotes ??
-                                  [])
-                              .obs),
-                      SizedBox(height: 10.h),
-                      HomeEventSummary(),
-                      SizedBox(height: 10.h),
-                    ],
-                  ),
+                    SizedBox(height: 10.h),
+                    HomeTask(
+                      (homeController.homeDataModel.value?.tasklist ?? []).obs,
+                      taskController,
+                    ),
+                    SizedBox(height: 10.h),
+                    discussion(
+                      (homeController.homeDataModel.value?.chatlist ?? []).obs,
+                      (homeController.homeDataModel.value?.latestComments ?? [])
+                          .obs,
+                    ),
+                    SizedBox(height: 10.h),
+                    pinedData(
+                      (homeController.homeDataModel.value?.pinnedNotes ?? [])
+                          .obs,
+                    ),
+                    SizedBox(height: 10.h),
+                    HomeEventSummary(),
+                    SizedBox(height: 10.h),
+                  ],
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -433,59 +364,42 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       onRefresh: onrefresher,
       child: SingleChildScrollView(
         controller: _scrollController,
-        child: Obx(
-          () {
-            return Column(
-              children: [
-                if (homeController.anniversaryListData.isNotEmpty)
-                  AutoScrollList(homeController.anniversaryListData),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      leadTodaySummary(
-                        homeController.homeLeadData.value,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      leadDailyActivityAndPending(
-                        homeController.homeLeadData.value,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      leadSummary(
-                        homeController.homeLeadData.value,
-                      ),
-                      SizedBox(height: 10.h),
-                      HomeLeads(
-                        homeController.homeLeadData.value,
-                      ),
-                      SizedBox(height: 10.h),
-                      leadDiscussion(
-                          (homeController.homeDataModel.value?.chatlist ?? [])
-                              .obs,
-                          (homeController.homeDataModel.value?.latestComments ??
-                                  [])
-                              .obs),
-                      SizedBox(height: 10.h),
-                      leadPinedData(
-                        homeController.homeLeadData.value,
-                      ),
-                      SizedBox(height: 10.h),
-                      HomeEventSummary(),
-                      SizedBox(height: 10.h),
-                    ],
-                  ),
+        child: Obx(() {
+          return Column(
+            children: [
+              if (homeController.anniversaryListData.isNotEmpty)
+                AutoScrollList(homeController.anniversaryListData),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    leadTodaySummary(homeController.homeLeadData.value),
+                    SizedBox(height: 10.h),
+                    leadDailyActivityAndPending(
+                      homeController.homeLeadData.value,
+                    ),
+                    SizedBox(height: 10.h),
+                    leadSummary(homeController.homeLeadData.value),
+                    SizedBox(height: 10.h),
+                    HomeLeads(homeController.homeLeadData.value),
+                    SizedBox(height: 10.h),
+                    leadDiscussion(
+                      (homeController.homeDataModel.value?.chatlist ?? []).obs,
+                      (homeController.homeDataModel.value?.latestComments ?? [])
+                          .obs,
+                    ),
+                    SizedBox(height: 10.h),
+                    leadPinedData(homeController.homeLeadData.value),
+                    SizedBox(height: 10.h),
+                    HomeEventSummary(),
+                    SizedBox(height: 10.h),
+                  ],
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -495,9 +409,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HomeTitle(dailyActivityAndPendingText),
-        SizedBox(
-          height: 4.h,
-        ),
+        SizedBox(height: 4.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -513,8 +425,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     color: whiteColor,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -527,9 +441,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   'assets/image/svg/blue_activity.svg',
                                   height: 32.h,
                                 ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
+                                SizedBox(width: 8.w),
                                 Text(
                                   "Daily\nActivity",
                                   style: heading7,
@@ -546,9 +458,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
-              width: 10.h,
-            ),
+            SizedBox(width: 10.h),
             Expanded(
               child: InkWell(
                 onTap: () async {
@@ -567,8 +477,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     color: whiteColor,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -581,9 +493,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   whatsPendingIcon,
                                   height: 32.h,
                                 ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
+                                SizedBox(width: 8.w),
                                 Text(
                                   "What’s\nPending?",
                                   style: heading7,
@@ -601,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -611,9 +521,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HomeTitle("Daily Activity"),
-        SizedBox(
-          height: 4.h,
-        ),
+        SizedBox(height: 4.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -629,8 +537,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     color: whiteColor,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -639,13 +549,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           children: [
                             Row(
                               children: [
-                                SvgPicture.asset(
-                                  todayIcon,
-                                  height: 32.h,
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
+                                SvgPicture.asset(todayIcon, height: 32.h),
+                                SizedBox(width: 8.w),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -672,9 +577,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
-              width: 10.h,
-            ),
+            SizedBox(width: 10.h),
             Expanded(
               child: InkWell(
                 onTap: () async {
@@ -693,8 +596,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     color: whiteColor,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -707,9 +612,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   whatsPendingIcon,
                                   height: 32.h,
                                 ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
+                                SizedBox(width: 8.w),
                                 Text(
                                   "What’s\nPending?",
                                   style: heading7,
@@ -727,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -737,9 +640,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<void> takePhoto(ImageSource source, String type) async {
     try {
       final pickedImage = await imagePicker.pickImage(
-          source: source,
-          preferredCameraDevice: CameraDevice.front,
-          imageQuality: 30);
+        source: source,
+        preferredCameraDevice: CameraDevice.front,
+        imageQuality: 30,
+      );
       if (pickedImage == null) {
         return;
       }
@@ -764,9 +668,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: whiteColor,
         border: Border.all(color: lightBorderColor),
-        borderRadius: BorderRadius.all(
-          Radius.circular(14.r),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(14.r)),
       ),
       child: Padding(
         padding: EdgeInsets.only(left: 8.w),
@@ -796,17 +698,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             if (value != null) {
               taskController.selectedResponsiblePersonData.value = value;
               homeController.homeDataApi(
-                  taskController.selectedResponsiblePersonData.value?.id);
+                taskController.selectedResponsiblePersonData.value?.id,
+              );
             }
           },
-          dropdownMenuEntries: taskController.responsiblePersonList
-              .map<DropdownMenuEntry<ResponsiblePersonData>>(
-                  (ResponsiblePersonData menu) {
-            return DropdownMenuEntry<ResponsiblePersonData>(
-              value: menu,
-              label: menu.name ?? '',
-            );
-          }).toList(),
+          dropdownMenuEntries:
+              taskController.responsiblePersonList
+                  .map<DropdownMenuEntry<ResponsiblePersonData>>((
+                    ResponsiblePersonData menu,
+                  ) {
+                    return DropdownMenuEntry<ResponsiblePersonData>(
+                      value: menu,
+                      label: menu.name ?? '',
+                    );
+                  })
+                  .toList(),
         ),
       ),
     );
@@ -818,67 +724,68 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeTitle(todaySummaryText),
-          SizedBox(
-            height: 5.h,
-          ),
+          SizedBox(height: 5.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: InkWell(
-                    onTap: () {
-                      Get.to(
-                        () => TaskScreenPage(
-                          taskType: 'New Task',
-                          assignedType: "Assigned to me",
-                          '',
-                          taskController.selectedResponsiblePersonData.value?.id
-                              .toString(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: boxBorderColor),
-                        borderRadius: BorderRadius.all(Radius.circular(18.r)),
-                        color: whiteColor,
+                  onTap: () {
+                    Get.to(
+                      () => TaskScreenPage(
+                        taskType: 'New Task',
+                        assignedType: "Assigned to me",
+                        '',
+                        taskController.selectedResponsiblePersonData.value?.id
+                            .toString(),
                       ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/image/svg/new_task.svg',
-                            height: 34.sp,
-                            width: 34.sp,
-                            fit: BoxFit.contain,
-                          ),
-                          SizedBox(width: 5.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  newTaskText,
-                                  style: heading7,
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: boxBorderColor),
+                      borderRadius: BorderRadius.all(Radius.circular(18.r)),
+                      color: whiteColor,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/image/svg/new_task.svg',
+                          height: 34.sp,
+                          width: 34.sp,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(width: 5.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                newTaskText,
+                                style: heading7,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              Obx(
+                                () => Text(
+                                  "${homeController.homeDataModel.value?.newTask ?? 0}",
+                                  style: heading9,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
-                                Obx(
-                                  () => Text(
-                                    "${homeController.homeDataModel.value?.newTask ?? 0}",
-                                    style: heading9,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               SizedBox(width: 10.w),
               Expanded(
@@ -919,61 +826,58 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeTitle(todaySummaryText),
-          SizedBox(
-            height: 5.h,
-          ),
+          SizedBox(height: 5.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: InkWell(
-                    onTap: () {
-                      Get.to(
-                        () => LeadList(
-                          status: 'new lead',
+                  onTap: () {
+                    Get.to(() => LeadList(status: 'new lead'));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: boxBorderColor),
+                      borderRadius: BorderRadius.all(Radius.circular(18.r)),
+                      color: whiteColor,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          newTaskSvgIcon,
+                          height: 34.sp,
+                          width: 34.sp,
+                          fit: BoxFit.contain,
                         ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: boxBorderColor),
-                        borderRadius: BorderRadius.all(Radius.circular(18.r)),
-                        color: whiteColor,
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            newTaskSvgIcon,
-                            height: 34.sp,
-                            width: 34.sp,
-                            fit: BoxFit.contain,
+                        SizedBox(width: 5.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "New Leads",
+                                style: heading7,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              Text(
+                                "${leadData?.newLeads ?? ""}",
+                                style: heading9,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 5.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "New Leads",
-                                  style: heading7,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  "${leadData?.newLeads ?? ""}",
-                                  style: heading9,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               SizedBox(width: 10.w),
               Expanded(
@@ -995,8 +899,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.all(Radius.circular(18.r)),
                       color: whiteColor,
                     ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
                     child: Row(
                       children: [
                         Image.asset(
@@ -1137,12 +1043,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  Get.to(() => TaskScreenPage(
+                  Get.to(
+                    () => TaskScreenPage(
                       taskType: 'Past Due',
                       assignedType: "Assigned to me",
                       '',
                       taskController.selectedResponsiblePersonData.value?.id
-                          .toString()));
+                          .toString(),
+                    ),
+                  );
                 },
                 child: Obx(
                   () => TaskInfo(
@@ -1310,7 +1219,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             //   ),
             // ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -1324,21 +1233,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            totalTaskBoxColor1,
-            gradientSecondaryBoxColor2,
-          ],
+          colors: [totalTaskBoxColor1, gradientSecondaryBoxColor2],
         ),
       ),
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-      child: Column(
-        children: [],
-      ),
+      child: Column(children: []),
     );
   }
 
   Widget discussion(
-      RxList<Chatlist> homeChatList, RxList<LatestComments> letestComent) {
+    RxList<Chatlist> homeChatList,
+    RxList<LatestComments> letestComent,
+  ) {
     return Container(
       height: 360.h,
       width: double.infinity,
@@ -1353,8 +1259,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               InkWell(
                 onTap: () {
                   bottomBarController.currentPageIndex.value = 1;
-                  Get.to(BottomNavigationBarExample(
-                      from: 'home', payloadData: {}));
+                  Get.to(
+                    BottomNavigationBarExample(from: 'home', payloadData: {}),
+                  );
                 },
                 child: Text(
                   seeAll,
@@ -1379,24 +1286,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: homeController.isGeneralSelected.value
-                            ? selectedTabBarColor
-                            : whiteColor,
+                        color:
+                            homeController.isGeneralSelected.value
+                                ? selectedTabBarColor
+                                : whiteColor,
                         borderRadius: BorderRadius.circular(22.r),
                       ),
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            generalIcon,
-                            height: 26.h,
-                          ),
+                          SvgPicture.asset(generalIcon, height: 26.h),
                           SizedBox(width: 8.w),
-                          Text(
-                            generalText,
-                            style: heading6,
-                          ),
+                          Text(generalText, style: heading6),
                         ],
                       ),
                     ),
@@ -1410,24 +1312,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: homeController.isTaskCommentSelected.value
-                            ? selectedTabBarColor
-                            : whiteColor,
+                        color:
+                            homeController.isTaskCommentSelected.value
+                                ? selectedTabBarColor
+                                : whiteColor,
                         borderRadius: BorderRadius.circular(22.r),
                       ),
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            discussionTaskIcon,
-                            height: 26.h,
-                          ),
+                          SvgPicture.asset(discussionTaskIcon, height: 26.h),
                           SizedBox(width: 8.w),
-                          Text(
-                            taskComents,
-                            style: heading6,
-                          ),
+                          Text(taskComents, style: heading6),
                         ],
                       ),
                     ),
@@ -1453,9 +1350,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              child: homeController.isGeneralSelected.value
-                  ? HomeDiscussionList(homeChatList)
-                  : HomeTaskList(letestComent),
+              child:
+                  homeController.isGeneralSelected.value
+                      ? HomeDiscussionList(homeChatList)
+                      : HomeTaskList(letestComent),
             ),
           ),
         ],
@@ -1464,7 +1362,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget leadDiscussion(
-      RxList<Chatlist> homeChatList, RxList<LatestComments> commentList) {
+    RxList<Chatlist> homeChatList,
+    RxList<LatestComments> commentList,
+  ) {
     return Container(
       height: 360.h,
       width: double.infinity,
@@ -1479,8 +1379,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               InkWell(
                 onTap: () {
                   bottomBarController.currentPageIndex.value = 1;
-                  Get.to(BottomNavigationBarExample(
-                      from: 'home', payloadData: {}));
+                  Get.to(
+                    BottomNavigationBarExample(from: 'home', payloadData: {}),
+                  );
                 },
                 child: Text(
                   seeAll,
@@ -1505,24 +1406,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: homeController.isGeneralSelected.value
-                            ? selectedTabBarColor
-                            : whiteColor,
+                        color:
+                            homeController.isGeneralSelected.value
+                                ? selectedTabBarColor
+                                : whiteColor,
                         borderRadius: BorderRadius.circular(22.r),
                       ),
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            generalIcon,
-                            height: 26.h,
-                          ),
+                          SvgPicture.asset(generalIcon, height: 26.h),
                           SizedBox(width: 8.w),
-                          Text(
-                            generalText,
-                            style: heading6,
-                          ),
+                          Text(generalText, style: heading6),
                         ],
                       ),
                     ),
@@ -1536,24 +1432,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: homeController.isTaskCommentSelected.value
-                            ? selectedTabBarColor
-                            : whiteColor,
+                        color:
+                            homeController.isTaskCommentSelected.value
+                                ? selectedTabBarColor
+                                : whiteColor,
                         borderRadius: BorderRadius.circular(22.r),
                       ),
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            discussionTaskIcon,
-                            height: 26.h,
-                          ),
+                          SvgPicture.asset(discussionTaskIcon, height: 26.h),
                           SizedBox(width: 8.w),
-                          Text(
-                            "Lead Comments",
-                            style: heading6,
-                          ),
+                          Text("Lead Comments", style: heading6),
                         ],
                       ),
                     ),
@@ -1579,9 +1470,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              child: homeController.isGeneralSelected.value
-                  ? HomeDiscussionList(homeChatList)
-                  : HomeTaskList(commentList),
+              child:
+                  homeController.isGeneralSelected.value
+                      ? HomeDiscussionList(homeChatList)
+                      : HomeTaskList(commentList),
             ),
           ),
         ],
@@ -1589,15 +1481,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  RxList<Color> pinnedColorList = <Color>[
-    pinnedColor1,
-    pinnedColor2,
-    pinnedColor3,
-    pinnedColor4,
-    pinnedColor5,
-    pinnedColor6,
-    pinnedColor7
-  ].obs;
+  RxList<Color> pinnedColorList =
+      <Color>[
+        pinnedColor1,
+        pinnedColor2,
+        pinnedColor3,
+        pinnedColor4,
+        pinnedColor5,
+        pinnedColor6,
+        pinnedColor7,
+      ].obs;
   Widget leadPinedData(HomeLeadData? leadData) {
     return Container(
       height: 300.h,
@@ -1637,78 +1530,88 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              child: (leadData?.pinnedNotes ?? []).isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/image/png/pinned 1 (1).png',
-                            height: 80.h,
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text(
-                            'No pinned notes available',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                              color: textColor,
+              child:
+                  (leadData?.pinnedNotes ?? []).isEmpty
+                      ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/image/png/pinned 1 (1).png',
+                              height: 80.h,
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: leadData?.pinnedNotes?.length,
-                      itemBuilder: (context, index) {
-                        var note = leadData?.pinnedNotes?[index];
-                        quill.QuillController? quillController;
-                        return InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom,
-                                ),
-                                child: viewNotesBottomSheet(context, note),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'No pinned notes available',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: textColor,
                               ),
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 6.h, horizontal: 8.w),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8.w, vertical: 5.h),
-                            decoration: BoxDecoration(
-                              color: pinnedColorList[
-                                  index % pinnedColorList.length],
-                              borderRadius: BorderRadius.circular(10.r),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${leadData?.pinnedNotes?[index].title ?? ""}',
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black,
+                          ],
+                        ),
+                      )
+                      : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: leadData?.pinnedNotes?.length,
+                        itemBuilder: (context, index) {
+                          var note = leadData?.pinnedNotes?[index];
+                          quill.QuillController? quillController;
+                          return InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder:
+                                    (context) => Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom:
+                                            MediaQuery.of(
+                                              context,
+                                            ).viewInsets.bottom,
+                                      ),
+                                      child: viewNotesBottomSheet(
+                                        context,
+                                        note,
+                                      ),
+                                    ),
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                vertical: 6.h,
+                                horizontal: 8.w,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 5.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    pinnedColorList[index %
+                                        pinnedColorList.length],
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${leadData?.pinnedNotes?[index].title ?? ""}',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      ),
             ),
           ),
         ],
@@ -1757,92 +1660,99 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ],
               ),
               child: Obx(
-                () => homePinnedNotes.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/image/png/pinned 1 (1).png',
-                              height: 80.h,
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Text(
-                              'No pinned notes available',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: textColor,
+                () =>
+                    homePinnedNotes.isEmpty
+                        ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/image/png/pinned 1 (1).png',
+                                height: 80.h,
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: homePinnedNotes.length,
-                        itemBuilder: (context, index) {
-                          var note = homePinnedNotes[index];
-                          quill.QuillController? quillController;
-                          return InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder: (context) => Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: viewNotesBottomSheet(context, note),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'No pinned notes available',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: textColor,
                                 ),
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 6.h, horizontal: 8.w),
-                              padding: EdgeInsets.all(12.sp),
-                              decoration: BoxDecoration(
-                                color: pinnedColorList[
-                                    index % pinnedColorList.length],
-                                borderRadius: BorderRadius.circular(10.r),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${homePinnedNotes[index].title ?? ''}',
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(height: 4.h),
-                                  if (quillController != null)
-                                    quill.QuillEditor(
-                                      controller: quillController,
-                                      focusNode: FocusNode(),
-                                      scrollController: ScrollController(),
-                                      config: quill.QuillEditorConfig(
-                                        enableInteractiveSelection: false,
-                                        showCursor: false,
-                                        expands: false,
-                                        padding: EdgeInsets.zero,
-                                        scrollable: true,
+                            ],
+                          ),
+                        )
+                        : ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: homePinnedNotes.length,
+                          itemBuilder: (context, index) {
+                            var note = homePinnedNotes[index];
+                            quill.QuillController? quillController;
+                            return InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder:
+                                      (context) => Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              MediaQuery.of(
+                                                context,
+                                              ).viewInsets.bottom,
+                                        ),
+                                        child: viewNotesBottomSheet(
+                                          context,
+                                          note,
+                                        ),
                                       ),
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: 6.h,
+                                  horizontal: 8.w,
+                                ),
+                                padding: EdgeInsets.all(12.sp),
+                                decoration: BoxDecoration(
+                                  color:
+                                      pinnedColorList[index %
+                                          pinnedColorList.length],
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${homePinnedNotes[index].title ?? ''}',
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                ],
+                                    SizedBox(height: 4.h),
+                                    if (quillController != null)
+                                      quill.QuillEditor(
+                                        controller: quillController,
+                                        focusNode: FocusNode(),
+                                        scrollController: ScrollController(),
+                                        config: quill.QuillEditorConfig(
+                                          enableInteractiveSelection: false,
+                                          showCursor: false,
+                                          expands: false,
+                                          padding: EdgeInsets.zero,
+                                          scrollable: true,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        ),
               ),
             ),
           ),
@@ -1851,14 +1761,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget viewNotesBottomSheet(
-    BuildContext context,
-    dynamic homePinnedNot,
-  ) {
+  Widget viewNotesBottomSheet(BuildContext context, dynamic homePinnedNot) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20.r))),
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+      ),
       width: double.infinity,
       height: 400.h,
       padding: const EdgeInsets.all(20),
@@ -1870,15 +1778,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('${homePinnedNot['title']}',
-                    style: changeTextColor(rubikBlack, darkGreyColor)),
+                Text(
+                  '${homePinnedNot['title']}',
+                  style: changeTextColor(rubikBlack, darkGreyColor),
+                ),
               ],
             ),
             SizedBox(height: 3.h),
             SizedBox(
               width: 335.w,
-              child: Text('${homePinnedNot['description']}',
-                  style: changeTextColor(rubikRegular, lightGreyColor)),
+              child: Text(
+                '${homePinnedNot['description']}',
+                style: changeTextColor(rubikRegular, lightGreyColor),
+              ),
             ),
             SizedBox(height: 3.h),
             Row(
@@ -1887,31 +1799,38 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   height: 10.h,
                   width: 10.w,
                   decoration: BoxDecoration(
-                    color: homePinnedNot['tags'].toString() == '1'
-                        ? Colors.blue
-                        : homePinnedNot['tags'].toString() == '2'
+                    color:
+                        homePinnedNot['tags'].toString() == '1'
+                            ? Colors.blue
+                            : homePinnedNot['tags'].toString() == '2'
                             ? Colors.green
                             : homePinnedNot['tags'].toString() == '3'
-                                ? Colors.yellow[800]
-                                : Colors.redAccent,
+                            ? Colors.yellow[800]
+                            : Colors.redAccent,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                 ),
-                SizedBox(
-                  width: 10.w,
-                ),
+                SizedBox(width: 10.w),
                 Text(
-                  '${homePinnedNot['tags'].toString() == '1' ? "Work" : homePinnedNot['tags'].toString() == '2' ? 'Social' : homePinnedNot['tags'].toString() == '3' ? 'Personal' : 'Public'}',
+                  '${homePinnedNot['tags'].toString() == '1'
+                      ? "Work"
+                      : homePinnedNot['tags'].toString() == '2'
+                      ? 'Social'
+                      : homePinnedNot['tags'].toString() == '3'
+                      ? 'Personal'
+                      : 'Public'}',
                   style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: homePinnedNot['tags'].toString() == '1'
-                          ? Colors.blue
-                          : homePinnedNot['tags'].toString() == '2'
-                              ? Colors.green
-                              : homePinnedNot['tags'].toString() == '3'
-                                  ? Colors.yellow[800]
-                                  : Colors.redAccent),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color:
+                        homePinnedNot['tags'].toString() == '1'
+                            ? Colors.blue
+                            : homePinnedNot['tags'].toString() == '2'
+                            ? Colors.green
+                            : homePinnedNot['tags'].toString() == '3'
+                            ? Colors.yellow[800]
+                            : Colors.redAccent,
+                  ),
                 ),
               ],
             ),

@@ -58,8 +58,10 @@ class ChatController extends GetxController {
 
   Future<void> updateGroupIconApi(String? chatId) async {
     isChatLoading.value = true;
-    final result =
-        await ChatService().updateGroupIconApi(chatId, grouppickedFile);
+    final result = await ChatService().updateGroupIconApi(
+      chatId,
+      grouppickedFile,
+    );
     if (result != null) {
       await chatListApi('');
     } else {}
@@ -130,12 +132,23 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> sendMessageApi(String? userId, String text, String? chatId,
-      String? fromPage, File attachment,
-      {required String messageId}) async {
+  Future<void> sendMessageApi(
+    String? userId,
+    String text,
+    String? chatId,
+    String? fromPage,
+    File attachment, {
+    required String messageId,
+  }) async {
     isMessageSending.value = true;
-    final result = await ChatService()
-        .sendMessageApi(userId, text, chatId, fromPage, attachment, messageId);
+    final result = await ChatService().sendMessageApi(
+      userId,
+      text,
+      chatId,
+      fromPage,
+      attachment,
+      messageId,
+    );
     if (result != null) {
       pickedFile.value = File('');
     } else {
@@ -148,16 +161,17 @@ class ChatController extends GetxController {
   Rx<File> selectedFile = File('').obs;
   var selectedMessageId = "".obs;
   var selectedParentMessageSender = "".obs;
-  Future<void> updateMessageData(
-      {required String message,
-      required File attachment,
-      String? name,
-      required String userId,
-      required String chatId,
-      String? fromPage,
-      required String messageId,
-      required String parrent_message_sender_name,
-      required String selectedMessage}) async {
+  Future<void> updateMessageData({
+    required String message,
+    required File attachment,
+    String? name,
+    required String userId,
+    required String chatId,
+    String? fromPage,
+    required String messageId,
+    required String parrent_message_sender_name,
+    required String selectedMessage,
+  }) async {
     DateTime inputDateTime = DateTime.now();
 
     String displayDate = getDisplayDate(inputDateTime);
@@ -193,8 +207,11 @@ class ChatController extends GetxController {
     // Remove Time (only Date part)
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(Duration(days: 1));
-    final inputDate =
-        DateTime(inputDateTime.year, inputDateTime.month, inputDateTime.day);
+    final inputDate = DateTime(
+      inputDateTime.year,
+      inputDateTime.month,
+      inputDateTime.day,
+    );
 
     if (inputDate == today) {
       return 'Today';
@@ -215,8 +232,9 @@ class ChatController extends GetxController {
     final result = await ChatService().addGroupUser(chatId, selectedChatId);
     if (result != null) {
       selectedMemberId.clear();
-      taskController.selectedLongPress.addAll(List<bool>.filled(
-          taskController.responsiblePersonList.length, false));
+      taskController.selectedLongPress.addAll(
+        List<bool>.filled(taskController.responsiblePersonList.length, false),
+      );
       await memberListApi(chatId);
     } else {
       isGroupUserAdding.value = false;
@@ -227,7 +245,9 @@ class ChatController extends GetxController {
   var isGroupCreating = false.obs;
   List<int> selectedPersonList = <int>[];
   Future<void> groupCreateApi(
-      String text, RxList<ResponsiblePersonData> selectedList) async {
+    String text,
+    RxList<ResponsiblePersonData> selectedList,
+  ) async {
     isGroupCreating.value = true;
     selectedPersonList.clear();
     for (var data in selectedList) {
