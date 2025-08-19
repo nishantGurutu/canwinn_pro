@@ -192,8 +192,8 @@ class LocalNotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+      // uiLocalNotificationDateInterpretation:
+      //     UILocalNotificationDateInterpretation.absoluteTime,
       // uiLscalNotificationDateInterpretation.absoluteTime,
       payload: jsonEncode({'page': s, 'taskId': notificationId}),
     );
@@ -210,6 +210,8 @@ class LocalNotificationService {
 
   // Discussion
   // kiej8d99 payload data in push service {"sendername":"IT Administrator","senderid":"97","productid":"1","type":"leadchat","title":"Discussion & Comments","message":"New comment on lead \"Kallo\""}
+
+  // kiej8d99 payload data in push service {"sendername":"Nishant Kumar Schotest","senderid":"262","productid":"5505","type":"task","title":"Task Assigned","message":"Task, Navigation test has been assigned to you."}
 
   static void handleNavigation(String? payload) {
     if (payload == null) return;

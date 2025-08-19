@@ -50,15 +50,17 @@ class LeadService {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-        logPrint: (object) {
-          print('Add lead log print data value ${object}');
-        },
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+          logPrint: (object) {
+            print('Add lead log print data value ${object}');
+          },
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'name': leadName.toString(),
@@ -192,7 +194,9 @@ class LeadService {
   }
 
   Future<bool> assignFollowup(
-      RxList<ResponsiblePersonData> personid, int? followupId) async {
+    RxList<ResponsiblePersonData> personid,
+    int? followupId,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -242,12 +246,14 @@ class LeadService {
       print("Token wiuye873 38798e3s79j9used: $id");
       var userId = StorageHelper.getId();
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
       var leadSelectedtype = "";
       if (leadTypeValue == "Created by me") {
         leadSelectedtype = 'created_by_me';
@@ -265,12 +271,12 @@ class LeadService {
                 (leadSelectedtype.isEmpty || leadSelectedtype == ""))
             ? '${ApiConstant.baseUrl + ApiConstant.leads_list}?user_id=$userId'
             : ((id != null || id != "null") &&
-                    (leadSelectedtype.isEmpty || leadSelectedtype == ""))
-                ? "$url&status=$id"
-                : ((id == null || id == "null") &&
-                        (leadSelectedtype.isNotEmpty || leadSelectedtype != ""))
-                    ? "$url&type=$leadSelectedtype"
-                    : "$url&status=$id&type=$leadSelectedtype",
+                (leadSelectedtype.isEmpty || leadSelectedtype == ""))
+            ? "$url&status=$id"
+            : ((id == null || id == "null") &&
+                (leadSelectedtype.isNotEmpty || leadSelectedtype != ""))
+            ? "$url&type=$leadSelectedtype"
+            : "$url&status=$id&type=$leadSelectedtype",
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -292,12 +298,14 @@ class LeadService {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.added_document_lead_list,
       );
@@ -323,12 +331,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.source_list,
@@ -355,12 +365,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.source_list,
@@ -387,12 +399,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.lead_status_list,
@@ -419,16 +433,16 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
-      final Map<String, dynamic> formDataMap = {
-        'lead_id': leadId.toString(),
-      };
+      final Map<String, dynamic> formDataMap = {'lead_id': leadId.toString()};
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
@@ -458,20 +472,22 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
-      final Map<String, dynamic> formDataMap = {
-        'user_id': userId.toString(),
-      };
+      final Map<String, dynamic> formDataMap = {'user_id': userId.toString()};
       final formData = FormData.fromMap(formDataMap);
 
-      final response = await _dio
-          .post(ApiConstant.baseUrl + ApiConstant.home_lead, data: formData);
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.home_lead,
+        data: formData,
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return HomeLeadsModel.fromJson(response.data);
@@ -494,20 +510,24 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'user_id': homeAdminUserId.toString(),
       };
       final formData = FormData.fromMap(formDataMap);
 
-      final response = await _dio
-          .post(ApiConstant.baseUrl + ApiConstant.home_lead, data: formData);
+      final response = await _dio.post(
+        ApiConstant.baseUrl + ApiConstant.home_lead,
+        data: formData,
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return HomeLeadsModel.fromJson(response.data);
@@ -530,12 +550,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'user_id': homeAdminUserId.toString(),
@@ -543,8 +565,9 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-          ApiConstant.baseUrl + ApiConstant.get_user_report,
-          data: formData);
+        ApiConstant.baseUrl + ApiConstant.get_user_report,
+        data: formData,
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return UserReportModel.fromJson(response.data);
@@ -567,12 +590,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.delete(
         ApiConstant.baseUrl + ApiConstant.delete_lead,
@@ -599,12 +624,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {};
       if (leadId != 0) {
@@ -632,19 +659,22 @@ class LeadService {
     }
   }
 
-  Future<FollowUpsTypeListModel?> followUpsTypeListApi(
-      {required leadId}) async {
+  Future<FollowUpsTypeListModel?> followUpsTypeListApi({
+    required leadId,
+  }) async {
     try {
       final token = StorageHelper.getToken();
       print("Token 6twfs66w7 used: $leadId");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.followup_type_list}?lead_id=$leadId",
@@ -671,12 +701,14 @@ class LeadService {
       print("Token 8273y8ey9832 used: $leadId");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.followup_type_list,
@@ -703,12 +735,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.visit_type_list,
@@ -729,19 +763,27 @@ class LeadService {
     }
   }
 
-  Future<bool> addFollowUpsApi(followupsType, String followupsDate,
-      String followupsTime, String note, int? status, int? leadId) async {
+  Future<bool> addFollowUpsApi(
+    followupsType,
+    String followupsDate,
+    String followupsTime,
+    String note,
+    int? status,
+    int? leadId,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'follow_up_type': followupsType.toString(),
@@ -782,39 +824,42 @@ class LeadService {
   }
 
   Future<bool> updateLeadDetails(
-      String name,
-      String companyName,
-      String phone,
-      String email,
-      String designation,
-      SourceListData? source,
-      String noofProject,
-      String regionalOffice,
-      LeadStatusData? status,
-      String refDetails,
-      String type,
-      String descriptin,
-      String siteAddress,
-      String officeAddress,
-      String city,
-      File visitFile,
-      File pickedFile,
-      leadId,
-      int? followupType,
-      String followupDate,
-      String followupTime,
-      String reminder) async {
+    String name,
+    String companyName,
+    String phone,
+    String email,
+    String designation,
+    SourceListData? source,
+    String noofProject,
+    String regionalOffice,
+    LeadStatusData? status,
+    String refDetails,
+    String type,
+    String descriptin,
+    String siteAddress,
+    String officeAddress,
+    String city,
+    File visitFile,
+    File pickedFile,
+    leadId,
+    int? followupType,
+    String followupDate,
+    String followupTime,
+    String reminder,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'name': name.toString(),
@@ -894,24 +939,27 @@ class LeadService {
   }
 
   Future<bool> addVisitApi(
-      String nameController,
-      String phoneController,
-      String emailController,
-      String descriptionController,
-      String addressController,
-      int? id,
-      leadId) async {
+    String nameController,
+    String phoneController,
+    String emailController,
+    String descriptionController,
+    String addressController,
+    int? id,
+    leadId,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'visit_type': id.toString(),
@@ -954,12 +1002,14 @@ class LeadService {
       print("Token used: $token");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.products_list,
@@ -998,14 +1048,16 @@ class LeadService {
       _dio.options.contentType = Headers.jsonContentType;
 
       _dio.interceptors.clear();
-      _dio.interceptors.add(LogInterceptor(
-        request: true,
-        requestBody: true,
-        requestHeader: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          request: true,
+          requestBody: true,
+          requestHeader: true,
+          responseHeader: true,
+          responseBody: true,
+          error: true,
+        ),
+      );
 
       final List<Map<String, dynamic>> itemList =
           items.map((item) => item.toJson()).toList();
@@ -1048,10 +1100,7 @@ class LeadService {
     }
   }
 
-  Future<bool> statusUpdate(
-    leadId,
-    int? status,
-  ) async {
+  Future<bool> statusUpdate(leadId, int? status) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -1059,10 +1108,7 @@ class LeadService {
 
       final response = await _dio.post(
         ApiConstant.baseUrl + ApiConstant.change_lead_status,
-        data: {
-          "status": status,
-          "id": leadId,
-        },
+        data: {"status": status, "id": leadId},
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1078,19 +1124,26 @@ class LeadService {
     }
   }
 
-  Future<bool> addContact(leadId, String name, String phone, String email,
-      String designation) async {
+  Future<bool> addContact(
+    leadId,
+    String name,
+    String phone,
+    String email,
+    String designation,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         "lead_id": leadId,
@@ -1135,12 +1188,14 @@ class LeadService {
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         "lead_id": leadId,
@@ -1188,16 +1243,16 @@ class LeadService {
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
       print('j9e38e 3ue83 ${documentId}');
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
-      final Map<String, dynamic> formDataMap = {
-        "document_id": documentId,
-      };
+      final Map<String, dynamic> formDataMap = {"document_id": documentId};
 
       final formData = FormData.fromMap(formDataMap);
 
@@ -1228,12 +1283,14 @@ class LeadService {
       print("Tokenasf6 quotation skdo used: $leadId");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.list_quotation}?lead_id=$leadId",
@@ -1259,12 +1316,14 @@ class LeadService {
       final token = StorageHelper.getToken();
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         "lead_id": leadId,
@@ -1274,8 +1333,9 @@ class LeadService {
       final formData = FormData.fromMap(formDataMap);
 
       final response = await _dio.post(
-          ApiConstant.baseUrl + ApiConstant.get_lead_document,
-          data: formData);
+        ApiConstant.baseUrl + ApiConstant.get_lead_document,
+        data: formData,
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return SessionListModel.fromJson(response.data);
@@ -1297,12 +1357,14 @@ class LeadService {
       final token = StorageHelper.getToken();
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         ApiConstant.baseUrl + ApiConstant.get_document_types,
@@ -1328,17 +1390,17 @@ class LeadService {
       final token = StorageHelper.getToken();
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       print("iu4r84 4r948ur98 49849 ${leadId}");
-      final Map<String, dynamic> formMapData = {
-        "lead_id": leadId,
-      };
+      final Map<String, dynamic> formMapData = {"lead_id": leadId};
       final formData = FormData.fromMap(formMapData);
 
       final response = await _dio.post(
@@ -1367,12 +1429,14 @@ class LeadService {
       print("Tokenasf6 used: $leadId");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.lead_contacts_list}?lead_id=$leadId",
@@ -1394,19 +1458,26 @@ class LeadService {
   }
 
   // Notes api
-  Future<bool> addLeadNote(String text, String jsonEncode, String value,
-      int leadId, Rx<File> leadpickedFile) async {
+  Future<bool> addLeadNote(
+    String text,
+    String jsonEncode,
+    String value,
+    int leadId,
+    Rx<File> leadpickedFile,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         "lead_id": leadId,
@@ -1450,12 +1521,14 @@ class LeadService {
       print("Tokenasf6 used: $leadId");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.lead_notes_list}?lead_id=$leadId",
@@ -1481,11 +1554,7 @@ class LeadService {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
 
-      final formData = FormData.fromMap(
-        {
-          'notes_id': id,
-        },
-      );
+      final formData = FormData.fromMap({'notes_id': id});
 
       final response = await _dio.post(
         ApiConstant.baseUrl + ApiConstant.lead_notes_important,
@@ -1554,12 +1623,14 @@ class LeadService {
       print("Tokenasf6 used: $leadId");
 
       _dio.options.headers["Authorization"] = "Bearer $token";
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.lead_discussion_list}?lead_id=$leadId",
@@ -1589,9 +1660,7 @@ class LeadService {
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.download_quotation}/$id",
-        options: Options(
-          responseType: ResponseType.bytes,
-        ),
+        options: Options(responseType: ResponseType.bytes),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1609,8 +1678,12 @@ class LeadService {
     }
   }
 
-  Future<bool> addPeople(personid, int? leadId, String from,
-      RxList<ResponsiblePersonData> selectdePersonIds) async {
+  Future<bool> addPeople(
+    personid,
+    int? leadId,
+    String from,
+    RxList<ResponsiblePersonData> selectdePersonIds,
+  ) async {
     String ids = selectdePersonIds
         .map((e) => e.id.toString())
         .toList()
@@ -1623,16 +1696,16 @@ class LeadService {
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
-      final Map<String, dynamic> formDataMap = {
-        'id': leadId.toString(),
-      };
+      final Map<String, dynamic> formDataMap = {'id': leadId.toString()};
 
       if (from == "add-people") {
         formDataMap['people_added'] = ids;
@@ -1685,8 +1758,14 @@ class LeadService {
     }
   }
 
-  Future<bool> changeVisitStatusApi(File image, String latitude,
-      String longitude, int? id, int status, String remark) async {
+  Future<bool> changeVisitStatusApi(
+    File image,
+    String latitude,
+    String longitude,
+    int? id,
+    int status,
+    String remark,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -1697,12 +1776,14 @@ class LeadService {
       String formattedDate = DateFormat('dd/MM/yyyy').format(dt);
       print(formattedDate);
       print(formattedTime);
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'id': id.toString(),
@@ -1771,24 +1852,27 @@ class LeadService {
   }
 
   Future<bool> addFollowup(
-      String followupsType,
-      String followupsDate,
-      String followupsTime,
-      String note,
-      int? status,
-      dynamic leadId,
-      String reminder) async {
+    String followupsType,
+    String followupsDate,
+    String followupsTime,
+    String note,
+    int? status,
+    dynamic leadId,
+    String reminder,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'follow_up_type': followupsType,
@@ -1827,18 +1911,23 @@ class LeadService {
   }
 
   Future<bool> markitingManagerApproving(
-      leadId, String remark, int status) async {
+    leadId,
+    String remark,
+    int status,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       print("euh8 398ue93 e983ue93 ${leadId}");
       print("euh8 398ue93 e983ue93 ${remark}");
@@ -1873,18 +1962,24 @@ class LeadService {
   }
 
   Future<bool> branchHeadManagerApproving(
-      leadId, String remark, int status, File attachment) async {
+    leadId,
+    String remark,
+    int status,
+    File attachment,
+  ) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
       _dio.options.contentType = 'multipart/form-data';
 
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'lead_id': leadId,

@@ -54,202 +54,203 @@ class LeadController extends GetxController {
   RxString selectedQuotation = "".obs;
   RxString selectedAddressType = "".obs;
 
-  var countryList = <String>[
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi',
-    'Cabo Verde',
-    'Cambodia',
-    'Cameroon',
-    'Canada',
-    'Central African Republic',
-    'Chad',
-    'Chile',
-    'China',
-    'Colombia',
-    'Comoros',
-    'Congo (Brazzaville)',
-    'Congo (Kinshasa)',
-    'Costa Rica',
-    'Croatia',
-    'Cuba',
-    'Cyprus',
-    'Czech Republic',
-    'Denmark',
-    'Djibouti',
-    'Dominica',
-    'Dominican Republic',
-    'Ecuador',
-    'Egypt',
-    'El Salvador',
-    'Equatorial Guinea',
-    'Eritrea',
-    'Estonia',
-    'Eswatini',
-    'Ethiopia',
-    'Fiji',
-    'Finland',
-    'France',
-    'Gabon',
-    'Gambia',
-    'Georgia',
-    'Germany',
-    'Ghana',
-    'Greece',
-    'Grenada',
-    'Guatemala',
-    'Guinea',
-    'Guinea-Bissau',
-    'Guyana',
-    'Haiti',
-    'Honduras',
-    'Hungary',
-    'Iceland',
-    'India',
-    'Indonesia',
-    'Iran',
-    'Iraq',
-    'Ireland',
-    'Israel',
-    'Italy',
-    'Jamaica',
-    'Japan',
-    'Jordan',
-    'Kazakhstan',
-    'Kenya',
-    'Kiribati',
-    'Kuwait',
-    'Kyrgyzstan',
-    'Laos',
-    'Latvia',
-    'Lebanon',
-    'Lesotho',
-    'Liberia',
-    'Libya',
-    'Liechtenstein',
-    'Lithuania',
-    'Luxembourg',
-    'Madagascar',
-    'Malawi',
-    'Malaysia',
-    'Maldives',
-    'Mali',
-    'Malta',
-    'Marshall Islands',
-    'Mauritania',
-    'Mauritius',
-    'Mexico',
-    'Micronesia',
-    'Moldova',
-    'Monaco',
-    'Mongolia',
-    'Montenegro',
-    'Morocco',
-    'Mozambique',
-    'Myanmar',
-    'Namibia',
-    'Nauru',
-    'Nepal',
-    'Netherlands',
-    'New Zealand',
-    'Nicaragua',
-    'Niger',
-    'Nigeria',
-    'North Korea',
-    'North Macedonia',
-    'Norway',
-    'Oman',
-    'Pakistan',
-    'Palau',
-    'Panama',
-    'Papua New Guinea',
-    'Paraguay',
-    'Peru',
-    'Philippines',
-    'Poland',
-    'Portugal',
-    'Qatar',
-    'Romania',
-    'Russia',
-    'Rwanda',
-    'Saint Kitts and Nevis',
-    'Saint Lucia',
-    'Saint Vincent and the Grenadines',
-    'Samoa',
-    'San Marino',
-    'Sao Tome and Principe',
-    'Saudi Arabia',
-    'Senegal',
-    'Serbia',
-    'Seychelles',
-    'Sierra Leone',
-    'Singapore',
-    'Slovakia',
-    'Slovenia',
-    'Solomon Islands',
-    'Somalia',
-    'South Africa',
-    'South Korea',
-    'South Sudan',
-    'Spain',
-    'Sri Lanka',
-    'Sudan',
-    'Suriname',
-    'Sweden',
-    'Switzerland',
-    'Syria',
-    'Taiwan',
-    'Tajikistan',
-    'Tanzania',
-    'Thailand',
-    'Timor-Leste',
-    'Togo',
-    'Tonga',
-    'Trinidad and Tobago',
-    'Tunisia',
-    'Turkey',
-    'Turkmenistan',
-    'Tuvalu',
-    'Uganda',
-    'Ukraine',
-    'United Arab Emirates',
-    'United Kingdom',
-    'United States',
-    'Uruguay',
-    'Uzbekistan',
-    'Vanuatu',
-    'Vatican City',
-    'Venezuela',
-    'Vietnam',
-    'Yemen',
-    'Zambia',
-    'Zimbabwe',
-  ].obs;
+  var countryList =
+      <String>[
+        'Afghanistan',
+        'Albania',
+        'Algeria',
+        'Andorra',
+        'Angola',
+        'Antigua and Barbuda',
+        'Argentina',
+        'Armenia',
+        'Australia',
+        'Austria',
+        'Azerbaijan',
+        'Bahamas',
+        'Bahrain',
+        'Bangladesh',
+        'Barbados',
+        'Belarus',
+        'Belgium',
+        'Belize',
+        'Benin',
+        'Bhutan',
+        'Bolivia',
+        'Bosnia and Herzegovina',
+        'Botswana',
+        'Brazil',
+        'Brunei',
+        'Bulgaria',
+        'Burkina Faso',
+        'Burundi',
+        'Cabo Verde',
+        'Cambodia',
+        'Cameroon',
+        'Canada',
+        'Central African Republic',
+        'Chad',
+        'Chile',
+        'China',
+        'Colombia',
+        'Comoros',
+        'Congo (Brazzaville)',
+        'Congo (Kinshasa)',
+        'Costa Rica',
+        'Croatia',
+        'Cuba',
+        'Cyprus',
+        'Czech Republic',
+        'Denmark',
+        'Djibouti',
+        'Dominica',
+        'Dominican Republic',
+        'Ecuador',
+        'Egypt',
+        'El Salvador',
+        'Equatorial Guinea',
+        'Eritrea',
+        'Estonia',
+        'Eswatini',
+        'Ethiopia',
+        'Fiji',
+        'Finland',
+        'France',
+        'Gabon',
+        'Gambia',
+        'Georgia',
+        'Germany',
+        'Ghana',
+        'Greece',
+        'Grenada',
+        'Guatemala',
+        'Guinea',
+        'Guinea-Bissau',
+        'Guyana',
+        'Haiti',
+        'Honduras',
+        'Hungary',
+        'Iceland',
+        'India',
+        'Indonesia',
+        'Iran',
+        'Iraq',
+        'Ireland',
+        'Israel',
+        'Italy',
+        'Jamaica',
+        'Japan',
+        'Jordan',
+        'Kazakhstan',
+        'Kenya',
+        'Kiribati',
+        'Kuwait',
+        'Kyrgyzstan',
+        'Laos',
+        'Latvia',
+        'Lebanon',
+        'Lesotho',
+        'Liberia',
+        'Libya',
+        'Liechtenstein',
+        'Lithuania',
+        'Luxembourg',
+        'Madagascar',
+        'Malawi',
+        'Malaysia',
+        'Maldives',
+        'Mali',
+        'Malta',
+        'Marshall Islands',
+        'Mauritania',
+        'Mauritius',
+        'Mexico',
+        'Micronesia',
+        'Moldova',
+        'Monaco',
+        'Mongolia',
+        'Montenegro',
+        'Morocco',
+        'Mozambique',
+        'Myanmar',
+        'Namibia',
+        'Nauru',
+        'Nepal',
+        'Netherlands',
+        'New Zealand',
+        'Nicaragua',
+        'Niger',
+        'Nigeria',
+        'North Korea',
+        'North Macedonia',
+        'Norway',
+        'Oman',
+        'Pakistan',
+        'Palau',
+        'Panama',
+        'Papua New Guinea',
+        'Paraguay',
+        'Peru',
+        'Philippines',
+        'Poland',
+        'Portugal',
+        'Qatar',
+        'Romania',
+        'Russia',
+        'Rwanda',
+        'Saint Kitts and Nevis',
+        'Saint Lucia',
+        'Saint Vincent and the Grenadines',
+        'Samoa',
+        'San Marino',
+        'Sao Tome and Principe',
+        'Saudi Arabia',
+        'Senegal',
+        'Serbia',
+        'Seychelles',
+        'Sierra Leone',
+        'Singapore',
+        'Slovakia',
+        'Slovenia',
+        'Solomon Islands',
+        'Somalia',
+        'South Africa',
+        'South Korea',
+        'South Sudan',
+        'Spain',
+        'Sri Lanka',
+        'Sudan',
+        'Suriname',
+        'Sweden',
+        'Switzerland',
+        'Syria',
+        'Taiwan',
+        'Tajikistan',
+        'Tanzania',
+        'Thailand',
+        'Timor-Leste',
+        'Togo',
+        'Tonga',
+        'Trinidad and Tobago',
+        'Tunisia',
+        'Turkey',
+        'Turkmenistan',
+        'Tuvalu',
+        'Uganda',
+        'Ukraine',
+        'United Arab Emirates',
+        'United Kingdom',
+        'United States',
+        'Uruguay',
+        'Uzbekistan',
+        'Vanuatu',
+        'Vatican City',
+        'Venezuela',
+        'Vietnam',
+        'Yemen',
+        'Zambia',
+        'Zimbabwe',
+      ].obs;
   RxString selectedCountry = ''.obs;
   var pickedImage = ''.obs;
   var pickedFile = File('').obs;
@@ -287,32 +288,34 @@ class LeadController extends GetxController {
   }
 
   var isLeadUpdating = false.obs;
-  Future<void> updateLeads(
-      {required String leadName,
-      required String companyName,
-      required String phone,
-      required String email,
-      required String source,
-      required String industry,
-      required String status,
-      required String tag,
-      required String description,
-      required String address,
-      required id}) async {
+  Future<void> updateLeads({
+    required String leadName,
+    required String companyName,
+    required String phone,
+    required String email,
+    required String source,
+    required String industry,
+    required String status,
+    required String tag,
+    required String description,
+    required String address,
+    required id,
+  }) async {
     isLeadUpdating.value = true;
     final result = await LeadService().updateLeadsApi(
-        leadName: leadName,
-        companyName: companyName,
-        phone: phone,
-        email: email,
-        source: source,
-        industry: industry,
-        status: status,
-        tag: tag,
-        description: description,
-        address: address,
-        pickedFile: pickedFile,
-        id: id);
+      leadName: leadName,
+      companyName: companyName,
+      phone: phone,
+      email: email,
+      source: source,
+      industry: industry,
+      status: status,
+      tag: tag,
+      description: description,
+      address: address,
+      pickedFile: pickedFile,
+      id: id,
+    );
     if (result) {
       Get.back();
       await leadsList(selectedLeadStatusData.value?.id, selectedLeadType.value);
@@ -321,9 +324,10 @@ class LeadController extends GetxController {
   }
 
   var isFollowUp = false.obs;
-  Future<void> assignFollowup(
-      {required RxList<ResponsiblePersonData> personid,
-      int? followupId}) async {
+  Future<void> assignFollowup({
+    required RxList<ResponsiblePersonData> personid,
+    int? followupId,
+  }) async {
     isLeadUpdating.value = true;
     final result = await LeadService().assignFollowup(personid, followupId);
     if (result) {
@@ -362,8 +366,9 @@ class LeadController extends GetxController {
             );
             for (var matchingLead in matchingLeads) {
               final leadId = matchingLead['id'] as int;
-              final deleteResult =
-                  await DatabaseHelper.instance.deleteLead(leadId);
+              final deleteResult = await DatabaseHelper.instance.deleteLead(
+                leadId,
+              );
               if (deleteResult > 0) {
                 CustomToast().showCustomToast(
                   'Offline lead with phone ${onlineLead.phone} removed.',
@@ -376,7 +381,8 @@ class LeadController extends GetxController {
                   'Failed to delete offline lead with phone ${onlineLead.phone} and name ${onlineLead.leadName}.',
                 );
                 debugPrint(
-                    "Failed to delete offline lead with phone ${onlineLead.phone} and name ${onlineLead.leadName}.");
+                  "Failed to delete offline lead with phone ${onlineLead.phone} and name ${onlineLead.leadName}.",
+                );
               }
             }
           }
@@ -506,7 +512,8 @@ class LeadController extends GetxController {
     leadsListData.refresh();
 
     selectedStatusPerLead.addAll(
-        List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
+      List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()),
+    );
     for (int i = 0; i < leadsListData.length; i++) {
       for (int j = 0; j < leadStatusData.length; j++) {
         if (leadsListData[i].status == leadStatusData[j].id) {
@@ -521,8 +528,9 @@ class LeadController extends GetxController {
 
   RxList<LeadStatusData> leadStatusData = <LeadStatusData>[].obs;
   Rx<LeadStatusData?> selectedLeadStatusData = Rx<LeadStatusData?>(null);
-  Rx<LeadStatusData?> selectedLeadStatusDropdawnData =
-      Rx<LeadStatusData?>(null);
+  Rx<LeadStatusData?> selectedLeadStatusDropdawnData = Rx<LeadStatusData?>(
+    null,
+  );
   Rx<LeadStatusData?> addselectedLeadStatusData = Rx<LeadStatusData?>(null);
   Rx<LeadStatusData?> selectedLeadStatusUpdateData = Rx<LeadStatusData?>(null);
   Future<void> statusListApi({required status}) async {
@@ -546,7 +554,9 @@ class LeadController extends GetxController {
         }
         print('lead selected id from home ${selectedLeadStatusData.value?.id}');
         await leadsList(
-            selectedLeadStatusData.value?.id, selectedLeadType.value);
+          selectedLeadStatusData.value?.id,
+          selectedLeadType.value,
+        );
       }
       isStatusListLoading.value = false;
     } else {}
@@ -580,8 +590,9 @@ class LeadController extends GetxController {
   var followupStatusList = ["Done", "Not Done", "Reshedule"].obs;
   RxList<String> selectedStatusTypeList = <String>[].obs;
   RxList<FollowUpsListData> followUpsListData = <FollowUpsListData>[].obs;
-  Rx<FollowUpsListData?> selectedFollowUpsListData =
-      Rx<FollowUpsListData?>(null);
+  Rx<FollowUpsListData?> selectedFollowUpsListData = Rx<FollowUpsListData?>(
+    null,
+  );
   var isFollowupsListLoading = false.obs;
   Future<void> followUpsListApi({required dynamic leadId}) async {
     isFollowupsListLoading.value = true;
@@ -589,8 +600,9 @@ class LeadController extends GetxController {
     if (result != null) {
       followUpsListData.assignAll(result.data!);
       selectedStatusTypeList.clear();
-      selectedStatusTypeList
-          .addAll(List<String>.filled(followUpsListData.length, ''));
+      selectedStatusTypeList.addAll(
+        List<String>.filled(followUpsListData.length, ''),
+      );
       refresh();
       for (var dt in followUpsListData) {
         if (dt.followUpDate != null && dt.followUpTime != null) {
@@ -605,8 +617,10 @@ class LeadController extends GetxController {
             }
             if (dateTime == null) {
               try {
-                DateFormat inputFormat =
-                    DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                DateFormat inputFormat = DateFormat(
+                  "dd-MM-yyyy h:mm a",
+                  'en_US',
+                );
                 dateTime = inputFormat.parse(dateInput.toUpperCase());
               } catch (e) {
                 print("Error parsing with uppercase AM/PM: $e");
@@ -666,8 +680,9 @@ class LeadController extends GetxController {
   }
 
   RxList<FollowUpsTypeData> followUpsTypeListData = <FollowUpsTypeData>[].obs;
-  Rx<FollowUpsTypeData?> selectedFollowUpsTypeListData =
-      Rx<FollowUpsTypeData?>(null);
+  Rx<FollowUpsTypeData?> selectedFollowUpsTypeListData = Rx<FollowUpsTypeData?>(
+    null,
+  );
   var isFollowupsTypeListLoading = false.obs;
   Future<void> followUpsTypeListApi({required leadId}) async {
     isFollowupsTypeListLoading.value = true;
@@ -702,13 +717,14 @@ class LeadController extends GetxController {
   }
 
   var isFollowUpsAdding = false.obs;
-  Future<void> addFollowUps(
-      {required followupsType,
-      required String followupsDate,
-      required String followupsTime,
-      required String note,
-      int? status,
-      int? leadId}) async {
+  Future<void> addFollowUps({
+    required followupsType,
+    required String followupsDate,
+    required String followupsTime,
+    required String note,
+    int? status,
+    int? leadId,
+  }) async {
     isFollowUpsAdding.value = true;
     final result = await LeadService().addFollowUpsApi(
       followupsType,
@@ -726,27 +742,28 @@ class LeadController extends GetxController {
   }
 
   var isDetailsUpdating = false.obs;
-  Future<void> updateDetails(
-      {required String name,
-      required String companyName,
-      required String phone,
-      required String email,
-      required String designation,
-      SourceListData? source,
-      required String noofProject,
-      required String regionalOffice,
-      LeadStatusData? status,
-      required String refDetails,
-      required String type,
-      required String descriptin,
-      required String siteAddress,
-      required String officeAddress,
-      required String city,
-      required leadId,
-      int? followupType,
-      required String followupDate,
-      required String followupTime,
-      required String reminder}) async {
+  Future<void> updateDetails({
+    required String name,
+    required String companyName,
+    required String phone,
+    required String email,
+    required String designation,
+    SourceListData? source,
+    required String noofProject,
+    required String regionalOffice,
+    LeadStatusData? status,
+    required String refDetails,
+    required String type,
+    required String descriptin,
+    required String siteAddress,
+    required String officeAddress,
+    required String city,
+    required leadId,
+    int? followupType,
+    required String followupDate,
+    required String followupTime,
+    required String reminder,
+  }) async {
     isDetailsUpdating.value = true;
     final result = await LeadService().updateLeadDetails(
       name,
@@ -779,23 +796,25 @@ class LeadController extends GetxController {
   }
 
   var isVisitAdding = false.obs;
-  Future<void> addVisit(
-      {required String nameController,
-      required String phoneController,
-      required String emailController,
-      required String descriptionController,
-      required String addressController,
-      VisitTypeData? visitType,
-      required leadId}) async {
+  Future<void> addVisit({
+    required String nameController,
+    required String phoneController,
+    required String emailController,
+    required String descriptionController,
+    required String addressController,
+    VisitTypeData? visitType,
+    required leadId,
+  }) async {
     isVisitAdding.value = true;
     final result = await LeadService().addVisitApi(
-        nameController,
-        phoneController,
-        emailController,
-        descriptionController,
-        addressController,
-        visitType?.id,
-        leadId);
+      nameController,
+      phoneController,
+      emailController,
+      descriptionController,
+      addressController,
+      visitType?.id,
+      leadId,
+    );
     if (result != null) {
       Get.back();
       await listVisitApi(leadId: leadId);
@@ -830,8 +849,17 @@ class LeadController extends GetxController {
     int? revisedId,
   }) async {
     isQuotationAdding.value = true;
-    final result = await LeadService().addQuotationApi(leadId, transaction,
-        valid, type, rate, advance, security, items, revisedId);
+    final result = await LeadService().addQuotationApi(
+      leadId,
+      transaction,
+      valid,
+      type,
+      rate,
+      advance,
+      security,
+      items,
+      revisedId,
+    );
     if (result != null) {
       Get.back();
       await quotationListApi(leadId: leadId);
@@ -864,8 +892,13 @@ class LeadController extends GetxController {
     required String designation,
   }) async {
     isStatusUpdating.value = true;
-    final result =
-        await LeadService().addContact(leadId, name, phone, email, designation);
+    final result = await LeadService().addContact(
+      leadId,
+      name,
+      phone,
+      email,
+      designation,
+    );
     if (result != null) {
       Get.back();
       selectedLeadStatusUpdateData.value = null;
@@ -877,11 +910,12 @@ class LeadController extends GetxController {
   RxList<int> documentIdList = <int>[].obs;
   RxList<File> documentUplodedList = <File>[].obs;
   var isDocumentUploading = false.obs;
-  Future<void> documentUploading(
-      {required RxList<int> documentId,
-      required RxList<File> ducument,
-      required leadId,
-      required quotationId}) async {
+  Future<void> documentUploading({
+    required RxList<int> documentId,
+    required RxList<File> ducument,
+    required leadId,
+    required quotationId,
+  }) async {
     isDocumentUploading.value = true;
     final result = await LeadService().documentUploading(
       documentId,
@@ -944,10 +978,12 @@ class LeadController extends GetxController {
         isDocumentTypeLoading.value = false;
         isDocumentTypeLoading.refresh();
         documentIdList.addAll(List.filled(documentTypeListData.length, 0));
-        documentUplodedList
-            .addAll(List.filled(documentTypeListData.length, File('')));
-        isDocumentCheckBoxSelected
-            .addAll(List.filled(documentTypeListData.length, false));
+        documentUplodedList.addAll(
+          List.filled(documentTypeListData.length, File('')),
+        );
+        isDocumentCheckBoxSelected.addAll(
+          List.filled(documentTypeListData.length, false),
+        );
       }
     } else {}
     isDocumentTypeLoading.value = false;
@@ -956,8 +992,10 @@ class LeadController extends GetxController {
   RxList<UploadedDocumentData> leadDocumentListData =
       <UploadedDocumentData>[].obs;
   var isDocumentListLoading = false.obs;
-  Future<void> leadDocumentList(
-      {required int leadId, required String from}) async {
+  Future<void> leadDocumentList({
+    required int leadId,
+    required String from,
+  }) async {
     if (from == 'initstate') {
       isDocumentListLoading.value = true;
     }
@@ -968,8 +1006,9 @@ class LeadController extends GetxController {
         leadDocumentListData.assignAll(result.data!);
         isDocumentListLoading.value = false;
         isDocumentListLoading.refresh();
-        isDocumentCheckBoxSelected
-            .addAll(List.filled(leadDocumentListData.length, false));
+        isDocumentCheckBoxSelected.addAll(
+          List.filled(leadDocumentListData.length, false),
+        );
         for (int i = 0; i < leadDocumentListData.length; i++) {
           if (leadDocumentListData[i].status == 1) {
             isDocumentCheckBoxSelected[i] = true;
@@ -1015,7 +1054,9 @@ class LeadController extends GetxController {
 
       if (result != null) {
         await leadsList(
-            selectedLeadStatusData.value?.id, selectedLeadType.value);
+          selectedLeadStatusData.value?.id,
+          selectedLeadType.value,
+        );
         debugPrint("Offline lead ${lead.leadName} synced successfully.");
       } else {
         debugPrint("Failed to sync offline lead: ${lead.leadName}");
@@ -1029,10 +1070,19 @@ class LeadController extends GetxController {
   Rx<File> leadpickedFile = File('').obs;
   var isLeadNoteAdding = false.obs;
   Future<void> addLeadNote(
-      String text, String jsonEncode, String value, int leadId) async {
+    String text,
+    String jsonEncode,
+    String value,
+    int leadId,
+  ) async {
     isLeadNoteAdding.value = true;
-    final result = await LeadService()
-        .addLeadNote(text, jsonEncode, value, leadId, leadpickedFile);
+    final result = await LeadService().addLeadNote(
+      text,
+      jsonEncode,
+      value,
+      leadId,
+      leadpickedFile,
+    );
     if (result != null) {
       Get.back();
       await leadNoteList(leadId: leadId);
@@ -1067,8 +1117,11 @@ class LeadController extends GetxController {
   var messagePicPath = ''.obs;
   Future<void> leadDiscussionSend(String text, leadId, File attachment) async {
     isDiscussionSending.value = true;
-    final result =
-        await LeadService().sendLeadDiscussion(text, leadId, attachment);
+    final result = await LeadService().sendLeadDiscussion(
+      text,
+      leadId,
+      attachment,
+    );
     if (result != null) {}
     isDiscussionSending.value = false;
   }
@@ -1080,8 +1133,9 @@ class LeadController extends GetxController {
     required File attachment,
     required leadId,
   }) async {
-    String formattedDateTime =
-        DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now());
+    String formattedDateTime = DateFormat(
+      'dd-MM-yyyy hh:mm a',
+    ).format(DateTime.now());
     print('iuws83 dateTime $formattedDateTime');
 
     final newMessage = LeadDiscussionData(
@@ -1107,7 +1161,8 @@ class LeadController extends GetxController {
     if (result != null) {
       leadDiscussionListData.assignAll(result.data!);
       print(
-          "lead discussion list data length ${leadDiscussionListData.length}");
+        "lead discussion list data length ${leadDiscussionListData.length}",
+      );
     } else {}
     isDiscussionLoading.value = false;
   }
@@ -1121,11 +1176,14 @@ class LeadController extends GetxController {
     String rate = rateControlelr.text;
 
     if (productId.toString().isNotEmpty && qty.isNotEmpty && rate.isNotEmpty) {
-      items.add(QuotationItem(
+      items.add(
+        QuotationItem(
           productName: productName.toString(),
           productId: productId ?? 0,
           quantity: qty,
-          rate: rate));
+          rate: rate,
+        ),
+      );
       Get.back();
       clearFormFields();
     }
@@ -1175,11 +1233,18 @@ class LeadController extends GetxController {
   }
 
   var isPeopleAdding = false.obs;
-  Future<void> addPeople(
-      {required personid, int? leadId, required String from}) async {
+  Future<void> addPeople({
+    required personid,
+    int? leadId,
+    required String from,
+  }) async {
     isPeopleAdding.value = true;
-    final result = await LeadService()
-        .addPeople(personid, leadId, from, selectdePersonIds);
+    final result = await LeadService().addPeople(
+      personid,
+      leadId,
+      from,
+      selectdePersonIds,
+    );
     if (result != null) {
       Get.back();
     } else {}
@@ -1210,28 +1275,37 @@ class LeadController extends GetxController {
   RxList<String> visitStatustype = <String>['Start', "Done", "Reshedule"].obs;
   RxString selectedVisitStatus = "".obs;
   var isLeadVisitStatusChanging = false.obs;
-  Future<void> changeVisitStatus(
-      {required File image,
-      required String latitude,
-      required String longitude,
-      int? id,
-      required int status,
-      required String remark,
-      required leadid,
-      required String selectedValue,
-      required List<AssignedToUsers> mergedPeopleList}) async {
+  Future<void> changeVisitStatus({
+    required File image,
+    required String latitude,
+    required String longitude,
+    int? id,
+    required int status,
+    required String remark,
+    required leadid,
+    required String selectedValue,
+    required List<AssignedToUsers> mergedPeopleList,
+  }) async {
     isLeadVisitStatusChanging.value = true;
-    final result = await LeadService()
-        .changeVisitStatusApi(image, latitude, longitude, id, status, remark);
+    final result = await LeadService().changeVisitStatusApi(
+      image,
+      latitude,
+      longitude,
+      id,
+      status,
+      remark,
+    );
     if (result != null) {
       Get.back();
-      await leadContactList(
-        leadId: leadid ?? 0,
-      );
+      await leadContactList(leadId: leadid ?? 0);
       await fetchLeadMeetings(leadId: leadid ?? 0, visitid: id);
       if (selectedValue == "Reshedule") {
-        Get.to(() =>
-            MeetingScreens(leadId: leadid, mergedPeopleList: mergedPeopleList));
+        Get.to(
+          () => MeetingScreens(
+            leadId: leadid,
+            mergedPeopleList: mergedPeopleList,
+          ),
+        );
       }
     } else {}
     isLeadVisitStatusChanging.value = false;
@@ -1280,8 +1354,10 @@ class LeadController extends GetxController {
 
   final Dio _dio = Dio();
 
-  Future<void> fetchLeadMeetings(
-      {required dynamic leadId, int? visitid}) async {
+  Future<void> fetchLeadMeetings({
+    required dynamic leadId,
+    int? visitid,
+  }) async {
     isLoading.value = true;
 
     try {
@@ -1301,8 +1377,9 @@ class LeadController extends GetxController {
         meetingList.assignAll(parsed.data!.reversed.toList());
 
         selectedStatusTypeList.clear();
-        selectedStatusTypeList
-            .addAll(List<String>.filled(meetingList.length, ''));
+        selectedStatusTypeList.addAll(
+          List<String>.filled(meetingList.length, ''),
+        );
 
         for (var dt in meetingList) {
           if (dt.meetingDate != null && dt.meetingTime != null) {
@@ -1312,8 +1389,10 @@ class LeadController extends GetxController {
 
               DateTime? dateTime;
               try {
-                DateFormat inputFormat =
-                    DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                DateFormat inputFormat = DateFormat(
+                  "dd-MM-yyyy h:mm a",
+                  'en_US',
+                );
                 dateTime = inputFormat.parse(dateInput.toLowerCase());
               } catch (e) {
                 print("Error parsing with lowercase AM/PM: $e");
@@ -1321,16 +1400,20 @@ class LeadController extends GetxController {
 
               if (dateTime == null) {
                 try {
-                  DateFormat inputFormat =
-                      DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                  DateFormat inputFormat = DateFormat(
+                    "dd-MM-yyyy h:mm a",
+                    'en_US',
+                  );
                   dateTime = inputFormat.parse(dateInput.toUpperCase());
                 } catch (e) {
                   print("Error parsing with uppercase AM/PM: $e");
                 }
               }
               if (dateTime != null) {
-                DateFormat outputFormat =
-                    DateFormat("dd-MM-yyyy HH:mm", 'en_US');
+                DateFormat outputFormat = DateFormat(
+                  "dd-MM-yyyy HH:mm",
+                  'en_US',
+                );
                 print('Formatted Date Input: 65ew54 meeting $dateTime');
                 String dateOutput = outputFormat.format(dateTime);
                 List<String> splitDt = dateOutput.split(" ");
@@ -1441,8 +1524,15 @@ class LeadController extends GetxController {
     required String reminder,
   }) async {
     isPeopleAdding.value = true;
-    final result = await LeadService().addFollowup(followupsType, followupsDate,
-        followupsTime, note, status, leadId, reminder);
+    final result = await LeadService().addFollowup(
+      followupsType,
+      followupsDate,
+      followupsTime,
+      note,
+      status,
+      leadId,
+      reminder,
+    );
     if (result != null) {
       Get.back();
       Get.back();
@@ -1452,11 +1542,17 @@ class LeadController extends GetxController {
   }
 
   var isMarketingManagerApproving = false.obs;
-  Future<void> approveMarketingManager(
-      {required leadId, required String remark, required int status}) async {
+  Future<void> approveMarketingManager({
+    required leadId,
+    required String remark,
+    required int status,
+  }) async {
     isMarketingManagerApproving.value = true;
-    final result =
-        await LeadService().markitingManagerApproving(leadId, remark, status);
+    final result = await LeadService().markitingManagerApproving(
+      leadId,
+      remark,
+      status,
+    );
     if (result != null) {
       Get.back();
       // Get.back();
@@ -1466,14 +1562,19 @@ class LeadController extends GetxController {
   }
 
   var isBranchHeadManagerApproving = false.obs;
-  Future<void> branchheadManagerApproving(
-      {required leadId,
-      required String remark,
-      required int status,
-      required File attachment}) async {
+  Future<void> branchheadManagerApproving({
+    required leadId,
+    required String remark,
+    required int status,
+    required File attachment,
+  }) async {
     isBranchHeadManagerApproving.value = true;
-    final result = await LeadService()
-        .branchHeadManagerApproving(leadId, remark, status, attachment);
+    final result = await LeadService().branchHeadManagerApproving(
+      leadId,
+      remark,
+      status,
+      attachment,
+    );
     if (result != null) {
       Get.back();
       // Get.back();
@@ -1482,9 +1583,6 @@ class LeadController extends GetxController {
     isBranchHeadManagerApproving.value = false;
   }
 
-  RxList<String> timeList = <String>[
-    "Minutes",
-    "Hours",
-  ].obs;
+  RxList<String> timeList = <String>["Minutes", "Hours"].obs;
   RxString? selectedTime = "".obs;
 }

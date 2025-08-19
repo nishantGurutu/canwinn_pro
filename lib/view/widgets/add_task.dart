@@ -37,9 +37,14 @@ class AddTask extends StatefulWidget {
   final RxList<ResponsiblePersonData> responsiblePersonList;
   final int? id;
   final String? description;
-  const AddTask(this.priorityList, this.allProjectDataList,
-      this.responsiblePersonList, this.id, this.description,
-      {super.key});
+  const AddTask(
+    this.priorityList,
+    this.allProjectDataList,
+    this.responsiblePersonList,
+    this.id,
+    this.description, {
+    super.key,
+  });
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -99,9 +104,9 @@ class _AddTaskState extends State<AddTask> {
         String? filePath = result.files.single.path;
 
         if (filePath == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: File path is null')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: File path is null')));
           return;
         }
 
@@ -109,553 +114,630 @@ class _AddTaskState extends State<AddTask> {
         taskController.pickedFile.value = File(file.path);
         taskController.profilePicPath.value = file.path.toString();
         print(
-            'selected file path from device is ${taskController.pickedFile.value}');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No file selected.')),
+          'selected file path from device is ${taskController.pickedFile.value}',
         );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('No file selected.')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading file: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error uploading file: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => isLoading.value == true
-          ? Center(child: CircularProgressIndicator())
-          : Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+      () =>
+          isLoading.value == true
+              ? Center(child: CircularProgressIndicator())
+              : Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.r),
-                    topRight: Radius.circular(20.r)),
-              ),
-              width: double.infinity,
-              height: 680.h,
-              child: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                createNewTask,
-                                style: TextStyle(
+                    topRight: Radius.circular(20.r),
+                  ),
+                ),
+                width: double.infinity,
+                height: 680.h,
+                child: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  createNewTask,
+                                  style: TextStyle(
                                     fontSize: 20.sp,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          TaskCustomTextField(
-                            controller: taskNameController,
-                            textCapitalization: TextCapitalization.sentences,
-                            data: taskName,
-                            hintText: taskName,
-                            labelText: taskName,
-                            index: 0,
-                            focusedIndexNotifier: focusedIndexNotifier,
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          TaskCustomTextField(
-                            controller: remarkController,
-                            textCapitalization: TextCapitalization.sentences,
-                            data: enterRemark,
-                            hintText: enterRemark,
-                            labelText: enterRemark,
-                            index: 1,
-                            maxLine: 3,
-                            focusedIndexNotifier: focusedIndexNotifier,
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 161.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      selectProject,
-                                      style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15.h),
+                            TaskCustomTextField(
+                              controller: taskNameController,
+                              textCapitalization: TextCapitalization.sentences,
+                              data: taskName,
+                              hintText: taskName,
+                              labelText: taskName,
+                              index: 0,
+                              focusedIndexNotifier: focusedIndexNotifier,
+                            ),
+                            SizedBox(height: 10.h),
+                            TaskCustomTextField(
+                              controller: remarkController,
+                              textCapitalization: TextCapitalization.sentences,
+                              data: enterRemark,
+                              hintText: enterRemark,
+                              labelText: enterRemark,
+                              index: 1,
+                              maxLine: 3,
+                              focusedIndexNotifier: focusedIndexNotifier,
+                            ),
+                            SizedBox(height: 15.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 161.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        selectProject,
+                                        style: TextStyle(
                                           fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 3.w,
-                                    ),
-                                    Obx(
-                                      () => DropdownButtonHideUnderline(
-                                        child: DropdownButton2<CreatedByMe>(
-                                          isExpanded: true,
-                                          items: taskController
-                                              .allProjectDataList
-                                              .map((CreatedByMe item) {
-                                            return DropdownMenuItem<
-                                                CreatedByMe>(
-                                              value: item,
-                                              child: Text(
-                                                item.name ?? "",
-                                                style: TextStyle(
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                  fontFamily: 'Roboto',
-                                                  color: darkGreyColor,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16.sp,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3.w),
+                                      Obx(
+                                        () => DropdownButtonHideUnderline(
+                                          child: DropdownButton2<CreatedByMe>(
+                                            isExpanded: true,
+                                            items:
+                                                taskController
+                                                    .allProjectDataList
+                                                    .map((CreatedByMe item) {
+                                                      return DropdownMenuItem<
+                                                        CreatedByMe
+                                                      >(
+                                                        value: item,
+                                                        child: Text(
+                                                          item.name ?? "",
+                                                          style: TextStyle(
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .none,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            color:
+                                                                darkGreyColor,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 16.sp,
+                                                          ),
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                        ),
+                                                      );
+                                                    })
+                                                    .toList(),
+                                            value:
+                                                taskController
+                                                    .selectedAllProjectListData
+                                                    .value,
+                                            onChanged: (CreatedByMe? value) {
+                                              taskController
+                                                  .selectedAllProjectListData
+                                                  .value = value;
+                                              print(
+                                                "selected project id  in add task ${taskController.selectedAllProjectListData.value?.id}",
+                                              );
+                                            },
+                                            buttonStyleData: ButtonStyleData(
+                                              height: 47.h,
+                                              width: double.infinity,
+                                              padding: EdgeInsets.only(
+                                                left: 14.w,
+                                                right: 14.w,
                                               ),
-                                            );
-                                          }).toList(),
-                                          value: taskController
-                                              .selectedAllProjectListData.value,
-                                          onChanged: (CreatedByMe? value) {
-                                            taskController
-                                                .selectedAllProjectListData
-                                                .value = value;
-                                            print(
-                                                "selected project id  in add task ${taskController.selectedAllProjectListData.value?.id}");
-                                          },
-                                          buttonStyleData: ButtonStyleData(
-                                            height: 47.h,
-                                            width: double.infinity,
-                                            padding: EdgeInsets.only(
-                                                left: 14.w, right: 14.w),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(14.r),
-                                              border: Border.all(
-                                                  color: lightBorderColor),
-                                              color: whiteColor,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(14.r),
+                                                border: Border.all(
+                                                  color: lightBorderColor,
+                                                ),
+                                                color: whiteColor,
+                                              ),
                                             ),
-                                          ),
-                                          hint: Text(
-                                            'Select Project'.tr,
-                                            style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Roboto',
-                                              color: darkGreyColor,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.sp,
+                                            hint: Text(
+                                              'Select Project'.tr,
+                                              style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                fontFamily: 'Roboto',
+                                                color: darkGreyColor,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16.sp,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          iconStyleData: IconStyleData(
-                                            icon: Image.asset(
-                                              'assets/images/png/Vector 3.png',
-                                              color: secondaryColor,
-                                              height: 8.h,
+                                            iconStyleData: IconStyleData(
+                                              icon: Image.asset(
+                                                'assets/images/png/Vector 3.png',
+                                                color: secondaryColor,
+                                                height: 8.h,
+                                              ),
+                                              iconSize: 14.sp,
+                                              iconEnabledColor: lightGreyColor,
+                                              iconDisabledColor: lightGreyColor,
                                             ),
-                                            iconSize: 14.sp,
-                                            iconEnabledColor: lightGreyColor,
-                                            iconDisabledColor: lightGreyColor,
-                                          ),
-                                          dropdownStyleData: DropdownStyleData(
-                                            maxHeight: 200.h,
-                                            width: 161.w,
-                                            decoration: BoxDecoration(
+                                            dropdownStyleData: DropdownStyleData(
+                                              maxHeight: 200.h,
+                                              width: 161.w,
+                                              decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(14.r),
                                                 color: whiteColor,
                                                 border: Border.all(
-                                                    color: lightBorderColor)),
-                                            offset: const Offset(0, 0),
-                                            scrollbarTheme: ScrollbarThemeData(
-                                              radius: Radius.circular(40.r),
-                                              thickness: WidgetStateProperty
-                                                  .all<double>(6),
-                                              thumbVisibility:
-                                                  WidgetStateProperty.all<bool>(
-                                                      true),
+                                                  color: lightBorderColor,
+                                                ),
+                                              ),
+                                              offset: const Offset(0, 0),
+                                              scrollbarTheme:
+                                                  ScrollbarThemeData(
+                                                    radius: Radius.circular(
+                                                      40.r,
+                                                    ),
+                                                    thickness:
+                                                        WidgetStateProperty.all<
+                                                          double
+                                                        >(6),
+                                                    thumbVisibility:
+                                                        WidgetStateProperty.all<
+                                                          bool
+                                                        >(true),
+                                                  ),
                                             ),
-                                          ),
-                                          menuItemStyleData: MenuItemStyleData(
-                                            height: 40.h,
-                                            padding: EdgeInsets.only(
-                                                left: 14.w, right: 14.w),
+                                            menuItemStyleData:
+                                                MenuItemStyleData(
+                                                  height: 40.h,
+                                                  padding: EdgeInsets.only(
+                                                    left: 14.w,
+                                                    right: 14.w,
+                                                  ),
+                                                ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 161.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      selectDepartment,
-                                      style: TextStyle(
+                                SizedBox(
+                                  width: 161.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        selectDepartment,
+                                        style: TextStyle(
                                           fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 3.w,
-                                    ),
-                                    SizedBox(
-                                        width: 161.w, child: DepartmentList()),
-                                  ],
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3.w),
+                                      SizedBox(
+                                        width: 161.w,
+                                        child: DepartmentList(),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom),
-                                      child: AddContactIntask(),
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      color: chatColor,
-                                      size: 20.sp,
-                                    ),
-                                    SizedBox(
-                                      width: 3.w,
-                                    ),
-                                    Text(
-                                      'Add Contact',
-                                      style:
-                                          changeTextColor(heading7, chatColor),
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder:
+                                          (context) => Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).viewInsets.bottom,
+                                            ),
+                                            child: AddContactIntask(),
+                                          ),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: chatColor,
+                                        size: 20.sp,
+                                      ),
+                                      SizedBox(width: 3.w),
+                                      Text(
+                                        'Add Contact',
+                                        style: changeTextColor(
+                                          heading7,
+                                          chatColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 15.w,
-                              ),
-                              Obx(
-                                () => taskController
-                                        .addTaskContactList.isNotEmpty
-                                    ? InkWell(
-                                        onTap: () {
-                                          Get.to(() => TaskContactList(
-                                              taskController
-                                                  .addTaskContactList));
-                                        },
-                                        child: SizedBox(
-                                          width: 100.w,
-                                          height: 30.h,
-                                          child: Stack(
-                                            children: List.generate(
-                                              taskController.addTaskContactList
-                                                          .length >
-                                                      3
-                                                  ? 4
-                                                  : taskController
-                                                      .addTaskContactList
-                                                      .length,
-                                              (index) {
-                                                if (index < 3) {
-                                                  final contact = taskController
-                                                          .addTaskContactList[
-                                                      index];
-                                                  final firstChar =
-                                                      contact.name!.isNotEmpty
-                                                          ? contact.name![0]
-                                                          : '?';
-                                                  final leftPosition =
-                                                      index == 0
-                                                          ? 0.0
-                                                          : (index == 1
-                                                              ? 22.w
-                                                              : 44.w);
-                                                  final bgColor = index == 0
-                                                      ? redColor
-                                                      : index == 1
-                                                          ? blueColor
-                                                          : secondaryColor;
+                                SizedBox(width: 15.w),
+                                Obx(
+                                  () =>
+                                      taskController
+                                              .addTaskContactList
+                                              .isNotEmpty
+                                          ? InkWell(
+                                            onTap: () {
+                                              Get.to(
+                                                () => TaskContactList(
+                                                  taskController
+                                                      .addTaskContactList,
+                                                ),
+                                              );
+                                            },
+                                            child: SizedBox(
+                                              width: 100.w,
+                                              height: 30.h,
+                                              child: Stack(
+                                                children: List.generate(
+                                                  taskController
+                                                              .addTaskContactList
+                                                              .length >
+                                                          3
+                                                      ? 4
+                                                      : taskController
+                                                          .addTaskContactList
+                                                          .length,
+                                                  (index) {
+                                                    if (index < 3) {
+                                                      final contact =
+                                                          taskController
+                                                              .addTaskContactList[index];
+                                                      final firstChar =
+                                                          contact
+                                                                  .name!
+                                                                  .isNotEmpty
+                                                              ? contact.name![0]
+                                                              : '?';
+                                                      final leftPosition =
+                                                          index == 0
+                                                              ? 0.0
+                                                              : (index == 1
+                                                                  ? 22.w
+                                                                  : 44.w);
+                                                      final bgColor =
+                                                          index == 0
+                                                              ? redColor
+                                                              : index == 1
+                                                              ? blueColor
+                                                              : secondaryColor;
 
-                                                  return Positioned(
-                                                    left: leftPosition,
-                                                    child: Container(
-                                                      height: 30.h,
-                                                      width: 30.w,
-                                                      decoration: BoxDecoration(
-                                                        color: bgColor,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    15.r)),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          firstChar,
-                                                          style:
-                                                              changeTextColor(
-                                                                  heading9,
-                                                                  whiteColor),
+                                                      return Positioned(
+                                                        left: leftPosition,
+                                                        child: Container(
+                                                          height: 30.h,
+                                                          width: 30.w,
+                                                          decoration: BoxDecoration(
+                                                            color: bgColor,
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                  Radius.circular(
+                                                                    15.r,
+                                                                  ),
+                                                                ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              firstChar,
+                                                              style:
+                                                                  changeTextColor(
+                                                                    heading9,
+                                                                    whiteColor,
+                                                                  ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  final extraCount =
-                                                      taskController
+                                                      );
+                                                    } else {
+                                                      final extraCount =
+                                                          taskController
                                                               .addTaskContactList
                                                               .length -
                                                           3;
-                                                  return Positioned(
-                                                    left: 65.w,
-                                                    child: Container(
-                                                      height: 30.h,
-                                                      width: 30.w,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            primaryButtonColor,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    15.r)),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          '+$extraCount',
-                                                          style:
-                                                              changeTextColor(
-                                                                  heading9,
-                                                                  whiteColor),
+                                                      return Positioned(
+                                                        left: 65.w,
+                                                        child: Container(
+                                                          height: 30.h,
+                                                          width: 30.w,
+                                                          decoration: BoxDecoration(
+                                                            color:
+                                                                primaryButtonColor,
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                  Radius.circular(
+                                                                    15.r,
+                                                                  ),
+                                                                ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              '+$extraCount',
+                                                              style:
+                                                                  changeTextColor(
+                                                                    heading9,
+                                                                    whiteColor,
+                                                                  ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : SizedBox(),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Obx(
-                            () => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        takePhoto();
-                                      },
-                                      child: Container(
-                                        width: 115.w,
-                                        decoration: BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(7.r)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w,
-                                              vertical: 11.2.h),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Attachment",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: whiteColor,
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              SizedBox(width: 5.w),
-                                              Image.asset(
-                                                'assets/images/png/attachment_rounded.png',
-                                                color: whiteColor,
-                                                height: 16.sp,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Badge(
-                                      backgroundColor: secondaryPrimaryColor,
-                                      isLabelVisible:
-                                          taskController.assignedUserId.isEmpty
-                                              ? false
-                                              : true,
-                                      label: Text(
-                                        "${taskController.assignedUserId.length}",
-                                        style: TextStyle(
-                                            color: textColor, fontSize: 16),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () {
-                                          showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            context: context,
-                                            builder: (context) => Padding(
-                                              padding: EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom),
-                                              child: ToAssignUserList(''),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 100.w,
-                                          decoration: BoxDecoration(
-                                            color: secondaryColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(7.r)),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.w,
-                                                vertical: 11.2.h),
-                                            child: Center(
-                                              child: Text(
-                                                "Assigned To",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: whiteColor,
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w500,
+                                                      );
+                                                    }
+                                                  },
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Badge(
-                                      backgroundColor: secondaryPrimaryColor,
-                                      isLabelVisible:
-                                          taskController.reviewerUserId.isEmpty
-                                              ? false
-                                              : true,
-                                      label: Text(
-                                        "${taskController.reviewerUserId.length}",
-                                        style: TextStyle(
-                                            color: textColor, fontSize: 16),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () {
-                                          showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            builder: (context) => Padding(
-                                              padding: EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom),
-                                              child: ResponsiblePersonList(
-                                                'reviewer',
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 95.w,
-                                          decoration: BoxDecoration(
-                                            color: blueColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(7.r)),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8.w,
-                                                vertical: 11.2.h),
-                                            child: Center(
-                                              child: Text(
-                                                "Reviewer",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: whiteColor,
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                          )
+                                          : SizedBox(),
                                 ),
-                                SizedBox(height: 10.h),
-                                taskController.profilePicPath.value.isEmpty
-                                    ? SizedBox()
-                                    : InkWell(
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            Obx(
+                              () => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
                                         onTap: () {
-                                          openFile(File(taskController
-                                              .profilePicPath.value));
+                                          takePhoto();
+                                        },
+                                        child: Container(
+                                          width: 115.w,
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(7.r),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 11.2.h,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "Attachment",
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5.w),
+                                                Image.asset(
+                                                  'assets/images/png/attachment_rounded.png',
+                                                  color: whiteColor,
+                                                  height: 16.sp,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Badge(
+                                        backgroundColor: secondaryPrimaryColor,
+                                        isLabelVisible:
+                                            taskController
+                                                    .assignedUserId
+                                                    .isEmpty
+                                                ? false
+                                                : true,
+                                        label: Text(
+                                          "${taskController.assignedUserId.length}",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder:
+                                                  (context) => Padding(
+                                                    padding: EdgeInsets.only(
+                                                      bottom:
+                                                          MediaQuery.of(
+                                                            context,
+                                                          ).viewInsets.bottom,
+                                                    ),
+                                                    child: ToAssignUserList(''),
+                                                  ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 100.w,
+                                            decoration: BoxDecoration(
+                                              color: secondaryColor,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(7.r),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 11.2.h,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "Assigned To",
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Badge(
+                                        backgroundColor: secondaryPrimaryColor,
+                                        isLabelVisible:
+                                            taskController
+                                                    .reviewerUserId
+                                                    .isEmpty
+                                                ? false
+                                                : true,
+                                        label: Text(
+                                          "${taskController.reviewerUserId.length}",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              builder:
+                                                  (context) => Padding(
+                                                    padding: EdgeInsets.only(
+                                                      bottom:
+                                                          MediaQuery.of(
+                                                            context,
+                                                          ).viewInsets.bottom,
+                                                    ),
+                                                    child:
+                                                        ResponsiblePersonList(
+                                                          'reviewer',
+                                                        ),
+                                                  ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 95.w,
+                                            decoration: BoxDecoration(
+                                              color: blueColor,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(7.r),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w,
+                                                vertical: 11.2.h,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "Reviewer",
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  taskController.profilePicPath.value.isEmpty
+                                      ? SizedBox()
+                                      : InkWell(
+                                        onTap: () {
+                                          openFile(
+                                            File(
+                                              taskController
+                                                  .profilePicPath
+                                                  .value,
+                                            ),
+                                          );
                                         },
                                         child: Container(
                                           height: 40.h,
                                           width: 60.w,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: lightGreyColor),
+                                              color: lightGreyColor,
+                                            ),
                                             borderRadius: BorderRadius.all(
-                                                Radius.circular(8.r)),
+                                              Radius.circular(8.r),
+                                            ),
                                           ),
                                           child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
                                             child: Image.file(
-                                              File(taskController
-                                                  .profilePicPath.value),
+                                              File(
+                                                taskController
+                                                    .profilePicPath
+                                                    .value,
+                                              ),
                                               fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
+                                              errorBuilder: (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) {
                                                 return Center(
                                                   child: Text(
                                                     "Invalid Image",
                                                     style: TextStyle(
-                                                        color: Colors.red),
+                                                      color: Colors.red,
+                                                    ),
                                                   ),
                                                 );
                                               },
@@ -663,341 +745,362 @@ class _AddTaskState extends State<AddTask> {
                                           ),
                                         ),
                                       ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 161.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${startDate} *",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3.w),
+                                      CustomCalender(
+                                        hintText: dateFormate,
+                                        controller: startDateController,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 161.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${dueDate} *",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3.w),
+                                      CustomCalender(
+                                        hintText: dateFormate,
+                                        controller: dueDateController,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 161.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${startDate} *",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 3.w,
-                                    ),
-                                    CustomCalender(
-                                      hintText: dateFormate,
-                                      controller: startDateController,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 161.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${dueDate} *",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 3.w,
-                                    ),
-                                    CustomCalender(
-                                      hintText: dateFormate,
-                                      controller: dueDateController,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 161.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${dueTime} *",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 3.w,
-                                    ),
-                                    CustomTimer(
-                                      hintText: "",
-                                      controller: dueTimeController,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 161.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${selectPriority} *",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 3.w,
-                                    ),
-                                    CustomDropdown<PriorityData>(
-                                      items: priorityController.priorityList,
-                                      itemLabel: (item) =>
-                                          item.priorityName ?? "",
-                                      selectedValue: null,
-                                      onChanged: (value) {
-                                        priorityController
-                                            .selectedPriorityData.value = value;
-                                      },
-                                      hintText: selectPriority,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 160.w,
-                                child: CustomTextField(
-                                  controller: timeTextEditingController,
-                                  textCapitalization: TextCapitalization.none,
-                                  hintText: alarmReminder,
-                                  keyboardType: TextInputType.number,
-                                  prefixIcon: Icon(Icons.lock_clock),
-                                  data: alarmReminder,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 160.w,
-                                child: Obx(
-                                  () => DropdownButtonHideUnderline(
-                                    child: DropdownButton2<String>(
-                                      isExpanded: true,
-                                      items: homeController.timeList
-                                          .map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Roboto',
-                                              color: darkGreyColor,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        );
-                                      }).toList(),
-                                      value: homeController
-                                              .selectedTime!.value.isEmpty
-                                          ? null
-                                          : homeController.selectedTime?.value,
-                                      onChanged: (String? value) {
-                                        homeController.selectedTime?.value =
-                                            value ?? '';
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 50.h,
-                                        width: double.infinity,
-                                        padding: EdgeInsets.only(
-                                            left: 14.w, right: 14.w),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14.r),
-                                          border: Border.all(
-                                              color: lightBorderColor),
-                                          color: whiteColor,
-                                        ),
-                                      ),
-                                      hint: Text(
-                                        'Select type',
+                            SizedBox(height: 15.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 161.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${dueTime} *",
                                         style: TextStyle(
-                                          decoration: TextDecoration.none,
-                                          fontFamily: 'Roboto',
-                                          color: darkGreyColor,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      iconStyleData: IconStyleData(
-                                        icon: Image.asset(
-                                          'assets/images/png/Vector 3.png',
-                                          color: secondaryColor,
-                                          height: 8.h,
+                                      SizedBox(height: 3.w),
+                                      CustomTimer(
+                                        hintText: "",
+                                        controller: dueTimeController,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 161.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${selectPriority} *",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: lightGreyColor,
-                                        iconDisabledColor: lightGreyColor,
                                       ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200.h,
-                                        width: 160.w,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14.r),
+                                      SizedBox(height: 3.w),
+                                      CustomDropdown<PriorityData>(
+                                        items: priorityController.priorityList,
+                                        itemLabel:
+                                            (item) => item.priorityName ?? "",
+                                        selectedValue: null,
+                                        onChanged: (value) {
+                                          priorityController
+                                              .selectedPriorityData
+                                              .value = value;
+                                        },
+                                        hintText: selectPriority,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 160.w,
+                                  child: CustomTextField(
+                                    controller: timeTextEditingController,
+                                    textCapitalization: TextCapitalization.none,
+                                    hintText: alarmReminder,
+                                    keyboardType: TextInputType.number,
+                                    prefixIcon: Icon(Icons.lock_clock),
+                                    data: alarmReminder,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 160.w,
+                                  child: Obx(
+                                    () => DropdownButtonHideUnderline(
+                                      child: DropdownButton2<String>(
+                                        isExpanded: true,
+                                        items:
+                                            homeController.timeList.map((
+                                              String item,
+                                            ) {
+                                              return DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: TextStyle(
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                    fontFamily: 'Roboto',
+                                                    color: darkGreyColor,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              );
+                                            }).toList(),
+                                        value:
+                                            homeController
+                                                    .selectedTime!
+                                                    .value
+                                                    .isEmpty
+                                                ? null
+                                                : homeController
+                                                    .selectedTime
+                                                    ?.value,
+                                        onChanged: (String? value) {
+                                          homeController.selectedTime?.value =
+                                              value ?? '';
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 50.h,
+                                          width: double.infinity,
+                                          padding: EdgeInsets.only(
+                                            left: 14.w,
+                                            right: 14.w,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              14.r,
+                                            ),
+                                            border: Border.all(
+                                              color: lightBorderColor,
+                                            ),
+                                            color: whiteColor,
+                                          ),
+                                        ),
+                                        hint: Text(
+                                          'Select type',
+                                          style: TextStyle(
+                                            decoration: TextDecoration.none,
+                                            fontFamily: 'Roboto',
+                                            color: darkGreyColor,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        iconStyleData: IconStyleData(
+                                          icon: Image.asset(
+                                            'assets/images/png/Vector 3.png',
+                                            color: secondaryColor,
+                                            height: 8.h,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: lightGreyColor,
+                                          iconDisabledColor: lightGreyColor,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200.h,
+                                          width: 160.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              14.r,
+                                            ),
                                             color: whiteColor,
                                             border: Border.all(
-                                                color: lightBorderColor)),
-                                        offset: const Offset(0, 0),
-                                        scrollbarTheme: ScrollbarThemeData(
-                                          radius: const Radius.circular(40),
-                                          thickness:
-                                              WidgetStateProperty.all<double>(
-                                                  6),
-                                          thumbVisibility:
-                                              WidgetStateProperty.all<bool>(
-                                                  true),
+                                              color: lightBorderColor,
+                                            ),
+                                          ),
+                                          offset: const Offset(0, 0),
+                                          scrollbarTheme: ScrollbarThemeData(
+                                            radius: const Radius.circular(40),
+                                            thickness:
+                                                WidgetStateProperty.all<double>(
+                                                  6,
+                                                ),
+                                            thumbVisibility:
+                                                WidgetStateProperty.all<bool>(
+                                                  true,
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                              height: 40,
+                                              padding: EdgeInsets.only(
+                                                left: 14,
+                                                right: 14,
+                                              ),
+                                            ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Obx(
-                            () => CustomButton(
-                              onPressed: () {
-                                if (taskController.isTaskAdding.value ==
-                                    false) {
-                                  if (taskController
-                                      .assignedUserId.isNotEmpty) {
+                              ],
+                            ),
+                            SizedBox(height: 15.h),
+                            Obx(
+                              () => CustomButton(
+                                onPressed: () {
+                                  if (taskController.isTaskAdding.value ==
+                                      false) {
                                     if (taskController
-                                        .reviewerUserId.isNotEmpty) {
-                                      if (priorityController
-                                                  .selectedPriorityData.value !=
-                                              null &&
-                                          dueTimeController.text.isNotEmpty &&
-                                          dueDateController.text.isNotEmpty &&
-                                          startDateController.text.isNotEmpty) {
-                                        if (profileController
-                                                .selectedDepartMentListData
-                                                .value !=
-                                            null) {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            taskController.addTask(
-                                              taskNameController.text,
-                                              remarkController.text,
-                                              taskController
-                                                      .selectedAllProjectListData
-                                                      .value
-                                                      ?.id ??
-                                                  0,
-                                              profileController
+                                        .assignedUserId
+                                        .isNotEmpty) {
+                                      if (taskController
+                                          .reviewerUserId
+                                          .isNotEmpty) {
+                                        if (priorityController
+                                                    .selectedPriorityData
+                                                    .value !=
+                                                null &&
+                                            dueTimeController.text.isNotEmpty &&
+                                            dueDateController.text.isNotEmpty &&
+                                            startDateController
+                                                .text
+                                                .isNotEmpty) {
+                                          if (profileController
                                                   .selectedDepartMentListData
-                                                  .value
-                                                  ?.id,
-                                              startDateController.text,
-                                              dueDateController.text,
-                                              dueTimeController.text,
-                                              priorityController
-                                                  .selectedPriorityData
-                                                  .value
-                                                  ?.id,
-                                              'bottom',
-                                              timeTextEditingController.text,
-                                              homeController
-                                                      .selectedTime?.value ??
-                                                  '',
+                                                  .value !=
+                                              null) {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              taskController.addTask(
+                                                taskNameController.text,
+                                                remarkController.text,
+                                                taskController
+                                                        .selectedAllProjectListData
+                                                        .value
+                                                        ?.id ??
+                                                    0,
+                                                profileController
+                                                    .selectedDepartMentListData
+                                                    .value
+                                                    ?.id,
+                                                startDateController.text,
+                                                dueDateController.text,
+                                                dueTimeController.text,
+                                                priorityController
+                                                    .selectedPriorityData
+                                                    .value
+                                                    ?.id,
+                                                'bottom',
+                                                timeTextEditingController.text,
+                                                homeController
+                                                        .selectedTime
+                                                        ?.value ??
+                                                    '',
+                                              );
+                                            }
+                                          } else {
+                                            CustomToast().showCustomToast(
+                                              "Please select department.",
                                             );
                                           }
                                         } else {
                                           CustomToast().showCustomToast(
-                                              "Please select department.");
+                                            "Please select * value.",
+                                          );
                                         }
                                       } else {
                                         CustomToast().showCustomToast(
-                                            "Please select * value.");
+                                          "Please select reviewer person.",
+                                        );
                                       }
                                     } else {
                                       CustomToast().showCustomToast(
-                                          "Please select reviewer person.");
+                                        "Please select assign person.",
+                                      );
                                     }
-                                  } else {
-                                    CustomToast().showCustomToast(
-                                        "Please select assign person.");
                                   }
-                                }
-                              },
-                              text: taskController.isTaskAdding.value == true
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CircularProgressIndicator(
-                                          color: whiteColor,
-                                        ),
-                                        SizedBox(
-                                          width: 8.w,
-                                        ),
-                                        Text(
-                                          loading,
+                                },
+                                text:
+                                    taskController.isTaskAdding.value == true
+                                        ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: whiteColor,
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Text(
+                                              loading,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: whiteColor,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                        : Text(
+                                          create,
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: whiteColor),
+                                            color: whiteColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                      ],
-                                    )
-                                  : Text(
-                                      create,
-                                      style: TextStyle(
-                                        color: whiteColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                              width: double.infinity,
-                              color: primaryColor,
-                              height: 45.h,
+                                width: double.infinity,
+                                color: primaryColor,
+                                height: 45.h,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                        ],
+                            SizedBox(height: 15.h),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
     );
   }
 
@@ -1007,25 +1110,21 @@ class _AddTaskState extends State<AddTask> {
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => ImageScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => ImageScreen(file: file)),
       );
     } else if (fileExtension == 'pdf') {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => PDFScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => PDFScreen(file: file)),
       );
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Excel file viewing not supported yet.')),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unsupported file type.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unsupported file type.')));
     }
   }
 }
