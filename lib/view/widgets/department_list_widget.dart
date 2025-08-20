@@ -18,7 +18,6 @@ class DepartmentList extends StatelessWidget {
     return Obx(() {
       menuController.text =
           profileController.selectedDepartMentListData.value?.name ?? '';
-
       return Container(
         height: 45.h,
         decoration: BoxDecoration(

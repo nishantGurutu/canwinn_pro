@@ -634,7 +634,7 @@ class _AddTaskState extends State<AddTask> {
                                                 ? false
                                                 : true,
                                         label: Text(
-                                          "${taskController.reviewerUserId.length}",
+                                          "${taskController.reviewerUserId.length ?? ""}",
                                           style: TextStyle(
                                             color: textColor,
                                             fontSize: 16,
