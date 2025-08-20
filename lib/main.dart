@@ -24,6 +24,7 @@ import 'package:task_management/view/screen/lead_overview.dart';
 import 'package:task_management/view/screen/meeting_screen.dart';
 import 'package:task_management/view/screen/message.dart';
 import 'package:task_management/view/screen/outscreen/chalanDetail.dart';
+import 'package:task_management/view/screen/outscreen/user_chalan_details.dart';
 import 'package:task_management/view/screen/project.dart';
 import 'package:task_management/view/screen/splash_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -64,7 +65,8 @@ Future<void> main() async {
   await StorageHelper.initialize();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(
-      await _firebaseMessagingBackgroundHandler);
+    await _firebaseMessagingBackgroundHandler,
+  );
   await EasyLocalization.ensureInitialized();
   await LocalNotificationService.initialize();
   // await LocationTrackerService.initialize();
@@ -100,9 +102,7 @@ Future<void> main() async {
       path: 'assets/translations',
       supportedLocales: const [Locale('en')],
       fallbackLocale: const Locale('en'),
-      child: MyApp(
-        initialPayload: initialPayload,
-      ),
+      child: MyApp(initialPayload: initialPayload),
     ),
   );
 }
@@ -318,16 +318,16 @@ Future<void> requestPermissions() async {
 }
 
 Future<void> requestNotificationPermission() async {
-  final NotificationSettings settings =
-      await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+  final NotificationSettings settings = await FirebaseMessaging.instance
+      .requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
   debugPrint('Notification permission status: ${settings.authorizationStatus}');
 }
 
@@ -335,8 +335,9 @@ class MyApp extends StatelessWidget {
   final String? initialPayload;
 
   MyApp({super.key, this.initialPayload});
-  final BottomBarController bottomBarController =
-      Get.put(BottomBarController());
+  final BottomBarController bottomBarController = Get.put(
+    BottomBarController(),
+  );
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -371,15 +372,16 @@ class MyApp extends StatelessWidget {
 
     if (payloadData['type'] == "chat") {
       return MessageScreen(
-          payloadData['sendername'].toString(),
-          payloadData['productid'].toString(),
-          payloadData['senderid'].toString(),
-          '',
-          [],
-          '',
-          '',
-          '',
-          'notification');
+        payloadData['sendername'].toString(),
+        payloadData['productid'].toString(),
+        payloadData['senderid'].toString(),
+        '',
+        [],
+        '',
+        '',
+        '',
+        'notification',
+      );
     } else if (payloadData['type'].toString() == "dailymsg") {
       print('Navigating from main dailymsg ${initialPayload}');
       StorageHelper.setDailyMessage(true);
@@ -403,10 +405,10 @@ class MyApp extends StatelessWidget {
       );
     } else if (payloadData['type'].toString() == "meeting") {
       return MeetingListScreen();
-    } else if (payloadData['type'].toString().contains("challan")) {
+    } else if (payloadData['type'].toString() == "challan") {
       return InChalanDetails(payloadData['productid'.toString()]);
-    } else if (payloadData['type'].toString().contains("out_challan")) {
-      return ChalanDetails(payloadData['productid'.toString()], 'notification');
+    } else if (payloadData['type'].toString() == "out_challan") {
+      return UserChalanDetails(payloadData['productid'.toString()]);
     } else if (payloadData['type'].toString() == "sos") {
       bottomBarController.currentPageIndex.value = 0;
       return BottomNavigationBarExample(from: 'true', payloadData: payloadData);
@@ -414,16 +416,16 @@ class MyApp extends StatelessWidget {
       return Project('notification');
     } else if (payloadData['page'].toString() == "task") {
       return TaskDetails(
-        taskId: int.parse(
-          payloadData['taskId'].toString(),
-        ),
+        taskId: int.parse(payloadData['taskId'].toString()),
         assignedStatus: '',
         initialIndex: 0,
       );
     } else if (payloadData['page'].toString() == "daily-task") {
       bottomBarController.currentPageIndex.value = 0;
       return BottomNavigationBarExample(
-          from: 'reminder', payloadData: payloadData);
+        from: 'reminder',
+        payloadData: payloadData,
+      );
     } else if (payloadData['page'].toString().contains("todo")) {
       return ToDoList('');
     } else if (payloadData['type'].toString() == "emi_reminder") {

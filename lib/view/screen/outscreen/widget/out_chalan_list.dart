@@ -14,42 +14,42 @@ class OutChalanlist extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: backgroundColor,
-        child: chalanList.isEmpty
-            ? Center(
-                child: Text(
-                  'No chalan created',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-              )
-            : ListView.separated(
-                itemCount: chalanList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.h),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(() => UserChalanDetails(chalanList[index]));
-                      },
-                      child: ChalanListBox(
-                        image: chalanList[index]['upload_image_path'] ?? "",
-                        chalanNumber: chalanList[index]['challan_number'] ?? "",
-                        deptName:
-                            chalanList[index]['department_full_name'] ?? "",
-                        dispatchTo: chalanList[index]['dispatch_to'] ?? "",
-                        from: "outchalan",
-                        date: chalanList[index]['date'] ?? "",
-                        contact: chalanList[index]['contact'] ?? "",
-                        status: chalanList[index]['status'] ?? "",
+        child:
+            chalanList.isEmpty
+                ? Center(
+                  child: Text(
+                    'No chalan created',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                )
+                : ListView.separated(
+                  itemCount: chalanList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(() => UserChalanDetails(''));
+                        },
+                        child: ChalanListBox(
+                          image: chalanList[index]['upload_image_path'] ?? "",
+                          chalanNumber:
+                              chalanList[index]['challan_number'] ?? "",
+                          deptName:
+                              chalanList[index]['department_full_name'] ?? "",
+                          dispatchTo: chalanList[index]['dispatch_to'] ?? "",
+                          from: "outchalan",
+                          date: chalanList[index]['date'] ?? "",
+                          contact: chalanList[index]['contact'] ?? "",
+                          status: chalanList[index]['status'] ?? "",
+                        ),
                       ),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(
-                    height: 0.h,
-                  );
-                },
-              ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 0.h);
+                  },
+                ),
       ),
     );
   }
