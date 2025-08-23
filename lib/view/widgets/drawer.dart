@@ -42,6 +42,7 @@ import 'package:task_management/view/screen/vehicleManagement.dart';
 import 'package:task_management/view/widgets/all_assets.dart';
 import 'package:task_management/view/widgets/notes_folder.dart';
 import 'package:task_management/view/widgets/select_user.dart';
+import '../screen/CalendarScreenPage.dart';
 import '../screen/outscreen/hr_screen.dart';
 import '../screen/outscreen/security.dart';
 import 'add_assets.dart';
@@ -292,6 +293,56 @@ class _SideDrawerState extends State<SideDrawer> {
                                                   1
                                               ? whiteColor
                                               : textColor,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        InkWell(
+                          onTap: () {
+                            bottomBarController.selectedTabIndex.value = 48;
+                            Get.back();
+                            Get.to(
+                              Calendarscreenpage(
+                                '', // navigationType
+                                '', // userId
+                                taskType: "Data Calendar",
+                                assignedType: " me",
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: bottomBarController.selectedTabIndex.value == 48
+                                  ? selectedTabColor
+                                  : whiteColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6.r),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10.w, top: 7.h, bottom: 7.h),
+                              child: Row(
+                                spacing: 10.w,
+                                children: [
+                                  SvgPicture.asset(
+                                    drawerTaskicon,
+                                    color: bottomBarController.selectedTabIndex.value == 48
+                                        ? whiteColor
+                                        : textColor,
+                                    height: 20.h,
+                                  ),
+                                  Text(
+                                    "Data Calendar",
+                                    style: TextStyle(
+                                      color: bottomBarController.selectedTabIndex.value == 48
+                                          ? whiteColor
+                                          : textColor,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
                                     ),

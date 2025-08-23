@@ -16,25 +16,27 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.10+1
   flutter_speed_dial: ^7.0.0
-  image_picker: ^1.1.2 
+  image_picker: ^1.1.2
+
   dropdown_button2: ^2.3.9
   dio: ^5.7.0
   fluttertoast: ^8.2.8
   firebase_core: ^4.0.0
+  device_calendar: ^4.3.1
+  syncfusion_flutter_calendar: ^30.1.39
   firebase_auth: ^6.0.0
   firebase_messaging: ^16.0.0
   flutter_local_notifications:
   flutter_background_service:
   flutter_background_service_android:
   flutter_background_service_ios: ^5.0.3
-  syncfusion_flutter_calendar: ^30.1.39 
   percent_indicator: ^4.2.4
   linear_progress_bar: ^1.1.2
   google_nav_bar: ^5.0.7
   path_provider: ^2.1.5
   syncfusion_flutter_pdfviewer:  
   path: 
-  intl: ^0.19.0
+  intl: ^0.20.2
   permission_handler: ^12.0.1
   location: ^8.0.0
   google_maps_flutter: ^2.5.1
@@ -45,6 +47,7 @@ dependencies:
   data_table_2: ^2.5.18
   badges: ^3.1.2
   pdf: ^3.11.1
+  timezone: ^0.10.1
   readmore: 
   pusher_channels_flutter:  
   multi_dropdown: ^3.0.1
@@ -65,7 +68,6 @@ dependencies:
   mime: ^2.0.0
   http_parser: ^4.1.2
   geocoding_platform_interface: any
-  timezone: any
   http: any
   flutter_datetime_picker_plus: ^2.2.0
   google_sign_in: ^7.1.1
@@ -84,6 +86,10 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   audioplayers: ^6.5.0
   swipe_to: ^1.0.6
+
+dependency_overrides:
+  timezone: ^0.10.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

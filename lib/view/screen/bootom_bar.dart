@@ -4,9 +4,13 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/dialog_class.dart';
@@ -81,6 +85,10 @@ class _BottomNavigationBarExampleState
   var profilePicPath = ''.obs;
   final HomeController homeController = Get.put(HomeController());
   final LeadController leadController = Get.put(LeadController());
+  final DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
+  final location = tz.local;
+
+
   @override
   void initState() {
     super.initState();
@@ -136,11 +144,95 @@ class _BottomNavigationBarExampleState
       "",
     );
 
+   // await fetchCalendarEvents();
+
+
+
     await SosPusherConfig().initPusher(
       _onPusherEvent,
       channelName: "test-channel",
       context: context,
     );
+  }
+
+  Future<void> fetchCalendarEvents() async {
+    // Check and request permission
+    var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
+    if (permissionsGranted.isSuccess && !permissionsGranted.data!) {
+      permissionsGranted = await _deviceCalendarPlugin.requestPermissions();
+      if (!permissionsGranted.isSuccess || !permissionsGranted.data!) {
+        Fluttertoast.showToast(msg: "Calendar permission denied");
+        return;
+      }
+    }
+
+    // Get all calendars
+    final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+    final calendars = calendarsResult.data;
+
+    if (calendars == null || calendars.isEmpty) {
+      Fluttertoast.showToast(msg: "No calendars found");
+      return;
+    }
+
+    bool anyEventFound = false;
+
+    // Loop through all calendars
+    for (var cal in calendars) {
+      final eventsResult = await _deviceCalendarPlugin.retrieveEvents(
+        cal.id!,
+        RetrieveEventsParams(
+          startDate: tz.TZDateTime.from(
+            DateTime.now().subtract(Duration(days: 30)),
+            tz.local,
+          ),
+          endDate: tz.TZDateTime.from(
+            DateTime.now().add(Duration(days: 60)),
+            tz.local,
+          ),
+        ),
+      );
+
+      final events = eventsResult?.data ?? [];
+      if (events.isNotEmpty) {
+        anyEventFound = true;
+        for (var event in events) {
+          Fluttertoast.showToast(
+            msg: "📅 ${cal.name}\nTitle: ${event.title}\nStart: ${event.start}",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+          );
+        }
+      }
+    }
+
+    // Agar koi event na mila to ek dummy event create kare
+    if (!anyEventFound) {
+      final defaultCalendar = calendars.first;
+
+      final dummyEvent = Event(
+        defaultCalendar.id,
+        title: "Dummy Meeting",
+        start: tz.TZDateTime.from(
+          DateTime.now().add(Duration(minutes: 2)),
+          tz.local,
+        ),
+        end: tz.TZDateTime.from(
+          DateTime.now().add(Duration(hours: 1)),
+          tz.local,
+        ),
+        description: "This is a test dummy event",
+      );
+
+      final createResult =
+      await _deviceCalendarPlugin.createOrUpdateEvent(dummyEvent);
+
+      if (createResult!.isSuccess) {
+        Fluttertoast.showToast(msg: "✅ Dummy event created in ${defaultCalendar.name}");
+      } else {
+        Fluttertoast.showToast(msg: "❌ Failed to create dummy event");
+      }
+    }
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
@@ -193,7 +285,60 @@ class _BottomNavigationBarExampleState
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  Future<void> _addEventToGoogleCalendar() async {
+    if (Platform.isAndroid) {
+      final intent = AndroidIntent(
+        action: 'android.intent.action.EDIT',
+        type: 'vnd.android.cursor.item/event',
+        data: 'content://com.android.calendar/events',
+        arguments: {
+          'title': 'Test Title',
+          'beginTime': "10-04-2025",
+          'endTime': "10-04-2025",
+          'allDay': false,
+        },
+        flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+      );
 
+      try {
+        await intent.launch();
+        Fluttertoast.showToast(
+          msg: "Opening Google Calendar...",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black54,
+          textColor: Colors.white,
+        );
+
+        await Future.delayed(Duration(seconds: 5));
+        Fluttertoast.showToast(
+          msg: "Event added (check your Calendar)",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } catch (e) {
+        Fluttertoast.showToast(
+          msg: "Error: $e",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    } else {
+      Fluttertoast.showToast(
+        msg: "Calendar event not supported on this platform",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.orange,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+/*
   Future<void> _addEventToGoogleCalendar() async {
     if (Platform.isAndroid) {
       final intent = AndroidIntent(
@@ -218,6 +363,7 @@ class _BottomNavigationBarExampleState
       print('Calendar event creation not supported on this platform');
     }
   }
+*/
 
   @override
   Widget build(BuildContext context) {
