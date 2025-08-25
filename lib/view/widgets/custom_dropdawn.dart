@@ -32,6 +32,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
   @override
   void initState() {
     super.initState();
+    selectedValue.value = null;
     selectedValue.value = widget.selectedValue;
   }
 
@@ -45,7 +46,6 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
-    selectedValue.value = null;
     return DropdownButtonHideUnderline(
       child: Obx(
         () => DropdownButton2<T>(

@@ -293,18 +293,102 @@ class _UpdateExpenseState extends State<UpdateExpense> {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () {
-                              if (expenseController.isExpenseAdding.value ==
-                                  false) {
-                                expenseController.updatingExpense(
-                                  expenseController
-                                      .expenseTypeTextController.value.text,
-                                  billNumberTextController.value.text,
-                                  amountTextController.value.text,
-                                  descriptionTextController.value.text,
-                                  expenseDateTextController.value.text,
-                                  widget.expenseListData.id.toString(),
-                                );
+                            onTap: () async {
+                              if (expenseController.isExpenseAdding.value == false) {
+                                // ✅ Trimmed values
+                                String expenseType = expenseController.expenseTypeTextController.value.text.trim();
+                                String billNumber = billNumberTextController.value.text.trim();
+                                String amount = amountTextController.value.text.trim();
+                                String description = descriptionTextController.value.text.trim();
+                                String expenseDate = expenseDateTextController.value.text.trim();
+
+                                // ✅ Mandatory checks
+                                if (expenseType.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Please select expense type')),
+                                  );
+                                  return;
+                                }
+                                if (billNumber.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Please enter bill number')),
+                                  );
+                                  return;
+                                }
+                                if (amount.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Please enter amount')),
+                                  );
+                                  return;
+                                }
+                                if (!RegExp(r'^\d+$').hasMatch(amount)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Amount must contain only digits')),
+                                  );
+                                  return;
+                                }
+                                if (description.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Please enter description')),
+                                  );
+                                  return;
+                                }
+                                if (expenseDate.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Please select expense date')),
+                                  );
+                                  return;
+                                }
+
+                                try {
+                                  // ✅ Call update method
+                                  await expenseController.updatingExpense(
+                                    expenseType,
+                                    billNumber,
+                                    amount,
+                                    description,
+                                    expenseDate,
+                                    widget.expenseListData.id.toString(),
+                                  );
+
+                                  // ✅ Show success dialog
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Success'),
+                                        content: const Text('Expense updated successfully'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Close dialog
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } catch (e) {
+                                  // ✅ Show error dialog
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Error'),
+                                        content: const Text('Expense not updated. Please try again!'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
                               }
                             },
                             child: Container(

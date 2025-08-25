@@ -357,7 +357,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(height: 25.h),
                     _buildLabelAndField('Name', profileController.nameTextEditingController.value, 'name'),
                     SizedBox(height: 15.h),
-                    _buildLabelAndField('Email', profileController.emailTextEditingController.value, 'email', keyboardType: TextInputType.emailAddress),
+                    _buildLabelAndField('Email', profileController.emailTextEditingController.value, 'email', keyboardType: TextInputType.emailAddress, enable: false),
                     SizedBox(height: 15.h),
                     _buildLabelAndField('Mobile', profileController.mobileTextEditingController.value, 'Phone', maxLength: 10, keyboardType: TextInputType.number),
                     SizedBox(height: 15.h),
@@ -373,11 +373,33 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(height: 25.h),
                     Obx(() => CustomButton(
                       onPressed: () {
+                        final emaildata = profileController.emailTextEditingController.value.text.trim();
+                        final emailRegex = RegExp(
+                            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+                        if (!emailRegex.hasMatch(emaildata)) {
+                          Get.snackbar(
+                            "Error",
+                            "Please enter a valid email address.",
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          return;
+                        }
+                        final mobiledata = profileController.mobileTextEditingController.value.text.trim();
+                        final mobileRegex = RegExp(r'^[0-9]{10}$');
+                        if (!mobileRegex.hasMatch(mobiledata)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Please enter a valid 10-digit mobile number')),
+                          );
+                          return;
+                        }
+
                         if (profileController.isProfileUpdating.value) return;
+
                         profileController.updateProfile(
                           profileController.nameTextEditingController.value.text,
-                          profileController.emailTextEditingController.value.text,
-                          profileController.mobileTextEditingController.value.text,
+                          emaildata,
+                          mobiledata,
                           profileController.departmentIdTextEditingController.value.text,
                           userPageControlelr.selectedRoleListData.value?.id,
                           profileController.selectedGender?.value,
@@ -446,6 +468,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: TextField(
         controller: controller,
+
         textCapitalization: TextCapitalization.sentences,
         maxLength: maxLength,
         keyboardType: keyboardType,
@@ -598,7 +621,7 @@ class _ProfilePageState extends State<ProfilePage> {
               context: context,
               initialDate: DateTime.now(),
               firstDate: DateTime(1950),
-              lastDate: DateTime(2100),
+              lastDate: DateTime.now(),
             );
 
             if (pickedDate != null) {

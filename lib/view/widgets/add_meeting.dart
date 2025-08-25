@@ -381,6 +381,7 @@ class _AddMeetingState extends State<AddMeeting> {
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
+
                                     ),
                                   ),
                                   SizedBox(

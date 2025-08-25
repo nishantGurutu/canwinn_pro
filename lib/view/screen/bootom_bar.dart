@@ -146,8 +146,6 @@ class _BottomNavigationBarExampleState
 
    // await fetchCalendarEvents();
 
-
-
     await SosPusherConfig().initPusher(
       _onPusherEvent,
       channelName: "test-channel",

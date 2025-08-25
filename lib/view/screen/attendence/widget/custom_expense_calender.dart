@@ -7,11 +7,13 @@ import 'package:task_management/constant/style_constant.dart';
 class CustomExpenseCalender extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final bool allowAllDates;
 
   CustomExpenseCalender({
     super.key,
     required this.hintText,
     required this.controller,
+    this.allowAllDates = true,
   });
 
   @override
@@ -51,10 +53,11 @@ class CustomExpenseCalender extends StatelessWidget {
       ),
       readOnly: true,
       onTap: () async {
+        DateTime now = DateTime.now();
         DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime.now(),
+          initialDate: now,
+          firstDate: allowAllDates ? DateTime(2000) : now,
           lastDate: DateTime(2100),
         );
 

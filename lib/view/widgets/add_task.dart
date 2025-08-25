@@ -689,6 +689,8 @@ class _AddTaskState extends State<AddTask> {
                                     CustomCalender(
                                       hintText: dateFormate,
                                       controller: startDateController,
+                                      from: 'startDate',
+                                      otherController: dueDateController,
                                     ),
                                   ],
                                 ),
@@ -710,6 +712,8 @@ class _AddTaskState extends State<AddTask> {
                                     CustomCalender(
                                       hintText: dateFormate,
                                       controller: dueDateController,
+                                      from: 'dueDate',
+                                      otherController: startDateController,
                                     ),
                                   ],
                                 ),

@@ -279,18 +279,44 @@ class _ExpenseClaimState extends State<ExpenseClaim> {
                                                   ),
                                                   PopupMenuItem(
                                                     onTap: () {
-                                                      if (expenseController
-                                                              .isExpenseDeleting
-                                                              .value ==
-                                                          false) {
-                                                        expenseController
-                                                            .expenseDelete(
-                                                                expenseController
-                                                                        .expenseListData[
-                                                                            index]
-                                                                        .id ??
-                                                                    0);
-                                                      }
+                                                      // Delay to allow popup menu to close before showing dialog
+                                                      Future.delayed(Duration.zero, () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) {
+                                                            return AlertDialog(
+                                                              title: const Text('Confirm Delete'),
+                                                              content: const Text(
+                                                                  'Are you sure you want to delete this expense?'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop(); // Cancel delete
+                                                                  },
+                                                                  child: const Text('Cancel'),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop(); // Close dialog
+                                                                    // Call delete function
+                                                                    if (expenseController.isExpenseDeleting.value ==
+                                                                        false) {
+                                                                      expenseController.expenseDelete(
+                                                                          expenseController
+                                                                              .expenseListData[index].id ??
+                                                                              0);
+                                                                    }
+                                                                  },
+                                                                  child: const Text(
+                                                                    'OK',
+                                                                    style: TextStyle(color: Colors.red),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      });
                                                     },
                                                     child: Text(delete),
                                                   ),

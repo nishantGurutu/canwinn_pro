@@ -4,11 +4,18 @@ import 'package:android_intent_plus/flag.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:io' show Platform;
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +57,6 @@ import 'package:task_management/view/widgets/home_title.dart';
 import 'package:task_management/view/widgets/notes_folder.dart'
     show NotesFolder;
 import 'package:task_management/view/widgets/task_info.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'daily_activity.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
@@ -79,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
   late Animation<double> _animation;
   late AnimationController _animationController;
+
   // late TabController _tabController;
   @override
   void initState() {
@@ -93,6 +100,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       parent: _animationController,
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkForAppUpdate(context);
+    });
+
     super.initState();
   }
 
@@ -213,6 +225,161 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     String? notificationData = prefs.getString('notification_data');
     if (notificationData.toString() != "null" &&
         notificationData.toString() != "") {}
+  }
+
+  Future<void> checkForAppUpdate(BuildContext context) async {
+    print("checkForAppUpdate() called");
+
+    if (kDebugMode) {
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Fake Update Available"),
+          content: const Text(
+            "Testing only - Play Store update dialog.\n\n"
+            "Release build me real update check hoga.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text("Cancel"),
+            ),
+            TextButton(onPressed: () => Get.back(), child: const Text("OK")),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (Platform.isAndroid) {
+      try {
+        print("Platform is Android, checking update...");
+
+        AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
+        print("Got updateInfo: ${updateInfo.updateAvailability}");
+
+        if (updateInfo.updateAvailability ==
+            UpdateAvailability.updateAvailable) {
+          print("Update available!");
+
+          if (updateInfo.immediateUpdateAllowed) {
+            print(" Immediate update allowed → starting...");
+            await InAppUpdate.performImmediateUpdate();
+          } else if (updateInfo.flexibleUpdateAllowed) {
+            print("Flexible update allowed → starting...");
+            await InAppUpdate.startFlexibleUpdate();
+
+            print("Showing update dialog...");
+            Get.dialog(
+              AlertDialog(
+                title: const Text("Update Available"),
+                content: const Text(
+                  "A new version of the app is available. Please update to the latest version from the Play Store to continue using the app.",
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      print("User cancelled update dialog");
+                      Get.back();
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      print("User clicked Update Now");
+                      const playStoreUrl =
+                          'https://play.google.com/store/apps/details?id=com.cannwin.task_management';
+
+                      if (await canLaunchUrl(Uri.parse(playStoreUrl))) {
+                        print("Opening Play Store...");
+                        await launchUrl(
+                          Uri.parse(playStoreUrl),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } else {
+                        print("Could not open Play Store");
+                        Fluttertoast.showToast(
+                          msg: "Could not open Play Store",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
+                      Get.back();
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+              ),
+              barrierDismissible: false,
+            );
+          } else {
+            print(
+              "Update available but neither immediate nor flexible update allowed",
+            );
+          }
+        } else {
+          print("No update available");
+        }
+      } catch (e) {
+        print('Error checking for app update: $e');
+        Fluttertoast.showToast(
+          msg: "Failed to check for updates: $e",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } else if (Platform.isIOS) {
+      print("Platform is iOS, showing App Store dialog...");
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Update Available"),
+          content: const Text(
+            "A new version of the app is available. Please update from the App Store.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                print("User cancelled iOS update dialog");
+                Get.back();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                print("User clicked Update Now (iOS)");
+                const appStoreUrl =
+                    'https://apps.apple.com/app/com.cannwin.task_management';
+                if (await canLaunchUrl(Uri.parse(appStoreUrl))) {
+                  print("Opening App Store...");
+                  await launchUrl(
+                    Uri.parse(appStoreUrl),
+                    mode: LaunchMode.externalApplication,
+                  );
+                } else {
+                  print("Could not open App Store");
+                  Fluttertoast.showToast(
+                    msg: "Could not open App Store",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                }
+                Get.back();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+        barrierDismissible: false,
+      );
+    }
   }
 
   Future onrefresher() async {
@@ -662,6 +829,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final TextEditingController menuController = TextEditingController();
   final controller = MultiSelectController<ResponsiblePersonData>();
   final dropDownKey = GlobalKey<DropdownSearchState>();
+
   Widget selectUser() {
     return Container(
       height: 45.h,
@@ -1203,7 +1371,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            SizedBox(height: 10), // Add spacing if needed
+            SizedBox(height: 10),
+            // Add spacing if needed
             // Remove Expanded here unless it's inside a scrollable or constrained widget
             // InkWell(
             //   onTap: () {
@@ -1491,6 +1660,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         pinnedColor6,
         pinnedColor7,
       ].obs;
+
   Widget leadPinedData(HomeLeadData? leadData) {
     return Container(
       height: 300.h,

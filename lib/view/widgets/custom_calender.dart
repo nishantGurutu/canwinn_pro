@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -7,11 +8,15 @@ import 'package:task_management/constant/style_constant.dart';
 class CustomCalender extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final String? from;
+  final TextEditingController? otherController;
 
-  CustomCalender({
+  const CustomCalender({
     super.key,
     required this.hintText,
     required this.controller,
+    this.from,
+    this.otherController,
   });
 
   @override
@@ -51,18 +56,36 @@ class CustomCalender extends StatelessWidget {
       ),
       readOnly: true,
       onTap: () async {
-        // DateTime? pickedDate = await showDatePicker(
-        //   context: context,
-        //   initialDate: DateTime.now(),
-        //   firstDate: DateTime(1950),
-        //   lastDate: DateTime(2100),
-        // );
+        DateTime initialDate = DateTime.now();
+        DateTime firstDate = DateTime.now(); // Restrict to today or later
+        DateTime lastDate = DateTime(2100);
+
+        // If selecting start date, ensure it's not after due date
+        if (from == 'startDate' && otherController != null && otherController!.text.isNotEmpty) {
+          try {
+            DateTime dueDate = DateFormat('dd-MM-yyyy').parse(otherController!.text);
+            lastDate = dueDate; // Start date cannot be after due date
+          } catch (e) {
+            // Handle invalid date format if necessary
+          }
+        }
+
+        // If selecting due date, ensure it's not before start date
+        if (from == 'dueDate' && otherController != null && otherController!.text.isNotEmpty) {
+          try {
+            DateTime startDate = DateFormat('dd-MM-yyyy').parse(otherController!.text);
+            firstDate = startDate; // Due date cannot be before start date
+            initialDate = startDate.isAfter(DateTime.now()) ? startDate : DateTime.now();
+          } catch (e) {
+            // Handle invalid date format if necessary
+          }
+        }
 
         DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2100),
+          initialDate: initialDate,
+          firstDate: firstDate,
+          lastDate: lastDate,
         );
 
         if (pickedDate != null) {
