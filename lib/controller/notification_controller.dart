@@ -39,8 +39,9 @@ class NotificationController extends GetxController {
         isAllSelect.value = false;
         notificationList.clear();
         notificationSelectList.clear();
+        readNotificationList.clear();
       }
-      if (result['unreadfeeds'].length > 0) {
+    /*  if (result['unreadfeeds'].length > 0) {
         notificationList.addAll(result['unreadfeeds']);
       }
       if (pageValue.value == 1) {
@@ -48,6 +49,47 @@ class NotificationController extends GetxController {
       } else if (pageValue.value > 1 && result['readfeeds'].length > 0) {
         readNotificationList.addAll(result['readfeeds']);
       }
+      */
+
+      // Deduplicate unread notifications
+      final Set<String> uniqueKeys = {};
+      final List<dynamic> uniqueUnreadNotifications = [];
+      for (var notification in result['unreadfeeds']) {
+        // Create a unique key based on title, description, and created_at
+        final String key =
+            "${notification['title'] ?? ''}_${notification['description'] ?? ''}_${notification['created_at'] ?? ''}";
+        if (!uniqueKeys.contains(key)) {
+          uniqueKeys.add(key);
+          uniqueUnreadNotifications.add(notification);
+        }
+      }
+
+      // Deduplicate read notifications
+      final Set<String> uniqueReadKeys = {};
+      final List<dynamic> uniqueReadNotifications = [];
+      for (var notification in result['readfeeds']) {
+        final String key =
+            "${notification['title'] ?? ''}_${notification['description'] ?? ''}_${notification['created_at'] ?? ''}";
+        if (!uniqueReadKeys.contains(key)) {
+          uniqueReadKeys.add(key);
+          uniqueReadNotifications.add(notification);
+        }
+      }
+
+      // Add deduplicated unread notifications
+      if (type.toString() == '') {
+        notificationList.assignAll(uniqueUnreadNotifications);
+      } else {
+        notificationList.addAll(uniqueUnreadNotifications);
+      }
+
+      // Add deduplicated read notifications
+      if (pageValue.value == 1) {
+        readNotificationList.assignAll(uniqueReadNotifications);
+      } else if (pageValue.value > 1 && uniqueReadNotifications.isNotEmpty) {
+        readNotificationList.addAll(uniqueReadNotifications);
+      }
+
       readNotificationSelectList.assignAll(
         List<bool>.filled(readNotificationList.length, isAllSelect.value),
       );

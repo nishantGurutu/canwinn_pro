@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/constant/style_constant.dart';
@@ -792,6 +793,9 @@ class _AddTaskState extends State<AddTask> {
                                   keyboardType: TextInputType.number,
                                   prefixIcon: Icon(Icons.lock_clock),
                                   data: alarmReminder,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                                  ],
                                 ),
                               ),
                               SizedBox(

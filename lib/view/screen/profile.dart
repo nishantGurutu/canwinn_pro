@@ -475,7 +475,7 @@ class _ProfilePageState extends State<ProfilePage> {
         enabled: enable,
         style: TextStyle(color: Colors.black87, fontSize: 15.sp),
     decoration: InputDecoration(
-    counterText: '', // to hide maxLength counter text if needed
+    counterText: '',
     contentPadding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 12.w),
     hintText: hint,
     border: InputBorder.none,  // because container has border
@@ -596,7 +596,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Image.asset(
                 prefixIconPath,
                 height: 18.h,
-                color:secondaryColor, // primaryColor
+                color:secondaryColor,
               ),
             )
                 : null,

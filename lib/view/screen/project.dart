@@ -241,8 +241,55 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                                                   allProjectDataList[index]));
                                               break;
                                             case 'delete':
-                                              projectController.deleteProject(
-                                                allProjectDataList[index].id,
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                      "Delete Project",
+                                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                                    ),
+                                                    content: const Text("Are you sure you want to delete this project?"),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: const Text(
+                                                          "Cancel",
+                                                          style: TextStyle(color: Colors.grey),
+                                                        ),
+                                                      ),
+                                                      Obx(
+                                                            () => ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                            backgroundColor: Colors.red,
+                                                          ),
+                                                          onPressed: projectController.isProjectDeleting.value
+                                                              ? null
+                                                              : () async {
+                                                            final id = allProjectDataList[index].id;
+                                                            await projectController.deleteProject(id);
+                                                            Navigator.of(context).pop(); // ✅ Dialog close after delete
+                                                          },
+                                                          child: projectController.isProjectDeleting.value
+                                                              ? const SizedBox(
+                                                            height: 20,
+                                                            width: 20,
+                                                            child: CircularProgressIndicator(
+                                                              color: Colors.white,
+                                                              strokeWidth: 2,
+                                                            ),
+                                                          )
+                                                              : const Text("OK"),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                               break;
                                             case 'addTask':

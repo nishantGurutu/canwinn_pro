@@ -198,7 +198,7 @@ class _DailyActivityState extends State<DailyActivity> {
                                           ),
                                           SizedBox(width: 10.w),
                                           InkWell(
-                                            onTap: () {
+                                            /*onTap: () {
                                               profileController.deleteDailyTask(
                                                   profileController
                                                           .dailyTaskDataList[
@@ -206,6 +206,35 @@ class _DailyActivityState extends State<DailyActivity> {
                                                           .id ??
                                                       0,
                                                   context);
+                                            },*/
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text("Are you sure?"),
+                                                    content: Text("Do you really want to delete this task?"),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text("Cancel"),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          profileController.deleteDailyTask(
+                                                            profileController.dailyTaskDataList[index].id ?? 0,
+                                                            context,
+                                                          );
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text("OK"),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
                                             },
                                             child: Container(
                                               height: 28.h,

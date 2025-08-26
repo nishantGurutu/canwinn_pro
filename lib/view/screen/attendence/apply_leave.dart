@@ -32,6 +32,7 @@ class _ApplyLeaveState extends State<ApplyLeave> {
   final TextEditingController leaveEndDateController2 = TextEditingController();
   final TextEditingController leaveDurationController2 =
       TextEditingController();
+
   final TextEditingController leaveTypeController2 = TextEditingController();
   final TextEditingController leaveDescriptionController2 =
       TextEditingController();
@@ -192,7 +193,30 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                                               ),
                                             );
                                           } else if (result == 'delete') {
-                                            attendenceController.leaveDeleting(leave.id);
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text("Confirm Deletion"),
+                                                  content: Text("Are you sure you want to delete this leave?"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text("Cancel"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        Navigator.of(context).pop();
+                                                        await attendenceController.leaveDeleting(leave.id);
+                                                      },
+                                                      child: Text("OK"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
                                           }
                                         },
                                         itemBuilder: (BuildContext context) => [
@@ -333,6 +357,8 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                     CustomCalender2(
                       hintText: dateFormate2,
                       controller: leaveStartDateController,
+                      from: 'startDate',
+                      otherController: leaveEndDateController,
                     ),
                     SizedBox(
                       height: 10.h,
@@ -348,6 +374,8 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                     CustomCalender2(
                       hintText: dateFormate2,
                       controller: leaveEndDateController,
+                      from: 'dueDate',
+                      otherController: leaveStartDateController,
                     ),
                     SizedBox(
                       height: 10.h,

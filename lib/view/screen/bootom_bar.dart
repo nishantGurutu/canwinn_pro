@@ -204,8 +204,7 @@ class _BottomNavigationBarExampleState
       }
     }
 
-    // Agar koi event na mila to ek dummy event create kare
-    if (!anyEventFound) {
+   if (!anyEventFound) {
       final defaultCalendar = calendars.first;
 
       final dummyEvent = Event(

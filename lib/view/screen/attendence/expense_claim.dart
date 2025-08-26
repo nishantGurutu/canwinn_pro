@@ -205,52 +205,6 @@ class _ExpenseClaimState extends State<ExpenseClaim> {
                                                       color:
                                                           secondaryTextColor),
                                                 ),
-                                                // Spacer(),
-                                                // Container(
-                                                //   width: 80.w,
-                                                //   height: 25.h,
-                                                //   decoration: BoxDecoration(
-                                                //       borderRadius:
-                                                //           BorderRadius.all(
-                                                //               Radius.circular(
-                                                //                   12.r)),
-                                                //       color: expenseController
-                                                //                   .expenseListData[
-                                                //                       index]
-                                                //                   .status ==
-                                                //               1
-                                                //           ? progressBackgroundColor
-                                                //           : expenseController
-                                                //                       .expenseListData[
-                                                //                           index]
-                                                //                       .status ==
-                                                //                   0
-                                                //               ? softYellowColor
-                                                //               : softredColor),
-                                                //   child: Center(
-                                                //     child: Text(
-                                                //       '${expenseController.expenseListData[index].status == 1 ? "Approved" : expenseController.expenseListData[index].status == 0 ? "Pending" : "Reject"}',
-                                                //       style: TextStyle(
-                                                //           fontSize: 14.sp,
-                                                //           color: expenseController
-                                                //                       .expenseListData[
-                                                //                           index]
-                                                //                       .status ==
-                                                //                   1
-                                                //               ? greenColor
-                                                //               : expenseController
-                                                //                           .expenseListData[
-                                                //                               index]
-                                                //                           .status ==
-                                                //                       0
-                                                //                   ? secondaryPrimaryColor
-                                                //                   : slightlyDarkColor,
-                                                //           fontWeight:
-                                                //               FontWeight
-                                                //                   .w500),
-                                                //     ),
-                                                //   ),
-                                                // ),
                                               ],
                                             ),
                                           ],
@@ -279,7 +233,6 @@ class _ExpenseClaimState extends State<ExpenseClaim> {
                                                   ),
                                                   PopupMenuItem(
                                                     onTap: () {
-                                                      // Delay to allow popup menu to close before showing dialog
                                                       Future.delayed(Duration.zero, () {
                                                         showDialog(
                                                           context: context,
@@ -291,20 +244,20 @@ class _ExpenseClaimState extends State<ExpenseClaim> {
                                                               actions: [
                                                                 TextButton(
                                                                   onPressed: () {
-                                                                    Navigator.of(context).pop(); // Cancel delete
+                                                                    Navigator.of(context).pop();
                                                                   },
                                                                   child: const Text('Cancel'),
                                                                 ),
                                                                 TextButton(
                                                                   onPressed: () {
-                                                                    Navigator.of(context).pop(); // Close dialog
-                                                                    // Call delete function
+                                                                    Navigator.of(context).pop();
                                                                     if (expenseController.isExpenseDeleting.value ==
                                                                         false) {
                                                                       expenseController.expenseDelete(
                                                                           expenseController
                                                                               .expenseListData[index].id ??
-                                                                              0);
+                                                                              0,
+                                                                        index,);
                                                                     }
                                                                   },
                                                                   child: const Text(
@@ -332,40 +285,6 @@ class _ExpenseClaimState extends State<ExpenseClaim> {
                             },
                           ),
                   ),
-                  // Container(
-                  //   width: double.infinity,
-                  //   color: whiteColor,
-                  //   child: Padding(
-                  //     padding: EdgeInsets.symmetric(
-                  //         horizontal: 12.w, vertical: 12.h),
-                  //     child: InkWell(
-                  //       onTap: () {
-                  //         Get.to(() => AddExpense());
-                  //       },
-                  //       child: Container(
-                  //         decoration: BoxDecoration(
-                  //           color: blueColor,
-                  //           borderRadius: BorderRadius.all(
-                  //             Radius.circular(8.r),
-                  //           ),
-                  //         ),
-                  //         child: Padding(
-                  //           padding: EdgeInsets.symmetric(vertical: 8.h),
-                  //           child: Center(
-                  //             child: Text(
-                  //               'Add Expense Claim',
-                  //               style: TextStyle(
-                  //                 fontSize: 18,
-                  //                 color: whiteColor,
-                  //                 fontWeight: FontWeight.w500,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
       ),

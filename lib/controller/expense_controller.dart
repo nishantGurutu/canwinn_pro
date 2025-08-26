@@ -89,12 +89,28 @@ class ExpenseController extends GetxController {
     isExpenseListLoading.value = false;
   }
 
-  var isExpenseDeleting = false.obs;
+ /* var isExpenseDeleting = false.obs;
   Future<void> expenseDelete(int id) async {
     isExpenseDeleting.value = true;
     final result = await ExpenseService().expenseDelete(id);
     await expenseListApi(from: '', expenseIdType: '');
     isExpenseDeleting.value = false;
     isExpenseDeleting.value = false;
+  }*/
+  var isExpenseDeleting = false.obs;
+  Future<void> expenseDelete(int id, int index) async {
+    if (isExpenseDeleting.value) return;
+    isExpenseDeleting.value = true;
+    try {
+      final result = await ExpenseService().expenseDelete(id);
+      if (result) {
+        expenseListData.removeAt(index); // Remove item locally
+        await expenseListApi(from: '', expenseIdType: ''); // Refresh list from backend
+      } else {
+      }
+    } catch (e) {
+    } finally {
+      isExpenseDeleting.value = false;
+    }
   }
 }
