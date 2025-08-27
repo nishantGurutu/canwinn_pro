@@ -126,7 +126,7 @@ class _MessageScreenState extends State<MessageScreen> {
     highlightedMessageId.value = messageId;
     Future.delayed(Duration(seconds: 1), () {
       if (highlightedMessageId.value == messageId) {
-        highlightedMessageId.value = null; // remove highlight
+        highlightedMessageId.value = null;
       }
     });
   }
@@ -140,7 +140,7 @@ class _MessageScreenState extends State<MessageScreen> {
         curve: Curves.easeInOut,
         alignment: 0.3,
       ).then((_) {
-        highlightMessage(messageId); // trigger highlight
+        highlightMessage(messageId);
       });
     }
   }

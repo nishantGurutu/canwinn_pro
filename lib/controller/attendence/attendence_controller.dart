@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/component/location_handler.dart';
@@ -18,16 +19,23 @@ class AttendenceController extends GetxController {
   var attendenceStatusValueList = ["14(+6)", "0", "0", "5", "0:00", "0:00"].obs;
   var isAttendencePunching = false.obs;
   Future<void> attendencePunching(
-      File pickedFile,
-      String address,
-      String latitude1,
-      String longitude1,
-      String attendenceTime,
-      String searchText,
-      File imageValue) async {
+    File pickedFile,
+    String address,
+    String latitude1,
+    String longitude1,
+    String attendenceTime,
+    String searchText,
+    File imageValue,
+  ) async {
     isAttendencePunching.value = true;
-    final result = await AttendenceService().attendencePunching(imageValue,
-        address, latitude.value, longitude.value, attendenceTime, searchText);
+    final result = await AttendenceService().attendencePunching(
+      imageValue,
+      address,
+      latitude.value,
+      longitude.value,
+      attendenceTime,
+      searchText,
+    );
     if (result != null) {
       isPunchin.value = true;
       isAttendencePunching.value = false;
@@ -55,18 +63,32 @@ class AttendenceController extends GetxController {
     isCheckingLoading.value = true;
     try {
       await LocationHandler.determinePosition(context);
-      List<geocoding.Placemark> placeMarks =
-          await geocoding.placemarkFromCoordinates(
-              LocationHandler.position!.latitude,
-              LocationHandler.position!.longitude);
+      List<geocoding.Placemark> placeMarks = await geocoding
+          .placemarkFromCoordinates(
+            LocationHandler.position!.latitude,
+            LocationHandler.position!.longitude,
+          );
       var latLon =
           'Lat: ${LocationHandler.position?.latitude}, Lng: ${LocationHandler.position?.longitude}';
       latitude.value = "${LocationHandler.position?.latitude}";
       longitude.value = "${LocationHandler.position?.longitude}";
-      locationString?.value = placeMarks.isNotEmpty
-          ? "${placeMarks.first.name ?? ""}, ${placeMarks.first.subLocality ?? ""}, ${placeMarks.first.subAdministrativeArea ?? ""}, ${placeMarks.first.locality ?? ""}, ${placeMarks.first.postalCode ?? ""}, ${placeMarks.first.country ?? ""}"
-          : '';
-      StorageHelper.setUserLocation(locationString?.value ?? "");
+      locationString?.value =
+          placeMarks.isNotEmpty
+              ? [
+                placeMarks.first.name,
+                placeMarks.first.subThoroughfare,
+                placeMarks.first.thoroughfare,
+                placeMarks.first.street,
+                placeMarks.first.subLocality,
+                placeMarks.first.locality,
+                placeMarks.first.subAdministrativeArea,
+                placeMarks.first.administrativeArea,
+                placeMarks.first.postalCode,
+                placeMarks.first.country,
+              ].where((e) => e != null && e.isNotEmpty).toSet().join(", ")
+              : "";
+
+      // StorageHelper.setUserLocation(locationString?.value ?? "");
       isCheckingLoading.value = false;
       print("User position: $placeMarks");
       print("User position: $latitude");
@@ -81,21 +103,23 @@ class AttendenceController extends GetxController {
 
   var isAttendencePunchout = false.obs;
   Future<void> attendencePunchout(
-      File pickedFile,
-      String address,
-      String latitude1,
-      String longitude1,
-      String attendenceTime,
-      String searchText,
-      File imageValue) async {
+    File pickedFile,
+    String address,
+    String latitude1,
+    String longitude1,
+    String attendenceTime,
+    String searchText,
+    File imageValue,
+  ) async {
     isAttendencePunchout.value = true;
     final result = await AttendenceService().attendencePunchout(
-        imageValue,
-        locationString?.value ?? "",
-        latitude.value,
-        longitude.value,
-        attendenceTime,
-        searchText);
+      imageValue,
+      locationString?.value ?? "",
+      latitude.value,
+      longitude.value,
+      attendenceTime,
+      searchText,
+    );
     if (result != null) {
       isPunchin.value = false;
       isAttendencePunchout.value = false;
@@ -121,7 +145,8 @@ class AttendenceController extends GetxController {
       attendenceListModel.refresh();
       isAttendenceListLoading.value = false;
       print(
-          'iuyiuyiuyuycf77g87t8y87 uf7f6d65juy7 ${attendenceListModel.value?.data?.year}');
+        'iuyiuyiuyuycf77g87t8y87 uf7f6d65juy7 ${attendenceListModel.value?.data?.year}',
+      );
     } else {}
     isAttendenceListLoading.value = false;
   }
@@ -167,11 +192,21 @@ class AttendenceController extends GetxController {
   }
 
   var isApplyingLeave = false.obs;
-  Future<void> aplyingLeave(String startDate, String endDate, String duration,
-      String leaveType, String description) async {
+  Future<void> aplyingLeave(
+    String startDate,
+    String endDate,
+    String duration,
+    String leaveType,
+    String description,
+  ) async {
     isApplyingLeave.value = true;
-    final result = await AttendenceService()
-        .applyingLeave(startDate, endDate, duration, leaveType, description);
+    final result = await AttendenceService().applyingLeave(
+      startDate,
+      endDate,
+      duration,
+      leaveType,
+      description,
+    );
     isApplyingLeave.value = false;
     await leaveLoading();
     Get.back();
@@ -179,11 +214,23 @@ class AttendenceController extends GetxController {
   }
 
   var isLeaveEditing = false.obs;
-  Future<void> leaveEditing(String startDate, String endDate, String duration,
-      String leaveType, String description, String id) async {
+  Future<void> leaveEditing(
+    String startDate,
+    String endDate,
+    String duration,
+    String leaveType,
+    String description,
+    String id,
+  ) async {
     isLeaveEditing.value = true;
-    final result = await AttendenceService()
-        .leaveEditing(startDate, endDate, duration, leaveType, description, id);
+    final result = await AttendenceService().leaveEditing(
+      startDate,
+      endDate,
+      duration,
+      leaveType,
+      description,
+      id,
+    );
     isLeaveEditing.value = false;
     await leaveLoading();
     Get.back();

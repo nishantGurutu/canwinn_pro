@@ -1,11 +1,14 @@
 import "dart:io";
 import "package:camera/camera.dart";
 import "package:flutter/material.dart";
+import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:get/get.dart";
+import "package:path_provider/path_provider.dart";
 import "package:task_management/controller/attendence/attendence_controller.dart";
 import "package:task_management/controller/register_controller.dart";
 import "package:task_management/controller/task_controller.dart";
+import 'package:path/path.dart' as path;
 
 class CameraView extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -69,36 +72,113 @@ class _CameraViewState extends State<CameraView> {
   final TextEditingController addressTextEditingController =
       TextEditingController();
   Rx<File> pickedFile = File('').obs;
+
+  Future<File?> compressImage(File file) async {
+    try {
+      final dir = await getTemporaryDirectory();
+      final targetPath = path.join(
+        dir.absolute.path,
+        "${DateTime.now().millisecondsSinceEpoch}_compressed.jpg",
+      );
+
+      XFile? result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: 85, // quality 70-85 safe hai
+        format: CompressFormat.jpeg,
+      );
+
+      if (result != null) {
+        return File(result.path); // ✅ XFile ko File me convert
+      }
+      return null;
+    } catch (e) {
+      print("❌ Compression error: $e");
+      return null;
+    }
+  }
+
+  // void captureImage({String? address}) async {
+  //   try {
+  //     final XFile? pickImage = await controller?.takePicture();
+  //     print('picked image value from camera is ${pickImage?.path}');
+  //     if (pickImage != null) {
+  //       pickedFile.value = File(pickImage.path);
+  //       print('picked image value from camera is 2 ${pickedFile.value}');
+
+  //       if (widget.type == "checkin") {
+  //         if (attendenceController.attendenceUserDetails.value?.data?.punchin ==
+  //             1) {
+  //           Get.back();
+  //           await attendenceController.attendencePunchout(
+  //             pickedFile.value,
+  //             widget.address ?? "",
+  //             widget.latitude,
+  //             widget.longitude,
+  //             widget.attendenceTime,
+  //             "",
+  //             pickedFile.value,
+  //           );
+  //         } else {
+  //           Get.back();
+  //           await attendenceController.attendencePunching(
+  //             pickedFile.value,
+  //             address ?? "",
+  //             widget.latitude,
+  //             widget.longitude,
+  //             widget.attendenceTime,
+  //             "",
+  //             pickedFile.value,
+  //           );
+  //         }
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print("Error taking picture: $e");
+  //   }
+  // }
+
   void captureImage({String? address}) async {
     try {
       final XFile? pickImage = await controller?.takePicture();
       print('picked image value from camera is ${pickImage?.path}');
+
       if (pickImage != null) {
-        pickedFile.value = File(pickImage.path);
-        print('picked image value from camera is 2 ${pickedFile.value}');
+        // Pehle compress kar
+        File? compressedFile = await compressImage(File(pickImage.path));
+
+        if (compressedFile == null) {
+          print("⚠️ Compression failed, using original image");
+          compressedFile = File(pickImage.path);
+        }
+
+        pickedFile.value = compressedFile;
+        print('compressed image path: ${pickedFile.value.path}');
 
         if (widget.type == "checkin") {
           if (attendenceController.attendenceUserDetails.value?.data?.punchin ==
               1) {
             Get.back();
             await attendenceController.attendencePunchout(
-                pickedFile.value,
-                widget.address ?? "",
-                widget.latitude,
-                widget.longitude,
-                widget.attendenceTime,
-                "",
-                pickedFile.value);
+              pickedFile.value,
+              widget.address ?? "",
+              widget.latitude,
+              widget.longitude,
+              widget.attendenceTime,
+              "",
+              pickedFile.value,
+            );
           } else {
             Get.back();
             await attendenceController.attendencePunching(
-                pickedFile.value,
-                address ?? "",
-                widget.latitude,
-                widget.longitude,
-                widget.attendenceTime,
-                "",
-                pickedFile.value);
+              pickedFile.value,
+              address ?? "",
+              widget.latitude,
+              widget.longitude,
+              widget.attendenceTime,
+              "",
+              pickedFile.value,
+            );
           }
         }
       }
@@ -120,16 +200,17 @@ class _CameraViewState extends State<CameraView> {
         children: [
           SizedBox(
             height: double.infinity,
-            child: controller == null
-                ? Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(40)),
-                    ),
-                  )
-                : CameraPreview(controller!),
+            child:
+                controller == null
+                    ? Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                      ),
+                    )
+                    : CameraPreview(controller!),
           ),
           Positioned(
             right: 5.w,
@@ -139,11 +220,7 @@ class _CameraViewState extends State<CameraView> {
               onTap: () {
                 Get.back();
               },
-              child: const Icon(
-                Icons.close,
-                size: 35,
-                color: Colors.white,
-              ),
+              child: const Icon(Icons.close, size: 35, color: Colors.white),
             ),
           ),
           Positioned(

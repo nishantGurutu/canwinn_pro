@@ -38,9 +38,7 @@ class _ChatListState extends State<ChatList> {
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => NetworkImageScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => NetworkImageScreen(file: file)),
       );
     }
   }
@@ -51,60 +49,53 @@ class _ChatListState extends State<ChatList> {
       backgroundColor: whiteColor,
       resizeToAvoidBottomInset: false,
       body: Obx(
-        () => chatController.isChatLoading.value
-            ? Center(
-                child: CircularProgressIndicator(
-                  color: primaryButtonColor,
-                ),
-              )
-            : RefreshIndicator(
-                onRefresh: onRefresher,
-                child: Column(
-                  children: [
-                    SizedBox(height: 5.h),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: chatController.chatList.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      noDiscussionDataIcon,
-                                      height: 160.h,
+        () =>
+            chatController.isChatLoading.value
+                ? Center(
+                  child: CircularProgressIndicator(color: primaryButtonColor),
+                )
+                : RefreshIndicator(
+                  onRefresh: onRefresher,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 5.h),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child:
+                              chatController.chatList.isEmpty
+                                  ? Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          noDiscussionDataIcon,
+                                          height: 160.h,
+                                        ),
+                                        SizedBox(height: 3.h),
+                                        Text(
+                                          'No Discussion found !',
+                                          style: heading6,
+                                        ),
+                                        SizedBox(height: 3.h),
+                                        Text(
+                                          'Click Below to Add',
+                                          style: heading7,
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      height: 3.h,
-                                    ),
-                                    Text(
-                                      'No Discussion found !',
-                                      style: heading6,
-                                    ),
-                                    SizedBox(
-                                      height: 3.h,
-                                    ),
-                                    Text(
-                                      'Click Below to Add',
-                                      style: heading7,
-                                    )
-                                  ],
-                                ),
-                              )
-                            : DiscussionList(chatController.chatList),
+                                  )
+                                  : DiscussionList(chatController.chatList),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: darkBlue,
-        child: Icon(
-          Icons.add,
-          color: whiteColor,
-          size: 30.h,
-        ),
+        child: Icon(Icons.add, color: whiteColor, size: 30.h),
         onPressed: () {
           Get.to(() => SelectContact());
         },
@@ -122,9 +113,7 @@ class _ChatListState extends State<ChatList> {
         width: 40.w,
         decoration: BoxDecoration(
           color: primaryColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(27.r),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(27.r)),
           boxShadow: [
             BoxShadow(
               color: lightGreyColor.withOpacity(0.2),
@@ -135,13 +124,7 @@ class _ChatListState extends State<ChatList> {
             ),
           ],
         ),
-        child: Center(
-          child: Icon(
-            Icons.add,
-            color: whiteColor,
-            size: 25.sp,
-          ),
-        ),
+        child: Center(child: Icon(Icons.add, color: whiteColor, size: 25.sp)),
       ),
     );
   }

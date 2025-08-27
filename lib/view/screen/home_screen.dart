@@ -222,9 +222,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     await cacheManager.removeFile('$cacheKey');
 
     await homeController.homeDataApi('');
-    // } else if (homeController.isTabIndexSelected.value == 1) {
     await homeController.leadHomeApi();
-    // }
   }
 
   @override
@@ -238,68 +236,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             _animationController.reverse();
           }
         },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Container(
-                //   color: whiteColor,
-                //   child: TabBar(
-                //     controller: _tabController,
-                //     isScrollable: false,
-                //     onTap: (value) {
-                //       homeController.isTabIndexSelected.value = value;
-                //       if (_animationController.isCompleted) {
-                //         _animationController.reverse();
-                //       }
-                //     },
-                //     indicatorSize: TabBarIndicatorSize.tab,
-                //     tabs: [
-                //       Tab(
-                //         icon: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             SvgPicture.asset(
-                //                 'assets/image/svg/assignment_late.svg'),
-                //             SizedBox(width: 5.w),
-                //             Text(
-                //               'Task',
-                //               style: TextStyle(
-                //                   fontSize: 16, fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //       Tab(
-                //         icon: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             SvgPicture.asset('assets/image/svg/done_all (1).svg'),
-                //             SizedBox(width: 5.w),
-                //             Text(
-                //               'Lead',
-                //               style: TextStyle(
-                //                   fontSize: 16, fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Expanded(
-                //   child: TabBarView(
-                //     controller: _tabController,
-                //     children: [
-                //       _buildHomeLeadContent(),
-                //     ],
-                //   ),
-                // ),
-                _buildHomeContent(),
-              ],
-            ),
-          ),
-        ),
+        child: SafeArea(child: _buildHomeContent()),
       ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[

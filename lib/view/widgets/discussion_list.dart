@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/image_constant.dart';
@@ -28,18 +27,21 @@ class DiscussionList extends StatelessWidget {
           child: TextFormField(
             controller: searchAssignController,
             onChanged: (value) {
-              rxFilteredList.value = chatController.chatList
-                  .where((person) =>
-                      person.name
-                          ?.toLowerCase()
-                          .contains(value.toLowerCase()) ??
-                      false)
-                  .toList();
+              rxFilteredList.value =
+                  chatController.chatList
+                      .where(
+                        (person) =>
+                            person.name?.toLowerCase().contains(
+                              value.toLowerCase(),
+                            ) ??
+                            false,
+                      )
+                      .toList();
             },
             decoration: InputDecoration(
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.sp),
-                child: Icon(Icons.search,size: 20,),
+                child: Icon(Icons.search, size: 20),
               ),
               hintText: 'Search here...',
               fillColor: searchBackgroundColor,
@@ -53,8 +55,10 @@ class DiscussionList extends StatelessWidget {
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.all(Radius.circular(30.r)),
               ),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+                vertical: 10.h,
+              ),
             ),
           ),
         ),
@@ -81,17 +85,19 @@ class DiscussionList extends StatelessWidget {
                     }
                   },
                   onTap: () {
-                    Get.to(() => MessageScreen(
-                          item.name,
-                          item.chatId.toString(),
-                          item.userId.toString(),
-                          'chat_list',
-                          item.members,
-                          item.type.toString(),
-                          item.image.toString(),
-                          item.groupIcon.toString(),
-                          "",
-                        ));
+                    Get.to(
+                      () => MessageScreen(
+                        item.name,
+                        item.chatId.toString(),
+                        item.userId.toString(),
+                        'chat_list',
+                        item.members,
+                        item.type.toString(),
+                        item.image.toString(),
+                        item.groupIcon.toString(),
+                        "",
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -107,36 +113,47 @@ class DiscussionList extends StatelessWidget {
                                 color: const Color(0xffF4E2FF),
                                 borderRadius: BorderRadius.circular(22.5.h),
                               ),
-                              child: item.type?.toLowerCase() == 'group'
-                                  ? ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(22.5.h),
-                                      child: Image.network(
-                                        '${item.groupIcon}',
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Image.asset(backgroundLogo);
-                                        },
-                                      ),
-                                    )
-                                  : InkWell(
-                                      onTap: () {
-                                        openFile(item.image ?? "");
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(22.5.h),
+                              child:
+                                  item.type?.toLowerCase() == 'group'
+                                      ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          22.5.h,
+                                        ),
                                         child: Image.network(
-                                          '${item.image}',
+                                          '${item.groupIcon}',
                                           fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) {
                                             return Image.asset(backgroundLogo);
                                           },
                                         ),
+                                      )
+                                      : InkWell(
+                                        onTap: () {
+                                          openFile(item.image ?? "");
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            22.5.h,
+                                          ),
+                                          child: Image.network(
+                                            '${item.image}',
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (
+                                              context,
+                                              error,
+                                              stackTrace,
+                                            ) {
+                                              return Image.asset(
+                                                backgroundLogo,
+                                              );
+                                            },
+                                          ),
+                                        ),
                                       ),
-                                    ),
                             ),
                             SizedBox(width: 8.w),
                             Expanded(
@@ -160,8 +177,9 @@ class DiscussionList extends StatelessWidget {
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
-                                          color: const Color(0xff262626)
-                                              .withOpacity(0.38),
+                                          color: const Color(
+                                            0xff262626,
+                                          ).withOpacity(0.38),
                                         ),
                                       ),
                                     ],
@@ -174,8 +192,9 @@ class DiscussionList extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
-                                      color: const Color(0xff262626)
-                                          .withOpacity(0.38),
+                                      color: const Color(
+                                        0xff262626,
+                                      ).withOpacity(0.38),
                                     ),
                                   ),
                                 ],

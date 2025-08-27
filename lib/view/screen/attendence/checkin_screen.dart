@@ -25,8 +25,9 @@ class CheckinScreen extends StatefulWidget {
 }
 
 class _CheckinScreenState extends State<CheckinScreen> {
-  final AttendenceController attendenceController =
-      Get.put(AttendenceController());
+  final AttendenceController attendenceController = Get.put(
+    AttendenceController(),
+  );
   final RegisterController registerController = Get.put(RegisterController());
   @override
   void initState() {
@@ -37,8 +38,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   Future<void> callFunctions() async {
     if (StorageHelper.getType() != 3) {
-      await attendenceController
-          .attendenceUserDetailsApi(StorageHelper.getId().toString());
+      await attendenceController.attendenceUserDetailsApi(
+        StorageHelper.getId().toString(),
+      );
     }
     await checkAndResetAttendanceData();
     // await locationName();
@@ -73,11 +75,17 @@ class _CheckinScreenState extends State<CheckinScreen> {
   String address = '';
 
   bool isWithinRange(
-      double lat1, double lon1, double lat2, double lon2, double range) {
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+    double range,
+  ) {
     const double earthRadius = 6371000;
     double dLat = (lat2 - lat1) * (3.14159265359 / 180);
     double dLon = (lon2 - lon1) * (3.14159265359 / 180);
-    double a = (sin(dLat / 2) * sin(dLat / 2)) +
+    double a =
+        (sin(dLat / 2) * sin(dLat / 2)) +
         cos(lat1 * (3.14159265359 / 180)) *
             cos(lat2 * (3.14159265359 / 180)) *
             (sin(dLon / 2) * sin(dLon / 2));
@@ -94,271 +102,176 @@ class _CheckinScreenState extends State<CheckinScreen> {
       body: Container(
         color: lightBlueColor,
         child: Obx(
-          () => attendenceController.isCheckingLoading.value == true
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: lightButtonColor,
-                  ),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(20.r),
-                          bottomLeft: Radius.circular(20.r),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 10.h),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Hello,',
-                                    style: TextStyle(
-                                      color: lightGreyColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' ${StorageHelper.getName()}',
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 15.h),
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Get.to(() => AttendenceScreen());
-                                  },
-                                  child: Container(
-                                    height: 85.h,
-                                    width: 110.w,
-                                    decoration: BoxDecoration(
-                                      color: lightBlueColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/png/attendence_icon.png',
-                                          height: 35.h,
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        Text(
-                                          'Attendance',
-                                          style: TextStyle(
-                                              color: textColor,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 15.w,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Get.to(() => ExpenseClaim());
-                                  },
-                                  child: Container(
-                                    height: 85.h,
-                                    width: 110.w,
-                                    decoration: BoxDecoration(
-                                      color: lightBlueColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/png/expense_icon-removebg-preview.png',
-                                          height: 35.h,
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        Text(
-                                          'Expense Claims',
-                                          style: TextStyle(
-                                              color: textColor,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 25.h),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 15.w),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "More Actions",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ],
+          () =>
+              attendenceController.isCheckingLoading.value == true
+                  ? Center(
+                    child: CircularProgressIndicator(color: lightButtonColor),
+                  )
+                  : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(20.r),
+                            bottomLeft: Radius.circular(20.r),
                           ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Row(
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Get.to(() => ApplyLeave());
-                                    },
-                                    child: Container(
-                                      height: 55.h,
-                                      width: 55.w,
-                                      decoration: BoxDecoration(
-                                        color: lightGreenColor,
-                                        border:
-                                            Border.all(color: lightGreenColor2),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10.r),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Image.asset(
-                                          'assets/images/png/umbrela-icon-removebg-preview.png',
-                                          height: 35.h,
-                                          color: greenColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 8.h,
-                                  ),
-                                  Text(
-                                    'Apply\nLeaves',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 30.w,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Get.to(() => AddExpense());
-                                },
-                                child: Column(
+                              SizedBox(height: 10.h),
+                              RichText(
+                                text: TextSpan(
                                   children: [
-                                    Container(
-                                      height: 55.h,
-                                      width: 55.w,
-                                      decoration: BoxDecoration(
-                                        color: lightGreenColor,
-                                        border:
-                                            Border.all(color: lightGreenColor2),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10.r),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Image.asset(
-                                          'assets/images/png/expanse-image-removebg-preview.png',
-                                          height: 65.h,
-                                          fit: BoxFit.cover,
-                                          color: greenColor,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    Text(
-                                      'Add Expense\n',
+                                    TextSpan(
+                                      text: 'Hello,',
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                        color: lightGreyColor,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' ${StorageHelper.getName()}',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                width: 30.w,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Get.to(() => HumanGatePass(index: 0));
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 55.h,
-                                      width: 55.w,
+                              SizedBox(height: 15.h),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.to(() => AttendenceScreen());
+                                    },
+                                    child: Container(
+                                      height: 85.h,
+                                      width: 110.w,
                                       decoration: BoxDecoration(
-                                        color: lightGreenColor,
-                                        border:
-                                            Border.all(color: lightGreenColor2),
+                                        color: lightBlueColor,
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(10.r),
                                         ),
                                       ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.sp),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/png/attendence_icon.png',
+                                            height: 35.h,
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            'Attendance',
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 15.w),
+                                  InkWell(
+                                    onTap: () {
+                                      Get.to(() => ExpenseClaim());
+                                    },
+                                    child: Container(
+                                      height: 85.h,
+                                      width: 110.w,
+                                      decoration: BoxDecoration(
+                                        color: lightBlueColor,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10.r),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/png/expense_icon-removebg-preview.png',
+                                            height: 35.h,
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            'Expense Claims',
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 25.h),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.w),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "More Actions",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20.h),
+                            Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Get.to(() => ApplyLeave());
+                                      },
+                                      child: Container(
+                                        height: 55.h,
+                                        width: 55.w,
+                                        decoration: BoxDecoration(
+                                          color: lightGreenColor,
+                                          border: Border.all(
+                                            color: lightGreenColor2,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Center(
                                           child: Image.asset(
-                                            'assets/image/png/pass-gate-scanner-icon-color-outline-vector-removebg-preview.png',
-                                            height: 65.h,
-                                            fit: BoxFit.cover,
+                                            'assets/images/png/umbrela-icon-removebg-preview.png',
+                                            height: 35.h,
                                             color: greenColor,
                                           ),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
+                                    SizedBox(height: 8.h),
                                     Text(
-                                      'Human\nGate Pass',
+                                      'Apply\nLeaves',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 16,
@@ -367,164 +280,256 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Spacer(),
-                    if (StorageHelper.getType() != 3)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(20.r),
-                            topLeft: Radius.circular(20.r),
-                          ),
-                        ),
-                        child: Obx(
-                          () => attendenceController.isCheckingLoading.value ==
-                                  true
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(
-                                      color: primaryButtonColor,
-                                    ),
-                                    SizedBox(
-                                      width: 8.w,
-                                    ),
-                                    Text(
-                                      "Location loading...",
-                                      style: TextStyle(
-                                          color: primaryButtonColor,
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400),
-                                    )
-                                  ],
-                                )
-                              : Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.w, vertical: 20.h),
+                                SizedBox(width: 30.w),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => AddExpense());
+                                  },
                                   child: Column(
                                     children: [
-                                      Obx(
-                                        () => (attendenceController
-                                                        .locationString
-                                                        ?.value ??
-                                                    "")
-                                                .isNotEmpty
-                                            ? Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Image.asset(
-                                                        'assets/image/png/location-mark.png',
-                                                        height: 20.h,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 8.w,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          "${attendenceController.locationString?.value ?? ""}",
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8.h,
-                                                  )
-                                                ],
-                                              )
-                                            : SizedBox(),
+                                      Container(
+                                        height: 55.h,
+                                        width: 55.w,
+                                        decoration: BoxDecoration(
+                                          color: lightGreenColor,
+                                          border: Border.all(
+                                            color: lightGreenColor2,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Image.asset(
+                                            'assets/images/png/expanse-image-removebg-preview.png',
+                                            height: 65.h,
+                                            fit: BoxFit.cover,
+                                            color: greenColor,
+                                          ),
+                                        ),
                                       ),
-                                      Obx(
-                                        () {
-                                          return InkWell(
-                                            onTap: () async {
-                                              if (!attendenceController
-                                                  .isAttendencePunching.value) {
-                                                if ((attendenceController
+                                      SizedBox(height: 8.h),
+                                      Text(
+                                        'Add Expense\n',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 30.w),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => HumanGatePass(index: 0));
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 55.h,
+                                        width: 55.w,
+                                        decoration: BoxDecoration(
+                                          color: lightGreenColor,
+                                          border: Border.all(
+                                            color: lightGreenColor2,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8.sp),
+                                            child: Image.asset(
+                                              'assets/image/png/pass-gate-scanner-icon-color-outline-vector-removebg-preview.png',
+                                              height: 65.h,
+                                              fit: BoxFit.cover,
+                                              color: greenColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Text(
+                                        'Human\nGate Pass',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Spacer(),
+                      if (StorageHelper.getType() != 3)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20.r),
+                              topLeft: Radius.circular(20.r),
+                            ),
+                          ),
+                          child: Obx(
+                            () =>
+                                attendenceController.isCheckingLoading.value ==
+                                        true
+                                    ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircularProgressIndicator(
+                                          color: primaryButtonColor,
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Text(
+                                          "Location loading...",
+                                          style: TextStyle(
+                                            color: primaryButtonColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                    : Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 15.w,
+                                        vertical: 20.h,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Obx(
+                                            () =>
+                                                (attendenceController
                                                                 .locationString
                                                                 ?.value ??
                                                             "")
-                                                        .isNotEmpty &&
-                                                    attendenceController
-                                                        .latitude.isNotEmpty &&
-                                                    attendenceController
-                                                        .longitude.isNotEmpty) {
-                                                  final cameras =
-                                                      await availableCameras();
-                                                  Get.to(
-                                                    () => CameraView(
-                                                      cameras: cameras,
-                                                      type: "checkin",
-                                                      latitude:
-                                                          attendenceController
-                                                                  .latitude
-                                                                  .value ??
-                                                              "",
-                                                      longitude:
-                                                          attendenceController
-                                                              .longitude.value,
-                                                      attendenceTime: DateFormat(
-                                                              'yyyy-MM-dd HH:mm:ss')
-                                                          .format(
-                                                              DateTime.now()),
-                                                      address:
-                                                          attendenceController
+                                                        .isNotEmpty
+                                                    ? Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              'assets/image/png/location-mark.png',
+                                                              height: 20.h,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 8.w,
+                                                            ),
+                                                            Expanded(
+                                                              child: Text(
+                                                                "${attendenceController.locationString?.value ?? ""}",
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 8.h),
+                                                      ],
+                                                    )
+                                                    : SizedBox(),
+                                          ),
+                                          Obx(() {
+                                            return InkWell(
+                                              onTap: () async {
+                                                if (!attendenceController
+                                                    .isAttendencePunching
+                                                    .value) {
+                                                  if ((attendenceController
                                                                   .locationString
                                                                   ?.value ??
-                                                              '',
-                                                    ),
-                                                  );
-                                                } else {
-                                                  CustomToast().showCustomToast(
-                                                      "Location not available. Try again.");
+                                                              "")
+                                                          .isNotEmpty &&
+                                                      attendenceController
+                                                          .latitude
+                                                          .isNotEmpty &&
+                                                      attendenceController
+                                                          .longitude
+                                                          .isNotEmpty) {
+                                                    final cameras =
+                                                        await availableCameras();
+                                                    Get.to(
+                                                      () => CameraView(
+                                                        cameras: cameras,
+                                                        type: "checkin",
+                                                        latitude:
+                                                            attendenceController
+                                                                .latitude
+                                                                .value ??
+                                                            "",
+                                                        longitude:
+                                                            attendenceController
+                                                                .longitude
+                                                                .value,
+                                                        attendenceTime: DateFormat(
+                                                          'yyyy-MM-dd HH:mm:ss',
+                                                        ).format(
+                                                          DateTime.now(),
+                                                        ),
+                                                        address:
+                                                            attendenceController
+                                                                .locationString
+                                                                ?.value ??
+                                                            '',
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    CustomToast().showCustomToast(
+                                                      "Location not available. Try again.",
+                                                    );
+                                                  }
                                                 }
-                                              }
-                                            },
-                                            child: Container(
-                                              height: 40.h,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Color.fromARGB(
-                                                    255, 244, 54, 54),
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(20.r),
+                                              },
+                                              child: Container(
+                                                height: 40.h,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    244,
+                                                    54,
+                                                    54,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radius.circular(20.r),
+                                                      ),
                                                 ),
-                                              ),
-                                              child: Center(
-                                                child:
-                                                    (attendenceController
-                                                                .isAttendencePunching
-                                                                .value ||
-                                                            attendenceController
-                                                                .isAttendencePunchout
-                                                                .value ||
-                                                            attendenceController
-                                                                    .isuserDetailsAttendenceListLoading
-                                                                    .value ==
-                                                                true)
-                                                        ? Row(
+                                                child: Center(
+                                                  child:
+                                                      (attendenceController
+                                                                  .isAttendencePunching
+                                                                  .value ||
+                                                              attendenceController
+                                                                  .isAttendencePunchout
+                                                                  .value ||
+                                                              attendenceController
+                                                                      .isuserDetailsAttendenceListLoading
+                                                                      .value ==
+                                                                  true)
+                                                          ? Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .center,
                                                             children: [
                                                               CircularProgressIndicator(
-                                                                  color:
-                                                                      whiteColor),
+                                                                color:
+                                                                    whiteColor,
+                                                              ),
                                                               SizedBox(
-                                                                  width: 8.w),
+                                                                width: 8.w,
+                                                              ),
                                                               Text(
                                                                 'Loading...',
-                                                                style:
-                                                                    TextStyle(
+                                                                style: TextStyle(
                                                                   color:
                                                                       whiteColor,
                                                                   fontSize: 18,
@@ -535,7 +540,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                               ),
                                                             ],
                                                           )
-                                                        : Text(
+                                                          : Text(
                                                             attendenceController
                                                                         .attendenceUserDetails
                                                                         .value
@@ -552,57 +557,58 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                               color: whiteColor,
                                                             ),
                                                           ),
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
+                                            );
+                                          }),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                        ),
-                      ),
-                    if (StorageHelper.getType() == 3)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(20.r),
-                            topLeft: Radius.circular(20.r),
+                                    ),
                           ),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.w, vertical: 20.h),
-                          child: InkWell(
-                            onTap: () {
-                              Get.to(() => CheckinUserDetails());
-                            },
-                            child: Container(
-                              height: 40.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 244, 54, 54),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20.r),
+                      if (StorageHelper.getType() == 3)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20.r),
+                              topLeft: Radius.circular(20.r),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15.w,
+                              vertical: 20.h,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Get.to(() => CheckinUserDetails());
+                              },
+                              child: Container(
+                                height: 40.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 244, 54, 54),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20.r),
+                                  ),
                                 ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Check User",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: whiteColor,
+                                child: Center(
+                                  child: Text(
+                                    "Check User",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
+                    ],
+                  ),
         ),
       ),
     );

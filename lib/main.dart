@@ -23,7 +23,6 @@ import 'package:task_management/view/screen/inscreen/inChalanDetails.dart';
 import 'package:task_management/view/screen/lead_overview.dart';
 import 'package:task_management/view/screen/meeting_screen.dart';
 import 'package:task_management/view/screen/message.dart';
-import 'package:task_management/view/screen/outscreen/chalanDetail.dart';
 import 'package:task_management/view/screen/outscreen/user_chalan_details.dart';
 import 'package:task_management/view/screen/project.dart';
 import 'package:task_management/view/screen/splash_screen.dart';
@@ -182,7 +181,6 @@ Future<bool> _isGPSEnabled() async {
   bool serviceEnabled;
   geolocator.LocationPermission permission;
 
-  // Test if location services are enabled.
   serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     // Location services are not enabled, prompt the user to enable them.

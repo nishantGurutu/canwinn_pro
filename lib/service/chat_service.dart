@@ -34,9 +34,7 @@ class ChatService {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
-      final Map<String, dynamic> formDataMap = {
-        'chat_id': chatId,
-      };
+      final Map<String, dynamic> formDataMap = {'chat_id': chatId};
       if (pickedFile.value.path.isNotEmpty) {
         formDataMap['group_icon'] = await MultipartFile.fromFile(
           pickedFile.value.path,
@@ -86,10 +84,10 @@ class ChatService {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
-      final response = await _dio
-          .post("${ApiConstant.baseUrl}${ApiConstant.deleteChat}", data: {
-        "chat_ids": selectedChatId,
-      });
+      final response = await _dio.post(
+        "${ApiConstant.baseUrl}${ApiConstant.deleteChat}",
+        data: {"chat_ids": selectedChatId},
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         CustomToast().showCustomToast(response.data['message']);
@@ -103,8 +101,14 @@ class ChatService {
     }
   }
 
-  Future<dynamic> sendMessageApi(String? id, String text, String? chatId,
-      String? fromPage, File pickedFile, String messageId) async {
+  Future<dynamic> sendMessageApi(
+    String? id,
+    String text,
+    String? chatId,
+    String? fromPage,
+    File pickedFile,
+    String messageId,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -277,7 +281,9 @@ class ChatService {
   // }
 
   Future<dynamic> addGroupUser(
-      String? chatId, RxList<int> selectedChatId) async {
+    String? chatId,
+    RxList<int> selectedChatId,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -306,15 +312,13 @@ class ChatService {
 
       final response = await _dio.post(
         ApiConstant.baseUrl + ApiConstant.createGroup,
-        data: {
-          'group_name': text,
-          'user_ids': selectedPersonList,
-        },
+        data: {'group_name': text, 'user_ids': selectedPersonList},
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         CustomToast().showCustomToast(
-            "Group created successfully! Time to share ideas and make plans!");
+          "Group created successfully! Time to share ideas and make plans!",
+        );
         return response.data;
       } else {
         throw Exception('Failed to send message');

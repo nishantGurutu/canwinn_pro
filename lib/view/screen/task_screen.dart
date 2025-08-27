@@ -33,8 +33,13 @@ class TaskScreenPage extends StatefulWidget {
   final String assignedType;
   final String? navigationType;
   final String? userId;
-  const TaskScreenPage(this.navigationType, this.userId,
-      {super.key, required this.taskType, required this.assignedType});
+  const TaskScreenPage(
+    this.navigationType,
+    this.userId, {
+    super.key,
+    required this.taskType,
+    required this.assignedType,
+  });
 
   @override
   State<TaskScreenPage> createState() => _TaskListPageState();
@@ -60,17 +65,20 @@ class _TaskListPageState extends State<TaskScreenPage> {
     taskController.completeTaskList.clear();
     taskController.pagevalue.value = 1;
     taskController.responsiblePersonListApi(
-        profileController.selectedDepartMentListData.value?.id, "");
+      profileController.selectedDepartMentListData.value?.id,
+      "",
+    );
     taskController.selectedTaskType.value = widget.taskType;
     taskController.selectedAssignedTask.value = widget.assignedType;
     priorityController.priorityApi();
     taskController.allProjectListApi();
     taskController.taskListApi(
-        widget.taskType,
-        taskController.selectedAssignedTask.value,
-        'initstate',
-        '',
-        widget.userId);
+      widget.taskType,
+      taskController.selectedAssignedTask.value,
+      'initstate',
+      '',
+      widget.userId,
+    );
     super.initState();
   }
 
@@ -79,20 +87,22 @@ class _TaskListPageState extends State<TaskScreenPage> {
         _scrollController.position.maxScrollExtent) {
       taskController.pagevalue.value += 1;
       await taskController.taskListApi(
-          widget.taskType,
-          taskController.selectedAssignedTask.value,
-          'scroll',
-          '',
-          widget.userId);
+        widget.taskType,
+        taskController.selectedAssignedTask.value,
+        'scroll',
+        '',
+        widget.userId,
+      );
     } else if (_scrollController.position.pixels ==
         _scrollController.position.minScrollExtent) {
       taskController.pagevalue.value -= 1;
       await taskController.taskListApi(
-          widget.taskType,
-          taskController.selectedAssignedTask.value,
-          'scroll',
-          '',
-          widget.userId);
+        widget.taskType,
+        taskController.selectedAssignedTask.value,
+        'scroll',
+        '',
+        widget.userId,
+      );
     }
   }
 
@@ -112,8 +122,10 @@ class _TaskListPageState extends State<TaskScreenPage> {
 
   Future<void> takePhoto(ImageSource source) async {
     try {
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
       if (pickedImage == null) {
         return;
       }
@@ -160,12 +172,18 @@ class _TaskListPageState extends State<TaskScreenPage> {
                 Get.back();
               }
             },
-            icon: SvgPicture.asset('assets/images/svg/back_arrow.svg',color: secondaryColor,),
+            icon: SvgPicture.asset(
+              'assets/images/svg/back_arrow.svg',
+              color: secondaryColor,
+            ),
           ),
           title: Text(
             task,
             style: TextStyle(
-                color: Colors.black87, fontSize: 21, fontWeight: FontWeight.bold),
+              color: Colors.black87,
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           actions: [
             Padding(
@@ -178,16 +196,19 @@ class _TaskListPageState extends State<TaskScreenPage> {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    builder: (context) => Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTask(
-                          priorityController.priorityList,
-                          taskController.allProjectDataList,
-                          taskController.responsiblePersonList,
-                          0,
-                          ""),
-                    ),
+                    builder:
+                        (context) => Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: AddTask(
+                            priorityController.priorityList,
+                            taskController.allProjectDataList,
+                            taskController.responsiblePersonList,
+                            0,
+                            "",
+                          ),
+                        ),
                   );
                 },
                 child: Container(
@@ -195,23 +216,18 @@ class _TaskListPageState extends State<TaskScreenPage> {
                   width: 30.w,
                   decoration: BoxDecoration(
                     color: secondaryColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15.r),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(15.r)),
                   ),
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
+                  child: Icon(Icons.add, color: Colors.white),
                 ),
               ),
-            )
+            ),
           ],
         ),
         body: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white, // or any background color
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.r),
               topRight: Radius.circular(20.r),
@@ -226,56 +242,213 @@ class _TaskListPageState extends State<TaskScreenPage> {
                 ),
                 child: Container(
                   color: whiteColor,
-                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10.h,
+                    horizontal: 12.w,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2100),
-                          );
-
-                          if (pickedDate != null) {
-                            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-                            dueDateController.text = formattedDate;
-                            taskController.taskListApi(
-                              widget.taskType,
-                              widget.assignedType,
-                              '',
-                              dueDateController.text,
-                              widget.userId,
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
                             );
-                          }
-                        },
+
+                            if (pickedDate != null) {
+                              String formattedDate = DateFormat(
+                                'dd-MM-yyyy',
+                              ).format(pickedDate);
+                              dueDateController.text = formattedDate;
+                              taskController.taskListApi(
+                                widget.taskType,
+                                widget.assignedType,
+                                '',
+                                dueDateController.text,
+                                widget.userId,
+                              );
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(6.h),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: boxBorderColor),
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: whiteColor,
+                            ),
+                            child: Icon(Icons.calendar_month, size: 24.h),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5.w),
+                      Expanded(
+                        flex: 4,
                         child: Container(
-                          padding: EdgeInsets.all(6.h),
                           decoration: BoxDecoration(
                             border: Border.all(color: boxBorderColor),
                             borderRadius: BorderRadius.circular(10.r),
                             color: whiteColor,
                           ),
-                          child: Icon(Icons.calendar_month, size: 24.h),
+                          child: Obx(
+                            () => DropdownButtonHideUnderline(
+                              child: DropdownButton2<String>(
+                                isExpanded: true,
+                                items:
+                                    taskController.taskType.map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            color: darkGreyColor,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                value:
+                                    taskController
+                                            .selectedTaskType
+                                            .value
+                                            .isEmpty
+                                        ? null
+                                        : taskController.selectedTaskType.value,
+                                onChanged: (value) async {
+                                  taskController.selectedTaskType.value =
+                                      value!;
+
+                                  await taskController.taskListApi(
+                                    taskController.selectedTaskType.value,
+                                    taskController.selectedAssignedTask.value,
+                                    '',
+                                    '',
+                                    '',
+                                  );
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 14.w,
+                                  ),
+                                  decoration: BoxDecoration(color: whiteColor),
+                                ),
+                                hint: Text(
+                                  'Select Task'.tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: darkGreyColor,
+                                  ),
+                                ),
+                                iconStyleData: IconStyleData(
+                                  icon: Image.asset(
+                                    'assets/images/png/Vector 3.png',
+                                    height: 8.h,
+                                    color: canwinnPurple,
+                                  ),
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200.h,
+                                  width: 130.w,
+                                  decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    border: Border.all(color: boxBorderColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-
-                      buildDropdown(
-                        items: taskController.taskType,
-                        value: taskController.selectedTaskType.value,
-                        hint: 'Select Task',
-                        onChanged: (val) => taskController.updateTaskType(val),
-                        width: 130.w,
-                      ),
-
-                      buildDropdown(
-                        items: taskController.taskSelectedType,
-                        value: taskController.selectedAssignedTask.value,
-                        hint: 'Select Task Type',
-                        onChanged: (val) => taskController.updateAssignedTask(val),
-                        width: 155.w,
+                      SizedBox(width: 5.w),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: boxBorderColor),
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: whiteColor,
+                          ),
+                          child: Obx(
+                            () => DropdownButtonHideUnderline(
+                              child: DropdownButton2<String>(
+                                isExpanded: true,
+                                items:
+                                    taskController.taskSelectedType.map((
+                                      String item,
+                                    ) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            color: darkGreyColor,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                value:
+                                    taskController
+                                            .selectedAssignedTask
+                                            .value
+                                            .isEmpty
+                                        ? null
+                                        : taskController
+                                            .selectedAssignedTask
+                                            .value,
+                                onChanged: (value) async {
+                                  taskController.selectedAssignedTask.value =
+                                      value!;
+                                  await taskController.taskListApi(
+                                    taskController.selectedTaskType.value,
+                                    taskController.selectedAssignedTask.value,
+                                    '',
+                                    '',
+                                    '',
+                                  );
+                                },
+                                buttonStyleData: ButtonStyleData(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 14.w,
+                                  ),
+                                  decoration: BoxDecoration(color: whiteColor),
+                                ),
+                                hint: Text(
+                                  'Select Task Type'.tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: darkGreyColor,
+                                  ),
+                                ),
+                                iconStyleData: IconStyleData(
+                                  icon: Image.asset(
+                                    'assets/images/png/Vector 3.png',
+                                    height: 8.h,
+                                    color: canwinnPurple,
+                                  ),
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200.h,
+                                  width: 130.w,
+                                  decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    border: Border.all(color: boxBorderColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -287,15 +460,21 @@ class _TaskListPageState extends State<TaskScreenPage> {
               Expanded(
                 child: Obx(() {
                   if (taskController.isTaskLoading.value) {
-                    return Center(child: CircularProgressIndicator(color: primaryColor));
+                    return Center(
+                      child: CircularProgressIndicator(color: primaryColor),
+                    );
                   }
 
                   if (taskController.selectedTaskType.value == "All Task") {
                     return allTaskList(taskController.allTaskList);
-                  } else if (["New Task", "Past Due", "Due Today"]
-                      .contains(taskController.selectedTaskType.value)) {
+                  } else if ([
+                    "New Task",
+                    "Past Due",
+                    "Due Today",
+                  ].contains(taskController.selectedTaskType.value)) {
                     return newTaskList(taskController.newTaskList);
-                  } else if (taskController.selectedTaskType.value == "Progress") {
+                  } else if (taskController.selectedTaskType.value ==
+                      "Progress") {
                     return progressTaskList(taskController.progressTaskList);
                   } else {
                     return completeTaskList(taskController.completeTaskList);
@@ -304,10 +483,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
               ),
             ],
           ),
-        )
-
-        ,
-
+        ),
       ),
     );
   }
@@ -319,418 +495,430 @@ class _TaskListPageState extends State<TaskScreenPage> {
   final TextEditingController dueTimeController3 = TextEditingController();
   Widget allTaskList(RxList newTaskList) {
     return Obx(
-      () => taskController.isTaskLoading.value == true
-          ? Center(
-              child: CircularProgressIndicator(
-              color: primaryColor,
-            ))
-          : newTaskList.isEmpty
+      () =>
+          taskController.isTaskLoading.value == true
+              ? Center(child: CircularProgressIndicator(color: primaryColor))
+              : newTaskList.isEmpty
               ? Expanded(
-                  child: Center(
-                    child: Text(
-                      'No data',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: textColor),
+                child: Center(
+                  child: Text(
+                    'No data',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
                     ),
                   ),
-                )
+                ),
+              )
               : Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: newTaskList.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == newTaskList.length) {
-                        return Obx(
-                          () => taskController.isScrolling.value == true
-                              ? Padding(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: newTaskList.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == newTaskList.length) {
+                      return Obx(
+                        () =>
+                            taskController.isScrolling.value == true
+                                ? Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Center(
                                     child: SizedBox(
                                       width: 30.w,
                                       height: 30.h,
                                       child: CircularProgressIndicator(
-                                          strokeWidth: 2),
+                                        strokeWidth: 2,
+                                      ),
                                     ),
                                   ),
                                 )
-                              : SizedBox.shrink(),
-                        );
-                      }
-                      return Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 5.h),
-                            child: InkWell(
-                              onTap: () {
-                                Get.to(TaskDetails(
+                                : SizedBox.shrink(),
+                      );
+                    }
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 5.h,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                TaskDetails(
                                   taskId: newTaskList[index]['id'],
                                   assignedStatus:
                                       taskController.selectedAssignedTask.value,
                                   initialIndex: 0,
-                                ));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(11.r),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(11.r),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: lightGreyColor.withOpacity(0.1),
+                                    blurRadius: 6.0,
+                                    spreadRadius: 2,
+                                    blurStyle: BlurStyle.inner,
+                                    offset: Offset(0, 1),
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: lightGreyColor.withOpacity(0.1),
-                                      blurRadius: 6.0,
-                                      spreadRadius: 2,
-                                      blurStyle: BlurStyle.inner,
-                                      offset: Offset(0, 1),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 10.h,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${newTaskList[index]['title']}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: changeTextColor(
+                                        heading16,
+                                        newTaskList[index]['is_late_completed']
+                                                    .toString()
+                                                    .toLowerCase() !=
+                                                "0"
+                                            ? Colors.black87
+                                            : textColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Task ID ${newTaskList[index]['id']}',
+                                      style: changeTextColor(
+                                        heading8,
+                                        newTaskList[index]['is_late_completed']
+                                                    .toString()
+                                                    .toLowerCase() !=
+                                                "0"
+                                            ? Colors.black87
+                                            : textColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            // width: 90.w,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  newTaskList[index]['priority_name']
+                                                              ?.toLowerCase() ==
+                                                          'medium'
+                                                      ? canwinnYellow
+                                                      : newTaskList[index]['priority_name']
+                                                              ?.toLowerCase() ==
+                                                          'low'
+                                                      ? Color(0xffFFCD57)
+                                                      : Color(0xffFF0005),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(12.r),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w,
+                                                vertical: 2.h,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  '${newTaskList[index]['priority_name']}',
+                                                  style: TextStyle(
+                                                    fontSize: 13.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: whiteColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  newTaskList[index]['effective_status']
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          "pending"
+                                                      ? Colors.red
+                                                      : newTaskList[index]['effective_status']
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          "progress"
+                                                      ? Colors.orange
+                                                      : Colors.green,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(12.r),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w,
+                                                vertical: 2.h,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  '${newTaskList[index]['effective_status'].toString()}',
+                                                  style: TextStyle(
+                                                    fontSize: 13.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: whiteColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(flex: 3, child: Container()),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                calenderTaskicon,
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Text(
+                                                '${newTaskList[index]['task_date']}',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: secondaryTextColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w, vertical: 10.h),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${newTaskList[index]['title']}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: changeTextColor(
-                                          heading16,
-                                          newTaskList[index]
-                                                          ['is_late_completed']
-                                                      .toString()
-                                                      .toLowerCase() !=
-                                                  "0"
-                                              ? Colors.black87
-                                              : textColor,
-                                        ),
-                                      ),
-                                      SizedBox(height: 3.h),
-                                      Text(
-                                        'Task ID ${newTaskList[index]['id']}',
-                                        style: changeTextColor(
-                                          heading8,
-                                          newTaskList[index]
-                                                          ['is_late_completed']
-                                                      .toString()
-                                                      .toLowerCase() !=
-                                                  "0"
-                                              ? Colors.black87
-                                              : textColor,
-                                        ),
-                                      ),
-                                      SizedBox(height: 6.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              // width: 90.w,
-                                              decoration: BoxDecoration(
-                                                color: newTaskList[index][
-                                                                'priority_name']
-                                                            ?.toLowerCase() ==
-                                                        'medium'
-                                                    ? canwinnYellow
-                                                    : newTaskList[index][
-                                                                    'priority_name']
-                                                                ?.toLowerCase() ==
-                                                            'low'
-                                                        ? Color(0xffFFCD57)
-                                                        : Color(0xffFF0005),
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(12.r),
-                                                ),
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 8.w,
-                                                    vertical: 2.h),
-                                                child: Center(
-                                                  child: Text(
-                                                    '${newTaskList[index]['priority_name']}',
-                                                    style: TextStyle(
-                                                      fontSize: 13.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: whiteColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10.w,
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: newTaskList[index][
-                                                                'effective_status']
-                                                            .toString()
-                                                            .toLowerCase() ==
-                                                        "pending"
-                                                    ? Colors.red
-                                                    : newTaskList[index][
-                                                                    'effective_status']
-                                                                .toString()
-                                                                .toLowerCase() ==
-                                                            "progress"
-                                                        ? Colors.orange
-                                                        : Colors.green,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(12.r),
-                                                ),
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 8.w,
-                                                    vertical: 2.h),
-                                                child: Center(
-                                                  child: Text(
-                                                    '${newTaskList[index]['effective_status'].toString()}',
-                                                    style: TextStyle(
-                                                        fontSize: 13.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: whiteColor),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(flex: 3, child: Container())
-                                        ],
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                SvgPicture.asset(
-                                                    calenderTaskicon),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Text(
-                                                  '${newTaskList[index]['task_date']}',
-                                                  maxLines: 1,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: secondaryTextColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          Positioned(
-                            right: 15.w,
-                            top: 5.h,
-                            child: SizedBox(
-                              height: 30.h,
-                              width: 25.w,
-                              child: PopupMenuButton<String>(
-                                color: whiteColor,
-                                constraints: BoxConstraints(
-                                  maxWidth: 200.w,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.r)),
-                                shadowColor: lightGreyColor,
-                                padding: const EdgeInsets.all(0),
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (String result) async {
-                                  switch (result) {
-                                    case 'edit':
-                                      for (var projectData in projectController
-                                          .allProjectDataList) {
-                                        if (projectData.id.toString() ==
-                                            newTaskList[index]['project_id']
-                                                .toString()) {
+                        ),
+                        Positioned(
+                          right: 15.w,
+                          top: 5.h,
+                          child: SizedBox(
+                            height: 30.h,
+                            width: 25.w,
+                            child: PopupMenuButton<String>(
+                              color: whiteColor,
+                              constraints: BoxConstraints(maxWidth: 200.w),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.r),
+                              ),
+                              shadowColor: lightGreyColor,
+                              padding: const EdgeInsets.all(0),
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (String result) async {
+                                switch (result) {
+                                  case 'edit':
+                                    for (var projectData
+                                        in projectController
+                                            .allProjectDataList) {
+                                      if (projectData.id.toString() ==
+                                          newTaskList[index]['project_id']
+                                              .toString()) {
+                                        projectController
+                                            .selectedAllProjectListData
+                                            .value = projectData;
+                                        await profileController.departmentList(
                                           projectController
                                               .selectedAllProjectListData
-                                              .value = projectData;
-                                          await profileController
-                                              .departmentList(projectController
-                                                  .selectedAllProjectListData
-                                                  .value
-                                                  ?.id);
-                                          break;
-                                        }
+                                              .value
+                                              ?.id,
+                                        );
+                                        break;
                                       }
-                                      await taskController
-                                          .responsiblePersonListApi(
-                                              profileController
-                                                  .selectedDepartMentListData
-                                                  .value
-                                                  ?.id,
-                                              "");
-                                      taskNameController3.text =
-                                          newTaskList[index]['title'];
-                                      remarkController3.text =
-                                          newTaskList[index]['description'];
-                                      startDateController3.text =
-                                          newTaskList[index]['start_date'];
-                                      dueDateController3.text =
-                                          newTaskList[index]['due_date'];
-                                      dueTimeController3.text =
-                                          newTaskList[index]['due_time'];
-
-                                      for (var priorityData
-                                          in priorityController.priorityList) {
-                                        if (priorityData.id.toString() ==
-                                            newTaskList[index]['priority']
-                                                .toString()) {
-                                          priorityController
-                                              .selectedPriorityData
-                                              .value = priorityData;
-                                          break;
-                                        }
-                                      }
-
-                                      for (var deptData in profileController
-                                          .departmentDataList) {
-                                        if (deptData.id.toString() ==
-                                            newTaskList[index]['department_id']
-                                                .toString()) {
+                                    }
+                                    await taskController
+                                        .responsiblePersonListApi(
                                           profileController
                                               .selectedDepartMentListData
-                                              .value = deptData;
-                                          break;
-                                        }
+                                              .value
+                                              ?.id,
+                                          "",
+                                        );
+                                    taskNameController3.text =
+                                        newTaskList[index]['title'];
+                                    remarkController3.text =
+                                        newTaskList[index]['description'];
+                                    startDateController3.text =
+                                        newTaskList[index]['start_date'];
+                                    dueDateController3.text =
+                                        newTaskList[index]['due_date'];
+                                    dueTimeController3.text =
+                                        newTaskList[index]['due_time'];
+
+                                    for (var priorityData
+                                        in priorityController.priorityList) {
+                                      if (priorityData.id.toString() ==
+                                          newTaskList[index]['priority']
+                                              .toString()) {
+                                        priorityController
+                                            .selectedPriorityData
+                                            .value = priorityData;
+                                        break;
                                       }
-                                      await showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) => Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: MediaQuery.of(context)
-                                                  .viewInsets
-                                                  .bottom),
-                                          child: EditTask(
-                                            priorityController.priorityList,
-                                            projectController
-                                                .allProjectDataList,
-                                            taskController
-                                                .responsiblePersonList,
-                                            newTaskList[index]['id'],
-                                            taskNameController3,
-                                            remarkController3,
-                                            startDateController3,
-                                            dueDateController3,
-                                            dueTimeController3,
-                                            newTaskList[index]['assigned_to'],
+                                    }
+
+                                    for (var deptData
+                                        in profileController
+                                            .departmentDataList) {
+                                      if (deptData.id.toString() ==
+                                          newTaskList[index]['department_id']
+                                              .toString()) {
+                                        profileController
+                                            .selectedDepartMentListData
+                                            .value = deptData;
+                                        break;
+                                      }
+                                    }
+                                    await showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder:
+                                          (context) => Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).viewInsets.bottom,
+                                            ),
+                                            child: EditTask(
+                                              priorityController.priorityList,
+                                              projectController
+                                                  .allProjectDataList,
+                                              taskController
+                                                  .responsiblePersonList,
+                                              newTaskList[index]['id'],
+                                              taskNameController3,
+                                              remarkController3,
+                                              startDateController3,
+                                              dueDateController3,
+                                              dueTimeController3,
+                                              newTaskList[index]['assigned_to'],
+                                            ),
+                                          ),
+                                    );
+                                    break;
+                                  case 'delete':
+                                    await taskController.deleteTask(
+                                      newTaskList[index]['id'],
+                                    );
+                                    break;
+                                  case 'status':
+                                    taskController.isCompleteStatus?.value =
+                                        false;
+                                    taskController.isProgressStatus?.value =
+                                        false;
+                                    statusRemarkController.clear();
+                                    taskController.profilePicPath2.value = '';
+                                    await changeStatusDialog(
+                                      context,
+                                      newTaskList[index]['id'],
+                                      newTaskList[index]['status'],
+                                      newTaskList[index]['parent_id'],
+                                      newTaskList[index]['is_subtask_completed'],
+                                      newTaskList[index]['effective_status'],
+                                    );
+                                    break;
+                                }
+                              },
+                              itemBuilder:
+                                  (
+                                    BuildContext context,
+                                  ) => <PopupMenuEntry<String>>[
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'edit',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            "assets/images/png/edit-icon.png",
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Edit',
+                                            style: TextStyle(fontSize: 16),
                                           ),
                                         ),
-                                      );
-                                      break;
-                                    case 'delete':
-                                      await taskController
-                                          .deleteTask(newTaskList[index]['id']);
-                                      break;
-                                    case 'status':
-                                      taskController.isCompleteStatus?.value =
-                                          false;
-                                      taskController.isProgressStatus?.value =
-                                          false;
-                                      statusRemarkController.clear();
-                                      taskController.profilePicPath2.value = '';
-                                      await changeStatusDialog(
-                                        context,
-                                        newTaskList[index]['id'],
-                                        newTaskList[index]['status'],
-                                        newTaskList[index]['parent_id'],
-                                        newTaskList[index]
-                                            ['is_subtask_completed'],
-                                        newTaskList[index]['effective_status'],
-                                      );
-                                      break;
-                                  }
-                                },
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<String>>[
-                                  if (taskController
-                                          .selectedAssignedTask.value ==
-                                      "Task created by me")
-                                    PopupMenuItem<String>(
-                                      value: 'edit',
-                                      child: ListTile(
-                                        leading: Image.asset(
-                                          "assets/images/png/edit-icon.png",
-                                          height: 20.h,
-                                        ),
-                                        title: Text(
-                                          'Edit',
-                                          style: TextStyle(fontSize: 16),
+                                      ),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'delete',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/delete-icon.png',
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Delete',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  if (taskController
-                                          .selectedAssignedTask.value ==
-                                      "Task created by me")
-                                    PopupMenuItem<String>(
-                                      value: 'delete',
-                                      child: ListTile(
-                                        leading: Image.asset(
-                                          'assets/images/png/delete-icon.png',
-                                          height: 20.h,
-                                        ),
-                                        title: Text(
-                                          'Delete',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                  if (taskController
-                                          .selectedAssignedTask.value ==
-                                      "Assigned to me")
-                                    PopupMenuItem<String>(
-                                      value: 'status',
-                                      child: ListTile(
-                                        leading: Image.asset(
-                                          'assets/images/png/document.png',
-                                          height: 20.h,
-                                          color: canwinnPurple,
-                                        ),
-                                        title: Text(
-                                          'Change Status',
-                                          style: TextStyle(fontSize: 16),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Assigned to me")
+                                      PopupMenuItem<String>(
+                                        value: 'status',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/document.png',
+                                            height: 20.h,
+                                            color: canwinnPurple,
+                                          ),
+                                          title: Text(
+                                            'Change Status',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                ],
-                              ),
+                                  ],
                             ),
-                          )
-                        ],
-                      );
-                    },
-                  ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
+              ),
     );
   }
+
   Widget buildDropdown({
     required List<String> items,
     required String value,
@@ -745,1282 +933,1376 @@ class _TaskListPageState extends State<TaskScreenPage> {
         border: Border.all(color: boxBorderColor),
         borderRadius: BorderRadius.circular(8.r),
       ),
-      child: Obx(() => DropdownButtonHideUnderline(
-        child: DropdownButton2<String>(
-          isExpanded: true,
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 14.sp, color: darkGreyColor),
-              ),
-            );
-          }).toList(),
-          value: value.isEmpty ? null : value,
-          onChanged: onChanged,
-          buttonStyleData: ButtonStyleData(
-            padding: EdgeInsets.symmetric(horizontal: 14.w),
-            decoration: BoxDecoration(color: whiteColor),
-          ),
-          hint: Text(
-            hint.tr,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14.sp, color: darkGreyColor),
-          ),
-          iconStyleData: IconStyleData(
-            icon: Image.asset(
-              'assets/images/png/Vector 3.png',
-              height: 8.h,
-              color: canwinnPurple,
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: DropdownButton2<String>(
+            isExpanded: true,
+            items:
+                items.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 14.sp, color: darkGreyColor),
+                    ),
+                  );
+                }).toList(),
+            value: value.isEmpty ? null : value,
+            onChanged: onChanged,
+            buttonStyleData: ButtonStyleData(
+              padding: EdgeInsets.symmetric(horizontal: 14.w),
+              decoration: BoxDecoration(color: whiteColor),
             ),
-          ),
-          dropdownStyleData: DropdownStyleData(
-            maxHeight: 200.h,
-            width: width,
-            decoration: BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: boxBorderColor),
+            hint: Text(
+              hint.tr,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 14.sp, color: darkGreyColor),
+            ),
+            iconStyleData: IconStyleData(
+              icon: Image.asset(
+                'assets/images/png/Vector 3.png',
+                height: 8.h,
+                color: canwinnPurple,
+              ),
+            ),
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 200.h,
+              width: width,
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(color: boxBorderColor),
+              ),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
-
 
   Widget newTaskList(RxList newTaskList) {
     return Obx(
-      () => newTaskList.isEmpty
-          ? Expanded(
-              child: Center(
-                child: Text(
-                  'No New data',
-                  style: TextStyle(
+      () =>
+          newTaskList.isEmpty
+              ? Expanded(
+                child: Center(
+                  child: Text(
+                    'No New data',
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: textColor),
+                      color: textColor,
+                    ),
+                  ),
                 ),
-              ),
-            )
-          : Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                itemCount: newTaskList.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == newTaskList.length) {
-                    return Obx(() => taskController.isScrolling.value
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Center(
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink());
-                  }
-                  return Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: InkWell(
-                          onTap: () {
-                            Get.to(TaskDetails(
-                              taskId: newTaskList[index]['id'],
-                              assignedStatus:
-                                  taskController.selectedAssignedTask.value,
-                              initialIndex: 0,
-                            ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(11.r),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: lightGreyColor.withOpacity(0.1),
-                                  blurRadius: 6.0,
-                                  spreadRadius: 2,
-                                  blurStyle: BlurStyle.inner,
-                                  offset: Offset(0, 1),
+              )
+              : Expanded(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  itemCount: newTaskList.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == newTaskList.length) {
+                      return Obx(
+                        () =>
+                            taskController.isScrolling.value
+                                ? Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                : SizedBox.shrink(),
+                      );
+                    }
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                TaskDetails(
+                                  taskId: newTaskList[index]['id'],
+                                  assignedStatus:
+                                      taskController.selectedAssignedTask.value,
+                                  initialIndex: 0,
                                 ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12.w, vertical: 10.h),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${newTaskList[index]['title']}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: changeTextColor(
-                                      heading16,
-                                      newTaskList[index]['is_late_completed']
-                                                  .toString()
-                                                  .toLowerCase() !=
-                                              "0"
-                                          ? redColor
-                                          : textColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 3.h),
-                                  Text(
-                                    'Task ID ${newTaskList[index]['id']}',
-                                    style: changeTextColor(
-                                      heading8,
-                                      newTaskList[index]['is_late_completed']
-                                                  .toString()
-                                                  .toLowerCase() !=
-                                              "0"
-                                          ? redColor
-                                          : textColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          // color: newTaskList[index]
-                                          //                 ['priority_name']
-                                          //             ?.toLowerCase() ==
-                                          //         'medium'
-                                          //     ? softYellowColor
-                                          //     : newTaskList[index]
-                                          //                     ['priority_name']
-                                          //                 ?.toLowerCase() ==
-                                          //             'low'
-                                          //         ? completeBackgroundColor
-                                          //         : softredColor,
-                                          color: newTaskList[index]
-                                                          ['priority_name']
-                                                      ?.toLowerCase() ==
-                                                  'medium'
-                                              ?canwinnYellow
-                                              : newTaskList[index]
-                                                              ['priority_name']
-                                                          ?.toLowerCase() ==
-                                                      'low'
-                                                  ? canwinnYellow
-                                                  : Color(0xffFF0005),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.r),
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w, vertical: 2.h),
-                                          child: Center(
-                                            child: Text(
-                                              '${newTaskList[index]['priority_name']}',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: whiteColor
-                                                  // newTaskList[index][
-                                                  //                 'priority_name']
-                                                  //             ?.toLowerCase() ==
-                                                  //         'medium'
-                                                  //     ? mediumColor
-                                                  //     : newTaskList[index][
-                                                  //                     'priority_name']
-                                                  //                 ?.toLowerCase() ==
-                                                  //             'low'
-                                                  //         ? blueColor
-                                                  //         : slightlyDarkColor,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Container(
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          // color: newTaskList[index]
-                                          //                 ['effective_status']
-                                          //             .toString()
-                                          //             .toLowerCase() ==
-                                          //         "pending"
-                                          //     ? pendingBackgroundColor
-                                          //     : newTaskList[index][
-                                          //                     'effective_status']
-                                          //                 .toString()
-                                          //                 .toLowerCase() ==
-                                          //             "progress"
-                                          //         ? progressBackgroundColor
-                                          //         : completeBackgroundColor,
-
-                                          color: newTaskList[index]
-                                                          ['effective_status']
-                                                      .toString()
-                                                      .toLowerCase() ==
-                                                  "pending"
-                                              ? Colors.red
-                                              : newTaskList[index][
-                                                              'effective_status']
-                                                          .toString()
-                                                          .toLowerCase() ==
-                                                      "progress"
-                                                  ? Colors.orange
-                                                  : Colors.green,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.r),
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w, vertical: 2.h),
-                                          child: Center(
-                                            child: Text(
-                                              '${newTaskList[index]['effective_status'].toString()}',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: whiteColor
-                                                  // newTaskList[index][
-                                                  //                 'effective_status']
-                                                  //             .toString()
-                                                  //             .toLowerCase() ==
-                                                  //         "pending"
-                                                  //     ? pendingColor
-                                                  //     : newTaskList[index][
-                                                  //                     'effective_status']
-                                                  //                 .toString()
-                                                  //                 .toLowerCase() ==
-                                                  //             "progress"
-                                                  //         ? elegentGreenColor
-                                                  //         : blueColor,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(calenderTaskicon),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              '${newTaskList[index]['task_date']}',
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: secondaryTextColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(11.r),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: lightGreyColor.withOpacity(0.1),
+                                    blurRadius: 6.0,
+                                    spreadRadius: 2,
+                                    blurStyle: BlurStyle.inner,
+                                    offset: Offset(0, 1),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 15.w,
-                        top: 5.h,
-                        child: SizedBox(
-                          height: 30.h,
-                          width: 25.w,
-                          child: PopupMenuButton<String>(
-                            color: whiteColor,
-                            constraints: BoxConstraints(
-                              maxWidth: 200.w,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.r)),
-                            shadowColor: lightGreyColor,
-                            padding: const EdgeInsets.all(0),
-                            icon: const Icon(Icons.more_vert),
-                            onSelected: (String result) {
-                              switch (result) {
-                                case 'edit':
-                                  for (var projectData
-                                      in projectController.allProjectDataList) {
-                                    if (projectData.id.toString() ==
-                                        newTaskList[index]['project_id']
-                                            .toString()) {
-                                      projectController
-                                          .selectedAllProjectListData
-                                          .value = projectData;
-                                      profileController.departmentList(
-                                          projectController
-                                              .selectedAllProjectListData
-                                              .value
-                                              ?.id);
-                                      break;
-                                    }
-                                  }
-                                  taskController.responsiblePersonListApi(
-                                      profileController
-                                          .selectedDepartMentListData.value?.id,
-                                      "");
-                                  taskNameController3.text =
-                                      newTaskList[index]['title'];
-                                  remarkController3.text =
-                                      newTaskList[index]['description'];
-                                  startDateController3.text =
-                                      newTaskList[index]['start_date'];
-                                  dueDateController3.text =
-                                      newTaskList[index]['due_date'];
-                                  dueTimeController3.text =
-                                      newTaskList[index]['due_time'];
-
-                                  for (var priorityData
-                                      in priorityController.priorityList) {
-                                    if (priorityData.id.toString() ==
-                                        newTaskList[index]['priority']
-                                            .toString()) {
-                                      priorityController.selectedPriorityData
-                                          .value = priorityData;
-                                      break;
-                                    }
-                                  }
-
-                                  for (var deptData
-                                      in profileController.departmentDataList) {
-                                    if (deptData.id.toString() ==
-                                        newTaskList[index]['department_id']
-                                            .toString()) {
-                                      profileController
-                                          .selectedDepartMentListData
-                                          .value = deptData;
-                                      break;
-                                    }
-                                  }
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom),
-                                      child: EditTask(
-                                        priorityController.priorityList,
-                                        projectController.allProjectDataList,
-                                        taskController.responsiblePersonList,
-                                        newTaskList[index]['id'],
-                                        taskNameController3,
-                                        remarkController3,
-                                        startDateController3,
-                                        dueDateController3,
-                                        dueTimeController3,
-                                        newTaskList[index]['assigned_to'],
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 10.h,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${newTaskList[index]['title']}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: changeTextColor(
+                                        heading16,
+                                        newTaskList[index]['is_late_completed']
+                                                    .toString()
+                                                    .toLowerCase() !=
+                                                "0"
+                                            ? redColor
+                                            : textColor,
                                       ),
                                     ),
-                                  );
-                                  break;
-                                case 'delete':
-                                  taskController
-                                      .deleteTask(newTaskList[index]['id']);
-                                  break;
-                                case 'status':
-                                  taskController.isCompleteStatus?.value =
-                                      false;
-                                  taskController.isProgressStatus?.value =
-                                      false;
-                                  statusRemarkController.clear();
-                                  taskController.profilePicPath2.value = '';
-                                  changeStatusDialog(
-                                    context,
-                                    newTaskList[index]['id'],
-                                    newTaskList[index]['status'],
-                                    newTaskList[index]['parent_id'],
-                                    newTaskList[index]['is_subtask_completed'],
-                                    newTaskList[index]['effective_status'],
-                                  );
-                                  break;
-                              }
-                            },
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Task created by me")
-                                PopupMenuItem<String>(
-                                  value: 'edit',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      "assets/images/png/edit-icon.png",
-                                      height: 20.h,
-                                    ),
-                                    title: Text(
-                                      'Edit',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Task created by me")
-                                PopupMenuItem<String>(
-                                  value: 'delete',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      'assets/images/png/delete-icon.png',
-                                      height: 20.h,
-                                    ),
-                                    title: Text(
-                                      'Delete',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Assigned to me")
-                                PopupMenuItem<String>(
-                                  value: 'status',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      'assets/images/png/document.png',
-                                      height: 20.h,
-                                      color: canwinnPurple,
-                                    ),
-                                    title: Text(
-                                      'Change Status',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 20.h);
-                },
-              ),
-            ),
-    );
-  }
-
-  Widget progressTaskList(RxList newTaskList) {
-    return Obx(
-      () => newTaskList.isEmpty
-          ? Expanded(
-              child: Center(
-                child: Text(
-                  'No Progress data',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: textColor),
-                ),
-              ),
-            )
-          : Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                itemCount: newTaskList.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == newTaskList.length) {
-                    return Obx(() => taskController.isScrolling.value
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Center(
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink());
-                  }
-                  return Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: InkWell(
-                          onTap: () {
-                            Get.to(TaskDetails(
-                              taskId: newTaskList[index]['id'],
-                              assignedStatus:
-                                  taskController.selectedAssignedTask.value,
-                              initialIndex: 0,
-                            ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(11.r),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: lightGreyColor.withOpacity(0.1),
-                                  blurRadius: 6.0,
-                                  spreadRadius: 2,
-                                  blurStyle: BlurStyle.inner,
-                                  offset: Offset(0, 1),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12.w, vertical: 10.h),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${newTaskList[index]['title']}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: changeTextColor(
-                                      heading16,
-                                      newTaskList[index]['is_late_completed']
-                                                  .toString()
-                                                  .toLowerCase() !=
-                                              "0"
-                                          ? redColor
-                                          : textColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 3.h),
-                                  Text(
-                                    'Task ID ${newTaskList[index]['id']}',
-                                    style: changeTextColor(
-                                      heading8,
-                                      newTaskList[index]['is_late_completed']
-                                                  .toString()
-                                                  .toLowerCase() !=
-                                              "0"
-                                          ? redColor
-                                          : textColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          // color: newTaskList[index]
-                                          //                 ['priority_name']
-                                          //             ?.toLowerCase() ==
-                                          //         'medium'
-                                          //     ? softYellowColor
-                                          //     : newTaskList[index]
-                                          //                     ['priority_name']
-                                          //                 ?.toLowerCase() ==
-                                          //             'low'
-                                          //         ? completeBackgroundColor
-                                          //         : softredColor,
-                                          color: newTaskList[index]
-                                                          ['priority_name']
-                                                      ?.toLowerCase() ==
-                                                  'medium'
-                                              ? canwinnYellow
-                                              : newTaskList[index]
-                                                              ['priority_name']
-                                                          ?.toLowerCase() ==
-                                                      'low'
-                                                  ? canwinnYellow
-                                                  : Color(0xffFF0005),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.r),
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w, vertical: 2.h),
-                                          child: Center(
-                                            child: Text(
-                                              '${newTaskList[index]['priority_name']}',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: whiteColor
-                                                  // newTaskList[index][
-                                                  //                 'priority_name']
-                                                  //             ?.toLowerCase() ==
-                                                  //         'medium'
-                                                  //     ? mediumColor
-                                                  //     : newTaskList[index][
-                                                  //                     'priority_name']
-                                                  //                 ?.toLowerCase() ==
-                                                  //             'low'
-                                                  //         ? blueColor
-                                                  //         : slightlyDarkColor,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Container(
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          // color: newTaskList[index]
-                                          //                 ['effective_status']
-                                          //             .toString()
-                                          //             .toLowerCase() ==
-                                          //         "pending"
-                                          //     ? pendingBackgroundColor
-                                          //     : newTaskList[index][
-                                          //                     'effective_status']
-                                          //                 .toString()
-                                          //                 .toLowerCase() ==
-                                          //             "progress"
-                                          //         ? progressBackgroundColor
-                                          //         : completeBackgroundColor,
-                                          color: newTaskList[index]
-                                                          ['effective_status']
-                                                      .toString()
-                                                      .toLowerCase() ==
-                                                  "pending"
-                                              ? Colors.red
-                                              : newTaskList[index][
-                                                              'effective_status']
-                                                          .toString()
-                                                          .toLowerCase() ==
-                                                      "progress"
-                                                  ?Colors.orange
-                                                  : Colors.green,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.r),
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.w, vertical: 2.h),
-                                          child: Center(
-                                            child: Text(
-                                              '${newTaskList[index]['effective_status'].toString()}',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: whiteColor
-                                                  // newTaskList[index][
-                                                  //                 'effective_status']
-                                                  //             .toString()
-                                                  //             .toLowerCase() ==
-                                                  //         "pending"
-                                                  //     ? pendingColor
-                                                  //     : newTaskList[index][
-                                                  //                     'effective_status']
-                                                  //                 .toString()
-                                                  //                 .toLowerCase() ==
-                                                  //             "progress"
-                                                  //         ? elegentGreenColor
-                                                  //         : blueColor,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(calenderTaskicon),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              '${newTaskList[index]['task_date']}',
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: secondaryTextColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 15.w,
-                        top: 5.h,
-                        child: SizedBox(
-                          height: 30.h,
-                          width: 25.w,
-                          child: PopupMenuButton<String>(
-                            color: whiteColor,
-                            constraints: BoxConstraints(
-                              maxWidth: 200.w,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.r)),
-                            shadowColor: lightGreyColor,
-                            padding: const EdgeInsets.all(0),
-                            icon: const Icon(Icons.more_vert),
-                            onSelected: (String result) {
-                              switch (result) {
-                                case 'edit':
-                                  for (var projectData
-                                      in projectController.allProjectDataList) {
-                                    if (projectData.id.toString() ==
-                                        newTaskList[index]['project_id']
-                                            .toString()) {
-                                      projectController
-                                          .selectedAllProjectListData
-                                          .value = projectData;
-                                      profileController.departmentList(
-                                          projectController
-                                              .selectedAllProjectListData
-                                              .value
-                                              ?.id);
-                                      break;
-                                    }
-                                  }
-                                  taskController.responsiblePersonListApi(
-                                      profileController
-                                          .selectedDepartMentListData.value?.id,
-                                      "");
-                                  taskNameController3.text =
-                                      newTaskList[index]['title'];
-                                  remarkController3.text =
-                                      newTaskList[index]['description'];
-                                  startDateController3.text =
-                                      newTaskList[index]['start_date'];
-                                  dueDateController3.text =
-                                      newTaskList[index]['due_date'];
-                                  dueTimeController3.text =
-                                      newTaskList[index]['due_time'];
-
-                                  for (var priorityData
-                                      in priorityController.priorityList) {
-                                    if (priorityData.id.toString() ==
-                                        newTaskList[index]['priority']
-                                            .toString()) {
-                                      priorityController.selectedPriorityData
-                                          .value = priorityData;
-                                      break;
-                                    }
-                                  }
-
-                                  for (var deptData
-                                      in profileController.departmentDataList) {
-                                    if (deptData.id.toString() ==
-                                        newTaskList[index]['department_id']
-                                            .toString()) {
-                                      profileController
-                                          .selectedDepartMentListData
-                                          .value = deptData;
-                                      break;
-                                    }
-                                  }
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom),
-                                      child: EditTask(
-                                        priorityController.priorityList,
-                                        projectController.allProjectDataList,
-                                        taskController.responsiblePersonList,
-                                        newTaskList[index]['id'],
-                                        taskNameController3,
-                                        remarkController3,
-                                        startDateController3,
-                                        dueDateController3,
-                                        dueTimeController3,
-                                        newTaskList[index]['assigned_to'],
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Task ID ${newTaskList[index]['id']}',
+                                      style: changeTextColor(
+                                        heading8,
+                                        newTaskList[index]['is_late_completed']
+                                                    .toString()
+                                                    .toLowerCase() !=
+                                                "0"
+                                            ? redColor
+                                            : textColor,
                                       ),
                                     ),
-                                  );
-                                  break;
-                                case 'delete':
-                                  taskController
-                                      .deleteTask(newTaskList[index]['id']);
-                                  break;
-                                case 'status':
-                                  taskController.isCompleteStatus?.value =
-                                      false;
-                                  taskController.isProgressStatus?.value =
-                                      false;
-                                  statusRemarkController.clear();
-                                  taskController.profilePicPath2.value = '';
-                                  changeStatusDialog(
-                                    context,
-                                    newTaskList[index]['id'],
-                                    newTaskList[index]['status'],
-                                    newTaskList[index]['parent_id'],
-                                    newTaskList[index]['is_subtask_completed'],
-                                    newTaskList[index]['effective_status'],
-                                  );
-                                  break;
-                              }
-                            },
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Task created by me")
-                                PopupMenuItem<String>(
-                                  value: 'edit',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      "assets/images/png/edit-icon.png",
-                                      height: 20.h,
-                                    ),
-                                    title: Text(
-                                      'Edit',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Task created by me")
-                                PopupMenuItem<String>(
-                                  value: 'delete',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      'assets/images/png/delete-icon.png',
-                                      height: 20.h,
-                                    ),
-                                    title: Text(
-                                      'Delete',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Assigned to me")
-                                PopupMenuItem<String>(
-                                  value: 'status',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      'assets/images/png/document.png',
-                                      height: 20.h,
-                                      color: canwinnPurple,
-                                    ),
-                                    title: Text(
-                                      'Change Status',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 20.h);
-                },
-              ),
-            ),
-    );
-  }
-
-  Widget completeTaskList(RxList newTaskList) {
-    return Obx(
-      () => newTaskList.isEmpty
-          ? Expanded(
-              child: Center(
-                child: Text(
-                  'No Completed data',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: textColor),
-                ),
-              ),
-            )
-          : Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                itemCount: newTaskList.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == newTaskList.length) {
-                    return Obx(() => taskController.isScrolling.value
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Center(
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink());
-                  }
-                  return Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: InkWell(
-                          onTap: () {
-                            Get.to(TaskDetails(
-                              taskId: newTaskList[index]['id'],
-                              assignedStatus:
-                                  taskController.selectedAssignedTask.value,
-                              initialIndex: 0,
-                            ));
-                          },
-                          child:Container(
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.all(Radius.circular(11.r)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: lightGreyColor.withOpacity(0.1),
-                                  blurRadius: 6.0,
-                                  spreadRadius: 2,
-                                  blurStyle: BlurStyle.inner,
-                                  offset: Offset(0, 1),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${newTaskList[index]['title']}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: newTaskList[index]['is_late_completed'].toString().toLowerCase() == "1"
-                                          ? Colors.black87
-                                          : newTaskList[index]['effective_status'].toString().toLowerCase() == "complete"
-                                          ? Colors.green
-                                          : textColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 3.h),
-
-                                  Text(
-                                    'Task ID ${newTaskList[index]['id']}',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: newTaskList[index]['is_late_completed'].toString().toLowerCase() == "1"
-                                          ? Colors.black87
-                                          : newTaskList[index]['effective_status'].toString().toLowerCase() == "complete"
-                                          ? Colors.green
-                                          : textColor,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6.h),
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 90.w,
-                                        decoration: BoxDecoration(
-                                          color: newTaskList[index]['priority_name']?.toLowerCase() == 'medium'
-                                              ? Color(0xffFF8700)
-                                              : newTaskList[index]['priority_name']?.toLowerCase() == 'low'
-                                              ? Color(0xffFFCD57)
-                                              : Color(0xffFF0005),
-                                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-                                          child: Center(
-                                            child: Text(
-                                              '${newTaskList[index]['priority_name']}',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: whiteColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 10.w),
-
-                                      IntrinsicWidth(
-                                        child: Container(
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 90.w,
                                           decoration: BoxDecoration(
-                                            color: newTaskList[index]['effective_status'].toString().toLowerCase() == "pending"
-                                                ? Colors.red
-                                                : newTaskList[index]['effective_status'].toString().toLowerCase() == "progress"
-                                                ? Colors.orange
-                                                : Colors.green,
-                                            borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                                            color:
+                                                newTaskList[index]['priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'medium'
+                                                    ? canwinnYellow
+                                                    : newTaskList[index]['priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'low'
+                                                    ? canwinnYellow
+                                                    : Color(0xffFF0005),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.r),
+                                            ),
                                           ),
                                           child: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 2.h,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${newTaskList[index]['priority_name']}',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: whiteColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Container(
+                                          width: 90.w,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                newTaskList[index]['effective_status']
+                                                            .toString()
+                                                            .toLowerCase() ==
+                                                        "pending"
+                                                    ? Colors.red
+                                                    : newTaskList[index]['effective_status']
+                                                            .toString()
+                                                            .toLowerCase() ==
+                                                        "progress"
+                                                    ? Colors.orange
+                                                    : Colors.green,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.r),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 2.h,
+                                            ),
                                             child: Center(
                                               child: Text(
                                                 '${newTaskList[index]['effective_status'].toString()}',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
-                                                  color: newTaskList[index]['effective_status'].toString().toLowerCase() == 'complete'
-                                                      ? Colors.green
-                                                      : newTaskList[index]['effective_status'].toString().toLowerCase() == 'progress'
-                                                      ? Colors.orange
-                                                      : whiteColor,
+                                                  color: whiteColor,
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.h),
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(calenderTaskicon),
-                                          SizedBox(width: 8.w),
-                                          Text(
-                                            '${newTaskList[index]['task_date']}',
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: secondaryTextColor,
-                                            ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                calenderTaskicon,
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Text(
+                                                '${newTaskList[index]['task_date']}',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: secondaryTextColor,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-
                         ),
-                      ),
-                      Positioned(
-                        right: 15.w,
-                        top: 5.h,
-                        child: SizedBox(
-                          height: 30.h,
-                          width: 25.w,
-                          child: PopupMenuButton<String>(
-                            color: whiteColor,
-                            constraints: BoxConstraints(
-                              maxWidth: 200.w,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.r)),
-                            shadowColor: lightGreyColor,
-                            padding: const EdgeInsets.all(0),
-                            icon: const Icon(Icons.more_vert),
-                            onSelected: (String result) {
-                              switch (result) {
-                                case 'edit':
-                                  for (var projectData
-                                      in projectController.allProjectDataList) {
-                                    if (projectData.id.toString() ==
-                                        newTaskList[index]['project_id']
-                                            .toString()) {
-                                      projectController
-                                          .selectedAllProjectListData
-                                          .value = projectData;
-                                      profileController.departmentList(
+                        Positioned(
+                          right: 15.w,
+                          top: 5.h,
+                          child: SizedBox(
+                            height: 30.h,
+                            width: 25.w,
+                            child: PopupMenuButton<String>(
+                              color: whiteColor,
+                              constraints: BoxConstraints(maxWidth: 200.w),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.r),
+                              ),
+                              shadowColor: lightGreyColor,
+                              padding: const EdgeInsets.all(0),
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (String result) {
+                                switch (result) {
+                                  case 'edit':
+                                    for (var projectData
+                                        in projectController
+                                            .allProjectDataList) {
+                                      if (projectData.id.toString() ==
+                                          newTaskList[index]['project_id']
+                                              .toString()) {
+                                        projectController
+                                            .selectedAllProjectListData
+                                            .value = projectData;
+                                        profileController.departmentList(
                                           projectController
                                               .selectedAllProjectListData
                                               .value
-                                              ?.id);
-                                      break;
+                                              ?.id,
+                                        );
+                                        break;
+                                      }
                                     }
-                                  }
-                                  taskController.responsiblePersonListApi(
-                                      profileController
-                                          .selectedDepartMentListData.value?.id,
-                                      "");
-                                  taskNameController3.text =
-                                      newTaskList[index]['title'];
-                                  remarkController3.text =
-                                      newTaskList[index]['description'];
-                                  startDateController3.text =
-                                      newTaskList[index]['start_date'];
-                                  dueDateController3.text =
-                                      newTaskList[index]['due_date'];
-                                  dueTimeController3.text =
-                                      newTaskList[index]['due_time'];
-
-                                  for (var priorityData
-                                      in priorityController.priorityList) {
-                                    if (priorityData.id.toString() ==
-                                        newTaskList[index]['priority']
-                                            .toString()) {
-                                      priorityController.selectedPriorityData
-                                          .value = priorityData;
-                                      break;
-                                    }
-                                  }
-
-                                  for (var deptData
-                                      in profileController.departmentDataList) {
-                                    if (deptData.id.toString() ==
-                                        newTaskList[index]['department_id']
-                                            .toString()) {
+                                    taskController.responsiblePersonListApi(
                                       profileController
                                           .selectedDepartMentListData
-                                          .value = deptData;
-                                      break;
+                                          .value
+                                          ?.id,
+                                      "",
+                                    );
+                                    taskNameController3.text =
+                                        newTaskList[index]['title'];
+                                    remarkController3.text =
+                                        newTaskList[index]['description'];
+                                    startDateController3.text =
+                                        newTaskList[index]['start_date'];
+                                    dueDateController3.text =
+                                        newTaskList[index]['due_date'];
+                                    dueTimeController3.text =
+                                        newTaskList[index]['due_time'];
+
+                                    for (var priorityData
+                                        in priorityController.priorityList) {
+                                      if (priorityData.id.toString() ==
+                                          newTaskList[index]['priority']
+                                              .toString()) {
+                                        priorityController
+                                            .selectedPriorityData
+                                            .value = priorityData;
+                                        break;
+                                      }
                                     }
-                                  }
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom),
-                                      child: EditTask(
-                                        priorityController.priorityList,
-                                        projectController.allProjectDataList,
-                                        taskController.responsiblePersonList,
-                                        newTaskList[index]['id'],
-                                        taskNameController3,
-                                        remarkController3,
-                                        startDateController3,
-                                        dueDateController3,
-                                        dueTimeController3,
-                                        newTaskList[index]['assigned_to'],
+
+                                    for (var deptData
+                                        in profileController
+                                            .departmentDataList) {
+                                      if (deptData.id.toString() ==
+                                          newTaskList[index]['department_id']
+                                              .toString()) {
+                                        profileController
+                                            .selectedDepartMentListData
+                                            .value = deptData;
+                                        break;
+                                      }
+                                    }
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder:
+                                          (context) => Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).viewInsets.bottom,
+                                            ),
+                                            child: EditTask(
+                                              priorityController.priorityList,
+                                              projectController
+                                                  .allProjectDataList,
+                                              taskController
+                                                  .responsiblePersonList,
+                                              newTaskList[index]['id'],
+                                              taskNameController3,
+                                              remarkController3,
+                                              startDateController3,
+                                              dueDateController3,
+                                              dueTimeController3,
+                                              newTaskList[index]['assigned_to'],
+                                            ),
+                                          ),
+                                    );
+                                    break;
+                                  case 'delete':
+                                    taskController.deleteTask(
+                                      newTaskList[index]['id'],
+                                    );
+                                    break;
+                                  case 'status':
+                                    taskController.isCompleteStatus?.value =
+                                        false;
+                                    taskController.isProgressStatus?.value =
+                                        false;
+                                    statusRemarkController.clear();
+                                    taskController.profilePicPath2.value = '';
+                                    changeStatusDialog(
+                                      context,
+                                      newTaskList[index]['id'],
+                                      newTaskList[index]['status'],
+                                      newTaskList[index]['parent_id'],
+                                      newTaskList[index]['is_subtask_completed'],
+                                      newTaskList[index]['effective_status'],
+                                    );
+                                    break;
+                                }
+                              },
+                              itemBuilder:
+                                  (
+                                    BuildContext context,
+                                  ) => <PopupMenuEntry<String>>[
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'edit',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            "assets/images/png/edit-icon.png",
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Edit',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                  break;
-                                case 'delete':
-                                  taskController
-                                      .deleteTask(newTaskList[index]['id']);
-                                  break;
-                                case 'status':
-                                  taskController.isCompleteStatus?.value =
-                                      false;
-                                  taskController.isProgressStatus?.value =
-                                      false;
-                                  statusRemarkController.clear();
-                                  taskController.profilePicPath2.value = '';
-                                  changeStatusDialog(
-                                    context,
-                                    newTaskList[index]['id'],
-                                    newTaskList[index]['status'],
-                                    newTaskList[index]['parent_id'],
-                                    newTaskList[index]['is_subtask_completed'],
-                                    newTaskList[index]['effective_status'],
-                                  );
-                                  break;
-                              }
-                            },
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Task created by me")
-                                PopupMenuItem<String>(
-                                  value: 'edit',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      "assets/images/png/edit-icon.png",
-                                      height: 20.h,
-                                    ),
-                                    title: Text(
-                                      'Edit',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Task created by me")
-                                PopupMenuItem<String>(
-                                  value: 'delete',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      'assets/images/png/delete-icon.png',
-                                      height: 20.h,
-                                    ),
-                                    title: Text(
-                                      'Delete',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              if (taskController.selectedAssignedTask.value ==
-                                  "Assigned to me")
-                                PopupMenuItem<String>(
-                                  value: 'status',
-                                  child: ListTile(
-                                    leading: Image.asset(
-                                      'assets/images/png/document.png',
-                                      height: 20.h,
-                                      color: canwinnPurple,
-                                    ),
-                                    title: Text(
-                                      'Change Status',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                            ],
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'delete',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/delete-icon.png',
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Delete',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Assigned to me")
+                                      PopupMenuItem<String>(
+                                        value: 'status',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/document.png',
+                                            height: 20.h,
+                                            color: canwinnPurple,
+                                          ),
+                                          title: Text(
+                                            'Change Status',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 20.h);
-                },
+                      ],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(height: 20.h);
+                  },
+                ),
               ),
-            ),
+    );
+  }
+
+  Widget progressTaskList(RxList newTaskList) {
+    return Obx(
+      () =>
+          newTaskList.isEmpty
+              ? Expanded(
+                child: Center(
+                  child: Text(
+                    'No Progress data',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
+                  ),
+                ),
+              )
+              : Expanded(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  itemCount: newTaskList.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == newTaskList.length) {
+                      return Obx(
+                        () =>
+                            taskController.isScrolling.value
+                                ? Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                : SizedBox.shrink(),
+                      );
+                    }
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                TaskDetails(
+                                  taskId: newTaskList[index]['id'],
+                                  assignedStatus:
+                                      taskController.selectedAssignedTask.value,
+                                  initialIndex: 0,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(11.r),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: lightGreyColor.withOpacity(0.1),
+                                    blurRadius: 6.0,
+                                    spreadRadius: 2,
+                                    blurStyle: BlurStyle.inner,
+                                    offset: Offset(0, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 10.h,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${newTaskList[index]['title']}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: changeTextColor(
+                                        heading16,
+                                        newTaskList[index]['is_late_completed']
+                                                    .toString()
+                                                    .toLowerCase() !=
+                                                "0"
+                                            ? redColor
+                                            : textColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Task ID ${newTaskList[index]['id']}',
+                                      style: changeTextColor(
+                                        heading8,
+                                        newTaskList[index]['is_late_completed']
+                                                    .toString()
+                                                    .toLowerCase() !=
+                                                "0"
+                                            ? redColor
+                                            : textColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 90.w,
+                                          decoration: BoxDecoration(
+                                            // color: newTaskList[index]
+                                            //                 ['priority_name']
+                                            //             ?.toLowerCase() ==
+                                            //         'medium'
+                                            //     ? softYellowColor
+                                            //     : newTaskList[index]
+                                            //                     ['priority_name']
+                                            //                 ?.toLowerCase() ==
+                                            //             'low'
+                                            //         ? completeBackgroundColor
+                                            //         : softredColor,
+                                            color:
+                                                newTaskList[index]['priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'medium'
+                                                    ? canwinnYellow
+                                                    : newTaskList[index]['priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'low'
+                                                    ? canwinnYellow
+                                                    : Color(0xffFF0005),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.r),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 2.h,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${newTaskList[index]['priority_name']}',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: whiteColor,
+                                                  // newTaskList[index][
+                                                  //                 'priority_name']
+                                                  //             ?.toLowerCase() ==
+                                                  //         'medium'
+                                                  //     ? mediumColor
+                                                  //     : newTaskList[index][
+                                                  //                     'priority_name']
+                                                  //                 ?.toLowerCase() ==
+                                                  //             'low'
+                                                  //         ? blueColor
+                                                  //         : slightlyDarkColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Container(
+                                          width: 90.w,
+                                          decoration: BoxDecoration(
+                                            // color: newTaskList[index]
+                                            //                 ['effective_status']
+                                            //             .toString()
+                                            //             .toLowerCase() ==
+                                            //         "pending"
+                                            //     ? pendingBackgroundColor
+                                            //     : newTaskList[index][
+                                            //                     'effective_status']
+                                            //                 .toString()
+                                            //                 .toLowerCase() ==
+                                            //             "progress"
+                                            //         ? progressBackgroundColor
+                                            //         : completeBackgroundColor,
+                                            color:
+                                                newTaskList[index]['effective_status']
+                                                            .toString()
+                                                            .toLowerCase() ==
+                                                        "pending"
+                                                    ? Colors.red
+                                                    : newTaskList[index]['effective_status']
+                                                            .toString()
+                                                            .toLowerCase() ==
+                                                        "progress"
+                                                    ? Colors.orange
+                                                    : Colors.green,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.r),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 2.h,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${newTaskList[index]['effective_status'].toString()}',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: whiteColor,
+                                                  // newTaskList[index][
+                                                  //                 'effective_status']
+                                                  //             .toString()
+                                                  //             .toLowerCase() ==
+                                                  //         "pending"
+                                                  //     ? pendingColor
+                                                  //     : newTaskList[index][
+                                                  //                     'effective_status']
+                                                  //                 .toString()
+                                                  //                 .toLowerCase() ==
+                                                  //             "progress"
+                                                  //         ? elegentGreenColor
+                                                  //         : blueColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                calenderTaskicon,
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Text(
+                                                '${newTaskList[index]['task_date']}',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: secondaryTextColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 15.w,
+                          top: 5.h,
+                          child: SizedBox(
+                            height: 30.h,
+                            width: 25.w,
+                            child: PopupMenuButton<String>(
+                              color: whiteColor,
+                              constraints: BoxConstraints(maxWidth: 200.w),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.r),
+                              ),
+                              shadowColor: lightGreyColor,
+                              padding: const EdgeInsets.all(0),
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (String result) {
+                                switch (result) {
+                                  case 'edit':
+                                    for (var projectData
+                                        in projectController
+                                            .allProjectDataList) {
+                                      if (projectData.id.toString() ==
+                                          newTaskList[index]['project_id']
+                                              .toString()) {
+                                        projectController
+                                            .selectedAllProjectListData
+                                            .value = projectData;
+                                        profileController.departmentList(
+                                          projectController
+                                              .selectedAllProjectListData
+                                              .value
+                                              ?.id,
+                                        );
+                                        break;
+                                      }
+                                    }
+                                    taskController.responsiblePersonListApi(
+                                      profileController
+                                          .selectedDepartMentListData
+                                          .value
+                                          ?.id,
+                                      "",
+                                    );
+                                    taskNameController3.text =
+                                        newTaskList[index]['title'];
+                                    remarkController3.text =
+                                        newTaskList[index]['description'];
+                                    startDateController3.text =
+                                        newTaskList[index]['start_date'];
+                                    dueDateController3.text =
+                                        newTaskList[index]['due_date'];
+                                    dueTimeController3.text =
+                                        newTaskList[index]['due_time'];
+
+                                    for (var priorityData
+                                        in priorityController.priorityList) {
+                                      if (priorityData.id.toString() ==
+                                          newTaskList[index]['priority']
+                                              .toString()) {
+                                        priorityController
+                                            .selectedPriorityData
+                                            .value = priorityData;
+                                        break;
+                                      }
+                                    }
+
+                                    for (var deptData
+                                        in profileController
+                                            .departmentDataList) {
+                                      if (deptData.id.toString() ==
+                                          newTaskList[index]['department_id']
+                                              .toString()) {
+                                        profileController
+                                            .selectedDepartMentListData
+                                            .value = deptData;
+                                        break;
+                                      }
+                                    }
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder:
+                                          (context) => Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).viewInsets.bottom,
+                                            ),
+                                            child: EditTask(
+                                              priorityController.priorityList,
+                                              projectController
+                                                  .allProjectDataList,
+                                              taskController
+                                                  .responsiblePersonList,
+                                              newTaskList[index]['id'],
+                                              taskNameController3,
+                                              remarkController3,
+                                              startDateController3,
+                                              dueDateController3,
+                                              dueTimeController3,
+                                              newTaskList[index]['assigned_to'],
+                                            ),
+                                          ),
+                                    );
+                                    break;
+                                  case 'delete':
+                                    taskController.deleteTask(
+                                      newTaskList[index]['id'],
+                                    );
+                                    break;
+                                  case 'status':
+                                    taskController.isCompleteStatus?.value =
+                                        false;
+                                    taskController.isProgressStatus?.value =
+                                        false;
+                                    statusRemarkController.clear();
+                                    taskController.profilePicPath2.value = '';
+                                    changeStatusDialog(
+                                      context,
+                                      newTaskList[index]['id'],
+                                      newTaskList[index]['status'],
+                                      newTaskList[index]['parent_id'],
+                                      newTaskList[index]['is_subtask_completed'],
+                                      newTaskList[index]['effective_status'],
+                                    );
+                                    break;
+                                }
+                              },
+                              itemBuilder:
+                                  (
+                                    BuildContext context,
+                                  ) => <PopupMenuEntry<String>>[
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'edit',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            "assets/images/png/edit-icon.png",
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Edit',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'delete',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/delete-icon.png',
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Delete',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Assigned to me")
+                                      PopupMenuItem<String>(
+                                        value: 'status',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/document.png',
+                                            height: 20.h,
+                                            color: canwinnPurple,
+                                          ),
+                                          title: Text(
+                                            'Change Status',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(height: 20.h);
+                  },
+                ),
+              ),
+    );
+  }
+
+  Widget completeTaskList(RxList newTaskList) {
+    return Obx(
+      () =>
+          newTaskList.isEmpty
+              ? Expanded(
+                child: Center(
+                  child: Text(
+                    'No Completed data',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
+                  ),
+                ),
+              )
+              : Expanded(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  itemCount: newTaskList.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == newTaskList.length) {
+                      return Obx(
+                        () =>
+                            taskController.isScrolling.value
+                                ? Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                : SizedBox.shrink(),
+                      );
+                    }
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                TaskDetails(
+                                  taskId: newTaskList[index]['id'],
+                                  assignedStatus:
+                                      taskController.selectedAssignedTask.value,
+                                  initialIndex: 0,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(11.r),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: lightGreyColor.withOpacity(0.1),
+                                    blurRadius: 6.0,
+                                    spreadRadius: 2,
+                                    blurStyle: BlurStyle.inner,
+                                    offset: Offset(0, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 10.h,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${newTaskList[index]['title']}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color:
+                                            newTaskList[index]['is_late_completed']
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "1"
+                                                ? Colors.black87
+                                                : newTaskList[index]['effective_status']
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "complete"
+                                                ? Colors.green
+                                                : textColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 3.h),
+
+                                    Text(
+                                      'Task ID ${newTaskList[index]['id']}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color:
+                                            newTaskList[index]['is_late_completed']
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "1"
+                                                ? Colors.black87
+                                                : newTaskList[index]['effective_status']
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "complete"
+                                                ? Colors.green
+                                                : textColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 6.h),
+
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 90.w,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                newTaskList[index]['priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'medium'
+                                                    ? Color(0xffFF8700)
+                                                    : newTaskList[index]['priority_name']
+                                                            ?.toLowerCase() ==
+                                                        'low'
+                                                    ? Color(0xffFFCD57)
+                                                    : Color(0xffFF0005),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.r),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 2.h,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${newTaskList[index]['priority_name']}',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: whiteColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+
+                                        IntrinsicWidth(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  newTaskList[index]['effective_status']
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          "pending"
+                                                      ? Colors.red
+                                                      : newTaskList[index]['effective_status']
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          "progress"
+                                                      ? Colors.orange
+                                                      : Colors.green,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(12.r),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w,
+                                                vertical: 2.h,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  '${newTaskList[index]['effective_status'].toString()}',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        newTaskList[index]['effective_status']
+                                                                    .toString()
+                                                                    .toLowerCase() ==
+                                                                'complete'
+                                                            ? Colors.green
+                                                            : newTaskList[index]['effective_status']
+                                                                    .toString()
+                                                                    .toLowerCase() ==
+                                                                'progress'
+                                                            ? Colors.orange
+                                                            : whiteColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(calenderTaskicon),
+                                            SizedBox(width: 8.w),
+                                            Text(
+                                              '${newTaskList[index]['task_date']}',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: secondaryTextColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 15.w,
+                          top: 5.h,
+                          child: SizedBox(
+                            height: 30.h,
+                            width: 25.w,
+                            child: PopupMenuButton<String>(
+                              color: whiteColor,
+                              constraints: BoxConstraints(maxWidth: 200.w),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.r),
+                              ),
+                              shadowColor: lightGreyColor,
+                              padding: const EdgeInsets.all(0),
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (String result) {
+                                switch (result) {
+                                  case 'edit':
+                                    for (var projectData
+                                        in projectController
+                                            .allProjectDataList) {
+                                      if (projectData.id.toString() ==
+                                          newTaskList[index]['project_id']
+                                              .toString()) {
+                                        projectController
+                                            .selectedAllProjectListData
+                                            .value = projectData;
+                                        profileController.departmentList(
+                                          projectController
+                                              .selectedAllProjectListData
+                                              .value
+                                              ?.id,
+                                        );
+                                        break;
+                                      }
+                                    }
+                                    taskController.responsiblePersonListApi(
+                                      profileController
+                                          .selectedDepartMentListData
+                                          .value
+                                          ?.id,
+                                      "",
+                                    );
+                                    taskNameController3.text =
+                                        newTaskList[index]['title'];
+                                    remarkController3.text =
+                                        newTaskList[index]['description'];
+                                    startDateController3.text =
+                                        newTaskList[index]['start_date'];
+                                    dueDateController3.text =
+                                        newTaskList[index]['due_date'];
+                                    dueTimeController3.text =
+                                        newTaskList[index]['due_time'];
+
+                                    for (var priorityData
+                                        in priorityController.priorityList) {
+                                      if (priorityData.id.toString() ==
+                                          newTaskList[index]['priority']
+                                              .toString()) {
+                                        priorityController
+                                            .selectedPriorityData
+                                            .value = priorityData;
+                                        break;
+                                      }
+                                    }
+
+                                    for (var deptData
+                                        in profileController
+                                            .departmentDataList) {
+                                      if (deptData.id.toString() ==
+                                          newTaskList[index]['department_id']
+                                              .toString()) {
+                                        profileController
+                                            .selectedDepartMentListData
+                                            .value = deptData;
+                                        break;
+                                      }
+                                    }
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder:
+                                          (context) => Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).viewInsets.bottom,
+                                            ),
+                                            child: EditTask(
+                                              priorityController.priorityList,
+                                              projectController
+                                                  .allProjectDataList,
+                                              taskController
+                                                  .responsiblePersonList,
+                                              newTaskList[index]['id'],
+                                              taskNameController3,
+                                              remarkController3,
+                                              startDateController3,
+                                              dueDateController3,
+                                              dueTimeController3,
+                                              newTaskList[index]['assigned_to'],
+                                            ),
+                                          ),
+                                    );
+                                    break;
+                                  case 'delete':
+                                    taskController.deleteTask(
+                                      newTaskList[index]['id'],
+                                    );
+                                    break;
+                                  case 'status':
+                                    taskController.isCompleteStatus?.value =
+                                        false;
+                                    taskController.isProgressStatus?.value =
+                                        false;
+                                    statusRemarkController.clear();
+                                    taskController.profilePicPath2.value = '';
+                                    changeStatusDialog(
+                                      context,
+                                      newTaskList[index]['id'],
+                                      newTaskList[index]['status'],
+                                      newTaskList[index]['parent_id'],
+                                      newTaskList[index]['is_subtask_completed'],
+                                      newTaskList[index]['effective_status'],
+                                    );
+                                    break;
+                                }
+                              },
+                              itemBuilder:
+                                  (
+                                    BuildContext context,
+                                  ) => <PopupMenuEntry<String>>[
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'edit',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            "assets/images/png/edit-icon.png",
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Edit',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Task created by me")
+                                      PopupMenuItem<String>(
+                                        value: 'delete',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/delete-icon.png',
+                                            height: 20.h,
+                                          ),
+                                          title: Text(
+                                            'Delete',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    if (taskController
+                                            .selectedAssignedTask
+                                            .value ==
+                                        "Assigned to me")
+                                      PopupMenuItem<String>(
+                                        value: 'status',
+                                        child: ListTile(
+                                          leading: Image.asset(
+                                            'assets/images/png/document.png',
+                                            height: 20.h,
+                                            color: canwinnPurple,
+                                          ),
+                                          title: Text(
+                                            'Change Status',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(height: 20.h);
+                  },
+                ),
+              ),
     );
   }
 
@@ -2042,224 +2324,227 @@ class _TaskListPageState extends State<TaskScreenPage> {
           insetPadding: const EdgeInsets.all(10),
           child: Container(
             width: double.infinity,
-            height: efectiveStatus.toString().toLowerCase() == "completed"
-                ? 230.h
-                : 340.h,
+            height:
+                efectiveStatus.toString().toLowerCase() == "completed"
+                    ? 230.h
+                    : 340.h,
             decoration: BoxDecoration(
               color: whiteColor,
               borderRadius: BorderRadius.circular(15),
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: efectiveStatus.toString().toLowerCase() == "completed"
-                  ? Center(
-                      child: Text(
-                        'Status Complete',
-                        style: TextStyle(
+              child:
+                  efectiveStatus.toString().toLowerCase() == "completed"
+                      ? Center(
+                        child: Text(
+                          'Status Complete',
+                          style: TextStyle(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w500,
-                            color: textColor),
-                      ),
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Update Status',
-                          style: TextStyle(
+                            color: textColor,
+                          ),
+                        ),
+                      )
+                      : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Update Status',
+                            style: TextStyle(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w500,
-                              color: textColor),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Obx(
-                                  () => Container(
-                                    width: 25.w,
-                                    height: 25.h,
-                                    child: Radio(
-                                      value: 'progress',
-                                      groupValue: taskController
-                                          .isProgressSelected?.value,
-                                      onChanged: (value) {
-                                        taskController.isProgressSelected
-                                            ?.value = value ?? "";
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  'In Progress',
-                                  style: heading5,
-                                )
-                              ],
+                              color: textColor,
                             ),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Obx(
-                                  () => Container(
-                                    width: 25.w,
-                                    height: 25.h,
-                                    child: Radio(
-                                      value: 'complete',
-                                      groupValue: taskController
-                                          .isProgressSelected?.value,
-                                      onChanged: (value) {
-                                        taskController.isProgressSelected
-                                            ?.value = value ?? "";
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  'Complete',
-                                  style: heading5,
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8.h,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Attachment',
-                              style: heading5,
-                            ),
-                            SvgPicture.asset(
-                              attachmentIcon,
-                              height: 20.h,
-                            ),
-                            SizedBox(width: 10.w),
-                            Obx(
-                              () => InkWell(
-                                onTap: () {
-                                  AttachmentClass()
-                                      .selectAttachmentDialog(context);
-                                },
-                                child: taskController
-                                        .pickedFile2.value.path.isNotEmpty
-                                    ? InkWell(
-                                        onTap: () {
-                                          Get.to(() => ImageScreen(
-                                                file: taskController
-                                                    .pickedFile2.value,
-                                              ));
+                          ),
+                          SizedBox(height: 15.h),
+                          Row(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Obx(
+                                    () => Container(
+                                      width: 25.w,
+                                      height: 25.h,
+                                      child: Radio(
+                                        value: 'progress',
+                                        groupValue:
+                                            taskController
+                                                .isProgressSelected
+                                                ?.value,
+                                        onChanged: (value) {
+                                          taskController
+                                              .isProgressSelected
+                                              ?.value = value ?? "";
                                         },
-                                        child: Container(
-                                          height: 35.h,
-                                          width: 35.w,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(4.r),
-                                            ),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(4.r),
-                                            ),
-                                            child: Image.file(
-                                              taskController.pickedFile2.value,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : SvgPicture.asset(addPhotoIcon),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Text('In Progress', style: heading5),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TaskCustomTextField(
-                          controller: statusRemarkController,
-                          textCapitalization: TextCapitalization.sentences,
-                          data: statusRemark,
-                          hintText: statusRemark,
-                          labelText: statusRemark,
-                          index: 0,
-                          maxLine: 3,
-                          focusedIndexNotifier: focusedIndexNotifier,
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Obx(
-                              () => SizedBox(
-                                width: 100.w,
-                                height: 40.h,
-                                child: CustomButton(
-                                  onPressed: () async {
-                                    if (taskController
-                                            .isProgressUpdating.value ==
-                                        false) {
+                              SizedBox(width: 5.w),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Obx(
+                                    () => Container(
+                                      width: 25.w,
+                                      height: 25.h,
+                                      child: Radio(
+                                        value: 'complete',
+                                        groupValue:
+                                            taskController
+                                                .isProgressSelected
+                                                ?.value,
+                                        onChanged: (value) {
+                                          taskController
+                                              .isProgressSelected
+                                              ?.value = value ?? "";
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Text('Complete', style: heading5),
+                                ],
+                              ),
+                              SizedBox(height: 8.h),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
+                          Row(
+                            children: [
+                              Text('Attachment', style: heading5),
+                              SvgPicture.asset(attachmentIcon, height: 20.h),
+                              SizedBox(width: 10.w),
+                              Obx(
+                                () => InkWell(
+                                  onTap: () {
+                                    AttachmentClass().selectAttachmentDialog(
+                                      context,
+                                    );
+                                  },
+                                  child:
+                                      taskController
+                                              .pickedFile2
+                                              .value
+                                              .path
+                                              .isNotEmpty
+                                          ? InkWell(
+                                            onTap: () {
+                                              Get.to(
+                                                () => ImageScreen(
+                                                  file:
+                                                      taskController
+                                                          .pickedFile2
+                                                          .value,
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 35.h,
+                                              width: 35.w,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(4.r),
+                                                ),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(4.r),
+                                                ),
+                                                child: Image.file(
+                                                  taskController
+                                                      .pickedFile2
+                                                      .value,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                          : SvgPicture.asset(addPhotoIcon),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
+                          TaskCustomTextField(
+                            controller: statusRemarkController,
+                            textCapitalization: TextCapitalization.sentences,
+                            data: statusRemark,
+                            hintText: statusRemark,
+                            labelText: statusRemark,
+                            index: 0,
+                            maxLine: 3,
+                            focusedIndexNotifier: focusedIndexNotifier,
+                          ),
+                          SizedBox(height: 20.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Obx(
+                                () => SizedBox(
+                                  width: 100.w,
+                                  height: 40.h,
+                                  child: CustomButton(
+                                    onPressed: () async {
                                       if (taskController
-                                              .isProgressSelected?.value !=
-                                          "") {
-                                        if (statusRemarkController
-                                            .text.isNotEmpty) {
-                                          if (taskController
-                                                  .isProgressSelected?.value ==
-                                              "progress") {
-                                            taskController.taskIdFromDetails =
-                                                newTaskListId;
-                                            await taskController
-                                                .updateProgressTask(
+                                              .isProgressUpdating
+                                              .value ==
+                                          false) {
+                                        if (taskController
+                                                .isProgressSelected
+                                                ?.value !=
+                                            "") {
+                                          if (statusRemarkController
+                                              .text
+                                              .isNotEmpty) {
+                                            if (taskController
+                                                    .isProgressSelected
+                                                    ?.value ==
+                                                "progress") {
+                                              taskController.taskIdFromDetails =
+                                                  newTaskListId;
+                                              await taskController
+                                                  .updateProgressTask(
                                                     newTaskListId,
                                                     statusRemarkController.text,
                                                     1,
-                                                    from: 'list');
-                                          } else {
-                                            taskController.taskIdFromDetails =
-                                                newTaskListId;
-                                            await taskController
-                                                .updateProgressTask(
+                                                    from: 'list',
+                                                  );
+                                            } else {
+                                              taskController.taskIdFromDetails =
+                                                  newTaskListId;
+                                              await taskController
+                                                  .updateProgressTask(
                                                     newTaskListId,
                                                     statusRemarkController.text,
                                                     2,
-                                                    from: 'list');
+                                                    from: 'list',
+                                                  );
+                                            }
+                                          } else {
+                                            CustomToast().showCustomToast(
+                                              "Please add remark.",
+                                            );
                                           }
                                         } else {
                                           CustomToast().showCustomToast(
-                                              "Please add remark.");
+                                            "Please select status",
+                                          );
                                         }
-                                      } else {
-                                        CustomToast().showCustomToast(
-                                            "Please select status");
                                       }
-                                    }
-                                  },
-                                  text:
-                                      taskController.isProgressUpdating.value ==
-                                              true
-                                          ? Row(
+                                    },
+                                    text:
+                                        taskController
+                                                    .isProgressUpdating
+                                                    .value ==
+                                                true
+                                            ? Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
@@ -2268,12 +2553,10 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                 ),
                                               ],
                                             )
-                                          : Row(
+                                            : Row(
                                               children: [
                                                 SvgPicture.asset(doneTaskIcon),
-                                                SizedBox(
-                                                  width: 5.w,
-                                                ),
+                                                SizedBox(width: 5.w),
                                                 Text(
                                                   done,
                                                   style: TextStyle(
@@ -2284,37 +2567,37 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                 ),
                                               ],
                                             ),
+                                    width: double.infinity,
+                                    color: primaryColor,
+                                    height: 40.h,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10.w),
+                              SizedBox(
+                                width: 100.w,
+                                height: 40.h,
+                                child: CustomButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  text: Text(
+                                    cancel,
+                                    style: TextStyle(
+                                      color: whiteColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                   width: double.infinity,
                                   color: primaryColor,
                                   height: 40.h,
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 10.w),
-                            SizedBox(
-                              width: 100.w,
-                              height: 40.h,
-                              child: CustomButton(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                text: Text(
-                                  cancel,
-                                  style: TextStyle(
-                                    color: whiteColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                width: double.infinity,
-                                color: primaryColor,
-                                height: 40.h,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                            ],
+                          ),
+                        ],
+                      ),
             ),
           ),
         );
@@ -2328,25 +2611,21 @@ class _TaskListPageState extends State<TaskScreenPage> {
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => ImageScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => ImageScreen(file: file)),
       );
     } else if (fileExtension == 'pdf') {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => PDFScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => PDFScreen(file: file)),
       );
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Excel file viewing not supported yet.')),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unsupported file type.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unsupported file type.')));
     }
   }
 

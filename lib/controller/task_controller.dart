@@ -24,21 +24,27 @@ class TaskController extends GetxController {
   RxBool? isCompleteStatus = false.obs;
   RxList<String> taskSelectedType =
       <String>['Assigned to me', 'Task created by me', "Task review by me"].obs;
-  RxString selectedAssignedTask = ''.obs;
-  RxList<String> taskType = <String>[
-    'All Task',
-    'New Task',
-    'Progress',
-    'Completed',
-    'Important',
-    'Past Due',
-    'Due Today',
-  ].obs;
+  RxString selectedAssignedTask = 'Assigned to me'.obs;
+  RxList<String> taskType =
+      <String>[
+        'All Task',
+        'New Task',
+        'Progress',
+        'Completed',
+        'Important',
+        'Past Due',
+        'Due Today',
+      ].obs;
   RxString selectedTaskType = 'All Task'.obs;
   Future<void> updateTaskType(String? value) async {
     selectedTaskType.value = value!;
     await taskListApi(
-        selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+      selectedTaskType.value,
+      selectedAssignedTask.value,
+      '',
+      '',
+      '',
+    );
   }
 
   var isAllProjectCalling = false.obs;
@@ -85,15 +91,20 @@ class TaskController extends GetxController {
             status: 1,
           ),
         );
-        for (int i = 0;
-            i < (allProjectListModel.value.createdByMe?.length ?? 0);
-            i++) {
-          allProjectDataList
-              .add(allProjectListModel.value.createdByMe?[i] ?? CreatedByMe());
+        for (
+          int i = 0;
+          i < (allProjectListModel.value.createdByMe?.length ?? 0);
+          i++
+        ) {
+          allProjectDataList.add(
+            allProjectListModel.value.createdByMe?[i] ?? CreatedByMe(),
+          );
         }
-        for (int i = 0;
-            i < (allProjectListModel.value.assignedToMe?.length ?? 0);
-            i++) {
+        for (
+          int i = 0;
+          i < (allProjectListModel.value.assignedToMe?.length ?? 0);
+          i++
+        ) {
           allProjectDataList.add(allProjectListModel.value.assignedToMe![i]);
         }
       }
@@ -111,8 +122,9 @@ class TaskController extends GetxController {
       selectedAllProjectListData.refresh();
       isAllProjectCalling.value = false;
       isAllProjectCalling.refresh();
-      await profileController
-          .departmentList(selectedAllProjectListData.value?.id ?? 0);
+      await profileController.departmentList(
+        selectedAllProjectListData.value?.id ?? 0,
+      );
     }
     isAllProjectCalling.value = false;
   }
@@ -120,7 +132,12 @@ class TaskController extends GetxController {
   Future<void> updateAssignedTask(String? value) async {
     selectedAssignedTask.value = value!;
     await taskListApi(
-        selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+      selectedTaskType.value,
+      selectedAssignedTask.value,
+      '',
+      '',
+      '',
+    );
   }
 
   final HomeController homeController = Get.put(HomeController());
@@ -154,8 +171,13 @@ class TaskController extends GetxController {
   RxInt pagevalue = 1.obs;
   RxInt prePageCount = 1.obs;
   var isScrolling = false.obs;
-  Future<void> taskListApi(String? selectedTaskValue, String assignValue,
-      String type, String date, String? userId) async {
+  Future<void> taskListApi(
+    String? selectedTaskValue,
+    String assignValue,
+    String type,
+    String date,
+    String? userId,
+  ) async {
     if (type == 'scroll') {
       isScrolling.value = true;
     } else {
@@ -164,7 +186,12 @@ class TaskController extends GetxController {
 
     try {
       var result = await TaskService().taskListApi(
-          selectedTaskValue, assignValue, pagevalue.value, date, userId ?? "");
+        selectedTaskValue,
+        assignValue,
+        pagevalue.value,
+        date,
+        userId ?? "",
+      );
 
       if (result != null) {
         checkAllTaskList.clear();
@@ -269,8 +296,10 @@ class TaskController extends GetxController {
 
               DateTime? dateTime;
               try {
-                DateFormat inputFormat =
-                    DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                DateFormat inputFormat = DateFormat(
+                  "dd-MM-yyyy h:mm a",
+                  'en_US',
+                );
                 dateTime = inputFormat.parse(dateInput.toLowerCase());
               } catch (e) {
                 print("Error parsing with lowercase AM/PM: $e");
@@ -278,16 +307,20 @@ class TaskController extends GetxController {
 
               if (dateTime == null) {
                 try {
-                  DateFormat inputFormat =
-                      DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                  DateFormat inputFormat = DateFormat(
+                    "dd-MM-yyyy h:mm a",
+                    'en_US',
+                  );
                   dateTime = inputFormat.parse(dateInput.toUpperCase());
                 } catch (e) {
                   print("Error parsing with uppercase AM/PM: $e");
                 }
               }
               if (dateTime != null) {
-                DateFormat outputFormat =
-                    DateFormat("dd-MM-yyyy HH:mm", 'en_US');
+                DateFormat outputFormat = DateFormat(
+                  "dd-MM-yyyy HH:mm",
+                  'en_US',
+                );
                 print('Formatted Date Input: 65ew54 $dateTime');
                 String dateOutput = outputFormat.format(dateTime);
                 List<String> splitDt = dateOutput.split(" ");
@@ -384,11 +417,7 @@ class TaskController extends GetxController {
       responsiblePersonList.clear();
       if (fromPage.toString() == "add_meeting") {
         responsiblePersonList.add(
-          ResponsiblePersonData(
-            id: 0,
-            name: "All user",
-            status: 1,
-          ),
+          ResponsiblePersonData(id: 0, name: "All user", status: 1),
         );
       }
       for (var person in responsiblePersonListModel.value.data!) {
@@ -396,18 +425,24 @@ class TaskController extends GetxController {
       }
       responsiblePersonList.refresh();
 
-      selectedSharedListPerson
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
-      responsiblePersonSelectedCheckBox
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
-      selectedResponsiblePersonId
-          .addAll(List<int>.filled(responsiblePersonList.length, 0));
-      selectedResponsiblePersonId
-          .addAll(List<int>.filled(responsiblePersonList.length, 0));
-      selectedLongPress
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
-      reviewerCheckBox
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
+      selectedSharedListPerson.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
+      responsiblePersonSelectedCheckBox.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
+      selectedResponsiblePersonId.addAll(
+        List<int>.filled(responsiblePersonList.length, 0),
+      );
+      selectedResponsiblePersonId.addAll(
+        List<int>.filled(responsiblePersonList.length, 0),
+      );
+      selectedLongPress.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
+      reviewerCheckBox.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
       responsiblePersonSelectedCheckBox2.clear();
       toAssignedPersonCheckBox.clear();
       for (var person in responsiblePersonList) {
@@ -495,16 +530,23 @@ class TaskController extends GetxController {
       );
       if (result) {
         Get.back();
-        responsiblePersonSelectedCheckBox
-            .addAll(List<bool>.filled(responsiblePersonList.length, false));
-        reviewerCheckBox
-            .addAll(List<bool>.filled(responsiblePersonList.length, false));
+        responsiblePersonSelectedCheckBox.addAll(
+          List<bool>.filled(responsiblePersonList.length, false),
+        );
+        reviewerCheckBox.addAll(
+          List<bool>.filled(responsiblePersonList.length, false),
+        );
         assignedUserId.clear();
         reviewerUserId.clear();
 
         // Refresh task list
         await taskListApi(
-            selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+          selectedTaskType.value,
+          selectedAssignedTask.value,
+          '',
+          '',
+          '',
+        );
 
         // Invalidate home data cache
         String cacheKey = 'home_data_cache';
@@ -570,22 +612,46 @@ class TaskController extends GetxController {
   // }
 
   var isSubTaskAdding = false.obs;
-  Future<void> addSubTask(String taskName, String startDate, String dueDate,
-      String dueTime, int? priorityId, id) async {
+  Future<void> addSubTask(
+    String taskName,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    id,
+  ) async {
     isSubTaskAdding.value = true;
-    final result = await TaskService()
-        .addSubTaskApi(taskName, startDate, dueDate, dueTime, priorityId, id);
+    final result = await TaskService().addSubTaskApi(
+      taskName,
+      startDate,
+      dueDate,
+      dueTime,
+      priorityId,
+      id,
+    );
     Get.back();
     taskDetailsApi(id);
     isSubTaskAdding.value = false;
   }
 
   var isSubTaskEditing = false.obs;
-  Future<void> editSubTask(String taskName, String startDate, String dueDate,
-      String dueTime, int? priorityId, id) async {
+  Future<void> editSubTask(
+    String taskName,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    id,
+  ) async {
     isSubTaskEditing.value = true;
-    final result = await TaskService()
-        .editSubTaskApi(taskName, startDate, dueDate, dueTime, priorityId, id);
+    final result = await TaskService().editSubTaskApi(
+      taskName,
+      startDate,
+      dueDate,
+      dueTime,
+      priorityId,
+      id,
+    );
     if (result) {
       Get.back();
       taskDetailsApi(id);
@@ -595,38 +661,45 @@ class TaskController extends GetxController {
 
   var isTaskEditing = false.obs;
   Future<void> editTask(
-      String taskName,
-      String remark,
-      int? projectId,
-      int? deptId,
-      RxList<String> assignedUserId,
-      RxList<String> reviewerUserId,
-      String startDate,
-      String dueDate,
-      String dueTime,
-      int? priorityId,
-      newTaskListId,
-      String timeTextEditingController,
-      String timeType) async {
+    String taskName,
+    String remark,
+    int? projectId,
+    int? deptId,
+    RxList<String> assignedUserId,
+    RxList<String> reviewerUserId,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    newTaskListId,
+    String timeTextEditingController,
+    String timeType,
+  ) async {
     isTaskEditing.value = true;
     final result = await TaskService().editTaskApi(
-        taskName,
-        remark,
-        projectId,
-        deptId,
-        assignedUserId,
-        reviewerUserId,
-        startDate,
-        dueDate,
-        dueTime,
-        priorityId,
-        newTaskListId,
-        pickedFile,
-        timeTextEditingController,
-        timeType);
+      taskName,
+      remark,
+      projectId,
+      deptId,
+      assignedUserId,
+      reviewerUserId,
+      startDate,
+      dueDate,
+      dueTime,
+      priorityId,
+      newTaskListId,
+      pickedFile,
+      timeTextEditingController,
+      timeType,
+    );
     if (result) {
       await taskListApi(
-          selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+        selectedTaskType.value,
+        selectedAssignedTask.value,
+        '',
+        '',
+        '',
+      );
       Get.back();
     }
     isTaskEditing.value = false;
@@ -638,7 +711,12 @@ class TaskController extends GetxController {
     final result = await TaskService().deleteTask(id);
     if (result) {
       await taskListApi(
-          selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+        selectedTaskType.value,
+        selectedAssignedTask.value,
+        '',
+        '',
+        '',
+      );
     }
     isTaskDeleting.value = false;
   }
@@ -658,21 +736,39 @@ class TaskController extends GetxController {
   Rx<File> pickedFile2 = File('').obs;
   int taskIdFromDetails = 0;
   var isProgressUpdating = false.obs;
-  Future<void> updateProgressTask(int? id, String statusRemark, int i,
-      {required String from}) async {
+  Future<void> updateProgressTask(
+    int? id,
+    String statusRemark,
+    int i, {
+    required String from,
+  }) async {
     isProgressUpdating.value = true;
-    final result = await TaskService()
-        .updateProgressTask(id, statusRemark, i, pickedFile2);
+    final result = await TaskService().updateProgressTask(
+      id,
+      statusRemark,
+      i,
+      pickedFile2,
+    );
     if (result) {
       isProgressStatus?.value = false;
       Get.back();
       if (from == "details") {
         await taskListApi(
-            selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+          selectedTaskType.value,
+          selectedAssignedTask.value,
+          '',
+          '',
+          '',
+        );
         await taskDetailsApi(taskIdFromDetails);
       } else {
         await taskListApi(
-            selectedTaskType.value, selectedAssignedTask.value, '', '', '');
+          selectedTaskType.value,
+          selectedAssignedTask.value,
+          '',
+          '',
+          '',
+        );
         await taskDetailsApi(taskIdFromDetails);
       }
     }

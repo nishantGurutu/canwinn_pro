@@ -1,7 +1,7 @@
 class ApiConstant {
   static const String baseUrl =
-      // "https://taskmaster.electionmaster.in/public/api/";
-      "https://canwinnpro.canwinn.in/public/api/";
+      "https://taskmaster.electionmaster.in/public/api/";
+  // "https://canwinnpro.canwinn.in/public/api/";
   static const String register = "auth/register";
   static const String login = "auth/login";
   static const String logout = "logout";
@@ -41,7 +41,6 @@ class ApiConstant {
   static const String editTask = "edit-task";
   static const String projectList = "projecttype-list";
   static const String projectDetails = "project-details";
-  // static const String allProjectList = "project-list";
   static const String allProjectList = "project-list-new";
   static const String projectCategoryList = "projectcategory-list";
   static const String userRoleList = "role-list";
@@ -133,8 +132,6 @@ class ApiConstant {
   static const String delete_event_list = "delete-event";
   static const String get_submitted_daily_task_list = "get-submit-daily-tasks";
   static const String assign_assets = "add-allocate-assets";
-  // static const String assign_assets = "add-assign-assets";
-  // static const String edit_assigned_assets = "edit-assigned-assets";
   static const String edit_assigned_assets = "update-allocate-assets";
   static const String store_task_comment = "store-task-comment";
   static const String send_task_message = "send-task-message";

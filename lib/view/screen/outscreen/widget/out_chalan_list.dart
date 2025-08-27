@@ -29,7 +29,9 @@ class OutChalanlist extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(() => UserChalanDetails(''));
+                          Get.to(
+                            () => UserChalanDetails(chalanList[index]['id']),
+                          );
                         },
                         child: ChalanListBox(
                           image: chalanList[index]['upload_image_path'] ?? "",
