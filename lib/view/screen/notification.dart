@@ -60,7 +60,6 @@ class _NotificationPageState extends State<NotificationPage> {
     super.dispose();
   }
 
-  // Add confirmation dialog method
   Future<bool> _showDeleteConfirmationDialog(BuildContext context) async {
     return await showDialog<bool>(
       context: context,

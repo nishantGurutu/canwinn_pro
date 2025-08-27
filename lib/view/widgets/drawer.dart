@@ -49,6 +49,7 @@ import 'add_assets.dart';
 
 class SideDrawer extends StatefulWidget {
   final RoleListData? roleData;
+
   const SideDrawer(this.roleData, {super.key});
 
   @override
@@ -318,31 +319,45 @@ class _SideDrawerState extends State<SideDrawer> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: bottomBarController.selectedTabIndex.value == 48
-                                  ? selectedTabColor
-                                  : whiteColor,
+                              color:
+                                  bottomBarController.selectedTabIndex.value ==
+                                          48
+                                      ? selectedTabColor
+                                      : whiteColor,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(6.r),
                               ),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.only(left: 10.w, top: 7.h, bottom: 7.h),
+                              padding: EdgeInsets.only(
+                                left: 10.w,
+                                top: 7.h,
+                                bottom: 7.h,
+                              ),
                               child: Row(
                                 spacing: 10.w,
                                 children: [
                                   SvgPicture.asset(
                                     drawerTaskicon,
-                                    color: bottomBarController.selectedTabIndex.value == 48
-                                        ? whiteColor
-                                        : textColor,
+                                    color:
+                                        bottomBarController
+                                                    .selectedTabIndex
+                                                    .value ==
+                                                48
+                                            ? whiteColor
+                                            : textColor,
                                     height: 20.h,
                                   ),
                                   Text(
                                     "Data Calendar",
                                     style: TextStyle(
-                                      color: bottomBarController.selectedTabIndex.value == 48
-                                          ? whiteColor
-                                          : textColor,
+                                      color:
+                                          bottomBarController
+                                                      .selectedTabIndex
+                                                      .value ==
+                                                  48
+                                              ? whiteColor
+                                              : textColor,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -2118,8 +2133,63 @@ class _SideDrawerState extends State<SideDrawer> {
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () {
-                            bottomBarController.selectedTabIndex.value = 25;
-                            logoutApp();
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  title: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.logout,
+                                        color: Colors.redAccent,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        "Logout",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  content: Text(
+                                    "Are you sure you want to logout?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context); // dialog close
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text("Logout"),
+                                      onPressed: () {
+                                        Navigator.pop(context); // dialog close
+                                        bottomBarController
+                                            .selectedTabIndex
+                                            .value = 25;
+                                        logoutApp(); // call logout
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -2621,6 +2691,7 @@ class _SideDrawerState extends State<SideDrawer> {
 
   ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
   RxList<bool> assetsListCheckbox = <bool>[].obs;
+
   Widget assignAssets(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

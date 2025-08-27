@@ -5,12 +5,10 @@ import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:device_calendar/device_calendar.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/dialog_class.dart';
@@ -44,6 +42,7 @@ import 'package:task_management/view/widgets/drawer.dart';
 class BottomNavigationBarExample extends StatefulWidget {
   final String? from;
   final Map<String, dynamic> payloadData;
+
   const BottomNavigationBarExample({
     super.key,
     this.from,
@@ -85,9 +84,7 @@ class _BottomNavigationBarExampleState
   var profilePicPath = ''.obs;
   final HomeController homeController = Get.put(HomeController());
   final LeadController leadController = Get.put(LeadController());
-  final DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
   final location = tz.local;
-
 
   @override
   void initState() {
@@ -97,6 +94,7 @@ class _BottomNavigationBarExampleState
   }
 
   var isLoading = false.obs;
+
   Future<void> callApi() async {
     isLoading.value = true;
 
@@ -144,92 +142,11 @@ class _BottomNavigationBarExampleState
       "",
     );
 
-   // await fetchCalendarEvents();
-
     await SosPusherConfig().initPusher(
       _onPusherEvent,
       channelName: "test-channel",
       context: context,
     );
-  }
-
-  Future<void> fetchCalendarEvents() async {
-    // Check and request permission
-    var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
-    if (permissionsGranted.isSuccess && !permissionsGranted.data!) {
-      permissionsGranted = await _deviceCalendarPlugin.requestPermissions();
-      if (!permissionsGranted.isSuccess || !permissionsGranted.data!) {
-        Fluttertoast.showToast(msg: "Calendar permission denied");
-        return;
-      }
-    }
-
-    // Get all calendars
-    final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
-    final calendars = calendarsResult.data;
-
-    if (calendars == null || calendars.isEmpty) {
-      Fluttertoast.showToast(msg: "No calendars found");
-      return;
-    }
-
-    bool anyEventFound = false;
-
-    // Loop through all calendars
-    for (var cal in calendars) {
-      final eventsResult = await _deviceCalendarPlugin.retrieveEvents(
-        cal.id!,
-        RetrieveEventsParams(
-          startDate: tz.TZDateTime.from(
-            DateTime.now().subtract(Duration(days: 30)),
-            tz.local,
-          ),
-          endDate: tz.TZDateTime.from(
-            DateTime.now().add(Duration(days: 60)),
-            tz.local,
-          ),
-        ),
-      );
-
-      final events = eventsResult?.data ?? [];
-      if (events.isNotEmpty) {
-        anyEventFound = true;
-        for (var event in events) {
-          Fluttertoast.showToast(
-            msg: "📅 ${cal.name}\nTitle: ${event.title}\nStart: ${event.start}",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-          );
-        }
-      }
-    }
-
-   if (!anyEventFound) {
-      final defaultCalendar = calendars.first;
-
-      final dummyEvent = Event(
-        defaultCalendar.id,
-        title: "Dummy Meeting",
-        start: tz.TZDateTime.from(
-          DateTime.now().add(Duration(minutes: 2)),
-          tz.local,
-        ),
-        end: tz.TZDateTime.from(
-          DateTime.now().add(Duration(hours: 1)),
-          tz.local,
-        ),
-        description: "This is a test dummy event",
-      );
-
-      final createResult =
-      await _deviceCalendarPlugin.createOrUpdateEvent(dummyEvent);
-
-      if (createResult!.isSuccess) {
-        Fluttertoast.showToast(msg: "✅ Dummy event created in ${defaultCalendar.name}");
-      } else {
-        Fluttertoast.showToast(msg: "❌ Failed to create dummy event");
-      }
-    }
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
@@ -240,7 +157,6 @@ class _BottomNavigationBarExampleState
   List<int> selectedItems = [];
   final List<DropdownMenuItem> items = [];
 
-  bool _isBackButtonPressed = false;
   @override
   void dispose() {
     profileController.selectedDepartMentListData.value = null;
@@ -252,115 +168,7 @@ class _BottomNavigationBarExampleState
     super.dispose();
   }
 
-  Future<bool> _onWillPop() async {
-    if (!_isBackButtonPressed) {
-      return await showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: Text('Confirm Exit'),
-                  content: Text('Are you sure you want to exit the app?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                        SystemNavigator.pop();
-                      },
-                      child: Text('Confirm'),
-                    ),
-                  ],
-                ),
-          ) ??
-          false;
-    } else {
-      return true;
-    }
-  }
-
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  Future<void> _addEventToGoogleCalendar() async {
-    if (Platform.isAndroid) {
-      final intent = AndroidIntent(
-        action: 'android.intent.action.EDIT',
-        type: 'vnd.android.cursor.item/event',
-        data: 'content://com.android.calendar/events',
-        arguments: {
-          'title': 'Test Title',
-          'beginTime': "10-04-2025",
-          'endTime': "10-04-2025",
-          'allDay': false,
-        },
-        flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-      );
-
-      try {
-        await intent.launch();
-        Fluttertoast.showToast(
-          msg: "Opening Google Calendar...",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black54,
-          textColor: Colors.white,
-        );
-
-        await Future.delayed(Duration(seconds: 5));
-        Fluttertoast.showToast(
-          msg: "Event added (check your Calendar)",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-      } catch (e) {
-        Fluttertoast.showToast(
-          msg: "Error: $e",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      }
-    } else {
-      Fluttertoast.showToast(
-        msg: "Calendar event not supported on this platform",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.orange,
-        textColor: Colors.white,
-      );
-    }
-  }
-
-/*
-  Future<void> _addEventToGoogleCalendar() async {
-    if (Platform.isAndroid) {
-      final intent = AndroidIntent(
-        action: 'android.intent.action.EDIT',
-        type: 'vnd.android.cursor.item/event',
-        data: 'content://com.android.calendar/events',
-        arguments: {
-          'title': 'Test Title',
-          'beginTime': "10-04-2025",
-          'endTime': "10-04-2025",
-          'allDay': false,
-        },
-        flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-      );
-      try {
-        await intent.launch();
-        await Future.delayed(Duration(seconds: 5));
-      } catch (e) {
-        print('Error launching Google Calendar: $e');
-      }
-    } else {
-      print('Calendar event creation not supported on this platform');
-    }
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -374,8 +182,128 @@ class _BottomNavigationBarExampleState
                   notificationController.isNotificationLoading.value == true &&
                   chatController.isChatLoading.value == true
               ? Center(child: CircularProgressIndicator())
-              : WillPopScope(
-                onWillPop: _onWillPop,
+              : /*WillPopScope(
+                onWillPop: _onWillPop,*/ PopScope(
+                canPop: false, // Prevent auto-pop
+                onPopInvoked: (didPop) async {
+                  if (didPop) {
+
+                    return;
+                  }
+
+
+                  if (isLoading.value) {
+
+                    Fluttertoast.showToast(
+                      msg: "Please wait, an operation is in progress",
+                    );
+                    return;
+                  }
+
+                  if (bottomBarController.currentPageIndex.value != 0) {
+
+                    bottomBarController.currentPageIndex.value = 0;
+                    return;
+                  }
+
+                  final bool? shouldExit = await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      elevation: 10,
+                      backgroundColor: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Top Icon
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.exit_to_app_rounded,
+                                color: Colors.red,
+                                size: 40,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Title
+                            const Text(
+                              "Confirm Exit",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // Message
+                            const Text(
+                              "Are you sure you want to exit the app?",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black54,
+                              ),
+                            ),
+
+                            const SizedBox(height: 25),
+
+                            // Buttons
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey[200],
+                                      foregroundColor: Colors.black87,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                    ),
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: const Text("Cancel"),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                    ),
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: const Text("Exit"),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+
+                  if (shouldExit == true && context.mounted) {
+                    SystemNavigator.pop();
+                  } else {
+                  }
+                },
                 child: Scaffold(
                   key: _key,
                   drawer: Obx(
@@ -570,19 +498,34 @@ class _BottomNavigationBarExampleState
     );
   }
 
-  String _getTitle(int index) {
-    switch (index) {
-      case 1:
-        return "Discussion";
-      case 2:
-        return "Attendance";
-      case 3:
-        return "Report";
-      case 4:
-        return "Document";
-      default:
-        return "";
+  Future<bool> _onWillPop() async {
+    if (isLoading.value) {
+      Fluttertoast.showToast(msg: "Please wait, an operation is in progress");
+      return false; // Prevent back navigation while loading
     }
+    log("Back button pressed");
+    return await showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text('Confirm Exit'),
+                content: Text('Are you sure you want to exit the app?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                      SystemNavigator.pop();
+                    },
+                    child: Text('Confirm'),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
   }
 
   BottomNavigationBarItem _buildBottomNavItem(

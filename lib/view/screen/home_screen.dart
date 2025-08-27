@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<void> checkForAppUpdate(BuildContext context) async {
     print("checkForAppUpdate() called");
 
-    if (kDebugMode) {
+   /* if (kDebugMode) {
       Get.dialog(
         AlertDialog(
           title: const Text("Fake Update Available"),
@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       );
       return;
     }
-
+*/
     if (Platform.isAndroid) {
       try {
         print("Platform is Android, checking update...");
