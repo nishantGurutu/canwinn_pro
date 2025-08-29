@@ -25,7 +25,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final ProfileController profileController = Get.find();
   final UserPageControlelr userPageControlelr = Get.find();
-  final TextEditingController anniversaryDateController = TextEditingController();
+  final TextEditingController anniversaryDateController =
+      TextEditingController();
 
   final Color whiteColor = Colors.white;
   final Color darkGreyColor = Colors.grey.shade800;
@@ -51,7 +52,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> takePhoto(ImageSource source) async {
     try {
-      final pickedImage = await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
       if (pickedImage == null) return;
 
       profileController.isProfilePicUploading.value = true;
@@ -81,25 +85,21 @@ class _ProfilePageState extends State<ProfilePage> {
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => NetworkImageScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => NetworkImageScreen(file: file)),
       );
     } else if (fileExtension == 'pdf') {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => PDFScreen(file: File(file)),
-        ),
+        MaterialPageRoute(builder: (context) => PDFScreen(file: File(file))),
       );
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Excel file viewing not supported yet.')),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unsupported file type.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unsupported file type.')));
     }
   }
 
@@ -171,10 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.camera,
-                                color: whiteColor,
-                              ),
+                              Icon(Icons.camera, color: whiteColor),
                               SizedBox(width: 8.w),
                               Text(
                                 'Camera',
@@ -200,8 +197,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  final TextEditingController assetsNameTextController = TextEditingController();
-  final TextEditingController qtytextEditingControlelr = TextEditingController();
+  final TextEditingController assetsNameTextController =
+      TextEditingController();
+  final TextEditingController qtytextEditingControlelr =
+      TextEditingController();
   final TextEditingController srNoTextController = TextEditingController();
 
   @override
@@ -210,257 +209,396 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: whiteColor,
       body: SafeArea(
         child: Obx(
-              () => profileController.isUserDetailsLoading.value
-              ? Center(child: CircularProgressIndicator(color: primaryColor))
-              : SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          onPressed: () => Get.back(),
-                          icon: SvgPicture.asset(
-                            'assets/images/svg/back_arrow.svg',
-                            color: secondaryColor,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    InkWell(
-                      onTap: () {
-                        showAlertDialog(context);
-                      },
-                      child: Stack(
-                        children: [
-                          Obx(
-                                () => profileController.profilePicPath.value.isEmpty
-                                ? Container(
-                              height: 90.h,
-                              width: 90.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(45.r),
-                                border: Border.all(color: borderColor, width: 1),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(45.r),
-                                child: Image.asset(
-                                  'assets/images/png/profile-image-removebg-preview.png',
-                                  fit: BoxFit.cover,
+          () =>
+              profileController.isUserDetailsLoading.value
+                  ? Center(
+                    child: CircularProgressIndicator(color: primaryColor),
+                  )
+                  : SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 20.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                IconButton(
+                                  onPressed: () => Get.back(),
+                                  icon: SvgPicture.asset(
+                                    'assets/images/svg/back_arrow.svg',
+                                    color: secondaryColor,
+                                  ),
                                 ),
-                              ),
-                            )
-                                : profileController.dataFromImagePicker.value == false &&
-                                profileController.profilePicPath.value.isNotEmpty
-                                ? InkWell(
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            InkWell(
                               onTap: () {
-                                openFile(profileController.profilePicPath.value);
+                                showAlertDialog(context);
+                              },
+                              child: Stack(
+                                children: [
+                                  Obx(
+                                    () =>
+                                        profileController
+                                                .profilePicPath
+                                                .value
+                                                .isEmpty
+                                            ? Container(
+                                              height: 90.h,
+                                              width: 90.w,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(45.r),
+                                                border: Border.all(
+                                                  color: borderColor,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(45.r),
+                                                child: Image.asset(
+                                                  'assets/images/png/profile-image-removebg-preview.png',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )
+                                            : profileController
+                                                        .dataFromImagePicker
+                                                        .value ==
+                                                    false &&
+                                                profileController
+                                                    .profilePicPath
+                                                    .value
+                                                    .isNotEmpty
+                                            ? InkWell(
+                                              onTap: () {
+                                                openFile(
+                                                  profileController
+                                                      .profilePicPath
+                                                      .value,
+                                                );
+                                              },
+                                              child: Container(
+                                                height: 90.h,
+                                                width: 90.w,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        45.r,
+                                                      ),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        45.r,
+                                                      ),
+                                                  child: Image.network(
+                                                    profileController
+                                                        .profilePicPath
+                                                        .value,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (
+                                                      context,
+                                                      error,
+                                                      stackTrace,
+                                                    ) {
+                                                      return Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                20.r,
+                                                              ),
+                                                        ),
+                                                        child: Image.asset(
+                                                          'assets/images/png/profile-image-removebg-preview.png',
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                            : Container(
+                                              height: 90.h,
+                                              width: 90.w,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(45.r),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(45.r),
+                                                child: Image.file(
+                                                  File(
+                                                    profileController
+                                                        .profilePicPath
+                                                        .value,
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            ),
+                                  ),
+                                  Positioned(
+                                    bottom: 5.h,
+                                    right: 5.w,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      padding: EdgeInsets.all(6),
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        color: whiteColor,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Text(
+                              'Complete Your Profile',
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => UserAssetsList(
+                                    profileController.allocatedAssetsList,
+                                    profileController,
+                                  ),
+                                );
                               },
                               child: Container(
-                                height: 90.h,
-                                width: 90.w,
+                                width: 120.w,
+                                height: 36.h,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(45.r),
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(8.r),
                                 ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(45.r),
-                                  child: Image.network(
-                                    profileController.profilePicPath.value,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20.r),
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/png/profile-image-removebg-preview.png',
-                                        ),
-                                      );
-                                    },
+                                child: Center(
+                                  child: Text(
+                                    'Your Assets',
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
-                            )
-                                : Container(
-                              height: 90.h,
-                              width: 90.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(45.r),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(45.r),
-                                child: Image.file(
-                                  File(profileController.profilePicPath.value),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 5.h,
-                            right: 5.w,
-                            child: Container(
-                              decoration: BoxDecoration(
+                            SizedBox(height: 25.h),
+                            _buildLabelAndField(
+                              'Name',
+                              profileController.nameTextEditingController.value,
+                              'name',
+                            ),
+                            SizedBox(height: 15.h),
+                            _buildLabelAndField(
+                              'Email',
+                              profileController
+                                  .emailTextEditingController
+                                  .value,
+                              'email',
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            SizedBox(height: 15.h),
+                            _buildLabelAndField(
+                              'Mobile',
+                              profileController
+                                  .mobileTextEditingController
+                                  .value,
+                              'Phone',
+                              maxLength: 10,
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: 15.h),
+                            _buildLabelAndField(
+                              'Department',
+                              profileController
+                                  .departmentTextEditingController
+                                  .value,
+                              'Department',
+                              enable: false,
+                            ),
+                            SizedBox(height: 15.h),
+                            _buildLabelAndField(
+                              'Role',
+                              userPageControlelr.roleTextDateController.value,
+                              'Role',
+                              enable: false,
+                            ),
+                            SizedBox(height: 15.h),
+                            _buildGenderDropdown(),
+                            SizedBox(height: 15.h),
+                            _buildDatePickerField(
+                              'DOB',
+                              profileController.dobTextEditingController.value,
+                              'dd-MM-yyyy',
+                              prefixIconPath: 'assets/images/png/callender.png',
+                            ),
+                            SizedBox(height: 15.h),
+                            _buildDatePickerField(
+                              'Anniversary Date',
+                              profileController.anniversaryDateController.value,
+                              'dd-MM-yyyy',
+                              prefixIconPath:
+                                  'assets/images/png/anniversary_logo.png',
+                            ),
+                            SizedBox(height: 25.h),
+                            Obx(
+                              () => CustomButton(
+                                onPressed: () {
+                                  if (profileController.isProfileUpdating.value)
+                                    return;
+                                  profileController.updateProfile(
+                                    profileController
+                                        .nameTextEditingController
+                                        .value
+                                        .text,
+                                    profileController
+                                        .emailTextEditingController
+                                        .value
+                                        .text,
+                                    profileController
+                                        .mobileTextEditingController
+                                        .value
+                                        .text,
+                                    profileController
+                                        .departmentIdTextEditingController
+                                        .value
+                                        .text,
+                                    userPageControlelr
+                                        .selectedRoleListData
+                                        .value
+                                        ?.id,
+                                    profileController.selectedGender?.value,
+                                    profileController
+                                        .dobTextEditingController
+                                        .value
+                                        .text,
+                                    profileController
+                                            .selectedAnniversary
+                                            ?.value ??
+                                        "",
+                                    profileController
+                                        .anniversaryDateController
+                                        .value
+                                        .text,
+                                    context,
+                                  );
+                                },
+                                text:
+                                    profileController.isProfileUpdating.value
+                                        ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 24.h,
+                                              width: 24.h,
+                                              child: CircularProgressIndicator(
+                                                color: whiteColor,
+                                                strokeWidth: 2.5,
+                                              ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              'Loading...',
+                                              style: TextStyle(
+                                                color: whiteColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                        : Text(
+                                          'Update Profile',
+                                          style: TextStyle(
+                                            color: whiteColor,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
                                 color: primaryColor,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              padding: EdgeInsets.all(6),
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: whiteColor,
-                                size: 18,
+                                height: 48.h,
+                                width: double.infinity,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20.h),
-                    Text(
-                      'Complete Your Profile',
-                      style: TextStyle(
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => UserAssetsList(profileController.allocatedAssetsList, profileController));
-                      },
-                      child: Container(
-                        width: 120.w,
-                        height: 36.h,
-                        decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Your Assets',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: whiteColor,
-                            ),
-                          ),
+                            SizedBox(height: 30.h),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 25.h),
-                    _buildLabelAndField('Name', profileController.nameTextEditingController.value, 'name'),
-                    SizedBox(height: 15.h),
-                    _buildLabelAndField('Email', profileController.emailTextEditingController.value, 'email', keyboardType: TextInputType.emailAddress),
-                    SizedBox(height: 15.h),
-                    _buildLabelAndField('Mobile', profileController.mobileTextEditingController.value, 'Phone', maxLength: 10, keyboardType: TextInputType.number),
-                    SizedBox(height: 15.h),
-                    _buildLabelAndField('Department', profileController.departmentTextEditingController.value, 'Department', enable: false),
-                    SizedBox(height: 15.h),
-                    _buildLabelAndField('Role', userPageControlelr.roleTextDateController.value, 'Role', enable: false),
-                    SizedBox(height: 15.h),
-                    _buildGenderDropdown(),
-                    SizedBox(height: 15.h),
-                    _buildDatePickerField('DOB', profileController.dobTextEditingController.value, 'dd-MM-yyyy', prefixIconPath: 'assets/images/png/callender.png'),
-                    SizedBox(height: 15.h),
-                    _buildDatePickerField('Anniversary Date', profileController.anniversaryDateController.value, 'dd-MM-yyyy', prefixIconPath: 'assets/images/png/anniversary_logo.png'),
-                    SizedBox(height: 25.h),
-                    Obx(() => CustomButton(
-                      onPressed: () {
-                        if (profileController.isProfileUpdating.value) return;
-                        profileController.updateProfile(
-                          profileController.nameTextEditingController.value.text,
-                          profileController.emailTextEditingController.value.text,
-                          profileController.mobileTextEditingController.value.text,
-                          profileController.departmentIdTextEditingController.value.text,
-                          userPageControlelr.selectedRoleListData.value?.id,
-                          profileController.selectedGender?.value,
-                          profileController.dobTextEditingController.value.text,
-                          profileController.selectedAnniversary?.value ?? "",
-                          profileController.anniversaryDateController.value.text,
-                          context,
-                        );
-                      },
-                      text: profileController.isProfileUpdating.value
-                          ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 24.h,
-                            width: 24.h,
-                            child: CircularProgressIndicator(color: whiteColor, strokeWidth: 2.5),
-                          ),
-                          SizedBox(width: 10.w),
-                          Text(
-                            'Loading...',
-                            style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16.sp),
-                          ),
-                        ],
-                      )
-                          : Text(
-                        'Update Profile',
-                        style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16.sp),
-                      ),
-                      color: primaryColor,
-                      height: 48.h,
-                      width: double.infinity,
-                    )),
-                    SizedBox(height: 30.h),
-                  ],
-                ),
-              ),
-            ),
-          ),
+                  ),
         ),
       ),
     );
   }
 
   Widget _buildLabelAndField(
-      String label,
-      TextEditingController controller,
-      String hint, {
-        bool enable = true,
-        int? maxLength,
-        TextInputType? keyboardType,
-      }) {
+    String label,
+    TextEditingController controller,
+    String hint, {
+    bool enable = true,
+    int? maxLength,
+    TextInputType? keyboardType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade800,
+          ),
         ),
         SizedBox(height: 6.h),
         Container(
-        decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: Colors.grey.shade400),
-        color: enable ? Colors.white : Colors.grey.shade200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(color: Colors.grey.shade400),
+            color: enable ? Colors.white : Colors.grey.shade200,
+          ),
+          child: TextField(
+            controller: controller,
+            textCapitalization: TextCapitalization.sentences,
+            maxLength: maxLength,
+            keyboardType: keyboardType,
+            enabled: enable,
+            style: TextStyle(color: Colors.black87, fontSize: 15.sp),
+            decoration: InputDecoration(
+              counterText: '',
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 14.h,
+                horizontal: 12.w,
+              ),
+              hintText: hint,
+              border: InputBorder.none,
+            ),
+          ),
         ),
-        child: TextField(
-        controller: controller,
-        textCapitalization: TextCapitalization.sentences,
-        maxLength: maxLength,
-        keyboardType: keyboardType,
-        enabled: enable,
-        style: TextStyle(color: Colors.black87, fontSize: 15.sp),
-    decoration: InputDecoration(
-    counterText: '', // to hide maxLength counter text if needed
-    contentPadding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 12.w),
-    hintText: hint,
-    border: InputBorder.none,  // because container has border
-    ),
-    ),
-    ),
-
-    ],
+      ],
     );
   }
 
@@ -470,28 +608,36 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         Text(
           'Gender',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade800,
+          ),
         ),
         SizedBox(height: 6.h),
         Obx(
-              () => DropdownButtonHideUnderline(
+          () => DropdownButtonHideUnderline(
             child: DropdownButton2<String>(
               isExpanded: true,
-              items: profileController.genderList.map((String? item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item ?? "",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16.sp,
-                      color: Colors.grey.shade800,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              }).toList(),
-              value: profileController.selectedGender!.value.isEmpty ? null : profileController.selectedGender?.value,
+              items:
+                  profileController.genderList.map((String? item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item ?? "",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          color: Colors.grey.shade800,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+              value:
+                  profileController.selectedGender!.value.isEmpty
+                      ? null
+                      : profileController.selectedGender?.value,
               onChanged: (String? value) {
                 profileController.selectedGender?.value = value ?? '';
               },
@@ -507,10 +653,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               hint: Text(
                 'Select Gender',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 16.sp,
-                ),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 16.sp),
               ),
               iconStyleData: IconStyleData(
                 icon: Padding(
@@ -548,17 +691,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildDatePickerField(
-      String label,
-      TextEditingController controller,
-      String hintText, {
-        String? prefixIconPath,
-      }) {
+    String label,
+    TextEditingController controller,
+    String hintText, {
+    String? prefixIconPath,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey.shade800,
+          ),
         ),
         SizedBox(height: 6.h),
         TextField(
@@ -566,17 +713,21 @@ class _ProfilePageState extends State<ProfilePage> {
           readOnly: true,
           style: TextStyle(color: Colors.black87, fontSize: 15.sp),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 12.w),
-            prefixIcon: prefixIconPath != null
-                ? Padding(
-              padding: const EdgeInsets.all(9.0),
-              child: Image.asset(
-                prefixIconPath,
-                height: 18.h,
-                color:secondaryColor, // primaryColor
-              ),
-            )
-                : null,
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 14.h,
+              horizontal: 12.w,
+            ),
+            prefixIcon:
+                prefixIconPath != null
+                    ? Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: Image.asset(
+                        prefixIconPath,
+                        height: 18.h,
+                        color: secondaryColor, // primaryColor
+                      ),
+                    )
+                    : null,
             hintText: hintText,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
@@ -602,7 +753,9 @@ class _ProfilePageState extends State<ProfilePage> {
             );
 
             if (pickedDate != null) {
-              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+              String formattedDate = DateFormat(
+                'dd-MM-yyyy',
+              ).format(pickedDate);
               controller.text = formattedDate;
             }
           },

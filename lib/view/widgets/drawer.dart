@@ -817,7 +817,6 @@ class _SideDrawerState extends State<SideDrawer> {
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () async {
-                            // Get.to(()=> DailyActivity());
                             bottomBarController.selectedTabIndex.value = 7;
                             await showModalBottomSheet(
                               context: context,
@@ -2872,8 +2871,6 @@ class _SideDrawerState extends State<SideDrawer> {
             CustomButton(
               onPressed: () async {
                 if (selectedAssetsList.isNotEmpty) {
-                  // await profileController.assignAssets(
-                  //     selectedAssetsList, taskController.assignedUserId);
                 } else {
                   CustomToast().showCustomToast("Please select assets.");
                 }

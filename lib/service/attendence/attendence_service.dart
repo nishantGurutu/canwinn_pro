@@ -11,38 +11,55 @@ import 'package:task_management/model/leave_type_model.dart';
 
 class AttendenceService {
   final Dio _dio = Dio();
+
   Future<bool?> attendencePunching(
-      File pickedFile,
-      String address,
-      String latitude,
-      String longitude,
-      String attendenceTime,
-      String searchText) async {
+    File pickedFile,
+    String address,
+    String latitude,
+    String longitude,
+    String attendenceTime,
+    String searchText,
+  ) async {
     try {
       var token = StorageHelper.getToken();
-      var addressData = StorageHelper.getUserLocationName();
+
       _dio.options.headers = {
         "Authorization": "Bearer $token",
-        "Content-Type": "multipart/form-data",
+        "Accept": "application/json",
       };
 
       final Map<String, dynamic> formDataMap = {
-        'check_in':
-            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
-        'check_in_latitude': latitude.toString(),
-        'check_in_longitude': longitude.toString(),
-        'check_in_address': StorageHelper.getUserLocation().toString(),
+        'check_in': DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+        'check_in_latitude': latitude,
+        'check_in_longitude': longitude,
+        'check_in_address': address,
       };
+
       if (pickedFile.path.isNotEmpty) {
         formDataMap['check_in_image'] = await MultipartFile.fromFile(
           pickedFile.path,
           filename: pickedFile.path.split('/').last,
         );
       }
+
       if (StorageHelper.getType() == 3) {
-        formDataMap['user_id'] = searchText.toString();
+        formDataMap['user_id'] = StorageHelper.getId();
       }
+
       final formData = FormData.fromMap(formDataMap);
+
+      print("====== Attendance Punch Request ======");
+      print("URL: ${ApiConstant.baseUrl + ApiConstant.add_user_checkin}");
+      print("Headers: ${_dio.options.headers}");
+      formDataMap.forEach((key, value) {
+        if (value is MultipartFile) {
+          print("$key: FILE → ${value.filename}");
+        } else {
+          print("$key: $value");
+        }
+      });
+      print("======================================");
+
       final response = await _dio.post(
         ApiConstant.baseUrl + ApiConstant.add_user_checkin,
         data: formData,
@@ -56,18 +73,19 @@ class AttendenceService {
         throw Exception('Failed notes list');
       }
     } catch (e) {
-      print('Error in Attendence punch: $e');
+      print('❌ Error in Attendence punch: $e');
       return null;
     }
   }
 
   Future<bool?> attendencePunchout(
-      File pickedFile,
-      String address,
-      String latitude,
-      String longitude,
-      String attendenceTime,
-      String searchText) async {
+    File pickedFile,
+    String address,
+    String latitude,
+    String longitude,
+    String attendenceTime,
+    String searchText,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       var addressData = StorageHelper.getUserLocationName();
@@ -75,22 +93,24 @@ class AttendenceService {
         "Authorization": "Bearer $token",
         "Content-Type": "multipart/form-data",
       };
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        error: true,
-        logPrint: (object) {
-          print('Add lead log print data value ${object}');
-        },
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+          logPrint: (object) {
+            print('Add lead log print data value ${object}');
+          },
+        ),
+      );
 
       final Map<String, dynamic> formDataMap = {
         'check_out':
             DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
         'check_out_latitude': latitude.toString(),
         'check_out_longitude': longitude.toString(),
-        'check_out_address': StorageHelper.getUserLocation().toString(),
+        'check_out_address': address,
       };
       if (pickedFile.path.isNotEmpty) {
         formDataMap['check_out_image'] = await MultipartFile.fromFile(
@@ -205,9 +225,7 @@ class AttendenceService {
         "Authorization": "Bearer $token",
         "Content-Type": "multipart/form-data",
       };
-      final Map<String, dynamic> formDataMap = {
-        'user_id': value.toString(),
-      };
+      final Map<String, dynamic> formDataMap = {'user_id': value.toString()};
 
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(
@@ -227,8 +245,13 @@ class AttendenceService {
     }
   }
 
-  Future<bool> applyingLeave(String startDate, String endDate, String duration,
-      String leaveType, String description) async {
+  Future<bool> applyingLeave(
+    String startDate,
+    String endDate,
+    String duration,
+    String leaveType,
+    String description,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers = {
@@ -261,8 +284,14 @@ class AttendenceService {
     }
   }
 
-  Future<bool> leaveEditing(String startDate, String endDate, String duration,
-      String leaveType, String description, String id) async {
+  Future<bool> leaveEditing(
+    String startDate,
+    String endDate,
+    String duration,
+    String leaveType,
+    String description,
+    String id,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers = {

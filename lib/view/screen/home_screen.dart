@@ -76,12 +76,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final PriorityController priorityController = Get.find();
   final ProjectController projectController = Get.find();
   DateTime dt = DateTime.now();
-  ScrollController _scrollController = ScrollController();
+  // ScrollController _scrollController = ScrollController();
   late Animation<double> _animation;
   late AnimationController _animationController;
   // late TabController _tabController;
   @override
   void initState() {
+    // _scrollController.addListener(_scrollListener);
     // _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     apiCall(context);
     _animationController = AnimationController(
@@ -117,15 +118,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       });
     }
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        homeController.isButtonVisible.value = false;
-      } else if (_scrollController.position.pixels ==
-          _scrollController.position.minScrollExtent) {
-        homeController.isButtonVisible.value = true;
-      }
-    });
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.userScrollDirection ==
+    //       ScrollDirection.reverse) {
+    //     homeController.isButtonVisible.value = false;
+    //   } else if (_scrollController.position.pixels ==
+    //       _scrollController.position.minScrollExtent) {
+    //     homeController.isButtonVisible.value = true;
+    //   }
+    // });
   }
 
   _launchURL(param0) async {
@@ -303,7 +304,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return RefreshIndicator(
       onRefresh: onrefresher,
       child: SingleChildScrollView(
-        controller: _scrollController,
+        // controller: _scrollController,
+        // physics: const AlwaysScrollableScrollPhysics(),
         child: Obx(() {
           return Column(
             children: [
@@ -363,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return RefreshIndicator(
       onRefresh: onrefresher,
       child: SingleChildScrollView(
-        controller: _scrollController,
+        // controller: _scrollController,
         child: Obx(() {
           return Column(
             children: [

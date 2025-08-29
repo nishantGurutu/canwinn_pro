@@ -18,6 +18,7 @@ import 'package:task_management/view/screen/meeting/get_meeting.dart';
 import 'package:task_management/view/screen/meeting_screen.dart';
 import 'package:task_management/view/screen/message.dart';
 import 'package:task_management/view/screen/outscreen/chalanDetail.dart';
+import 'package:task_management/view/screen/outscreen/user_chalan_details.dart';
 import 'package:task_management/view/screen/project.dart';
 import 'package:task_management/view/screen/task_details.dart';
 import 'package:task_management/view/screen/todo_list.dart';
@@ -211,6 +212,8 @@ class LocalNotificationService {
   // Discussion
   // kiej8d99 payload data in push service {"sendername":"IT Administrator","senderid":"97","productid":"1","type":"leadchat","title":"Discussion & Comments","message":"New comment on lead \"Kallo\""}
 
+  // kiej8d99 payload data in push service {"sendername":"Nishant Kumar Schotest","senderid":"262","productid":"5505","type":"task","title":"Task Assigned","message":"Task, Navigation test has been assigned to you."}
+  // kiej8d99 payload data in push service {"sendername":"Nishant Kumar Schotest","senderid":"262","productid":"29","type":"out_challan","title":"Thank you for creating the out gatepass.!","message":"you will get notified when further action is taken"}
   static void handleNavigation(String? payload) {
     if (payload == null) return;
     print("kiej8d99 payload data in push service ${payload}");
@@ -392,15 +395,10 @@ class LocalNotificationService {
       } else if (payloadData['type'].toString() == 'lead' &&
           payloadData['title'].toString().contains('New Lead Created')) {
         Get.to(LeadList());
-      } else if (payloadData['type'].toString().contains("challan")) {
+      } else if (payloadData['type'].toString() == "challan") {
         Get.to(() => InChalanDetails(payloadData['productid'.toString()]));
-      } else if (payloadData['type'].toString().contains("out_challan")) {
-        Get.to(
-          () => ChalanDetails(
-            payloadData['productid'.toString()],
-            'notification',
-          ),
-        );
+      } else if (payloadData['type'].toString() == "out_challan") {
+        Get.to(() => UserChalanDetails(payloadData['productid'.toString()]));
       } else if (payloadData['type'].toString().contains("project")) {
         Get.to(() => Project(''));
       } else if (payloadData['type'].toString() == "emi_reminder") {
