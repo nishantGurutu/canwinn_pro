@@ -7,11 +7,15 @@ import 'package:task_management/constant/style_constant.dart';
 class CustomCalender2 extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final String? from;
+  final TextEditingController? otherController;
 
   CustomCalender2({
     super.key,
     required this.hintText,
     required this.controller,
+    this.from,
+    this.otherController,
   });
 
   @override
@@ -51,15 +55,38 @@ class CustomCalender2 extends StatelessWidget {
       ),
       readOnly: true,
       onTap: () async {
+        DateTime initialDate = DateTime.now();
+        DateTime firstDate = DateTime.now();
+        DateTime lastDate = DateTime(2100);
+
+        if (from == 'startDate' && otherController != null && otherController!.text.isNotEmpty) {
+          try {
+            DateTime dueDate = DateFormat('dd-MM-yyyy').parse(otherController!.text);
+            lastDate = dueDate;
+          } catch (e) {
+
+          }
+        }
+
+        if (from == 'dueDate' && otherController != null && otherController!.text.isNotEmpty) {
+          try {
+            DateTime startDate = DateFormat('dd-MM-yyyy').parse(otherController!.text);
+            firstDate = startDate; // Due date cannot be before start date
+            initialDate = startDate.isAfter(DateTime.now()) ? startDate : DateTime.now();
+          } catch (e) {
+
+          }
+        }
+
         DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2100),
+          initialDate: initialDate,
+          firstDate: firstDate,
+          lastDate: lastDate,
         );
 
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           controller.text = formattedDate;
         }
       },

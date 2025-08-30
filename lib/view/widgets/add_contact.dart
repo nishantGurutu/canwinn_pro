@@ -29,18 +29,52 @@ class _AddContactIntaskState extends State<AddContactIntask> {
   }
 
   Future<void> addContact() async {
-    if (nameControlelr.text.isNotEmpty ||
-        emailControlelr.text.isNotEmpty ||
-        mobileControlelr.text.isNotEmpty) {
-      taskController.addTaskContactList.add(
-        ContactsData(
-          name: nameControlelr.text.trim(),
-          email: emailControlelr.text.trim(),
-          mobile: mobileControlelr.text.trim(),
-        ),
+    String name = nameControlelr.text.trim();
+    String email = emailControlelr.text.trim();
+    String mobile = mobileControlelr.text.trim();
+
+    if (name.isEmpty || email.isEmpty || mobile.isEmpty) {
+      Get.snackbar(
+        "Error",
+        "Name, Email, and Mobile are required.",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
       );
-      Get.back();
+      return;
     }
+
+    final mobileRegex = RegExp(r'^\d{10}$');
+    if (!mobileRegex.hasMatch(mobile)) {
+      Get.snackbar(
+        "Error",
+        "Mobile number must be exactly 10 digits and numeric only.",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    final emailRegex = RegExp(
+        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    if (!emailRegex.hasMatch(email)) {
+      Get.snackbar(
+        "Error",
+        "Please enter a valid email address.",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    taskController.addTaskContactList.add(
+      ContactsData(
+        name: name,
+        email: email,
+        mobile: mobile,
+      ),
+    );
+
+    Get.back();
   }
 
   @override

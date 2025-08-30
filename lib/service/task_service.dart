@@ -4,6 +4,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:task_management/api/api_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/helper/storage_helper.dart';
+import 'package:task_management/model/department_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/model/task_category_list_model.dart';
 import 'package:task_management/model/task_details_model.dart';
@@ -95,8 +96,47 @@ class TaskService {
     }
   }
 
+  Future<ResponsiblePersonListModel?> responsiblePersonListApi2(
+    RxList<DepartmentListData> selectedDepartMentListData2,
+  ) async {
+    try {
+      var token = StorageHelper.getToken();
+      var url = "${ApiConstant.baseUrl}${ApiConstant.responsiblePersonList}";
+
+      if (selectedDepartMentListData2.isNotEmpty) {
+        // Extract department IDs and join them with commas
+        final departmentIds = selectedDepartMentListData2
+            .map(
+              (dept) => dept.id.toString(),
+            ) // Assuming 'id' is a field in DepartmentListData
+            .where((id) => id.isNotEmpty) // Filter out null or empty IDs
+            .join(','); // Join IDs with commas (e.g., "1,2,3")
+
+        // Append department IDs to the URL as a query parameter
+        url += "?department_id=$departmentIds";
+      }
+
+      print('Responsible person API URL: $url');
+      print('Responsible person API URL: $token');
+
+      _dio.options.headers["Authorization"] = "Bearer $token";
+
+      final response = await _dio.get(url);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return ResponsiblePersonListModel.fromJson(response.data);
+      } else {
+        throw Exception('Failed to fetch responsible person list');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
   Future<ResponsiblePersonListModel?> responsiblePersonListApi(
-      dynamic id) async {
+    dynamic id,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       var url = "${ApiConstant.baseUrl + ApiConstant.responsiblePersonList}";
@@ -126,9 +166,7 @@ class TaskService {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
-      final Map<String, dynamic> formDataMap = {
-        'user_id': id,
-      };
+      final Map<String, dynamic> formDataMap = {'user_id': id};
 
       final formData = FormData.fromMap(formDataMap);
 
@@ -170,20 +208,21 @@ class TaskService {
   String reviewerId = '';
   String reminderData = '';
   Future<bool> addTaskApi(
-      String taskName,
-      String remark,
-      int selectedProjectId,
-      int? departmentId,
-      Rx<File> pickedFile,
-      RxList<String> assignedUserId,
-      RxList<String> reviewerUserId,
-      String startDate,
-      String dueDate,
-      String dueTime,
-      int? priorityId,
-      String timeTextString,
-      String timeType,
-      RxList<ContactsData> addTaskContactList) async {
+    String taskName,
+    String remark,
+    int selectedProjectId,
+    int? departmentId,
+    Rx<File> pickedFile,
+    RxList<String> assignedUserId,
+    RxList<String> reviewerUserId,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    String timeTextString,
+    String timeType,
+    RxList<ContactsData> addTaskContactList,
+  ) async {
     try {
       assignedId = assignedUserId.where((id) => id.isNotEmpty).join(',');
       reviewerId = reviewerUserId.where((id) => id.isNotEmpty).join(',');
@@ -235,8 +274,9 @@ class TaskService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        CustomToast()
-            .showCustomToast("Task added Successfully! Let's get to work!");
+        CustomToast().showCustomToast(
+          "Task added Successfully! Let's get to work!",
+        );
         return true;
       } else {
         CustomToast().showCustomToast(response.data['message']);
@@ -248,8 +288,14 @@ class TaskService {
     }
   }
 
-  Future<bool> addSubTaskApi(String taskName, String startDate, String dueDate,
-      String dueTime, int? priorityId, id) async {
+  Future<bool> addSubTaskApi(
+    String taskName,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    id,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -260,7 +306,7 @@ class TaskService {
         'due_date': dueDate,
         'due_time': dueTime,
         'priority': priorityId,
-        "task_id": id
+        "task_id": id,
       };
 
       final formData = FormData.fromMap(formDataMap);
@@ -281,8 +327,14 @@ class TaskService {
     }
   }
 
-  Future<bool> editSubTaskApi(String taskName, String startDate, String dueDate,
-      String dueTime, int? priorityId, int id) async {
+  Future<bool> editSubTaskApi(
+    String taskName,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    int id,
+  ) async {
     try {
       var token = await StorageHelper.getToken();
 
@@ -298,7 +350,7 @@ class TaskService {
         'due_date': dueDate,
         'due_time': dueTime,
         'priority': priorityId,
-        'task_id': id
+        'task_id': id,
       };
 
       final response = await _dio.post(
@@ -311,7 +363,8 @@ class TaskService {
         return true;
       } else {
         CustomToast().showCustomToast(
-            response.data['message'] ?? "Failed to update task.");
+          response.data['message'] ?? "Failed to update task.",
+        );
         return false;
       }
     } catch (e) {
@@ -320,20 +373,21 @@ class TaskService {
   }
 
   Future<bool> editTaskApi(
-      String taskName,
-      String remark,
-      int? projectId,
-      int? deptId,
-      RxList<String> assignedUserId,
-      RxList<String> reviewerUserId,
-      String startDate,
-      String dueDate,
-      String dueTime,
-      int? priorityId,
-      newTaskListId,
-      Rx<File> pickedFile,
-      String timeTextEditingController,
-      String timeType) async {
+    String taskName,
+    String remark,
+    int? projectId,
+    int? deptId,
+    RxList<String> assignedUserId,
+    RxList<String> reviewerUserId,
+    String startDate,
+    String dueDate,
+    String dueTime,
+    int? priorityId,
+    newTaskListId,
+    Rx<File> pickedFile,
+    String timeTextEditingController,
+    String timeType,
+  ) async {
     try {
       assignedId = '';
       for (var assign in assignedUserId) {
@@ -418,7 +472,11 @@ class TaskService {
   }
 
   Future<bool> updateProgressTask(
-      int? id, String statusRemark, int i, Rx<File> pickedFile2) async {
+    int? id,
+    String statusRemark,
+    int i,
+    Rx<File> pickedFile2,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";

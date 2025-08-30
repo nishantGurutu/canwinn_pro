@@ -8,6 +8,7 @@ import 'package:task_management/controller/profile_controller.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/all_project_list_model.dart';
+import 'package:task_management/model/department_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/model/task_category_list_model.dart';
 import 'package:task_management/model/task_details_model.dart';
@@ -454,6 +455,85 @@ class TaskController extends GetxController {
       isResponsiblePersonLoading.value = false;
       isResponsiblePersonLoading.refresh();
       await userLogActivity(responsiblePersonList.first.id);
+    }
+    Future.microtask(() {
+      isResponsiblePersonLoading.value = false;
+    });
+  }
+
+  // //department for add task
+  // RxMap<int, bool> responsiblePersonSelectedCheckBox2 = <int, bool>{}.obs;
+  // RxMap<int, bool> toAssignedPersonCheckBox = <int, bool>{}.obs;
+  // RxMap<int, bool> reviewerCheckBox2 = <int, bool>{}.obs;
+  // var isResponsiblePersonLoading = false.obs;
+  // RxBool selectAll = false.obs;
+  // RxList<ResponsiblePersonData> responsiblePersonList =
+  //     <ResponsiblePersonData>[].obs;
+  // RxList<bool> selectedLongPress = <bool>[].obs;
+  // RxList<int> selectedMemberId = <int>[].obs;
+  // RxList<bool> responsiblePersonSelectedCheckBox = <bool>[].obs;
+  // RxList<bool> reviewerCheckBox = <bool>[].obs;
+  // Rx<ResponsiblePersonData?> selectedResponsiblePersonData =
+  //     Rx<ResponsiblePersonData?>(null);
+  // RxList<int> selectedResponsiblePersonId = <int>[].obs;
+  // RxList<bool> selectedSharedListPerson = <bool>[].obs;
+  // var fromPage = ''.obs;
+  // RxList<bool> isLongPressed = <bool>[].obs;
+  // var makeSelectedPersonValue = ''.obs;
+  // var responsiblePersonListModel = ResponsiblePersonListModel().obs;
+  Future<void> responsiblePersonListApi2(
+    RxList<DepartmentListData> selectedDepartMentListData2,
+  ) async {
+    Future.microtask(() {
+      isResponsiblePersonLoading.value = true;
+    });
+    final result = await TaskService().responsiblePersonListApi2(
+      selectedDepartMentListData2,
+    );
+    if (result != null) {
+      selectedResponsiblePersonData.value = null;
+      responsiblePersonListModel.value = result;
+      responsiblePersonList.assignAll(result.data!);
+      // responsiblePersonList.clear();
+      // if (fromPage.toString() == "add_meeting") {
+      //   responsiblePersonList.add(
+      //     ResponsiblePersonData(id: 0, name: "All user", status: 1),
+      //   );
+      // }
+      // for (var person in responsiblePersonListModel.value.data!) {
+      //   responsiblePersonList.add(person);
+      // }
+      // responsiblePersonList.refresh();
+
+      // selectedSharedListPerson.addAll(
+      //   List<bool>.filled(responsiblePersonList.length, false),
+      // );
+      // responsiblePersonSelectedCheckBox.addAll(
+      //   List<bool>.filled(responsiblePersonList.length, false),
+      // );
+      // selectedResponsiblePersonId.addAll(
+      //   List<int>.filled(responsiblePersonList.length, 0),
+      // );
+      // selectedResponsiblePersonId.addAll(
+      //   List<int>.filled(responsiblePersonList.length, 0),
+      // );
+      // selectedLongPress.addAll(
+      //   List<bool>.filled(responsiblePersonList.length, false),
+      // );
+      // reviewerCheckBox.addAll(
+      //   List<bool>.filled(responsiblePersonList.length, false),
+      // );
+      // responsiblePersonSelectedCheckBox2.clear();
+      // toAssignedPersonCheckBox.clear();
+      // for (var person in responsiblePersonList) {
+      //   toAssignedPersonCheckBox[person.id] = false;
+      // }
+      // for (var person in responsiblePersonList) {
+      //   responsiblePersonSelectedCheckBox2[person.id] = false;
+      // }
+      // isResponsiblePersonLoading.value = false;
+      // isResponsiblePersonLoading.refresh();
+      // await userLogActivity(responsiblePersonList.first.id);
     }
     Future.microtask(() {
       isResponsiblePersonLoading.value = false;

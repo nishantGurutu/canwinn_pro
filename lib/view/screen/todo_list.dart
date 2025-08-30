@@ -1305,7 +1305,7 @@ class _ToDoListState extends State<ToDoList> {
 
   final TextEditingController editTimeTextEditingController =
       TextEditingController();
-  Widget todoListWidget() {
+  /*Widget todoListWidget() {
     return Obx(
       () => priorityController.isPriorityLoading.value == true &&
               todoController.isTodoListLoading.value == true &&
@@ -1593,16 +1593,37 @@ class _ToDoListState extends State<ToDoList> {
                                                 ),
                                                 PopupMenuItem(
                                                   onTap: () {
-                                                    if (todoController
-                                                            .isTodoDeleting
-                                                            .value ==
-                                                        false) {
-                                                      todoController
-                                                          .deleteTodoApi(
-                                                              todoController
-                                                                  .todoListData[
-                                                                      index]
-                                                                  .id);
+                                                    if (todoController.isTodoDeleting.value == false) {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: Text("Confirm Delete"),
+                                                            content: Text("Are you sure you want to delete this todo?"),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(context).pop(); // Close dialog
+                                                                },
+                                                                child: Text("Cancel"),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(context).pop(); // Close dialog
+                                                                  // Call delete API
+                                                                  todoController.deleteTodoApi(
+                                                                    todoController.todoListData[index].id,
+                                                                  );
+                                                                },
+                                                                child: Text(
+                                                                  "OK",
+                                                                  style: TextStyle(color: Colors.red),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
                                                     }
                                                   },
                                                   child: Text(delete),
@@ -1626,6 +1647,263 @@ class _ToDoListState extends State<ToDoList> {
                     },
                   ),
                 ),
+    );
+  }*/
+  Widget todoListWidget() {
+    return Obx(
+          () => priorityController.isPriorityLoading.value &&
+          todoController.isTodoListLoading.value &&
+          todoController.isTagLoading.value
+          ? Expanded(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      )
+          : todoController.todoListData.isEmpty
+          ? Expanded(
+        child: Center(
+          child: Text(noData),
+        ),
+      )
+          : Expanded(
+        child: ListView.builder(
+          itemCount: todoController.todoListData.length,
+          itemBuilder: (context, index) {
+            String priorityName = '';
+            if (todoController.todoListData[index].priority != null) {
+              final priorityId1 =
+                  todoController.todoListData[index].priority;
+              final priority1 = priorityController.priorityList.firstWhere(
+                    (priority1) => priority1.id == priorityId1,
+                orElse: () => PriorityData(id: 0, priorityName: 'Unknown'),
+              );
+              priorityName = priority1.priorityName ?? 'Unknown';
+            }
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    await showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: viewTodo(context, todoController.todoListData[index]),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: lightGreyColor.withOpacity(0.2),
+                            blurRadius: 13.0,
+                            spreadRadius: 2,
+                            blurStyle: BlurStyle.normal,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10.w, top: 10.h, bottom: 10.h),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.h),
+                              child: Obx(
+                                    () => SizedBox(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  child: Checkbox(
+                                    value: todoController.todoListCheckbox[index],
+                                    onChanged: (value) {
+                                      // Only allow checking, not unchecking
+                                      if (value == true &&
+                                          !todoController.todoListCheckbox[index]) {
+                                        todoController.todoListCheckbox[index] = value!;
+                                        todoController.completedTodoCheckList
+                                            .add(todoController.todoListData[index].id ?? 0);
+                                        todoController.completeTodoApi(
+                                          todoController.completedTodoCheckList,
+                                          1,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Container(
+                              width: 263.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${todoController.todoListData[index].title ?? ''}",
+                                    style: changeTextColor(rubikBlack, darkGreyColor),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    "${todoController.todoListData[index].description ?? ""}",
+                                    style: changeTextColor(rubikRegular, subTextColor),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 70.w,
+                                        height: 30.h,
+                                        decoration: BoxDecoration(
+                                          color: priorityName.toLowerCase() == "low"
+                                              ? Color(0xff0086FF)
+                                              : priorityName.toLowerCase() == "medium"
+                                              ? Color(0xffFF8700)
+                                              : Color(0xffFF0005),
+                                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "$priorityName",
+                                            style: TextStyle(
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: whiteColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${todoController.todoListData[index].alertDate ?? ""} ${todoController.todoListData[index].alertTime ?? ""}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 30.w,
+                              child: Center(
+                                child: PopupMenuButton(
+                                  itemBuilder: (context) {
+                                    List<PopupMenuItem> menuItems = [];
+                                    if (!todoController.todoListCheckbox[index]) {
+                                      menuItems.add(
+                                        PopupMenuItem(
+                                          onTap: () {
+                                            editTitleTextEditingController.text =
+                                                todoController.todoListData[index].title.toString();
+                                            editDescriptionTextEditingController.text =
+                                                todoController.todoListData[index].description.toString();
+                                            dueDateController.clear();
+                                            dueTimeController.clear();
+                                            for (var tagid in todoController.tagList) {
+                                              if (todoController.todoListData[index].tags.toString() ==
+                                                  tagid.id.toString()) {
+                                                todoController.selectedTagData.value = tagid;
+                                                break;
+                                              }
+                                            }
+                                            for (var priorityid in priorityController.priorityList) {
+                                              if (todoController.todoListData[index].priority.toString() ==
+                                                  priorityid.id.toString()) {
+                                                priorityController.selectedPriorityData.value = priorityid;
+                                                break;
+                                              }
+                                            }
+                                            dueDateController.text =
+                                                todoController.todoListData[index].alertDate ?? "";
+                                            dueTimeController.text =
+                                                todoController.todoListData[index].alertTime ?? "";
+                                            editTimeTextEditingController.text =
+                                                (todoController.todoListData[index].reminder ?? "").substring(0, 1);
+                                            todoController.selectedTime?.value =
+                                                (todoController.todoListData[index].reminder ?? "").substring(4);
+                                            showModalBottomSheet(
+                                              isDismissible: true,
+                                              context: context,
+                                              isScrollControlled: true,
+                                              builder: (context) => editBottomSheet(
+                                                todoController.todoListData[index].title,
+                                                todoController.todoListData[index].priority,
+                                                todoController.todoListData[index].tags,
+                                                todoController.todoListData[index].description,
+                                                todoController.todoListData[index].id,
+                                              ),
+                                            );
+                                          },
+                                          child: Text(edit),
+                                        ),
+                                      );
+                                    }
+                                    menuItems.add(
+                                      PopupMenuItem(
+                                        onTap: () {
+                                          if (!todoController.isTodoDeleting.value) {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text("Confirm Delete"),
+                                                  content: Text("Are you sure you want to delete this todo?"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop(); // Close dialog
+                                                      },
+                                                      child: Text("Cancel"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop(); // Close dialog
+                                                        todoController.deleteTodoApi(
+                                                          todoController.todoListData[index].id,
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        "OK",
+                                                        style: TextStyle(color: Colors.red),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
+                                        child: Text(delete),
+                                      ),
+                                    );
+                                    return menuItems;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 

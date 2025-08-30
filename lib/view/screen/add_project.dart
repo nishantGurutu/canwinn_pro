@@ -302,11 +302,15 @@ class _AddProjectState extends State<AddProject> {
                             CustomCalender(
                               hintText: startDate,
                               controller: startDateTextEditingControlelr,
+                              from: 'startDate',
+                              otherController: dueDateTextEditingControlelr,
                             ),
                             SizedBox(height: 10.h),
                             CustomCalender(
                               hintText: dueDate,
                               controller: dueDateTextEditingControlelr,
+                              from: 'dueDate',
+                              otherController: startDateTextEditingControlelr,
                             ),
                             SizedBox(height: 10.h),
                             CustomTimer(

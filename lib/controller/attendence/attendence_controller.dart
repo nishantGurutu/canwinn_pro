@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/component/location_handler.dart';
 import 'package:task_management/helper/storage_helper.dart';
@@ -181,7 +182,7 @@ class AttendenceController extends GetxController {
 
   var isLeaveLoading = false.obs;
   RxList<LeaveListData> leaveListData = <LeaveListData>[].obs;
-  Future<void> leaveLoading() async {
+  /*Future<void> leaveLoading() async {
     isLeaveLoading.value = true;
     final result = await AttendenceService().leaveList();
     if (result != null) {
@@ -189,6 +190,24 @@ class AttendenceController extends GetxController {
       isLeaveLoading.value = false;
     } else {}
     isLeaveLoading.value = false;
+  }*/
+  Future<void> leaveLoading() async {
+    try {
+      isLeaveLoading.value = true;
+      final result = await AttendenceService().leaveList();
+      if (result != null && result.data != null) {
+        leaveListData.assignAll(result.data!);
+        print('Deleted done: $result');// Update the list
+      } else {
+        print('Error loading leave list: $result');
+        leaveListData.clear(); // Optional: Clear the list on failure
+      }
+    } catch (e) {
+      print('Error loading leave list: $e');
+      leaveListData.clear(); // Optional: Clear the list on error
+    } finally {
+      isLeaveLoading.value = false; // Always reset loading state
+    }
   }
 
   var isApplyingLeave = false.obs;

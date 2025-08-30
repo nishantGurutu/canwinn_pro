@@ -65,7 +65,7 @@ class ProfileService {
         data: formData,
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201 || response.statusMessage =="Profile updated successfully!") {
         CustomToast().showCustomToast(
             "Your profie has been updated successfully! Time to shine and show the world your true self!");
         return true;
