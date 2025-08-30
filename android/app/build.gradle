@@ -14,7 +14,9 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.cannwin.task_management"
     compileSdk = 35
-    ndkVersion = "27.0.12077973"
+    // ndkVersion = "27.0.12077973"
+
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -38,6 +40,10 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
     }
 
     packagingOptions {
@@ -72,6 +78,9 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+                debugSymbolLevel 'NONE'
+            }
         }
     }
 }

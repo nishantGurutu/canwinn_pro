@@ -34,7 +34,6 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenScreenState extends State<CalendarScreen> {
   final CalenderController calenderController = Get.find();
-  // final CalenderController calenderController = Get.put(CalenderController());
 
   @override
   void initState() {
@@ -57,53 +56,14 @@ class _CalendarScreenScreenState extends State<CalendarScreen> {
       );
       try {
         await intent.launch();
-        // After launching, fetch events (you may want to delay or trigger this manually)
-        await Future.delayed(Duration(seconds: 5)); // Wait for user to return
-        // await _fetchAndSaveEvents();
+        await Future.delayed(Duration(seconds: 5));
       } catch (e) {
         print('Error launching Google Calendar: $e');
       }
     } else {
       print('Calendar event creation not supported on this platform');
-      // For iOS, use the Google Calendar API directly
-      // await _fetchAndSaveEvents();
     }
   }
-
-  // Future<void> _fetchAndSaveEvents() async {
-  //   if (_authClient == null) {
-  //     print('Not authenticated');
-  //     return;
-  //   }
-  //   final calendarApi = CalendarApi(_authClient!);
-  //   try {
-  //     final events = await calendarApi.events.list(
-  //       'primary',
-  //       timeMin: DateTime.now().subtract(Duration(days: 1)),
-  //       timeMax: DateTime.now().add(Duration(days: 30)),
-  //     );
-  //     final db = await _initDatabase();
-  //     for (var event in events.items ?? []) {
-  //       final title = event.summary ?? 'No Title';
-  //       final startTime = event.start?.dateTime ?? event.start?.date;
-  //       final endTime = event.end?.dateTime ?? event.end?.date;
-  //       if (startTime != null && endTime != null) {
-  //         await db.insert(
-  //           'events',
-  //           {
-  //             'title': title,
-  //             'start_time': startTime.toIso8601String(),
-  //             'end_time': endTime.toIso8601String(),
-  //           },
-  //           conflictAlgorithm: ConflictAlgorithm.replace,
-  //         );
-  //       }
-  //     }
-  //     print('Events saved to database');
-  //   } catch (e) {
-  //     print('Error fetching events: $e');
-  //   }
-  // }
 
   bool _isBackButtonPressed = false;
   Future<bool> _onWillPop() async {
@@ -150,52 +110,52 @@ class _CalendarScreenScreenState extends State<CalendarScreen> {
         ),
         backgroundColor: whiteColor,
         body: Obx(
-          () => calenderController.isCalenderLoading.value == true
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : CalendarControllerProvider(
-                  controller: EventController()
-                    ..addAll(
-                      calenderController.eventsList.map(
-                        (event) {
-                          String dateInput =
-                              "${event.eventDate} ${event.eventTime}";
-                          List<String> splitDt = dateInput.split(" ");
-                          List<String> splitDt2 = splitDt.first.split('-');
-                          List<String> splitDt3 = splitDt[1].split(':');
-                          DateTime targetDate = DateTime(
-                            int.parse(splitDt2.last),
-                            int.parse(splitDt2[1]),
-                            int.parse(splitDt2.first),
-                            int.parse(splitDt3.first),
-                            int.parse(splitDt3.last),
-                            0,
-                          );
-                          return CalendarEventData<Object?>(
-                            date: targetDate,
-                            title: event.eventName ?? "",
-                            description: event.eventName ?? "",
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  child: MonthView(
-                    onEventTap: (event, date) {
-                      Get.to(() => EventDetails(
+          () =>
+              calenderController.isCalenderLoading.value == true
+                  ? Center(child: CircularProgressIndicator())
+                  : CalendarControllerProvider(
+                    controller:
+                        EventController()..addAll(
+                          calenderController.eventsList.map((event) {
+                            String dateInput =
+                                "${event.eventDate} ${event.eventTime}";
+                            List<String> splitDt = dateInput.split(" ");
+                            List<String> splitDt2 = splitDt.first.split('-');
+                            List<String> splitDt3 = splitDt[1].split(':');
+                            DateTime targetDate = DateTime(
+                              int.parse(splitDt2.last),
+                              int.parse(splitDt2[1]),
+                              int.parse(splitDt2.first),
+                              int.parse(splitDt3.first),
+                              int.parse(splitDt3.last),
+                              0,
+                            );
+                            return CalendarEventData<Object?>(
+                              date: targetDate,
+                              title: event.eventName ?? "",
+                              description: event.eventName ?? "",
+                            );
+                          }).toList(),
+                        ),
+                    child: MonthView(
+                      onEventTap: (event, date) {
+                        Get.to(
+                          () => EventDetails(
                             eventName: event.title,
                             eventList: calenderController.eventsList,
                             event: event,
-                          ));
-                    },
-                    onCellTap: (events, date) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(date);
-                      eventDateController.text = formattedDate.toString();
-                      showAlertDialog(context);
-                    },
+                          ),
+                        );
+                      },
+                      onCellTap: (events, date) {
+                        String formattedDate = DateFormat(
+                          'dd-MM-yyyy',
+                        ).format(date);
+                        eventDateController.text = formattedDate.toString();
+                        showAlertDialog(context);
+                      },
+                    ),
                   ),
-                ),
         ),
       ),
     );
@@ -206,227 +166,223 @@ class _CalendarScreenScreenState extends State<CalendarScreen> {
   final TextEditingController eventTimeController = TextEditingController();
   final TextEditingController reminderTimeController = TextEditingController();
   ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
-  Future<void> showAlertDialog(
-    BuildContext context,
-  ) async {
+  Future<void> showAlertDialog(BuildContext context) async {
     return showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(10),
-            child: Container(
-              width: double.infinity,
-              height: 300.h,
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      createEvent,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: textColor),
+      context: context,
+      builder: (BuildContext builderContext) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.all(10),
+          child: Container(
+            width: double.infinity,
+            height: 300.h,
+            decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    createEvent,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    TaskCustomTextField(
-                      controller: eventNameController,
-                      textCapitalization: TextCapitalization.sentences,
-                      data: eventName,
-                      hintText: eventName,
-                      labelText: eventName,
-                      index: 0,
-                      focusedIndexNotifier: focusedIndexNotifier,
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 150.w,
-                          child: CustomCalender(
-                            hintText: eventDate,
-                            controller: eventDateController,
-                          ),
+                  ),
+                  SizedBox(height: 15.h),
+                  TaskCustomTextField(
+                    controller: eventNameController,
+                    textCapitalization: TextCapitalization.sentences,
+                    data: eventName,
+                    hintText: eventName,
+                    labelText: eventName,
+                    index: 0,
+                    focusedIndexNotifier: focusedIndexNotifier,
+                  ),
+                  SizedBox(height: 15.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 150.w,
+                        child: CustomCalender(
+                          hintText: eventDate,
+                          controller: eventDateController,
                         ),
-                        SizedBox(
-                          width: 150.w,
-                          child: CustomTimer(
-                            controller: eventTimeController,
-                            hintText: eventTime,
-                          ),
+                      ),
+                      SizedBox(
+                        width: 150.w,
+                        child: CustomTimer(
+                          controller: eventTimeController,
+                          hintText: eventTime,
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 150.w,
-                          child: CustomTextField(
-                            controller: reminderTimeController,
-                            textCapitalization: TextCapitalization.none,
-                            hintText: alarmReminder,
-                            keyboardType: TextInputType.number,
-                            prefixIcon: Icon(Icons.lock_clock),
-                            data: alarmReminder,
-                          ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 150.w,
+                        child: CustomTextField(
+                          controller: reminderTimeController,
+                          textCapitalization: TextCapitalization.none,
+                          hintText: alarmReminder,
+                          keyboardType: TextInputType.number,
+                          prefixIcon: Icon(Icons.lock_clock),
+                          data: alarmReminder,
                         ),
-                        SizedBox(
-                          width: 150.w,
-                          child: Obx(
-                            () => DropdownButtonHideUnderline(
-                              child: DropdownButton2<String>(
-                                isExpanded: true,
-                                items: calenderController.timeList
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Roboto',
-                                        color: darkGreyColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
+                      ),
+                      SizedBox(
+                        width: 150.w,
+                        child: Obx(
+                          () => DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              items:
+                                  calenderController.timeList.map((
+                                    String item,
+                                  ) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontFamily: 'Roboto',
+                                          color: darkGreyColor,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  );
-                                }).toList(),
-                                value: calenderController
-                                        .selectedTime!.value.isEmpty
-                                    ? null
-                                    : calenderController.selectedTime?.value,
-                                onChanged: (String? value) {
-                                  calenderController.selectedTime?.value =
-                                      value ?? '';
-                                },
-                                buttonStyleData: ButtonStyleData(
-                                  height: 50,
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.only(
-                                      left: 14, right: 14),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.r),
-                                    border:
-                                        Border.all(color: lightSecondaryColor),
+                                    );
+                                  }).toList(),
+                              value:
+                                  calenderController.selectedTime!.value.isEmpty
+                                      ? null
+                                      : calenderController.selectedTime?.value,
+                              onChanged: (String? value) {
+                                calenderController.selectedTime?.value =
+                                    value ?? '';
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: double.infinity,
+                                padding: const EdgeInsets.only(
+                                  left: 14,
+                                  right: 14,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.r),
+                                  border: Border.all(
+                                    color: lightSecondaryColor,
+                                  ),
+                                  color: lightSecondaryColor,
+                                ),
+                              ),
+                              hint: Text(
+                                'Select type',
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              iconStyleData: IconStyleData(
+                                icon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: secondaryColor,
+                                  height: 8.h,
+                                ),
+                                iconSize: 14,
+                                iconEnabledColor: lightGreyColor,
+                                iconDisabledColor: lightGreyColor,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200,
+                                width: 330,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.r),
+                                  color: lightSecondaryColor,
+                                  border: Border.all(
                                     color: lightSecondaryColor,
                                   ),
                                 ),
-                                hint: Text(
-                                  'Select type',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Roboto',
-                                    color: darkGreyColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: WidgetStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
                                 ),
-                                iconStyleData: IconStyleData(
-                                  icon: Image.asset(
-                                    'assets/images/png/Vector 3.png',
-                                    color: secondaryColor,
-                                    height: 8.h,
-                                  ),
-                                  iconSize: 14,
-                                  iconEnabledColor: lightGreyColor,
-                                  iconDisabledColor: lightGreyColor,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: 200,
-                                  width: 330,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      color: lightSecondaryColor,
-                                      border: Border.all(
-                                          color: lightSecondaryColor)),
-                                  offset: const Offset(0, 0),
-                                  scrollbarTheme: ScrollbarThemeData(
-                                    radius: const Radius.circular(40),
-                                    thickness:
-                                        WidgetStateProperty.all<double>(6),
-                                    thumbVisibility:
-                                        WidgetStateProperty.all<bool>(true),
-                                  ),
-                                ),
-                                menuItemStyleData: const MenuItemStyleData(
-                                  height: 40,
-                                  padding: EdgeInsets.only(left: 14, right: 14),
-                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Obx(
-                      () => CustomButton(
-                        onPressed: () {
-                          if (calenderController.isEventAdding.value == false) {
-                            calenderController.addEventApi(
-                              eventNameController.text,
-                              eventDateController.text,
-                              eventTimeController.text,
-                              reminderTimeController.text,
-                              calenderController.selectedTime?.value,
-                            );
-                          }
-                        },
-                        text: calenderController.isEventAdding.value == true
-                            ? Row(
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.h),
+                  Obx(
+                    () => CustomButton(
+                      onPressed: () {
+                        if (calenderController.isEventAdding.value == false) {
+                          calenderController.addEventApi(
+                            eventNameController.text,
+                            eventDateController.text,
+                            eventTimeController.text,
+                            reminderTimeController.text,
+                            calenderController.selectedTime?.value,
+                          );
+                        }
+                      },
+                      text:
+                          calenderController.isEventAdding.value == true
+                              ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CircularProgressIndicator(
-                                    color: whiteColor,
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
+                                  CircularProgressIndicator(color: whiteColor),
+                                  SizedBox(width: 8.w),
                                   Text(
                                     loading,
                                     style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: whiteColor),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: whiteColor,
+                                    ),
                                   ),
                                 ],
                               )
-                            : Text(
+                              : Text(
                                 create,
                                 style: TextStyle(color: whiteColor),
                               ),
-                        width: double.infinity,
-                        color: primaryColor,
-                        height: 45.h,
-                      ),
+                      width: double.infinity,
+                      color: primaryColor,
+                      height: 45.h,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget eventListWidhet(RxList<CallenderEventData> eventsList) {
@@ -456,7 +412,9 @@ class _CalendarScreenScreenState extends State<CalendarScreen> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 4.h),
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -496,40 +454,42 @@ class _CalendarScreenScreenState extends State<CalendarScreen> {
                               case 'edit':
                                 break;
                               case 'delete':
-                                calenderController
-                                    .deleteEvent(eventsList[index].id);
+                                calenderController.deleteEvent(
+                                  eventsList[index].id,
+                                );
                                 break;
                             }
                           },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            PopupMenuItem<String>(
-                              value: 'edit',
-                              child: ListTile(
-                                leading: Image.asset(
-                                  "assets/images/png/edit-icon.png",
-                                  height: 20.h,
-                                ),
-                                title: Text(
-                                  'Edit',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                            PopupMenuItem<String>(
-                              value: 'delete',
-                              child: ListTile(
-                                leading: Image.asset(
-                                  'assets/images/png/delete-icon.png',
-                                  height: 20.h,
-                                ),
-                                title: Text(
-                                  'Delete',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                          ],
+                          itemBuilder:
+                              (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                    PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: ListTile(
+                                        leading: Image.asset(
+                                          "assets/images/png/edit-icon.png",
+                                          height: 20.h,
+                                        ),
+                                        title: Text(
+                                          'Edit',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+                                    PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: ListTile(
+                                        leading: Image.asset(
+                                          'assets/images/png/delete-icon.png',
+                                          height: 20.h,
+                                        ),
+                                        title: Text(
+                                          'Delete',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                         ),
                       ),
                     ),
@@ -549,31 +509,32 @@ class _CalendarScreenScreenState extends State<CalendarScreen> {
 
 class EventDataSource extends CalendarDataSource {
   EventDataSource(RxList<CallenderEventData> eventList) {
-    appointments = eventList
-        .map((event) {
-          final dateParts = event.eventDate?.split('-') ?? [];
-          if (dateParts.length == 3) {
-            try {
-              final parsedDate = DateTime(
-                int.parse(dateParts[2]),
-                int.parse(dateParts[1]),
-                int.parse(dateParts[0]),
-              );
-              return Appointment(
-                startTime: parsedDate,
-                endTime: parsedDate.add(Duration(hours: 1)),
-                subject: event.eventName ?? "",
-                color: secondaryColor,
-              );
-            } catch (e) {
-              print('Error parsing date: $e');
+    appointments =
+        eventList
+            .map((event) {
+              final dateParts = event.eventDate?.split('-') ?? [];
+              if (dateParts.length == 3) {
+                try {
+                  final parsedDate = DateTime(
+                    int.parse(dateParts[2]),
+                    int.parse(dateParts[1]),
+                    int.parse(dateParts[0]),
+                  );
+                  return Appointment(
+                    startTime: parsedDate,
+                    endTime: parsedDate.add(Duration(hours: 1)),
+                    subject: event.eventName ?? "",
+                    color: secondaryColor,
+                  );
+                } catch (e) {
+                  print('Error parsing date: $e');
+                  return null;
+                }
+              }
               return null;
-            }
-          }
-          return null;
-        })
-        .where((appointment) => appointment != null)
-        .toList();
+            })
+            .where((appointment) => appointment != null)
+            .toList();
   }
 }
 

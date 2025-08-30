@@ -41,8 +41,9 @@ class _MeetingScreensState extends State<MeetingScreens> {
   final TextEditingController timeTextEditingController =
       TextEditingController();
   final LeadController leadController = Get.put(LeadController());
-  final LeadMeetingController leadMeetingController =
-      Get.put(LeadMeetingController());
+  final LeadMeetingController leadMeetingController = Get.put(
+    LeadMeetingController(),
+  );
 
   final MultiSelectController<AssignedToUsers> controller =
       MultiSelectController<AssignedToUsers>();
@@ -109,22 +110,24 @@ class _MeetingScreensState extends State<MeetingScreens> {
                   () => DropdownButtonHideUnderline(
                     child: DropdownButton2<VisitTypeData>(
                       isExpanded: true,
-                      items: leadController.leadVisitTypeListData
-                          .map((VisitTypeData item) {
-                        return DropdownMenuItem<VisitTypeData>(
-                          value: item,
-                          child: Text(
-                            item.name ?? 'Unnamed',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: darkGreyColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
+                      items:
+                          leadController.leadVisitTypeListData.map((
+                            VisitTypeData item,
+                          ) {
+                            return DropdownMenuItem<VisitTypeData>(
+                              value: item,
+                              child: Text(
+                                item.name ?? 'Unnamed',
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          }).toList(),
                       value: leadController.selectedVisitTypeListData.value,
                       onChanged: (VisitTypeData? value) {
                         if (value != null) {
@@ -153,8 +156,10 @@ class _MeetingScreensState extends State<MeetingScreens> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       iconStyleData: IconStyleData(
-                        icon:
-                            Icon(Icons.arrow_drop_down, color: secondaryColor),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: secondaryColor,
+                        ),
                         iconSize: 24,
                       ),
                       dropdownStyleData: DropdownStyleData(
@@ -222,86 +227,89 @@ class _MeetingScreensState extends State<MeetingScreens> {
                     borderRadius: BorderRadius.circular(14.r),
                   ),
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(14.r),
-                      child: MultiDropdown<AssignedToUsers>(
-                        controller: controller,
-                        items: widget.mergedPeopleList
-                            .map((item) => DropdownItem<AssignedToUsers>(
+                    borderRadius: BorderRadius.circular(14.r),
+                    child: MultiDropdown<AssignedToUsers>(
+                      controller: controller,
+                      items:
+                          widget.mergedPeopleList
+                              .map(
+                                (item) => DropdownItem<AssignedToUsers>(
                                   value: item,
                                   label: item.name ?? 'Unnamed',
-                                ))
-                            .toList(),
-                        onSelectionChange: (selectedItems) {
-                          leadController.selectedMergeContactData
-                              .assignAll(selectedItems);
-                        },
-                        searchEnabled: true,
-                        enabled: true,
-                        chipDecoration: ChipDecoration(
-                          backgroundColor: Colors.white,
-                          wrap: true,
-                          runSpacing: 2,
-                          spacing: 10,
-                          borderRadius: BorderRadius.circular(14.r),
-                        ),
-                        fieldDecoration: FieldDecoration(
-                          hintText: 'Select responsible persons',
-                          hintStyle: const TextStyle(color: Colors.black87),
-                          backgroundColor: Colors.white,
-                          border: InputBorder.none,
-                        ),
-                        dropdownDecoration: DropdownDecoration(
-                          marginTop: 2,
-                          maxHeight: 500,
-                          borderRadius: BorderRadius.circular(14.r),
-                          header: const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Select from list',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                              )
+                              .toList(),
+                      onSelectionChange: (selectedItems) {
+                        leadController.selectedMergeContactData.assignAll(
+                          selectedItems,
+                        );
+                      },
+                      searchEnabled: true,
+                      enabled: true,
+                      chipDecoration: ChipDecoration(
+                        backgroundColor: Colors.white,
+                        wrap: true,
+                        runSpacing: 2,
+                        spacing: 10,
+                        borderRadius: BorderRadius.circular(14.r),
+                      ),
+                      fieldDecoration: FieldDecoration(
+                        hintText: 'Select responsible persons',
+                        hintStyle: const TextStyle(color: Colors.black87),
+                        backgroundColor: Colors.white,
+                        border: InputBorder.none,
+                      ),
+                      dropdownDecoration: DropdownDecoration(
+                        marginTop: 2,
+                        maxHeight: 500,
+                        borderRadius: BorderRadius.circular(14.r),
+                        header: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'Select from list',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        dropdownItemDecoration: DropdownItemDecoration(
-                          selectedIcon:
-                              const Icon(Icons.check_box, color: Colors.green),
-                          disabledIcon: Icon(Icons.lock, color: Colors.grey),
+                      ),
+                      dropdownItemDecoration: DropdownItemDecoration(
+                        selectedIcon: const Icon(
+                          Icons.check_box,
+                          color: Colors.green,
                         ),
-                      )),
+                        disabledIcon: Icon(Icons.lock, color: Colors.grey),
+                      ),
+                    ),
+                  ),
                 ),
                 Obx(() {
                   return leadController.selectedVisitTypeListData.value?.name
                               ?.toLowerCase() ==
                           "meeting"
                       ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 10.h),
-                            _buildLabel("Meeting Link"),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            TaskCustomTextField(
-                              controller: meetingLinkController,
-                              textCapitalization: TextCapitalization.words,
-                              data: 'Meeting Link',
-                              hintText: 'meeting_link',
-                              labelText: 'meeting_link',
-                              index: 4,
-                              focusedIndexNotifier: meetingControllerNotifier,
-                            ),
-                          ],
-                        )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10.h),
+                          _buildLabel("Meeting Link"),
+                          SizedBox(height: 5.h),
+                          TaskCustomTextField(
+                            controller: meetingLinkController,
+                            textCapitalization: TextCapitalization.words,
+                            data: 'Meeting Link',
+                            hintText: 'meeting_link',
+                            labelText: 'meeting_link',
+                            index: 4,
+                            focusedIndexNotifier: meetingControllerNotifier,
+                          ),
+                        ],
+                      )
                       : SizedBox();
                 }),
-                SizedBox(
-                  height: 10.h,
-                ),
+                SizedBox(height: 10.h),
                 _buildLabel("Reminder "),
-                SizedBox(
-                  height: 5.h,
-                ),
+                SizedBox(height: 5.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -322,25 +330,27 @@ class _MeetingScreensState extends State<MeetingScreens> {
                         () => DropdownButtonHideUnderline(
                           child: DropdownButton2<String>(
                             isExpanded: true,
-                            items: leadController.timeList.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Roboto',
-                                    color: darkGreyColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              );
-                            }).toList(),
-                            value: leadController.selectedTime!.value.isEmpty
-                                ? null
-                                : leadController.selectedTime?.value,
+                            items:
+                                leadController.timeList.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(
+                                        decoration: TextDecoration.none,
+                                        fontFamily: 'Roboto',
+                                        color: darkGreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                            value:
+                                leadController.selectedTime!.value.isEmpty
+                                    ? null
+                                    : leadController.selectedTime?.value,
                             onChanged: (String? value) {
                               leadController.selectedTime?.value = value ?? '';
                             },
@@ -379,15 +389,17 @@ class _MeetingScreensState extends State<MeetingScreens> {
                               maxHeight: 200.h,
                               width: 160.w,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14.r),
-                                  color: whiteColor,
-                                  border: Border.all(color: lightBorderColor)),
+                                borderRadius: BorderRadius.circular(14.r),
+                                color: whiteColor,
+                                border: Border.all(color: lightBorderColor),
+                              ),
                               offset: const Offset(0, 0),
                               scrollbarTheme: ScrollbarThemeData(
                                 radius: const Radius.circular(40),
                                 thickness: WidgetStateProperty.all<double>(6),
-                                thumbVisibility:
-                                    WidgetStateProperty.all<bool>(true),
+                                thumbVisibility: WidgetStateProperty.all<bool>(
+                                  true,
+                                ),
                               ),
                             ),
                             menuItemStyleData: const MenuItemStyleData(
@@ -405,14 +417,15 @@ class _MeetingScreensState extends State<MeetingScreens> {
                   () => CustomButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        List<String> selectedPersonIds = meetingController
-                            .selectdePersonIds
-                            .map((e) => e.id.toString())
-                            .toList();
+                        List<String> selectedPersonIds =
+                            meetingController.selectdePersonIds
+                                .map((e) => e.id.toString())
+                                .toList();
                         String rem =
                             "${timeTextEditingController.text} ${leadController.selectedTime!.value}";
                         print(
-                            "meeting time kajud98eu9 ${meetingTimeController.text}");
+                          "meeting time kajud98eu9 ${meetingTimeController.text}",
+                        );
                         final visitType =
                             leadController.selectedVisitTypeListData.value?.id;
                         if (leadMeetingController.isAdding.value == false) {
@@ -430,28 +443,29 @@ class _MeetingScreensState extends State<MeetingScreens> {
                         }
                       }
                     },
-                    text: leadMeetingController.isAdding.value == true
-                        ? Row(
-                            children: [
-                              CircularProgressIndicator(color: whiteColor),
-                              SizedBox(
-                                width: 8.w,
+                    text:
+                        leadMeetingController.isAdding.value == true
+                            ? Row(
+                              children: [
+                                CircularProgressIndicator(color: whiteColor),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  "Loading...",
+                                  style: TextStyle(
+                                    fontSize: 13.sp,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ],
+                            )
+                            : Text(
+                              creates,
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
-                              Text(
-                                "Loading...",
-                                style: TextStyle(
-                                    fontSize: 13.sp, color: whiteColor),
-                              )
-                            ],
-                          )
-                        : Text(
-                            creates,
-                            style: TextStyle(
-                              color: whiteColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
                             ),
-                          ),
                     width: double.infinity,
                     color: primaryColor,
                     height: 45.h,

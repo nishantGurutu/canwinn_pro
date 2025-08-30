@@ -145,18 +145,6 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-  // void scrollToMessage(int messageId) {
-  //   final key = messageKeys[messageId];
-  //   if (key != null && key.currentContext != null) {
-  //     Scrollable.ensureVisible(
-  //       key.currentContext!,
-  //       duration: Duration(milliseconds: 500),
-  //       curve: Curves.easeInOut,
-  //       alignment: 0.3, // 0.0 = top, 1.0 = bottom
-  //     );
-  //   }
-  // }
-
   RxBool isCreatedDateShow = false.obs;
 
   final imojiscrollController = ScrollController();
@@ -230,7 +218,6 @@ class _MessageScreenState extends State<MessageScreen> {
                     ]
                     : null,
           ),
-
           body: SafeArea(
             child:
                 chatController.isChatHistoryLoading.value == true

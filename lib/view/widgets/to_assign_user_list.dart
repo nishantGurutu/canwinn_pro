@@ -19,8 +19,9 @@ class ToAssignUserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController searchAssignController = TextEditingController();
-    RxList<ResponsiblePersonData> filteredList =
-        RxList<ResponsiblePersonData>(homeController.responsiblePersonList);
+    RxList<ResponsiblePersonData> filteredList = RxList<ResponsiblePersonData>(
+      homeController.responsiblePersonList,
+    );
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -34,40 +35,39 @@ class ToAssignUserList extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 15.h,
-              ),
+              SizedBox(height: 15.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     assignedTaskText2,
-                    style:
-                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              SizedBox(height: 10.h),
               TextFormField(
                 controller: searchAssignController,
                 onChanged: (value) {
-                  filteredList.value = homeController.responsiblePersonList
-                      .where((person) =>
-                          person.name
-                              ?.toLowerCase()
-                              .contains(value.toLowerCase()) ??
-                          false)
-                      .toList();
+                  filteredList.value =
+                      homeController.responsiblePersonList
+                          .where(
+                            (person) =>
+                                person.name?.toLowerCase().contains(
+                                  value.toLowerCase(),
+                                ) ??
+                                false,
+                          )
+                          .toList();
                 },
                 decoration: InputDecoration(
                   hintText: 'Search here...',
                   fillColor: Colors.white,
                   filled: true,
-                  labelStyle: TextStyle(
-                    color: secondaryColor,
-                  ),
+                  labelStyle: TextStyle(color: secondaryColor),
                   counterText: "",
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: secondaryColor),
@@ -81,13 +81,13 @@ class ToAssignUserList extends StatelessWidget {
                     borderSide: BorderSide(color: secondaryColor),
                     borderRadius: BorderRadius.all(Radius.circular(5.r)),
                   ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 10.h,
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 5.h,
-              ),
+              SizedBox(height: 5.h),
               Expanded(
                 child: Obx(
                   () => ListView.separated(
@@ -125,9 +125,7 @@ class ToAssignUserList extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 8.w,
-                          ),
+                          SizedBox(width: 8.w),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -140,13 +138,14 @@ class ToAssignUserList extends StatelessWidget {
                               ),
                               StorageHelper.getId() == filteredList[index].id
                                   ? Text(
-                                      "Self Assign",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: secondaryColor),
-                                    )
-                                  : SizedBox()
+                                    "Self Assign",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: secondaryColor,
+                                    ),
+                                  )
+                                  : SizedBox(),
                             ],
                           ),
                           Spacer(),
@@ -158,19 +157,24 @@ class ToAssignUserList extends StatelessWidget {
                                 width: 20.w,
                                 child: Checkbox(
                                   value:
-                                      taskController.toAssignedPersonCheckBox[
-                                              filteredList[index].id] ??
-                                          false,
+                                      taskController
+                                          .toAssignedPersonCheckBox[filteredList[index]
+                                          .id] ??
+                                      false,
                                   onChanged: (value) {
-                                    taskController.toAssignedPersonCheckBox[
-                                        filteredList[index].id] = value!;
+                                    taskController
+                                            .toAssignedPersonCheckBox[filteredList[index]
+                                            .id] =
+                                        value!;
 
                                     if (value) {
                                       taskController.assignedUserId.add(
-                                          filteredList[index].id.toString());
+                                        filteredList[index].id.toString(),
+                                      );
                                     } else {
                                       taskController.assignedUserId.remove(
-                                          filteredList[index].id.toString());
+                                        filteredList[index].id.toString(),
+                                      );
                                       taskController.selectAll.value = false;
                                     }
                                   },
@@ -182,16 +186,12 @@ class ToAssignUserList extends StatelessWidget {
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        height: 10.h,
-                      );
+                      return SizedBox(height: 10.h);
                     },
                   ),
                 ),
               ),
-              SizedBox(
-                height: 15.h,
-              ),
+              SizedBox(height: 15.h),
               CustomButton(
                 onPressed: () {
                   Get.back();
@@ -204,9 +204,7 @@ class ToAssignUserList extends StatelessWidget {
                 height: 45.h,
                 width: double.infinity,
               ),
-              SizedBox(
-                height: 15.h,
-              ),
+              SizedBox(height: 15.h),
             ],
           ),
         ),

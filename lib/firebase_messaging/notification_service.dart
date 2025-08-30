@@ -17,7 +17,6 @@ import 'package:task_management/view/screen/leads_list.dart';
 import 'package:task_management/view/screen/meeting/get_meeting.dart';
 import 'package:task_management/view/screen/meeting_screen.dart';
 import 'package:task_management/view/screen/message.dart';
-import 'package:task_management/view/screen/outscreen/chalanDetail.dart';
 import 'package:task_management/view/screen/outscreen/user_chalan_details.dart';
 import 'package:task_management/view/screen/project.dart';
 import 'package:task_management/view/screen/task_details.dart';
