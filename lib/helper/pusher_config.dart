@@ -18,7 +18,6 @@ class PusherConfig {
   String getDisplayDate(DateTime inputDateTime) {
     final now = DateTime.now();
 
-    // Remove Time (only Date part)
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(Duration(days: 1));
     final inputDate = DateTime(
@@ -32,7 +31,6 @@ class PusherConfig {
     } else if (inputDate == yesterday) {
       return 'Yesterday';
     } else {
-      // Format as "dd MMM yyyy"
       return DateFormat('dd MMM yyyy').format(inputDateTime);
     }
   }
@@ -147,7 +145,6 @@ class PusherConfigSeen {
   String getDisplayDate(DateTime inputDateTime) {
     final now = DateTime.now();
 
-    // Remove Time (only Date part)
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(Duration(days: 1));
     final inputDate = DateTime(
@@ -161,7 +158,6 @@ class PusherConfigSeen {
     } else if (inputDate == yesterday) {
       return 'Yesterday';
     } else {
-      // Format as "dd MMM yyyy"
       return DateFormat('dd MMM yyyy').format(inputDateTime);
     }
   }
@@ -188,7 +184,7 @@ class PusherConfigSeen {
           if (event.eventName == "message") {
             try {
               final eventData = jsonDecode(event.data);
-              log("event Data value in pusherr6tt76: $eventData");
+              log("event Data value in pusherr6tt7687tt8t7: $eventData");
               if (eventData != null && eventData.containsKey("message")) {
                 print('sender id is in pusher ${eventData["senderId"]}');
                 if (StorageHelper.getId() != eventData["senderId"]) {
@@ -202,7 +198,8 @@ class PusherConfigSeen {
                     senderName: eventData["userName"],
                     senderEmail: "",
                     attachment: eventData["imageforevent"],
-                    createdAt: DateFormat.Hm().format(DateTime.now()),
+                    createdDate: displayDate,
+                    createdAt: dt,
                   );
 
                   chatController.chatHistoryList.add(newMessage);

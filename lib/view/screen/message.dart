@@ -73,6 +73,11 @@ class _MessageScreenState extends State<MessageScreen> {
         roomId: chatController.chatIdvalue.value,
       );
     }
+    PusherConfigSeen().initPusher(
+      chatController.onPusherEvent,
+      channelName: "chatseen",
+      roomId: chatController.chatIdvalue.value,
+    );
   }
 
   @override
