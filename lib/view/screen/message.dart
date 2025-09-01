@@ -1130,20 +1130,6 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-  // void openFile(String file) {
-  //   String fileExtension = file.split('.').last.toLowerCase();
-
-  //   if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
-  //     Get.to(NetworkImageScreen(file: file));
-  //   } else {
-  //     Get.to(
-  //       () => NetworkPDFScreen(
-  //         file: file,
-  //       ),
-  //     );
-  //   }
-  // }
-
   Future<void> showAlertDialog(BuildContext context, String from) async {
     return showDialog(
       context: context,
@@ -1368,7 +1354,6 @@ class _MessageScreenState extends State<MessageScreen> {
       }
 
       chatController.isMessagePicUploading.value = false;
-      // Get.back();
       if (from == 'group') {
         await chatController.updateGroupIconApi(widget.chatId);
       }
