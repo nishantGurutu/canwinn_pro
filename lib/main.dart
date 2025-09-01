@@ -68,12 +68,6 @@ Future<void> main() async {
   );
   await EasyLocalization.ensureInitialized();
   await LocalNotificationService.initialize();
-  // await LocationTrackerService.initialize();
-  // await _handleLocationPermissionAndGPS();
-  // await initializeService();
-  // await LocationTrackerService.enableBackgroundMode();
-  // await LocationTrackerService.initialize();
-  // await LocationTrackerService.enableBackgroundMode();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -106,84 +100,12 @@ Future<void> main() async {
   );
 }
 
-// Future<void> initializeService() async {
-//   final service = FlutterBackgroundService();
-//   await service.configure(
-//     androidConfiguration: AndroidConfiguration(
-//       onStart: onStart,
-//       autoStart: true,
-//       autoStartOnBoot: true,
-//       isForegroundMode: true,
-//     ),
-//     iosConfiguration: IosConfiguration(
-//       autoStart: true,
-//       onForeground: onStart,
-//       onBackground: onIosBackground,
-//     ),
-//   );
-// }
-
-// Future<bool> _handleLocationPermissionAndGPS() async {
-//   if (!await _requestLocationPermission()) {
-//     return false;
-//   }
-
-//   if (!await _isGPSEnabled()) {
-//     return false;
-//   }
-
-//   return true;
-// }
-
-// Future<bool> _requestLocationPermission() async {
-//   var status = await Permission.locationWhenInUse.status;
-//   if (!status.isGranted) {
-//     status = await Permission.locationWhenInUse.request();
-//     if (!status.isGranted) {
-//       if (status.isPermanentlyDenied) {
-//         await openAppSettings();
-//       } else {
-//         // Fluttertoast.showToast(
-//         //   msg: "Location services are disabled. Please enable the services.",
-//         //   toastLength: Toast.LENGTH_SHORT,
-//         //   gravity: ToastGravity.CENTER,
-//         //   timeInSecForIosWeb: 1,
-//         //   backgroundColor: Colors.red,
-//         //   textColor: Colors.white,
-//         //   fontSize: 16.0,
-//         // );
-//       }
-//       return false;
-//     }
-//   }
-
-//   status = await Permission.locationAlways.status;
-//   if (!status.isGranted) {
-//     status = await Permission.locationAlways.request();
-//     if (!status.isGranted) {
-//       if (status.isPermanentlyDenied) {
-//         await openAppSettings();
-//       } else {
-//         Get.showSnackbar(
-//           const GetSnackBar(
-//             title: "Location services are disabled. Please enable the services",
-//             duration: Duration(seconds: 3),
-//           ),
-//         );
-//       }
-//       return false;
-//     }
-//   }
-//   return true;
-// }
-
 Future<bool> _isGPSEnabled() async {
   bool serviceEnabled;
   geolocator.LocationPermission permission;
 
   serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    // Location services are not enabled, prompt the user to enable them.
     Fluttertoast.showToast(
       msg: "GPS is disabled. Please enable the GPS.",
       toastLength: Toast.LENGTH_SHORT,
@@ -200,81 +122,6 @@ Future<bool> _isGPSEnabled() async {
   return true;
 }
 
-// @pragma('vm:entry-point')
-// Future<bool> onIosBackground(ServiceInstance service) async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   DartPluginRegistrant.ensureInitialized();
-//   SharedPreferences preferences = await SharedPreferences.getInstance();
-//   await preferences.reload();
-//   final log = preferences.getStringList('log') ?? <String>[];
-//   log.add(DateTime.now().toIso8601String());
-//   await preferences.setStringList('log', log);
-//   return true;
-// }
-
-// @pragma('vm:entry-point')
-// void onStart(ServiceInstance service) async {
-//   DartPluginRegistrant.ensureInitialized();
-
-//   if (service is AndroidServiceInstance) {
-//     service.on('setAsForeground').listen((event) {
-//       service.setAsForegroundService();
-//     });
-
-//     service.on('setAsBackground').listen((event) {
-//       service.setAsBackgroundService();
-//     });
-//   }
-
-//   Timer.periodic(const Duration(seconds: 5), (timer) async {
-//     SharedPreferences preferences = await SharedPreferences.getInstance();
-
-//     // Fetch current location
-//     geolocator.Position? position;
-//     try {
-//       position = await geolocator.Geolocator.getCurrentPosition(
-//         // ignore: deprecated_member_use
-//         desiredAccuracy: geolocator.LocationAccuracy.high,
-//       );
-//     } catch (e) {
-//       print('Failed to get location: $e');
-//     }
-
-//     // Add log with timestamp and location info
-//     final log = preferences.getStringList('log') ?? <String>[];
-//     final currentTime = DateTime.now().toIso8601String();
-//     final locationInfo = position != null
-//         ? 'Lat: ${position.latitude}, Lon: ${position.longitude}'
-//         : 'Location not available';
-
-//     log.add('$currentTime - $locationInfo');
-//     _storeLocationInDb(lat: position?.latitude, lon: position?.longitude);
-
-//     // preferences.setString("token", loginModel.data?.token ?? "");
-
-//     // await LocationTrackingService().syncLocationsToApi();
-
-//     // await LocationTrackingService().syncLocationsToApi();
-//     await preferences.setStringList('log', log);
-
-//     // Fluttertoast.showToast(
-//     //   msg: "FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo'",
-//     //   toastLength: Toast.LENGTH_SHORT,
-//     //   gravity: ToastGravity.CENTER,
-//     //   timeInSecForIosWeb: 1,
-//     //   backgroundColor: Colors.red,
-//     //   textColor: Colors.white,
-//     //   fontSize: 16.0,
-//     // );
-//     print('FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo');
-
-//     service.invoke('update', {
-//       "current_date": currentTime,
-//       "location": locationInfo,
-//     });
-//   });
-// }
-
 DatabaseHelper _dbHelper = DatabaseHelper.instance;
 Future<void> _storeLocationInDb({double? lat, double? lon}) async {
   try {
@@ -287,8 +134,6 @@ Future<void> _storeLocationInDb({double? lat, double? lon}) async {
     print('Error storing location in database: $e');
   }
 }
-
-// End location service
 
 Location location = Location();
 LocationData? _currentPosition;
