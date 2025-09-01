@@ -73,8 +73,15 @@ class _MessageScreenState extends State<MessageScreen> {
         roomId: chatController.chatIdvalue.value,
       );
     }
+
+    PusherConfigSeen().initPusher(
+      chatController.onPusherEvent,
+      channelName: "chatseen",
+      roomId: widget.chatId ?? "",
+    );
   }
 
+  final List<int> seenMessageIds = [];
   @override
   void dispose() {
     chatController.selectedMessage.value = "";
@@ -268,6 +275,49 @@ class _MessageScreenState extends State<MessageScreen> {
                                               chat.id ?? 0,
                                               () => GlobalKey(),
                                             );
+
+                                            WidgetsBinding.instance
+                                                .addPostFrameCallback((_) {
+                                                  final key =
+                                                      messageKeys[chat.id];
+                                                  if (key != null &&
+                                                      key.currentContext !=
+                                                          null) {
+                                                    final RenderObject?
+                                                    renderObject =
+                                                        key.currentContext!
+                                                            .findRenderObject();
+                                                    if (renderObject != null &&
+                                                        !isCurrentUser &&
+                                                        !seenMessageIds
+                                                            .contains(
+                                                              chat.id,
+                                                            )) {
+                                                      final position =
+                                                          renderObject
+                                                              .getTransformTo(
+                                                                null,
+                                                              )
+                                                              .getTranslation();
+                                                      final screenHeight =
+                                                          MediaQuery.of(
+                                                            context,
+                                                          ).size.height;
+                                                      if (position.y >= 0 &&
+                                                          position.y <=
+                                                              screenHeight) {
+                                                        // Message is visible, mark as seen
+                                                        seenMessageIds.add(
+                                                          chat.id!,
+                                                        );
+                                                        chatController.markSeen(
+                                                          widget.chatId ?? '',
+                                                          seenMessageIds,
+                                                        );
+                                                      }
+                                                    }
+                                                  }
+                                                });
                                             String previousDate = '';
                                             if (index > 0) {
                                               previousDate =

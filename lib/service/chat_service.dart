@@ -159,126 +159,6 @@ class ChatService {
       return null;
     }
   }
-  // Future<dynamic> sendMessageApi(
-  //   String? id,
-  //   String text,
-  //   String? chatId,
-  //   String? fromPage,
-  //   Rx<File> pickedFile,
-  // ) async {
-  //   try {
-  //     var token = StorageHelper.getToken();
-  //     _dio.options.headers["Authorization"] = "Bearer $token";
-
-  //     print('send message id $id');
-  //     print('send message id 2 $chatId');
-  //     print('send message id 3 $pickedFile');
-  //     print('send message id 4 $text');
-
-  //     final Map<String, dynamic> formDataMap = {};
-
-  //     if (text.isNotEmpty) {
-  //       formDataMap['message'] = text;
-  //     }
-  //     if (id != null && id.isNotEmpty && id != "null") {
-  //       formDataMap['receiver_id'] = id;
-  //     }
-  //     if (chatId != null && chatId.isNotEmpty && chatId != "null") {
-  //       formDataMap['chat_id'] = chatId;
-  //     }
-
-  //     if (pickedFile.value.path.isNotEmpty) {
-  //       final filePath = pickedFile.value.path;
-  //       final fileName = filePath.split('/').last;
-
-  //       // Detect MIME type based on file path
-  //       final mimeType = lookupMimeType(filePath) ?? 'application/octet-stream';
-
-  //       formDataMap['attachment'] = await MultipartFile.fromFile(
-  //         filePath,
-  //         filename: fileName,
-  //         contentType: MediaType.parse(mimeType),
-  //       );
-  //     }
-
-  //     final formData = FormData.fromMap(formDataMap);
-
-  //     final response = await _dio.post(
-  //       ApiConstant.baseUrl + ApiConstant.sendMessage,
-  //       data: formData,
-  //     );
-
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       return response.data;
-  //     } else {
-  //       throw Exception('Failed to send message');
-  //     }
-  //   } catch (e) {
-  //     print("Error sending message: $e");
-  //     return null;
-  //   }
-  // }
-
-  // Future<dynamic> sendMessageApi(
-  //   String? id,
-  //   String text,
-  //   String? chatId,
-  //   String? fromPage,
-  //   Rx<File> pickedFile,
-  // ) async {
-  //   try {
-  //     var token = StorageHelper.getToken();
-  //     Dio _dio = Dio();
-  //     _dio.options.headers["Authorization"] = "Bearer $token";
-
-  //     print('send message id $id');
-  //     print('send message chatId $chatId');
-  //     print('pickedFile path: ${pickedFile.value.path}');
-  //     print('message text: $text');
-
-  //     final Map<String, dynamic> formDataMap = {};
-
-  //     // Always send message field, even if it's just a placeholder
-  //     formDataMap['message'] = text.isNotEmpty ? text : '';
-
-  //     if (id != null && id.isNotEmpty && id != "null") {
-  //       formDataMap['receiver_id'] = id;
-  //     }
-  //     if (chatId != null && chatId.isNotEmpty && chatId != "null") {
-  //       formDataMap['chat_id'] = chatId;
-  //     }
-
-  //     if (pickedFile.value.path.isNotEmpty) {
-  //       final filePath = pickedFile.value.path;
-  //       final fileName = filePath.split('/').last;
-  //       final mimeType = lookupMimeType(filePath) ?? 'application/octet-stream';
-
-  //       formDataMap['attachment'] = await MultipartFile.fromFile(
-  //         filePath,
-  //         filename: fileName,
-  //         contentType: MediaType.parse(mimeType),
-  //       );
-  //     }
-
-  //     final formData = FormData.fromMap(formDataMap);
-
-  //     print('Sending FormData: $formDataMap');
-
-  //     final response = await _dio.post(
-  //       ApiConstant.baseUrl + ApiConstant.sendMessage,
-  //       data: formData,
-  //     );
-
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       return response.data;
-  //     } else {
-  //       throw Exception('Failed to send message');
-  //     }
-  //   } catch (e) {
-  //     print("Error sending message: $e");
-  //     return null;
-  //   }
-  // }
 
   Future<dynamic> addGroupUser(
     String? chatId,
@@ -335,6 +215,47 @@ class ChatService {
 
       final response = await _dio.get(
         "${ApiConstant.baseUrl + ApiConstant.chat_members}/$chatId",
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data;
+      } else {
+        throw Exception('Failed to send message');
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<dynamic> markSeen(dynamic chatId, List<int> seenMessageIds) async {
+    try {
+      var token = StorageHelper.getToken();
+      print("uey376te7 e36e37 ${chatId}");
+      print("uey376te7 e36e37 ${seenMessageIds}");
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      final response = await _dio.post(
+        "${ApiConstant.baseUrl + ApiConstant.mark_seen}",
+        data: {"chat_id": chatId, "message_ids": seenMessageIds},
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data;
+      } else {
+        throw Exception('Failed to send message');
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<dynamic> chatTyping(dynamic chatId) async {
+    try {
+      var token = StorageHelper.getToken();
+      print("uey376te7 e36e37 ${chatId}");
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      final response = await _dio.post(
+        "${ApiConstant.baseUrl + ApiConstant.chat_typing}",
+        data: {"chat_id": chatId, "is_typing": true},
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {

@@ -43,8 +43,11 @@ class SosPusherConfig {
               );
             } else {
               await StorageHelper.setSosMessage(true);
-              await ShowDialogFunction()
-                  .sosMsg(context, eventData["message"], dt);
+              await ShowDialogFunction().sosMsg(
+                context,
+                eventData["message"],
+                dt,
+              );
             }
           } catch (e) {
             print("Error parsing Pusher event: $e");

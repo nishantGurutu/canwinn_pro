@@ -238,4 +238,6 @@ class ApiConstant {
   static const String download_employee_report = "download-employee-report";
   static const String change_lead_followup_status =
       "change-lead-followup-status";
+  static const String mark_seen = "mark-seen";
+  static const String chat_typing = "chat-typing";
 }

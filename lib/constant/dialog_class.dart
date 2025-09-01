@@ -67,10 +67,7 @@ class ShowDialogFunction {
                     Get.back();
                     await _audioPlayer.stop();
                   },
-                  child: Icon(
-                    Icons.close,
-                    size: 30,
-                  ),
+                  child: Icon(Icons.close, size: 30),
                 ),
               ),
             ],
@@ -81,7 +78,11 @@ class ShowDialogFunction {
   }
 
   Future<void> dailyMessage(
-      BuildContext context, eventData, DateTime dt, title) async {
+    BuildContext context,
+    eventData,
+    DateTime dt,
+    title,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     // await _audioPlayer.play(AssetSource('mp3/emergency_alarm_69780.mp3'));
     return showDialog(
@@ -140,10 +141,7 @@ class ShowDialogFunction {
                     await StorageHelper.setDailyMessage(false);
                     Get.back();
                   },
-                  child: Icon(
-                    Icons.close,
-                    size: 30,
-                  ),
+                  child: Icon(Icons.close, size: 30),
                 ),
               ),
             ],
@@ -186,20 +184,19 @@ class ShowDialogFunction {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SvgPicture.asset(
-                              'assets/image/svg/hourglass_bottom (1).svg'),
-                          SizedBox(
-                            width: 8.w,
+                            'assets/image/svg/hourglass_bottom (1).svg',
                           ),
+                          SizedBox(width: 8.w),
                           Text(
                             'Your Pending',
                             style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.w500),
-                          )
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: 8.h,
-                      ),
+                      SizedBox(height: 8.h),
                       Row(
                         children: [
                           Expanded(
@@ -207,10 +204,11 @@ class ShowDialogFunction {
                               onTap: () {
                                 Get.to(
                                   () => TaskScreenPage(
-                                      taskType: 'Progress',
-                                      assignedType: "Assigned to me",
-                                      '',
-                                      ''),
+                                    taskType: 'Progress',
+                                    assignedType: "Assigned to me",
+                                    '',
+                                    '',
+                                  ),
                                 );
                               },
                               child: PendingBox(
@@ -220,17 +218,11 @@ class ShowDialogFunction {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 12.w,
-                          ),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                Get.to(
-                                  () => LeadList(
-                                    status: 'new lead',
-                                  ),
-                                );
+                                Get.to(() => LeadList(status: 'new lead'));
                               },
                               child: PendingBox(
                                 image: pendingProjectIcon,
@@ -241,9 +233,7 @@ class ShowDialogFunction {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 8.h,
-                      ),
+                      SizedBox(height: 8.h),
                       Row(
                         children: [
                           Expanded(
@@ -258,19 +248,19 @@ class ShowDialogFunction {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 12.w,
-                          ),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                Get.to(() => GetMeetingList(
-                                      contactList: <LeadContactData>[].obs,
-                                      from: 'home',
-                                      leadId: '',
-                                      addPeople: [],
-                                      assignPeople: [],
-                                    ));
+                                Get.to(
+                                  () => GetMeetingList(
+                                    contactList: <LeadContactData>[].obs,
+                                    from: 'home',
+                                    leadId: '',
+                                    addPeople: [],
+                                    assignPeople: [],
+                                  ),
+                                );
                               },
                               child: PendingBox(
                                 image: pendingMeetingIcon,
@@ -278,7 +268,7 @@ class ShowDialogFunction {
                                 data: pendingLeadMeeting,
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -292,10 +282,7 @@ class ShowDialogFunction {
                   onTap: () async {
                     Get.back();
                   },
-                  child: Icon(
-                    Icons.close,
-                    size: 30,
-                  ),
+                  child: Icon(Icons.close, size: 30),
                 ),
               ),
             ],

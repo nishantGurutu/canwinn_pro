@@ -187,13 +187,10 @@ class _BottomNavigationBarExampleState
                 canPop: false, // Prevent auto-pop
                 onPopInvoked: (didPop) async {
                   if (didPop) {
-
                     return;
                   }
 
-
                   if (isLoading.value) {
-
                     Fluttertoast.showToast(
                       msg: "Please wait, an operation is in progress",
                     );
@@ -201,7 +198,6 @@ class _BottomNavigationBarExampleState
                   }
 
                   if (bottomBarController.currentPageIndex.value != 0) {
-
                     bottomBarController.currentPageIndex.value = 0;
                     return;
                   }
@@ -209,100 +205,113 @@ class _BottomNavigationBarExampleState
                   final bool? shouldExit = await showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) => Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      elevation: 10,
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Top Icon
-                            Container(
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.exit_to_app_rounded,
-                                color: Colors.red,
-                                size: 40,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Title
-                            const Text(
-                              "Confirm Exit",
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-
-                            const SizedBox(height: 12),
-
-                            // Message
-                            const Text(
-                              "Are you sure you want to exit the app?",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black54,
-                              ),
-                            ),
-
-                            const SizedBox(height: 25),
-
-                            // Buttons
-                            Row(
+                    builder:
+                        (context) => Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          elevation: 10,
+                          backgroundColor: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey[200],
-                                      foregroundColor: Colors.black87,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
-                                    ),
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                    child: const Text("Cancel"),
+                                // Top Icon
+                                Container(
+                                  padding: const EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.exit_to_app_rounded,
+                                    color: Colors.red,
+                                    size: 40,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
-                                    ),
-                                    onPressed: () => Navigator.of(context).pop(true),
-                                    child: const Text("Exit"),
+                                const SizedBox(height: 20),
+
+                                // Title
+                                const Text(
+                                  "Confirm Exit",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
                                   ),
+                                ),
+
+                                const SizedBox(height: 12),
+
+                                // Message
+                                const Text(
+                                  "Are you sure you want to exit the app?",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 25),
+
+                                // Buttons
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey[200],
+                                          foregroundColor: Colors.black87,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 14,
+                                          ),
+                                        ),
+                                        onPressed:
+                                            () => Navigator.of(
+                                              context,
+                                            ).pop(false),
+                                        child: const Text("Cancel"),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 14,
+                                          ),
+                                        ),
+                                        onPressed:
+                                            () =>
+                                                Navigator.of(context).pop(true),
+                                        child: const Text("Exit"),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
                   );
 
                   if (shouldExit == true && context.mounted) {
                     SystemNavigator.pop();
-                  } else {
-                  }
+                  } else {}
                 },
                 child: Scaffold(
                   key: _key,
