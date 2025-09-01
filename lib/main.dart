@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/controller/bottom_bar_navigation_controller.dart';
 import 'package:task_management/controller_binding.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
@@ -35,6 +38,29 @@ import 'package:task_management/view/widgets/notes_folder.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:geolocator/geolocator.dart' as geolocator;
 
+// class MyHttpOverrides extends HttpOverrides {
+//   @override
+//   HttpClient createHttpClient(SecurityContext? context) {
+//     return super.createHttpClient(context)
+//       ..badCertificateCallback =
+//           (X509Certificate cert, String host, int port) => true;
+//   }
+// }
+
+// final BottomBarController bottomBarController = Get.put(BottomBarController());
+
+// @pragma('vm:entry-point')
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   String? messageData = jsonEncode(message.data);
+//   debugPrint('3re763t8e93 e3ye7636er36 e635re653 ${messageData}');
+//   final AudioPlayer _audioPlayer = AudioPlayer();
+//   await _audioPlayer.play(AssetSource('mp3/emergency_alarm_69780.mp3'));
+// }
+
+// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -50,15 +76,39 @@ final BottomBarController bottomBarController = Get.put(BottomBarController());
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   String? messageData = jsonEncode(message.data);
+  Map<String, dynamic> payloadData = jsonDecode(messageData);
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('notification_data', payloadData['message'].toString());
+  debugPrint("Notification received in background: ${message.data}");
+  debugPrint(
+    "Notification received in background: 34 ${prefs.getString('notification_data')}",
+  );
+
+  final service = FlutterBackgroundService();
+  service.invoke("play_audio");
+}
+
+@pragma('vm:entry-point')
+void onStart(ServiceInstance service) {
+  final player = AudioPlayer();
+
+  service.on("play_audio").listen((event) async {
+    try {
+      debugPrint("Playing audio in background...");
+      await player.play(AssetSource('mp3/emergency_alarm_69780.mp3'));
+    } catch (e) {
+      debugPrint("Error playing audio: $e");
+    }
+  });
 }
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   tz.initializeTimeZones();
+  initializeService();
   await requestPermissions();
   await requestPermissionHandlar();
   await StorageHelper.initialize();
@@ -100,10 +150,31 @@ Future<void> main() async {
   );
 }
 
+void initializeService() async {
+  final service = FlutterBackgroundService();
+
+  await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      onStart: onStart,
+      autoStart: true,
+      isForegroundMode: false,
+    ),
+    iosConfiguration: IosConfiguration(
+      onForeground: onStart,
+      onBackground: onIosBackground,
+    ),
+  );
+  service.startService();
+}
+
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  return true;
+}
+
 Future<bool> _isGPSEnabled() async {
   bool serviceEnabled;
   geolocator.LocationPermission permission;
-
   serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     Fluttertoast.showToast(
@@ -115,10 +186,8 @@ Future<bool> _isGPSEnabled() async {
       textColor: Colors.white,
       fontSize: 16.0,
     );
-
     return false;
   }
-
   return true;
 }
 

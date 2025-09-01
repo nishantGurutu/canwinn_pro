@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_background_service/flutter_background_service.dart';
@@ -50,6 +51,7 @@ class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static String? pendingPayload;
+  static final AudioPlayer _audioPlayer = AudioPlayer();
 
   static Future<void> initialize() async {
     tz.initializeTimeZones();

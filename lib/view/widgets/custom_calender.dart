@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -57,13 +56,20 @@ class CustomCalender extends StatelessWidget {
       readOnly: true,
       onTap: () async {
         DateTime initialDate = DateTime.now();
-        DateTime firstDate = DateTime.now(); // Restrict to today or later
+        DateTime firstDate =
+            from == 'report'
+                ? DateTime(2100)
+                : DateTime.now(); // Restrict to today or later
         DateTime lastDate = DateTime(2100);
 
         // If selecting start date, ensure it's not after due date
-        if (from == 'startDate' && otherController != null && otherController!.text.isNotEmpty) {
+        if (from == 'startDate' &&
+            otherController != null &&
+            otherController!.text.isNotEmpty) {
           try {
-            DateTime dueDate = DateFormat('dd-MM-yyyy').parse(otherController!.text);
+            DateTime dueDate = DateFormat(
+              'dd-MM-yyyy',
+            ).parse(otherController!.text);
             lastDate = dueDate; // Start date cannot be after due date
           } catch (e) {
             // Handle invalid date format if necessary
@@ -71,11 +77,16 @@ class CustomCalender extends StatelessWidget {
         }
 
         // If selecting due date, ensure it's not before start date
-        if (from == 'dueDate' && otherController != null && otherController!.text.isNotEmpty) {
+        if (from == 'dueDate' &&
+            otherController != null &&
+            otherController!.text.isNotEmpty) {
           try {
-            DateTime startDate = DateFormat('dd-MM-yyyy').parse(otherController!.text);
+            DateTime startDate = DateFormat(
+              'dd-MM-yyyy',
+            ).parse(otherController!.text);
             firstDate = startDate; // Due date cannot be before start date
-            initialDate = startDate.isAfter(DateTime.now()) ? startDate : DateTime.now();
+            initialDate =
+                startDate.isAfter(DateTime.now()) ? startDate : DateTime.now();
           } catch (e) {
             // Handle invalid date format if necessary
           }

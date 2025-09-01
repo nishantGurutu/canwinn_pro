@@ -15,6 +15,28 @@ class PusherConfig {
   String SECRET = "28aaf7e01c80c948d803";
   String API_CLUSTER = "ap2";
 
+  String getDisplayDate(DateTime inputDateTime) {
+    final now = DateTime.now();
+
+    // Remove Time (only Date part)
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(Duration(days: 1));
+    final inputDate = DateTime(
+      inputDateTime.year,
+      inputDateTime.month,
+      inputDateTime.day,
+    );
+
+    if (inputDate == today) {
+      return 'Today';
+    } else if (inputDate == yesterday) {
+      return 'Yesterday';
+    } else {
+      // Format as "dd MMM yyyy"
+      return DateFormat('dd MMM yyyy').format(inputDateTime);
+    }
+  }
+
   Future<void> initPusher(
     Function(PusherEvent) onMessageReceived, {
     String? channelName,
@@ -31,29 +53,33 @@ class PusherConfig {
         onSubscriptionSucceeded: (channelName, data) {
           log("onSubscriptionSucceeded: $channelName data: $data");
         },
-        onEvent: (event) {
+        onEvent: (event) async {
           log("Received event: ${event.eventName} - ${event.data}");
 
           if (event.eventName == "message") {
             try {
               final eventData = jsonDecode(event.data);
-              log("event Data value in pusher: $eventData");
+              log("event Data value in pusher98u8yr54: $eventData");
               if (eventData != null && eventData.containsKey("message")) {
                 print('sender id is in pusher ${eventData["senderId"]}');
                 if (StorageHelper.getId() != eventData["senderId"]) {
+                  DateTime inputDateTime = DateTime.now();
+                  String dt = DateFormat.Hm().format(DateTime.now());
+                  String displayDate = getDisplayDate(inputDateTime);
+                  print('653r65e e63563 f356 $displayDate');
                   final newMessage = ChatHistoryData(
                     message: eventData["message"],
                     senderId: eventData["senderId"],
                     senderName: eventData["userName"],
                     senderEmail: "",
                     attachment: eventData["imageforevent"],
-                    createdAt: DateFormat.Hm().format(DateTime.now()),
+                    createdDate: displayDate,
+                    createdAt: dt,
                   );
-
+                  await chatController.markSeen(roomId, []);
                   chatController.chatHistoryList.add(newMessage);
                   chatController.chatHistoryList.refresh();
                 }
-
                 log(
                   "New message added: ${chatController.chatHistoryList.last}",
                 );
@@ -118,6 +144,28 @@ class PusherConfigSeen {
 
   String API_CLUSTER = "ap2";
 
+  String getDisplayDate(DateTime inputDateTime) {
+    final now = DateTime.now();
+
+    // Remove Time (only Date part)
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(Duration(days: 1));
+    final inputDate = DateTime(
+      inputDateTime.year,
+      inputDateTime.month,
+      inputDateTime.day,
+    );
+
+    if (inputDate == today) {
+      return 'Today';
+    } else if (inputDate == yesterday) {
+      return 'Yesterday';
+    } else {
+      // Format as "dd MMM yyyy"
+      return DateFormat('dd MMM yyyy').format(inputDateTime);
+    }
+  }
+
   Future<void> initPusher(
     Function(PusherEvent) onMessageReceived, {
     String? channelName,
@@ -134,16 +182,20 @@ class PusherConfigSeen {
         onSubscriptionSucceeded: (channelName, data) {
           log("onSubscriptionSucceeded: $channelName data: $data");
         },
-        onEvent: (event) {
+        onEvent: (event) async {
           log("Received event: ${event.eventName} - ${event.data}");
 
           if (event.eventName == "message") {
             try {
               final eventData = jsonDecode(event.data);
-              log("event Data value in pusher: $eventData");
+              log("event Data value in pusherr6tt76: $eventData");
               if (eventData != null && eventData.containsKey("message")) {
                 print('sender id is in pusher ${eventData["senderId"]}');
                 if (StorageHelper.getId() != eventData["senderId"]) {
+                  DateTime inputDateTime = DateTime.now();
+                  String dt = DateFormat.Hm().format(DateTime.now());
+                  String displayDate = getDisplayDate(inputDateTime);
+                  print('653r65e e63563 f356 $displayDate');
                   final newMessage = ChatHistoryData(
                     message: eventData["message"],
                     senderId: eventData["senderId"],

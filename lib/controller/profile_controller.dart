@@ -97,8 +97,9 @@ class ProfileController extends GetxController {
         assetsList.assignAll(userProfileModel.value!.data!.assets!);
       }
       if (userProfileModel.value!.data!.allocatedAssets!.isNotEmpty) {
-        allocatedAssetsList
-            .assignAll(userProfileModel.value!.data!.allocatedAssets!);
+        allocatedAssetsList.assignAll(
+          userProfileModel.value!.data!.allocatedAssets!,
+        );
       }
       profilePicPath.value = '';
       await departmentList(null);
@@ -131,9 +132,11 @@ class ProfileController extends GetxController {
       StorageHelper.setEmail(userProfileModel.value?.data?.email ?? '');
       StorageHelper.setPhone(userProfileModel.value?.data?.phone ?? '');
       StorageHelper.setRole(
-          userProfileModel.value?.data?.role.toString() ?? '');
+        userProfileModel.value?.data?.role.toString() ?? '',
+      );
       StorageHelper.setDepartmentId(
-          userProfileModel.value?.data?.departmentId ?? 0);
+        userProfileModel.value?.data?.departmentId ?? 0,
+      );
       StorageHelper.setGender(userProfileModel.value?.data?.gender ?? '');
       StorageHelper.setImage(userProfileModel.value?.data?.image ?? '');
       StorageHelper.setDob(userProfileModel.value?.data?.dob ?? '');
@@ -156,8 +159,9 @@ class ProfileController extends GetxController {
   final UserPageControlelr userPageControlelr = Get.put(UserPageControlelr());
   RxList<String> selectedDepartmentListId = <String>[].obs;
   var isdepartmentListLoading = false.obs;
-  Rx<DepartmentListData?> selectedDepartMentListData =
-      Rx<DepartmentListData?>(null);
+  Rx<DepartmentListData?> selectedDepartMentListData = Rx<DepartmentListData?>(
+    null,
+  );
   RxList<DepartmentListData> departmentDataList = <DepartmentListData>[].obs;
   Future<void> departmentList(dynamic selectedProjectId) async {
     isdepartmentListLoading.value = true;
@@ -167,16 +171,13 @@ class ProfileController extends GetxController {
       departmentDataList.clear();
       selectedDepartmentListId.clear();
       departmentDataList.add(
-        DepartmentListData(
-          id: 0,
-          name: "Other",
-          status: 1,
-        ),
+        DepartmentListData(id: 0, name: "Other", status: 1),
       );
       departmentDataList.addAll(result.data!);
 
-      selectedDepartmentListId
-          .addAll(List<String>.filled(departmentDataList.length, ''));
+      selectedDepartmentListId.addAll(
+        List<String>.filled(departmentDataList.length, ''),
+      );
 
       isdepartmentListLoading.value = false;
       for (var deptId in departmentDataList) {
@@ -207,7 +208,10 @@ class ProfileController extends GetxController {
   RxList<DailyTasks> dailyTaskDataList = <DailyTasks>[].obs;
   RxList<bool> dailyTaskListCheckbox = <bool>[].obs;
   Future<void> dailyTaskList(
-      BuildContext context, String s, payloadData) async {
+    BuildContext context,
+    String s,
+    payloadData,
+  ) async {
     print('payload data value in task list function ${payloadData}');
     isDailyTaskLoading.value = true;
     final result = await ProfileService().dailyTaskList();
@@ -216,8 +220,9 @@ class ProfileController extends GetxController {
       dailyTaskDataList.clear();
       dailyTaskListCheckbox.clear();
       dailyTaskDataList.assignAll(result.tasks!);
-      dailyTaskListCheckbox
-          .addAll(List<bool>.filled(dailyTaskDataList.length, false));
+      dailyTaskListCheckbox.addAll(
+        List<bool>.filled(dailyTaskDataList.length, false),
+      );
       isDailyTaskLoading.value = false;
       if (s == "pastTask") {
         Future.delayed(Duration(milliseconds: 100), () {
@@ -232,11 +237,13 @@ class ProfileController extends GetxController {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
-            builder: (context) => Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: dailyTaskListWidget(context, payloadData),
-            ),
+            builder:
+                (context) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: dailyTaskListWidget(context, payloadData),
+                ),
           );
         });
       }
@@ -344,9 +351,7 @@ class ProfileController extends GetxController {
 
   final TextEditingController selectedDateTextController =
       TextEditingController();
-  Future<void> showAlertDialog(
-    BuildContext context,
-  ) async {
+  Future<void> showAlertDialog(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
@@ -363,67 +368,66 @@ class ProfileController extends GetxController {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: Obx(
-                () => isQuotationDownloading.value == true
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            'Downloading....',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                () =>
+                    isQuotationDownloading.value == true
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 10.w),
+                            Text(
+                              'Downloading....',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Download report',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200.w,
-                                child: CustomCalender(
-                                  hintText: dateFormate,
-                                  controller: selectedDateTextController,
+                          ],
+                        )
+                        : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Download report',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 15.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 200.w,
+                                  child: CustomCalender(
+                                    hintText: dateFormate,
+                                    controller: selectedDateTextController,
+                                    from: 'report',
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 15.w,
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  await downloadReport(
-                                      date: selectedDateTextController.text);
-                                },
-                                child: SizedBox(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                      'assets/images/png/download_image.png',
-                                      height: 30.h,
+                                SizedBox(width: 15.w),
+                                InkWell(
+                                  onTap: () async {
+                                    await downloadReport(
+                                      date: selectedDateTextController.text,
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'assets/images/png/download_image.png',
+                                        height: 30.h,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              ],
+                            ),
+                          ],
+                        ),
               ),
             ),
           ),
@@ -459,7 +463,10 @@ class ProfileController extends GetxController {
 
   var isDailyTaskAdding = false.obs;
   Future<void> addDailyTask(
-      String taskName, BuildContext context, String taskTime) async {
+    String taskName,
+    BuildContext context,
+    String taskTime,
+  ) async {
     isDailyTaskAdding.value = true;
     final result = await ProfileService().addDailyTask(taskName, taskTime);
     isDailyTaskAdding.value = false;
@@ -479,7 +486,11 @@ class ProfileController extends GetxController {
 
   var isDailyTaskEditing = false.obs;
   Future<void> editDailyTask(
-      String? taskId, String title, String time, BuildContext context) async {
+    String? taskId,
+    String title,
+    String time,
+    BuildContext context,
+  ) async {
     isDailyTaskEditing.value = true;
     final result = await ProfileService().editDailyTask(taskId, title, time);
     isDailyTaskEditing.value = false;
@@ -491,8 +502,10 @@ class ProfileController extends GetxController {
   var isDailyTaskSubmitting = false.obs;
   RxList<DailyTaskSubmitModel> dailyTaskSubmitList =
       <DailyTaskSubmitModel>[].obs;
-  Future<void> submitDailyTask(RxList<DailyTaskSubmitModel> dailyTaskSubmitList,
-      BuildContext context) async {
+  Future<void> submitDailyTask(
+    RxList<DailyTaskSubmitModel> dailyTaskSubmitList,
+    BuildContext context,
+  ) async {
     isDailyTaskSubmitting.value = true;
     final result = await ProfileService().submitDailyTask(dailyTaskSubmitList);
     Get.back();
@@ -512,7 +525,10 @@ class ProfileController extends GetxController {
       previousSubmittedTask.assignAll(result.tasks!);
       Get.back();
       final pdfGenerator = SubmittedTaskPdfReport(
-          previousSubmittedTask, result.completedCount, dateText);
+        previousSubmittedTask,
+        result.completedCount,
+        dateText,
+      );
       await pdfGenerator.generatePDF();
     } else {
       isPreviousTaskLoading.value = false;
@@ -522,14 +538,20 @@ class ProfileController extends GetxController {
 
   var isAssestAssigning = false.obs;
   Future<void> assignAssets(
-      AssetsTypeData assetTypeId,
-      AssetsListData assetId,
-      ResponsiblePersonData selectedPerson,
-      String allocateddate,
-      String releaseDate) async {
+    AssetsTypeData assetTypeId,
+    AssetsListData assetId,
+    ResponsiblePersonData selectedPerson,
+    String allocateddate,
+    String releaseDate,
+  ) async {
     isAssestAssigning.value = true;
     final result = await ProfileService().assignAssets(
-        assetTypeId, assetId, selectedPerson, allocateddate, releaseDate);
+      assetTypeId,
+      assetId,
+      selectedPerson,
+      allocateddate,
+      releaseDate,
+    );
     Get.back();
     await assignAssetsList();
     isAssestAssigning.value = false;
@@ -572,10 +594,16 @@ class ProfileController extends GetxController {
 
   var isAllocatedAssestAssignDeleting = false.obs;
   Future<void> deleteAllocatedAssignAssets(
-      int? id, allocationDate, releasedDate) async {
+    int? id,
+    allocationDate,
+    releasedDate,
+  ) async {
     isAllocatedAssestAssignDeleting.value = true;
-    final result = await ProfileService()
-        .deleteAllocatedAssignAssets(id, allocationDate, releasedDate);
+    final result = await ProfileService().deleteAllocatedAssignAssets(
+      id,
+      allocationDate,
+      releasedDate,
+    );
     await assignAssetsList();
     isAllocatedAssestAssignDeleting.value = false;
   }
@@ -594,30 +622,34 @@ class ProfileController extends GetxController {
       width: double.infinity,
       height: 610.h,
       child: Obx(
-        () => isDailyTaskLoading.value == true
-            ? Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Daily Task List',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    isDailyTaskLoading.value == true
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: whiteColor,
+        () =>
+            isDailyTaskLoading.value == true
+                ? Center(child: CircularProgressIndicator())
+                : Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 12.h,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Daily Task List',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
                             ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      isDailyTaskLoading.value == true
+                          ? Center(
+                            child: CircularProgressIndicator(color: whiteColor),
                           )
-                        : Expanded(
+                          : Expanded(
                             child: ListView.builder(
                               itemCount: dailyTaskDataList.length,
                               itemBuilder: (context, index) {
@@ -626,19 +658,20 @@ class ProfileController extends GetxController {
                                     Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                        color: dailyTaskDataList[index]
-                                                    .id
-                                                    .toString() ==
-                                                payloadData.toString()
-                                            ? completeBackgroundColor
-                                            : whiteColor,
+                                        color:
+                                            dailyTaskDataList[index].id
+                                                        .toString() ==
+                                                    payloadData.toString()
+                                                ? completeBackgroundColor
+                                                : whiteColor,
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(0),
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color:
-                                                lightGreyColor.withOpacity(0.2),
+                                            color: lightGreyColor.withOpacity(
+                                              0.2,
+                                            ),
                                             blurRadius: 13.0,
                                             spreadRadius: 2,
                                             blurStyle: BlurStyle.normal,
@@ -648,7 +681,9 @@ class ProfileController extends GetxController {
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 10.w, vertical: 8.h),
+                                          horizontal: 10.w,
+                                          vertical: 8.h,
+                                        ),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -658,9 +693,9 @@ class ProfileController extends GetxController {
                                                 Text(
                                                   '${index + 1}.',
                                                   style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
                                                 SizedBox(width: 10.w),
                                                 Container(
@@ -671,9 +706,10 @@ class ProfileController extends GetxController {
                                                         TextOverflow.ellipsis,
                                                     '${dailyTaskDataList[index].taskName}',
                                                     style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500),
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
                                                   ),
                                                 ),
                                                 Spacer(),
@@ -683,57 +719,53 @@ class ProfileController extends GetxController {
                                                     width: 20.w,
                                                     child: Checkbox(
                                                       value:
-                                                          dailyTaskListCheckbox[
-                                                              index],
+                                                          dailyTaskListCheckbox[index],
                                                       onChanged: (value) {
                                                         if (isDailyTaskSubmitting
                                                                 .value ==
                                                             false) {
-                                                          if (timeControllers[
-                                                                      index]
+                                                          if (timeControllers[index]
                                                                   .text
                                                                   .isNotEmpty &&
-                                                              remarkControllers[
-                                                                      index]
+                                                              remarkControllers[index]
                                                                   .text
                                                                   .isNotEmpty) {
-                                                            dailyTaskListCheckbox[
-                                                                index] = value!;
+                                                            dailyTaskListCheckbox[index] =
+                                                                value!;
                                                             if (value) {
                                                               final taskId =
-                                                                  dailyTaskDataList[
-                                                                          index]
+                                                                  dailyTaskDataList[index]
                                                                       .id;
 
-                                                              dailyTaskSubmitList
-                                                                  .add(
+                                                              dailyTaskSubmitList.add(
                                                                 DailyTaskSubmitModel(
-                                                                    taskId:
-                                                                        taskId ??
-                                                                            0,
-                                                                    doneTime:
-                                                                        timeControllers[index]
-                                                                            .text,
-                                                                    remarks: remarkControllers[
-                                                                            index]
-                                                                        .text),
+                                                                  taskId:
+                                                                      taskId ??
+                                                                      0,
+                                                                  doneTime:
+                                                                      timeControllers[index]
+                                                                          .text,
+                                                                  remarks:
+                                                                      remarkControllers[index]
+                                                                          .text,
+                                                                ),
                                                               );
                                                             } else {
                                                               final taskId =
-                                                                  dailyTaskDataList[
-                                                                          index]
+                                                                  dailyTaskDataList[index]
                                                                       .id;
                                                               dailyTaskSubmitList
                                                                   .removeWhere(
-                                                                (task) =>
-                                                                    task.taskId ==
-                                                                    taskId,
-                                                              );
+                                                                    (task) =>
+                                                                        task.taskId ==
+                                                                        taskId,
+                                                                  );
                                                             }
                                                           } else {
                                                             CustomToast()
                                                                 .showCustomToast(
-                                                                    "Please select time & remarks.");
+                                                                  "Please select time & remarks.",
+                                                                );
                                                           }
                                                         }
                                                       },
@@ -742,9 +774,7 @@ class ProfileController extends GetxController {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
-                                              height: 8.h,
-                                            ),
+                                            SizedBox(height: 8.h),
                                             Row(
                                               children: [
                                                 SizedBox(
@@ -762,50 +792,59 @@ class ProfileController extends GetxController {
                                                       fillColor:
                                                           lightSecondaryColor,
                                                       filled: true,
-                                                      border:
-                                                          OutlineInputBorder(
+                                                      border: OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color:
-                                                                lightSecondaryColor),
+                                                          color:
+                                                              lightSecondaryColor,
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5.r)),
+                                                              Radius.circular(
+                                                                5.r,
+                                                              ),
+                                                            ),
                                                       ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
+                                                      enabledBorder: OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color:
-                                                                lightSecondaryColor),
+                                                          color:
+                                                              lightSecondaryColor,
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5.r)),
+                                                              Radius.circular(
+                                                                5.r,
+                                                              ),
+                                                            ),
                                                       ),
-                                                      disabledBorder:
-                                                          OutlineInputBorder(
+                                                      disabledBorder: OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color:
-                                                                lightSecondaryColor),
+                                                          color:
+                                                              lightSecondaryColor,
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5.r)),
+                                                              Radius.circular(
+                                                                5.r,
+                                                              ),
+                                                            ),
                                                       ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
+                                                      focusedBorder: OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color:
-                                                                lightSecondaryColor),
+                                                          color:
+                                                              lightSecondaryColor,
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5.r)),
+                                                              Radius.circular(
+                                                                5.r,
+                                                              ),
+                                                            ),
                                                       ),
                                                       contentPadding:
                                                           EdgeInsets.symmetric(
-                                                              horizontal: 10.w,
-                                                              vertical: 10.h),
+                                                            horizontal: 10.w,
+                                                            vertical: 10.h,
+                                                          ),
                                                     ),
                                                     readOnly: true,
                                                   ),
@@ -814,7 +853,9 @@ class ProfileController extends GetxController {
                                                 InkWell(
                                                   onTap: () {
                                                     remarkShowAlertDialog(
-                                                        context, index);
+                                                      context,
+                                                      index,
+                                                    );
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -822,8 +863,10 @@ class ProfileController extends GetxController {
                                                           lightSecondaryColor,
                                                       borderRadius:
                                                           BorderRadius.all(
-                                                              Radius.circular(
-                                                                  5.r)),
+                                                            Radius.circular(
+                                                              5.r,
+                                                            ),
+                                                          ),
                                                     ),
                                                     width: 180.w,
                                                     height: 40.h,
@@ -831,10 +874,11 @@ class ProfileController extends GetxController {
                                                       child: Text(
                                                         '${remarkControllers[index].text.isEmpty ? "Add Remark" : remarkControllers[index].text}',
                                                         style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: textColor),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: textColor,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -851,66 +895,65 @@ class ProfileController extends GetxController {
                               },
                             ),
                           ),
-                    Obx(
-                      () => CustomButton(
-                        onPressed: () {
-                          if (isDailyTaskSubmitting.value == false) {
-                            if (dailyTaskSubmitList.isNotEmpty) {
-                              submitDailyTask(dailyTaskSubmitList, context);
-                              timeControllers.clear();
-                              remarkControllers.clear();
-                            } else {
-                              CustomToast()
-                                  .showCustomToast("Please select daily task.");
+                      Obx(
+                        () => CustomButton(
+                          onPressed: () {
+                            if (isDailyTaskSubmitting.value == false) {
+                              if (dailyTaskSubmitList.isNotEmpty) {
+                                submitDailyTask(dailyTaskSubmitList, context);
+                                timeControllers.clear();
+                                remarkControllers.clear();
+                              } else {
+                                CustomToast().showCustomToast(
+                                  "Please select daily task.",
+                                );
+                              }
                             }
-                          }
-                        },
-                        text: isDailyTaskSubmitting.value == true
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                      child: CircularProgressIndicator(
-                                    color: whiteColor,
-                                  )),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Text(
-                                    'Loading...',
+                          },
+                          text:
+                              isDailyTaskSubmitting.value == true
+                                  ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: CircularProgressIndicator(
+                                          color: whiteColor,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        'Loading...',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: whiteColor,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : Text(
+                                    submit,
                                     style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: whiteColor),
+                                      color: whiteColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ],
-                              )
-                            : Text(
-                                submit,
-                                style: TextStyle(
-                                  color: whiteColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                        width: double.infinity,
-                        color: primaryColor,
-                        height: 45.h,
+                          width: double.infinity,
+                          color: primaryColor,
+                          height: 45.h,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
       ),
     );
   }
 
   ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
 
-  Future<void> remarkShowAlertDialog(
-    BuildContext context,
-    int index,
-  ) async {
+  Future<void> remarkShowAlertDialog(BuildContext context, int index) async {
     return showDialog(
       // barrierDismissible: false,
       context: context,
@@ -939,25 +982,25 @@ class ProfileController extends GetxController {
                     index: 1,
                     focusedIndexNotifier: focusedIndexNotifier,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   CustomButton(
-                      color: primaryColor,
-                      text: Text(
-                        add,
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: whiteColor),
+                    color: primaryColor,
+                    text: Text(
+                      add,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: whiteColor,
                       ),
-                      onPressed: () {
-                        remarkControllers[index].text =
-                            remarkControllers[index].text.trim();
-                        Get.back();
-                      },
-                      width: 200,
-                      height: 40.h)
+                    ),
+                    onPressed: () {
+                      remarkControllers[index].text =
+                          remarkControllers[index].text.trim();
+                      Get.back();
+                    },
+                    width: 200,
+                    height: 40.h,
+                  ),
                 ],
               ),
             ),
