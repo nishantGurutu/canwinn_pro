@@ -115,6 +115,7 @@ class _EditTaskState extends State<EditTask> {
   @override
   void dispose() {
     super.dispose();
+    taskController.profilePicPath.value = '';
     taskController.assignedUserId.clear();
     taskController.toAssignedPersonCheckBox.clear();
     taskController.reviewerUserId.clear();

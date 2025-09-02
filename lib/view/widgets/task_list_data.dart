@@ -245,7 +245,6 @@ class _TaskListDataState extends State<TaskListData> {
                                                   break;
                                                 }
                                               }
-
                                               for (var deptData
                                                   in profileController
                                                       .departmentDataList) {
