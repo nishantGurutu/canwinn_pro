@@ -484,7 +484,7 @@ class TaskOverview extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Task Updated by',
+                      'Task Edited by',
                       textAlign: TextAlign.start,
                       style: heading7,
                     ),
@@ -523,11 +523,13 @@ class TaskOverview extends StatelessWidget {
                 children: [
                   Text(() {
                     if (data?.updatedAt == null) return "";
-                    final dateTime = DateTime.parse(data?.updatedAt ?? "");
+                    final dateTime =
+                        DateTime.parse(data?.updatedAt ?? "").toLocal();
                     final dayWithSuffix = getDayWithSuffix(dateTime.day);
-                    final formatted =
+                    final formattedDate =
                         "$dayWithSuffix ${DateFormat('MMM yyyy').format(dateTime)}";
-                    return formatted;
+                    final formattedTime = DateFormat('h:mm a').format(dateTime);
+                    return "$formattedDate $formattedTime";
                   }(), style: heading11),
                 ],
               ),
