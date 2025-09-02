@@ -155,6 +155,22 @@ class _MessageScreenState extends State<MessageScreen> {
   final imojiscrollController = ScrollController();
   bool _isEmojiPickerVisible = false;
 
+  RxList<Color> colorList =
+      <Color>[
+        Color(0xff075e54),
+        Color(0xff7f6000),
+        Color(0xff128c7e),
+        Color(0xff741b47),
+        Color(0xff351c75),
+        Color(0xff005d4b),
+        Color(0xff274e13),
+        Color(0xffb45f06),
+        Color(0xff990000),
+        Color(0xffc90076),
+        Color(0xff6a329f),
+        Color(0xff744700),
+      ].obs;
+
   @override
   Widget build(BuildContext context) {
     final int loggedInUserId = StorageHelper.getId();
@@ -454,29 +470,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            isCurrentUser
-                                                                ? SizedBox()
-                                                                : Column(
-                                                                  children: [
-                                                                    if (!isCurrentUser &&
-                                                                        showSenderName &&
-                                                                        widget.type.toString().toLowerCase() ==
-                                                                            "group")
-                                                                      Text(
-                                                                        "${chat.senderName ?? ''}",
-                                                                        style: TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                        ),
-                                                                        maxLines:
-                                                                            100000,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                  ],
-                                                                ),
                                                             SizedBox(
                                                               height: 3.h,
                                                             ),
@@ -547,6 +540,38 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                             crossAxisAlignment:
                                                                                 CrossAxisAlignment.start,
                                                                             children: [
+                                                                              isCurrentUser
+                                                                                  ? SizedBox()
+                                                                                  : Column(
+                                                                                    children: [
+                                                                                      if (!isCurrentUser &&
+                                                                                          showSenderName &&
+                                                                                          widget.type.toString().toLowerCase() ==
+                                                                                              "group")
+                                                                                        Padding(
+                                                                                          padding: EdgeInsets.symmetric(
+                                                                                            horizontal:
+                                                                                                4.w,
+                                                                                          ),
+                                                                                          child: Text(
+                                                                                            "${chat.senderName ?? ''}",
+                                                                                            style: TextStyle(
+                                                                                              fontSize:
+                                                                                                  10.sp,
+                                                                                              fontWeight:
+                                                                                                  FontWeight.w500,
+                                                                                              color:
+                                                                                                  colorList[index %
+                                                                                                      colorList.length],
+                                                                                            ),
+                                                                                            maxLines:
+                                                                                                100000,
+                                                                                            overflow:
+                                                                                                TextOverflow.ellipsis,
+                                                                                          ),
+                                                                                        ),
+                                                                                    ],
+                                                                                  ),
                                                                               if (chat.parentMessageId !=
                                                                                       null &&
                                                                                   chat.parentMessageId !=
