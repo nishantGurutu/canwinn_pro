@@ -42,7 +42,7 @@ class _ToDoListState extends State<ToDoList> {
   void initState() {
     todoController.todoListApi('all');
     todoController.tagListApi();
-    priorityController.priorityApi();
+    priorityController.priorityApi(from: '');
     super.initState();
   }
 
@@ -98,182 +98,189 @@ class _ToDoListState extends State<ToDoList> {
           title: Text(
             todo,
             style: TextStyle(
-                color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+              color: textColor,
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
         ),
         body: Obx(
-          () => todoController.isTodoListLoading.value == true
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Container(
-                  width: double.infinity,
-                  color: backgroundColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 200.w,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    todo,
-                                    style: changeTextColor(
-                                        robotoBlack, darkGreyColor),
-                                  ),
-                                  Text(
-                                    manageYourTask,
-                                    style: changeTextColor(
-                                        rubikRegular, subTextColor),
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Obx(
-                                        () => SizedBox(
-                                          height: 20.h,
-                                          width: 20.w,
-                                          child: Checkbox(
-                                            value: todoController
-                                                .isMarkCompleted.value,
-                                            onChanged: (value) {
-                                              todoController.isMarkCompleted
-                                                  .value = value!;
-                                              for (int i = 0;
+          () =>
+              todoController.isTodoListLoading.value == true
+                  ? Center(child: CircularProgressIndicator())
+                  : Container(
+                    width: double.infinity,
+                    color: backgroundColor,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200.w,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      todo,
+                                      style: changeTextColor(
+                                        robotoBlack,
+                                        darkGreyColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      manageYourTask,
+                                      style: changeTextColor(
+                                        rubikRegular,
+                                        subTextColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Row(
+                                      children: [
+                                        Obx(
+                                          () => SizedBox(
+                                            height: 20.h,
+                                            width: 20.w,
+                                            child: Checkbox(
+                                              value:
+                                                  todoController
+                                                      .isMarkCompleted
+                                                      .value,
+                                              onChanged: (value) {
+                                                todoController
+                                                    .isMarkCompleted
+                                                    .value = value!;
+                                                for (
+                                                  int i = 0;
                                                   i <
                                                       todoController
-                                                          .todoListData.length;
-                                                  i++) {
-                                                todoController
-                                                        .completedTodoCheckList[i] =
-                                                    todoController
-                                                        .todoListData[i].id!;
-                                              }
-                                              if (todoController
-                                                      .isMarkCompleted.value ==
-                                                  true) {
-                                                todoController.completeTodoApi(
+                                                          .todoListData
+                                                          .length;
+                                                  i++
+                                                ) {
+                                                  todoController
+                                                          .completedTodoCheckList[i] =
+                                                      todoController
+                                                          .todoListData[i]
+                                                          .id!;
+                                                }
+                                                if (todoController
+                                                        .isMarkCompleted
+                                                        .value ==
+                                                    true) {
+                                                  todoController.completeTodoApi(
                                                     todoController
                                                         .completedTodoCheckList,
-                                                    1);
-                                              } else {
-                                                todoController.completeTodoApi(
+                                                    1,
+                                                  );
+                                                } else {
+                                                  todoController.completeTodoApi(
                                                     todoController
                                                         .completedTodoCheckList,
-                                                    0);
-                                              }
-                                            },
+                                                    0,
+                                                  );
+                                                }
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      Text(
-                                        markAllAsComplete,
-                                        style: changeTextColor(
-                                            rubikRegular, subTextColor),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                ],
+                                        SizedBox(width: 5.w),
+                                        Text(
+                                          markAllAsComplete,
+                                          style: changeTextColor(
+                                            rubikRegular,
+                                            subTextColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 130.w,
-                              height: 40.h,
-                              child: CustomDropdown<String>(
-                                items: todoController.sortList,
-                                itemLabel: (item) => item,
-                                onChanged: (value) {
-                                  todoController.todoListApi(value);
-                                },
-                                hintText: sortBy,
+                              SizedBox(
+                                width: 130.w,
+                                height: 40.h,
+                                child: CustomDropdown<String>(
+                                  items: todoController.sortList,
+                                  itemLabel: (item) => item,
+                                  onChanged: (value) {
+                                    todoController.todoListApi(value);
+                                  },
+                                  hintText: sortBy,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: InkWell(
-                          onTap: () {
-                            dueDateController.clear();
-                            dueTimeController.clear();
-                            todoController.titleTextEditingController.clear();
-                            todoController.descriptionTextEditingController
-                                .clear();
-                            showModalBottomSheet(
-                              isDismissible: true,
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => addTodoBotomsheet(),
-                            );
-                          },
-                          child: Container(
-                            height: 35.h,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.r),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: InkWell(
+                            onTap: () {
+                              dueDateController.clear();
+                              dueTimeController.clear();
+                              todoController.titleTextEditingController.clear();
+                              todoController.descriptionTextEditingController
+                                  .clear();
+                              showModalBottomSheet(
+                                isDismissible: true,
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => addTodoBotomsheet(),
+                              );
+                            },
+                            child: Container(
+                              height: 35.h,
+                              decoration: BoxDecoration(
+                                color: secondaryColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5.r),
+                                ),
                               ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8.w, vertical: 3.w),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 20.h,
-                                    width: 20.w,
-                                    decoration: BoxDecoration(
-                                      color: whiteColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.w,
+                                  vertical: 3.w,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 20.h,
+                                      width: 20.w,
+                                      decoration: BoxDecoration(
+                                        color: whiteColor,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10.r),
+                                        ),
+                                      ),
+                                      child: Icon(Icons.add, size: 20.h),
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    Text(
+                                      addTodo,
+                                      style: changeTextColor(
+                                        rubikRegular,
+                                        whiteColor,
                                       ),
                                     ),
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 20.h,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  Text(
-                                    addTodo,
-                                    style: changeTextColor(
-                                        rubikRegular, whiteColor),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      todoListWidget(),
-                    ],
+                        SizedBox(height: 10.h),
+                        todoListWidget(),
+                      ],
+                    ),
                   ),
-                ),
         ),
       ),
     );
@@ -281,22 +288,27 @@ class _ToDoListState extends State<ToDoList> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget editBottomSheet(
-      String? title, int? priority, int? tags, String? description, int? id) {
+    String? title,
+    int? priority,
+    int? tags,
+    String? description,
+    int? id,
+  ) {
     return SafeArea(
       child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20.r))),
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(20.r)),
+          ),
           width: double.infinity,
           height: 540.h,
           child: Column(
             children: [
-              SizedBox(
-                height: 5.h,
-              ),
+              SizedBox(height: 5.h),
               Padding(
                 padding: EdgeInsets.only(left: 15.w),
                 child: Row(
@@ -315,9 +327,7 @@ class _ToDoListState extends State<ToDoList> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: Form(
@@ -332,9 +342,7 @@ class _ToDoListState extends State<ToDoList> {
                         keyboardType: TextInputType.emailAddress,
                         data: todoTitle,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      SizedBox(height: 10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -347,23 +355,29 @@ class _ToDoListState extends State<ToDoList> {
                                   hint: Text(
                                     "Select Tag",
                                     style: changeTextColor(
-                                        rubikRegular, darkGreyColor),
+                                      rubikRegular,
+                                      darkGreyColor,
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  items: todoController.tagList
-                                      .map(
-                                        (TagData item) =>
-                                            DropdownMenuItem<TagData>(
-                                          value: item,
-                                          child: Text(
-                                            item.tagName ?? '',
-                                            style: changeTextColor(
-                                                rubikRegular, Colors.black),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
+                                  items:
+                                      todoController.tagList
+                                          .map(
+                                            (TagData item) =>
+                                                DropdownMenuItem<TagData>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.tagName ?? '',
+                                                    style: changeTextColor(
+                                                      rubikRegular,
+                                                      Colors.black,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                          )
+                                          .toList(),
                                   value: todoController.selectedTagData.value,
                                   onChanged: (TagData? value) {},
                                   buttonStyleData: ButtonStyleData(
@@ -375,7 +389,9 @@ class _ToDoListState extends State<ToDoList> {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14.r),
-                                      border: Border.all(color: lightBorderColor),
+                                      border: Border.all(
+                                        color: lightBorderColor,
+                                      ),
                                       color: whiteColor,
                                     ),
                                   ),
@@ -393,10 +409,12 @@ class _ToDoListState extends State<ToDoList> {
                                     maxHeight: 200.h,
                                     width: 160.w,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14.r),
-                                        color: whiteColor,
-                                        border:
-                                            Border.all(color: lightBorderColor)),
+                                      borderRadius: BorderRadius.circular(14.r),
+                                      color: whiteColor,
+                                      border: Border.all(
+                                        color: lightBorderColor,
+                                      ),
+                                    ),
                                     scrollbarTheme: ScrollbarThemeData(
                                       radius: const Radius.circular(40),
                                       thickness:
@@ -407,7 +425,10 @@ class _ToDoListState extends State<ToDoList> {
                                   ),
                                   menuItemStyleData: MenuItemStyleData(
                                     height: 40.h,
-                                    padding: EdgeInsets.only(left: 14, right: 14),
+                                    padding: EdgeInsets.only(
+                                      left: 14,
+                                      right: 14,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -422,28 +443,37 @@ class _ToDoListState extends State<ToDoList> {
                                   hint: Text(
                                     "Select Priority",
                                     style: changeTextColor(
-                                        rubikRegular, darkGreyColor),
+                                      rubikRegular,
+                                      darkGreyColor,
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  items: priorityController.priorityList
-                                      .map(
-                                        (PriorityData item) =>
-                                            DropdownMenuItem<PriorityData>(
-                                          value: item,
-                                          child: Text(
-                                            item.priorityName ?? '',
-                                            style: changeTextColor(
-                                                rubikRegular, Colors.black),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                  value: priorityController
-                                      .selectedPriorityData.value,
+                                  items:
+                                      priorityController.priorityList
+                                          .map(
+                                            (PriorityData item) =>
+                                                DropdownMenuItem<PriorityData>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.priorityName ?? '',
+                                                    style: changeTextColor(
+                                                      rubikRegular,
+                                                      Colors.black,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                          )
+                                          .toList(),
+                                  value:
+                                      priorityController
+                                          .selectedPriorityData
+                                          .value,
                                   onChanged: (PriorityData? value) {
                                     priorityController
-                                        .selectedPriorityData.value = value;
+                                        .selectedPriorityData
+                                        .value = value;
                                   },
                                   buttonStyleData: ButtonStyleData(
                                     height: 45.h,
@@ -454,7 +484,9 @@ class _ToDoListState extends State<ToDoList> {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14.r),
-                                      border: Border.all(color: lightBorderColor),
+                                      border: Border.all(
+                                        color: lightBorderColor,
+                                      ),
                                       color: whiteColor,
                                     ),
                                   ),
@@ -472,10 +504,12 @@ class _ToDoListState extends State<ToDoList> {
                                     maxHeight: 200.h,
                                     width: 160.w,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14.r),
-                                        color: whiteColor,
-                                        border:
-                                            Border.all(color: lightBorderColor)),
+                                      borderRadius: BorderRadius.circular(14.r),
+                                      color: whiteColor,
+                                      border: Border.all(
+                                        color: lightBorderColor,
+                                      ),
+                                    ),
                                     scrollbarTheme: ScrollbarThemeData(
                                       radius: const Radius.circular(40),
                                       thickness:
@@ -486,7 +520,10 @@ class _ToDoListState extends State<ToDoList> {
                                   ),
                                   menuItemStyleData: MenuItemStyleData(
                                     height: 40.h,
-                                    padding: EdgeInsets.only(left: 14, right: 14),
+                                    padding: EdgeInsets.only(
+                                      left: 14,
+                                      right: 14,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -494,9 +531,7 @@ class _ToDoListState extends State<ToDoList> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      SizedBox(height: 10.h),
                       CustomTextField(
                         controller: editDescriptionTextEditingController,
                         textCapitalization: TextCapitalization.sentences,
@@ -505,9 +540,7 @@ class _ToDoListState extends State<ToDoList> {
                         maxLine: 3,
                         data: description,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      SizedBox(height: 10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -519,11 +552,11 @@ class _ToDoListState extends State<ToDoList> {
                                 Text(
                                   alertDate,
                                   style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.w500),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 3.w,
-                                ),
+                                SizedBox(height: 3.w),
                                 CustomCalender(
                                   hintText: dateFormate,
                                   controller: dueDateController,
@@ -539,11 +572,11 @@ class _ToDoListState extends State<ToDoList> {
                                 Text(
                                   alertTime,
                                   style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.w500),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 3.w,
-                                ),
+                                SizedBox(height: 3.w),
                                 CustomTimer(
                                   hintText: alertTime,
                                   controller: dueTimeController,
@@ -553,9 +586,7 @@ class _ToDoListState extends State<ToDoList> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      SizedBox(height: 10.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -577,22 +608,24 @@ class _ToDoListState extends State<ToDoList> {
                                 child: DropdownButton2<String>(
                                   isExpanded: true,
                                   items:
-                                      todoController.timeList.map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          decoration: TextDecoration.none,
-                                          fontFamily: 'Roboto',
-                                          color: darkGreyColor,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    );
-                                  }).toList(),
+                                      todoController.timeList.map((
+                                        String item,
+                                      ) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: TextStyle(
+                                              decoration: TextDecoration.none,
+                                              fontFamily: 'Roboto',
+                                              color: darkGreyColor,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        );
+                                      }).toList(),
                                   value:
                                       todoController.selectedTime!.value.isEmpty
                                           ? null
@@ -605,10 +638,14 @@ class _ToDoListState extends State<ToDoList> {
                                     height: 50.h,
                                     width: double.infinity,
                                     padding: const EdgeInsets.only(
-                                        left: 14, right: 14),
+                                      left: 14,
+                                      right: 14,
+                                    ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14.r),
-                                      border: Border.all(color: lightBorderColor),
+                                      border: Border.all(
+                                        color: lightBorderColor,
+                                      ),
                                       color: whiteColor,
                                     ),
                                   ),
@@ -637,10 +674,12 @@ class _ToDoListState extends State<ToDoList> {
                                     maxHeight: 200,
                                     width: 330,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14.r),
-                                        color: whiteColor,
-                                        border:
-                                            Border.all(color: lightBorderColor)),
+                                      borderRadius: BorderRadius.circular(14.r),
+                                      color: whiteColor,
+                                      border: Border.all(
+                                        color: lightBorderColor,
+                                      ),
+                                    ),
                                     offset: const Offset(0, 0),
                                     scrollbarTheme: ScrollbarThemeData(
                                       radius: const Radius.circular(40),
@@ -652,7 +691,10 @@ class _ToDoListState extends State<ToDoList> {
                                   ),
                                   menuItemStyleData: const MenuItemStyleData(
                                     height: 40,
-                                    padding: EdgeInsets.only(left: 14, right: 14),
+                                    padding: EdgeInsets.only(
+                                      left: 14,
+                                      right: 14,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -660,9 +702,7 @@ class _ToDoListState extends State<ToDoList> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
+                      SizedBox(height: 15.h),
                       InkWell(
                         onTap: () {
                           selectAttachmentDialog(context);
@@ -684,23 +724,20 @@ class _ToDoListState extends State<ToDoList> {
                                 'assets/images/png/attachment-icon.png',
                                 width: 35.w,
                               ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
+                              SizedBox(width: 10.w),
                               Text(
                                 'Add Attachment',
                                 style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500),
-                              )
+                                  color: textColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
+                      SizedBox(height: 15.h),
                       Row(
                         children: [
                           InkWell(
@@ -719,15 +756,15 @@ class _ToDoListState extends State<ToDoList> {
                               child: Center(
                                 child: Text(
                                   cancel,
-                                  style:
-                                      changeTextColor(rubikRegular, whiteColor),
+                                  style: changeTextColor(
+                                    rubikRegular,
+                                    whiteColor,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 20.w,
-                          ),
+                          SizedBox(width: 20.w),
                           InkWell(
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
@@ -735,7 +772,9 @@ class _ToDoListState extends State<ToDoList> {
                                   editTitleTextEditingController.text,
                                   todoController.selectedTagData.value?.id,
                                   priorityController
-                                      .selectedPriorityData.value?.id,
+                                      .selectedPriorityData
+                                      .value
+                                      ?.id,
                                   editDescriptionTextEditingController.text,
                                   id,
                                   dueDateController.text,
@@ -757,8 +796,10 @@ class _ToDoListState extends State<ToDoList> {
                               child: Center(
                                 child: Text(
                                   edit,
-                                  style:
-                                      changeTextColor(rubikRegular, whiteColor),
+                                  style: changeTextColor(
+                                    rubikRegular,
+                                    whiteColor,
+                                  ),
                                 ),
                               ),
                             ),
@@ -781,20 +822,20 @@ class _ToDoListState extends State<ToDoList> {
   Widget addTodoBotomsheet() {
     return SafeArea(
       child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20.r))),
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(20.r)),
+          ),
           width: double.infinity,
           height: 540.h,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 5.h,
-                ),
+                SizedBox(height: 5.h),
                 Padding(
                   padding: EdgeInsets.only(left: 15.w),
                   child: Row(
@@ -813,9 +854,7 @@ class _ToDoListState extends State<ToDoList> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 10.h,
-                ),
+                SizedBox(height: 10.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: Form(
@@ -830,9 +869,7 @@ class _ToDoListState extends State<ToDoList> {
                           keyboardType: TextInputType.emailAddress,
                           data: todoTitle,
                         ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
+                        SizedBox(height: 10.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -853,17 +890,16 @@ class _ToDoListState extends State<ToDoList> {
                                 items: priorityController.priorityList,
                                 itemLabel: (item) => item.priorityName ?? '',
                                 onChanged: (value) {
-                                  priorityController.selectedPriorityData.value =
-                                      value;
+                                  priorityController
+                                      .selectedPriorityData
+                                      .value = value;
                                 },
                                 hintText: selectPriority,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
+                        SizedBox(height: 10.h),
                         CustomTextField(
                           controller:
                               todoController.descriptionTextEditingController,
@@ -873,9 +909,7 @@ class _ToDoListState extends State<ToDoList> {
                           maxLine: 3,
                           data: description,
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
+                        SizedBox(height: 15.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -887,12 +921,11 @@ class _ToDoListState extends State<ToDoList> {
                                   Text(
                                     alertDate,
                                     style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: 3.w,
-                                  ),
+                                  SizedBox(height: 3.w),
                                   CustomCalender(
                                     hintText: dateFormate,
                                     controller: dueDateController,
@@ -908,12 +941,11 @@ class _ToDoListState extends State<ToDoList> {
                                   Text(
                                     alertTime,
                                     style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: 3.w,
-                                  ),
+                                  SizedBox(height: 3.w),
                                   CustomTimer(
                                     hintText: alertTime,
                                     controller: dueTimeController,
@@ -923,17 +955,15 @@ class _ToDoListState extends State<ToDoList> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
+                        SizedBox(height: 15.h),
                         Text(
                           'Before Due',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
+                        SizedBox(height: 5.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -955,27 +985,34 @@ class _ToDoListState extends State<ToDoList> {
                                 () => DropdownButtonHideUnderline(
                                   child: DropdownButton2<String>(
                                     isExpanded: true,
-                                    items: todoController.timeList
-                                        .map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Roboto',
-                                            color: darkGreyColor,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      );
-                                    }).toList(),
+                                    items:
+                                        todoController.timeList.map((
+                                          String item,
+                                        ) {
+                                          return DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                fontFamily: 'Roboto',
+                                                color: darkGreyColor,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          );
+                                        }).toList(),
                                     value:
-                                        todoController.selectedTime!.value.isEmpty
+                                        todoController
+                                                .selectedTime!
+                                                .value
+                                                .isEmpty
                                             ? null
-                                            : todoController.selectedTime?.value,
+                                            : todoController
+                                                .selectedTime
+                                                ?.value,
                                     onChanged: (String? value) {
                                       todoController.selectedTime?.value =
                                           value ?? '';
@@ -983,11 +1020,16 @@ class _ToDoListState extends State<ToDoList> {
                                     buttonStyleData: ButtonStyleData(
                                       width: double.infinity,
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w, vertical: 4.h),
+                                        horizontal: 10.w,
+                                        vertical: 4.h,
+                                      ),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14.r),
-                                        border:
-                                            Border.all(color: lightBorderColor),
+                                        borderRadius: BorderRadius.circular(
+                                          14.r,
+                                        ),
+                                        border: Border.all(
+                                          color: lightBorderColor,
+                                        ),
                                         color: whiteColor,
                                       ),
                                     ),
@@ -1016,11 +1058,14 @@ class _ToDoListState extends State<ToDoList> {
                                       maxHeight: 200.h,
                                       width: 160.w,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14.r),
-                                          color: whiteColor,
-                                          border: Border.all(
-                                              color: lightBorderColor)),
+                                        borderRadius: BorderRadius.circular(
+                                          14.r,
+                                        ),
+                                        color: whiteColor,
+                                        border: Border.all(
+                                          color: lightBorderColor,
+                                        ),
+                                      ),
                                       offset: const Offset(0, 0),
                                       scrollbarTheme: ScrollbarThemeData(
                                         radius: const Radius.circular(40),
@@ -1032,7 +1077,9 @@ class _ToDoListState extends State<ToDoList> {
                                     ),
                                     menuItemStyleData: MenuItemStyleData(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w, vertical: 3.h),
+                                        horizontal: 10.w,
+                                        vertical: 3.h,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1040,9 +1087,7 @@ class _ToDoListState extends State<ToDoList> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
+                        SizedBox(height: 15.h),
                         InkWell(
                           onTap: () {
                             selectAttachmentDialog(context);
@@ -1064,23 +1109,20 @@ class _ToDoListState extends State<ToDoList> {
                                   'assets/images/png/attachment-icon.png',
                                   width: 35.w,
                                 ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
+                                SizedBox(width: 10.w),
                                 Text(
                                   'Add Attachment',
                                   style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                )
+                                    color: textColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
+                        SizedBox(height: 15.h),
                         Row(
                           children: [
                             InkWell(
@@ -1097,18 +1139,19 @@ class _ToDoListState extends State<ToDoList> {
                                 child: Center(
                                   child: Text(
                                     cancel,
-                                    style:
-                                        changeTextColor(rubikRegular, whiteColor),
+                                    style: changeTextColor(
+                                      rubikRegular,
+                                      whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
+                            SizedBox(width: 20.w),
                             InkWell(
                               onTap: () {
-                                if (todoController.isTodoAdding.value == false) {
+                                if (todoController.isTodoAdding.value ==
+                                    false) {
                                   if (_formKey.currentState!.validate()) {
                                     if (todoController.isTodoAdding.value ==
                                         false) {
@@ -1117,24 +1160,31 @@ class _ToDoListState extends State<ToDoList> {
                                           .isNotEmpty) {
                                         todoController.addTodoApi(
                                           todoController
-                                              .titleTextEditingController.text,
+                                              .titleTextEditingController
+                                              .text,
                                           todoController
-                                              .selectedTagData.value?.id,
+                                              .selectedTagData
+                                              .value
+                                              ?.id,
                                           priorityController
-                                              .selectedPriorityData.value?.id,
+                                              .selectedPriorityData
+                                              .value
+                                              ?.id,
                                           todoController
                                               .descriptionTextEditingController
                                               .text,
                                           dueTimeController.text,
                                           dueDateController.text,
                                           todoController
-                                              .timeTextEditingController.text,
+                                              .timeTextEditingController
+                                              .text,
                                           todoController.selectedTime?.value ??
                                               "",
                                         );
                                       } else {
                                         CustomToast().showCustomToast(
-                                            "Please select reminder type");
+                                          "Please select reminder type",
+                                        );
                                       }
                                     }
                                   }
@@ -1152,8 +1202,10 @@ class _ToDoListState extends State<ToDoList> {
                                 child: Center(
                                   child: Text(
                                     submit,
-                                    style:
-                                        changeTextColor(rubikRegular, whiteColor),
+                                    style: changeTextColor(
+                                      rubikRegular,
+                                      whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -1172,9 +1224,7 @@ class _ToDoListState extends State<ToDoList> {
     );
   }
 
-  Future<void> selectAttachmentDialog(
-    BuildContext context,
-  ) async {
+  Future<void> selectAttachmentDialog(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
@@ -1219,16 +1269,15 @@ class _ToDoListState extends State<ToDoList> {
                                 height: 20.h,
                                 color: whiteColor,
                               ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
+                              SizedBox(width: 8.w),
                               Text(
                                 'Gallery',
                                 style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: whiteColor),
-                              )
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: whiteColor,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -1249,29 +1298,23 @@ class _ToDoListState extends State<ToDoList> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.camera,
-                                color: whiteColor,
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
+                              Icon(Icons.camera, color: whiteColor),
+                              SizedBox(width: 8.w),
                               Text(
                                 'Camera',
                                 style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: whiteColor),
-                              )
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: whiteColor,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
+                  SizedBox(height: 15.h),
                 ],
               ),
             ),
@@ -1285,8 +1328,10 @@ class _ToDoListState extends State<ToDoList> {
 
   Future<void> takeAttachment(ImageSource source) async {
     try {
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
       if (pickedImage == null) {
         return;
       }
@@ -1651,266 +1696,372 @@ class _ToDoListState extends State<ToDoList> {
   }*/
   Widget todoListWidget() {
     return Obx(
-          () => priorityController.isPriorityLoading.value &&
-          todoController.isTodoListLoading.value &&
-          todoController.isTagLoading.value
-          ? Expanded(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      )
-          : todoController.todoListData.isEmpty
-          ? Expanded(
-        child: Center(
-          child: Text(noData),
-        ),
-      )
-          : Expanded(
-        child: ListView.builder(
-          itemCount: todoController.todoListData.length,
-          itemBuilder: (context, index) {
-            String priorityName = '';
-            if (todoController.todoListData[index].priority != null) {
-              final priorityId1 =
-                  todoController.todoListData[index].priority;
-              final priority1 = priorityController.priorityList.firstWhere(
-                    (priority1) => priority1.id == priorityId1,
-                orElse: () => PriorityData(id: 0, priorityName: 'Unknown'),
-              );
-              priorityName = priority1.priorityName ?? 'Unknown';
-            }
-            return Column(
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    await showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) => Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: viewTodo(context, todoController.todoListData[index]),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: lightGreyColor.withOpacity(0.2),
-                            blurRadius: 13.0,
-                            spreadRadius: 2,
-                            blurStyle: BlurStyle.normal,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.w, top: 10.h, bottom: 10.h),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: Obx(
-                                    () => SizedBox(
-                                  height: 20.h,
-                                  width: 20.w,
-                                  child: Checkbox(
-                                    value: todoController.todoListCheckbox[index],
-                                    onChanged: (value) {
-                                      // Only allow checking, not unchecking
-                                      if (value == true &&
-                                          !todoController.todoListCheckbox[index]) {
-                                        todoController.todoListCheckbox[index] = value!;
-                                        todoController.completedTodoCheckList
-                                            .add(todoController.todoListData[index].id ?? 0);
-                                        todoController.completeTodoApi(
-                                          todoController.completedTodoCheckList,
-                                          1,
-                                        );
-                                      }
-                                    },
-                                  ),
+      () =>
+          priorityController.isPriorityLoading.value &&
+                  todoController.isTodoListLoading.value &&
+                  todoController.isTagLoading.value
+              ? Expanded(child: Center(child: CircularProgressIndicator()))
+              : todoController.todoListData.isEmpty
+              ? Expanded(child: Center(child: Text(noData)))
+              : Expanded(
+                child: ListView.builder(
+                  itemCount: todoController.todoListData.length,
+                  itemBuilder: (context, index) {
+                    String priorityName = '';
+                    if (todoController.todoListData[index].priority != null) {
+                      final priorityId1 =
+                          todoController.todoListData[index].priority;
+                      final priority1 = priorityController.priorityList
+                          .firstWhere(
+                            (priority1) => priority1.id == priorityId1,
+                            orElse:
+                                () => PriorityData(
+                                  id: 0,
+                                  priorityName: 'Unknown',
                                 ),
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Container(
-                              width: 263.w,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${todoController.todoListData[index].title ?? ''}",
-                                    style: changeTextColor(rubikBlack, darkGreyColor),
+                          );
+                      priorityName = priority1.priorityName ?? 'Unknown';
+                    }
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder:
+                                  (context) => Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(
+                                            context,
+                                          ).viewInsets.bottom,
+                                    ),
+                                    child: viewTodo(
+                                      context,
+                                      todoController.todoListData[index],
+                                    ),
                                   ),
-                                  SizedBox(height: 5.h),
-                                  Text(
-                                    "${todoController.todoListData[index].description ?? ""}",
-                                    style: changeTextColor(rubikRegular, subTextColor),
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 70.w,
-                                        height: 30.h,
-                                        decoration: BoxDecoration(
-                                          color: priorityName.toLowerCase() == "low"
-                                              ? Color(0xff0086FF)
-                                              : priorityName.toLowerCase() == "medium"
-                                              ? Color(0xffFF8700)
-                                              : Color(0xffFF0005),
-                                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "$priorityName",
-                                            style: TextStyle(
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: whiteColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        '${todoController.todoListData[index].alertDate ?? ""} ${todoController.todoListData[index].alertTime ?? ""}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.r),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: lightGreyColor.withOpacity(0.2),
+                                    blurRadius: 13.0,
+                                    spreadRadius: 2,
+                                    blurStyle: BlurStyle.normal,
+                                    offset: Offset(0, 4),
                                   ),
                                 ],
                               ),
-                            ),
-                            Container(
-                              width: 30.w,
-                              child: Center(
-                                child: PopupMenuButton(
-                                  itemBuilder: (context) {
-                                    List<PopupMenuItem> menuItems = [];
-                                    if (!todoController.todoListCheckbox[index]) {
-                                      menuItems.add(
-                                        PopupMenuItem(
-                                          onTap: () {
-                                            editTitleTextEditingController.text =
-                                                todoController.todoListData[index].title.toString();
-                                            editDescriptionTextEditingController.text =
-                                                todoController.todoListData[index].description.toString();
-                                            dueDateController.clear();
-                                            dueTimeController.clear();
-                                            for (var tagid in todoController.tagList) {
-                                              if (todoController.todoListData[index].tags.toString() ==
-                                                  tagid.id.toString()) {
-                                                todoController.selectedTagData.value = tagid;
-                                                break;
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: 10.w,
+                                  top: 10.h,
+                                  bottom: 10.h,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 10.h),
+                                      child: Obx(
+                                        () => SizedBox(
+                                          height: 20.h,
+                                          width: 20.w,
+                                          child: Checkbox(
+                                            value:
+                                                todoController
+                                                    .todoListCheckbox[index],
+                                            onChanged: (value) {
+                                              // Only allow checking, not unchecking
+                                              if (value == true &&
+                                                  !todoController
+                                                      .todoListCheckbox[index]) {
+                                                todoController
+                                                        .todoListCheckbox[index] =
+                                                    value!;
+                                                todoController
+                                                    .completedTodoCheckList
+                                                    .add(
+                                                      todoController
+                                                              .todoListData[index]
+                                                              .id ??
+                                                          0,
+                                                    );
+                                                todoController.completeTodoApi(
+                                                  todoController
+                                                      .completedTodoCheckList,
+                                                  1,
+                                                );
                                               }
-                                            }
-                                            for (var priorityid in priorityController.priorityList) {
-                                              if (todoController.todoListData[index].priority.toString() ==
-                                                  priorityid.id.toString()) {
-                                                priorityController.selectedPriorityData.value = priorityid;
-                                                break;
-                                              }
-                                            }
-                                            dueDateController.text =
-                                                todoController.todoListData[index].alertDate ?? "";
-                                            dueTimeController.text =
-                                                todoController.todoListData[index].alertTime ?? "";
-                                            editTimeTextEditingController.text =
-                                                (todoController.todoListData[index].reminder ?? "").substring(0, 1);
-                                            todoController.selectedTime?.value =
-                                                (todoController.todoListData[index].reminder ?? "").substring(4);
-                                            showModalBottomSheet(
-                                              isDismissible: true,
-                                              context: context,
-                                              isScrollControlled: true,
-                                              builder: (context) => editBottomSheet(
-                                                todoController.todoListData[index].title,
-                                                todoController.todoListData[index].priority,
-                                                todoController.todoListData[index].tags,
-                                                todoController.todoListData[index].description,
-                                                todoController.todoListData[index].id,
-                                              ),
-                                            );
-                                          },
-                                          child: Text(edit),
+                                            },
+                                          ),
                                         ),
-                                      );
-                                    }
-                                    menuItems.add(
-                                      PopupMenuItem(
-                                        onTap: () {
-                                          if (!todoController.isTodoDeleting.value) {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text("Confirm Delete"),
-                                                  content: Text("Are you sure you want to delete this todo?"),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop(); // Close dialog
-                                                      },
-                                                      child: Text("Cancel"),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Container(
+                                      width: 263.w,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${todoController.todoListData[index].title ?? ''}",
+                                            style: changeTextColor(
+                                              rubikBlack,
+                                              darkGreyColor,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            "${todoController.todoListData[index].description ?? ""}",
+                                            style: changeTextColor(
+                                              rubikRegular,
+                                              subTextColor,
+                                            ),
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 70.w,
+                                                height: 30.h,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      priorityName.toLowerCase() ==
+                                                              "low"
+                                                          ? Color(0xff0086FF)
+                                                          : priorityName
+                                                                  .toLowerCase() ==
+                                                              "medium"
+                                                          ? Color(0xffFF8700)
+                                                          : Color(0xffFF0005),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radius.circular(5.r),
+                                                      ),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "$priorityName",
+                                                    style: TextStyle(
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: whiteColor,
                                                     ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop(); // Close dialog
-                                                        todoController.deleteTodoApi(
-                                                          todoController.todoListData[index].id,
+                                                  ),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                '${todoController.todoListData[index].alertDate ?? ""} ${todoController.todoListData[index].alertTime ?? ""}',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 30.w,
+                                      child: Center(
+                                        child: PopupMenuButton(
+                                          itemBuilder: (context) {
+                                            List<PopupMenuItem> menuItems = [];
+                                            if (!todoController
+                                                .todoListCheckbox[index]) {
+                                              menuItems.add(
+                                                PopupMenuItem(
+                                                  onTap: () {
+                                                    editTitleTextEditingController
+                                                        .text = todoController
+                                                            .todoListData[index]
+                                                            .title
+                                                            .toString();
+                                                    editDescriptionTextEditingController
+                                                        .text = todoController
+                                                            .todoListData[index]
+                                                            .description
+                                                            .toString();
+                                                    dueDateController.clear();
+                                                    dueTimeController.clear();
+                                                    for (var tagid
+                                                        in todoController
+                                                            .tagList) {
+                                                      if (todoController
+                                                              .todoListData[index]
+                                                              .tags
+                                                              .toString() ==
+                                                          tagid.id.toString()) {
+                                                        todoController
+                                                            .selectedTagData
+                                                            .value = tagid;
+                                                        break;
+                                                      }
+                                                    }
+                                                    for (var priorityid
+                                                        in priorityController
+                                                            .priorityList) {
+                                                      if (todoController
+                                                              .todoListData[index]
+                                                              .priority
+                                                              .toString() ==
+                                                          priorityid.id
+                                                              .toString()) {
+                                                        priorityController
+                                                            .selectedPriorityData
+                                                            .value = priorityid;
+                                                        break;
+                                                      }
+                                                    }
+                                                    dueDateController.text =
+                                                        todoController
+                                                            .todoListData[index]
+                                                            .alertDate ??
+                                                        "";
+                                                    dueTimeController.text =
+                                                        todoController
+                                                            .todoListData[index]
+                                                            .alertTime ??
+                                                        "";
+                                                    editTimeTextEditingController
+                                                        .text = (todoController
+                                                                .todoListData[index]
+                                                                .reminder ??
+                                                            "")
+                                                        .substring(0, 1);
+                                                    todoController
+                                                        .selectedTime
+                                                        ?.value = (todoController
+                                                                .todoListData[index]
+                                                                .reminder ??
+                                                            "")
+                                                        .substring(4);
+                                                    showModalBottomSheet(
+                                                      isDismissible: true,
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      builder:
+                                                          (
+                                                            context,
+                                                          ) => editBottomSheet(
+                                                            todoController
+                                                                .todoListData[index]
+                                                                .title,
+                                                            todoController
+                                                                .todoListData[index]
+                                                                .priority,
+                                                            todoController
+                                                                .todoListData[index]
+                                                                .tags,
+                                                            todoController
+                                                                .todoListData[index]
+                                                                .description,
+                                                            todoController
+                                                                .todoListData[index]
+                                                                .id,
+                                                          ),
+                                                    );
+                                                  },
+                                                  child: Text(edit),
+                                                ),
+                                              );
+                                            }
+                                            menuItems.add(
+                                              PopupMenuItem(
+                                                onTap: () {
+                                                  if (!todoController
+                                                      .isTodoDeleting
+                                                      .value) {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (
+                                                        BuildContext context,
+                                                      ) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                            "Confirm Delete",
+                                                          ),
+                                                          content: Text(
+                                                            "Are you sure you want to delete this todo?",
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                  context,
+                                                                ).pop(); // Close dialog
+                                                              },
+                                                              child: Text(
+                                                                "Cancel",
+                                                              ),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                  context,
+                                                                ).pop(); // Close dialog
+                                                                todoController
+                                                                    .deleteTodoApi(
+                                                                      todoController
+                                                                          .todoListData[index]
+                                                                          .id,
+                                                                    );
+                                                              },
+                                                              child: Text(
+                                                                "OK",
+                                                                style: TextStyle(
+                                                                  color:
+                                                                      Colors
+                                                                          .red,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         );
                                                       },
-                                                      child: Text(
-                                                        "OK",
-                                                        style: TextStyle(color: Colors.red),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
+                                                    );
+                                                  }
+                                                },
+                                                child: Text(delete),
+                                              ),
                                             );
-                                          }
-                                        },
-                                        child: Text(delete),
+                                            return menuItems;
+                                          },
+                                        ),
                                       ),
-                                    );
-                                    return menuItems;
-                                  },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+                        SizedBox(height: 10.h),
+                      ],
+                    );
+                  },
                 ),
-                SizedBox(height: 10.h),
-              ],
-            );
-          },
-        ),
-      ),
+              ),
     );
   }
 
-  Widget viewTodo(
-    BuildContext context,
-    TodoData todoListData,
-  ) {
+  Widget viewTodo(BuildContext context, TodoData todoListData) {
     return Stack(
       children: [
         Container(
@@ -1927,9 +2078,7 @@ class _ToDoListState extends State<ToDoList> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 15.h,
-                  ),
+                  SizedBox(height: 15.h),
                   Text(
                     "${todoListData.title ?? ""}",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
@@ -1953,16 +2102,15 @@ class _ToDoListState extends State<ToDoList> {
           ),
         ),
         Positioned(
-            right: 10.w,
-            top: 5.h,
-            child: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Icon(
-                Icons.close,
-              ),
-            ))
+          right: 10.w,
+          top: 5.h,
+          child: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Icon(Icons.close),
+          ),
+        ),
       ],
     );
   }

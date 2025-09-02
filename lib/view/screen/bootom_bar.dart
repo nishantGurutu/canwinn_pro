@@ -135,7 +135,7 @@ class _BottomNavigationBarExampleState
     }
 
     profilePicPath.value = await StorageHelper.getImage() ?? "";
-    await priorityController.priorityApi();
+    await priorityController.priorityApi(from: '');
     await taskController.allProjectListApi();
     await taskController.responsiblePersonListApi(
       StorageHelper.getDepartmentId(),

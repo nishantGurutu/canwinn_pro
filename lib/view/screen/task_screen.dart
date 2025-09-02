@@ -68,7 +68,6 @@ class _TaskListPageState extends State<TaskScreenPage> {
     );
     taskController.selectedTaskType.value = widget.taskType;
     taskController.selectedAssignedTask.value = widget.assignedType;
-    priorityController.priorityApi();
     taskController.allProjectListApi();
     taskController.taskListApi(
       widget.taskType,

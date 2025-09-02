@@ -16,8 +16,12 @@ class TaskOverview extends StatelessWidget {
   final TaskDetailsData? data;
   final int? taskId;
   final DiscussionController discussionController;
-  const TaskOverview(this.data, this.taskId, this.discussionController,
-      {super.key});
+  const TaskOverview(
+    this.data,
+    this.taskId,
+    this.discussionController, {
+    super.key,
+  });
   String _formatDate(String dateStr) {
     try {
       final inputFormat = DateFormat('dd-MM-yyyy');
@@ -41,9 +45,10 @@ class TaskOverview extends StatelessWidget {
               child: Text(
                 "${data?.title ?? ''}",
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: textColor),
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
           ],
@@ -61,13 +66,15 @@ class TaskOverview extends StatelessWidget {
                 trimExpandedText: '  Show less',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 moreStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
+                ),
                 lessStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: secondaryColor),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: secondaryColor,
+                ),
               ),
             ),
           ],
@@ -81,21 +88,23 @@ class TaskOverview extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child:
-                        progressListBottomSheet(context, data?.progress ?? []),
-                  ),
+                  builder:
+                      (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: progressListBottomSheet(
+                          context,
+                          data?.progress ?? [],
+                        ),
+                      ),
                 );
               },
               child: Container(
                 width: 100.w,
                 decoration: BoxDecoration(
                   color: darkBlue,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(7),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(7)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -106,15 +115,11 @@ class TaskOverview extends StatelessWidget {
                         height: 20.h,
                         width: 20.w,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.r),
-                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         child: SvgPicture.asset(timerIcon),
                       ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
+                      SizedBox(width: 5.w),
                       Column(
                         children: [
                           Text(
@@ -137,21 +142,23 @@ class TaskOverview extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child:
-                        progressListBottomSheet(context, data?.progress ?? []),
-                  ),
+                  builder:
+                      (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: progressListBottomSheet(
+                          context,
+                          data?.progress ?? [],
+                        ),
+                      ),
                 );
               },
               child: Container(
                 width: 100.w,
                 decoration: BoxDecoration(
                   color: darkBlue,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(7),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(7)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -162,15 +169,11 @@ class TaskOverview extends StatelessWidget {
                         height: 20.h,
                         width: 20.w,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.r),
-                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         child: SvgPicture.asset(hourglassIcon),
                       ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
+                      SizedBox(width: 5.w),
                       Column(
                         children: [
                           Text(
@@ -193,21 +196,23 @@ class TaskOverview extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child:
-                        progressListBottomSheet(context, data?.progress ?? []),
-                  ),
+                  builder:
+                      (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: progressListBottomSheet(
+                          context,
+                          data?.progress ?? [],
+                        ),
+                      ),
                 );
               },
               child: Container(
                 width: 100.w,
                 decoration: BoxDecoration(
                   color: darkBlue,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(7),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(7)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -217,18 +222,14 @@ class TaskOverview extends StatelessWidget {
                         height: 20.h,
                         width: 20.w,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.r),
-                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         ),
                         child: SvgPicture.asset(
                           calenderTaskicon,
                           color: whiteColor,
                         ),
                       ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
+                      SizedBox(width: 5.w),
                       Column(
                         children: [
                           Text(
@@ -256,20 +257,22 @@ class TaskOverview extends StatelessWidget {
                 "Contacts",
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                    color: textColor),
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
               ),
             ),
-            SizedBox(
-              width: 10.w,
-            ),
+            SizedBox(width: 10.w),
             if ((data?.contacts?.length ?? 0) > 0)
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Get.to(() => TaskContactList(
-                        data!.contacts?.obs ?? <ContactsData>[].obs));
+                    Get.to(
+                      () => TaskContactList(
+                        data!.contacts?.obs ?? <ContactsData>[].obs,
+                      ),
+                    );
                   },
                   child: SizedBox(
                     width: 100.w,
@@ -282,14 +285,16 @@ class TaskOverview extends StatelessWidget {
                         (index) {
                           if (index < 3) {
                             final contact = data?.contacts?[index];
-                            final firstChar = contact!.name!.isNotEmpty
-                                ? contact.name![0]
-                                : '?';
+                            final firstChar =
+                                contact!.name!.isNotEmpty
+                                    ? contact.name![0]
+                                    : '?';
                             final leftPosition =
                                 index == 0 ? 0.0 : (index == 1 ? 22.w : 44.w);
-                            final bgColor = index == 0
-                                ? redColor
-                                : index == 1
+                            final bgColor =
+                                index == 0
+                                    ? redColor
+                                    : index == 1
                                     ? blueColor
                                     : secondaryColor;
 
@@ -300,14 +305,17 @@ class TaskOverview extends StatelessWidget {
                                 width: 30.w,
                                 decoration: BoxDecoration(
                                   color: bgColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                 ),
                                 child: Center(
                                   child: Text(
                                     firstChar,
-                                    style:
-                                        changeTextColor(heading9, whiteColor),
+                                    style: changeTextColor(
+                                      heading9,
+                                      whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -321,14 +329,17 @@ class TaskOverview extends StatelessWidget {
                                 width: 30.w,
                                 decoration: BoxDecoration(
                                   color: primaryButtonColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                 ),
                                 child: Center(
                                   child: Text(
                                     '+$extraCount',
-                                    style:
-                                        changeTextColor(heading9, whiteColor),
+                                    style: changeTextColor(
+                                      heading9,
+                                      whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -361,36 +372,39 @@ class TaskOverview extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: data?.priorityName.toString().toLowerCase() ==
-                              'medium'
-                          ? warmYellowColor
-                          : data?.priorityName.toString().toLowerCase() == 'low'
+                      color:
+                          data?.priorityName.toString().toLowerCase() ==
+                                  'medium'
+                              ? warmYellowColor
+                              : data?.priorityName.toString().toLowerCase() ==
+                                  'low'
                               ? secondaryTextColorLow
                               : blueColor.withOpacity(0.28),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(11.r),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(11.r)),
                     ),
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 3),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 3,
+                      ),
                       child: Text(
                         "${data?.priorityName ?? ''}",
                         style: changeTextColor(
-                            heading11,
-                            data?.priorityName.toString().toLowerCase() ==
-                                    'medium'
-                                ? mediumColor
-                                : data?.priorityName.toString().toLowerCase() ==
-                                        'low'
-                                    ? secondaryTextColor
-                                    : blueColor),
+                          heading11,
+                          data?.priorityName.toString().toLowerCase() ==
+                                  'medium'
+                              ? mediumColor
+                              : data?.priorityName.toString().toLowerCase() ==
+                                  'low'
+                              ? secondaryTextColor
+                              : blueColor,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         Divider(),
@@ -402,8 +416,11 @@ class TaskOverview extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text('Task Created by',
-                        textAlign: TextAlign.start, style: heading7),
+                    child: Text(
+                      'Task Created by',
+                      textAlign: TextAlign.start,
+                      style: heading7,
+                    ),
                   ),
                 ],
               ),
@@ -411,14 +428,9 @@ class TaskOverview extends StatelessWidget {
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "${data?.creatorName}",
-                    style: heading11,
-                  )
-                ],
+                children: [Text("${data?.creatorName}", style: heading11)],
               ),
-            )
+            ),
           ],
         ),
         Row(
@@ -429,8 +441,11 @@ class TaskOverview extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text('& Date Time',
-                        textAlign: TextAlign.start, style: heading7),
+                    child: Text(
+                      '& Date Time',
+                      textAlign: TextAlign.start,
+                      style: heading7,
+                    ),
                   ),
                 ],
               ),
@@ -438,14 +453,60 @@ class TaskOverview extends StatelessWidget {
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                children: [Text("${data?.taskDate}", style: heading11)],
+              ),
+            ),
+          ],
+        ),
+        Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "${data?.taskDate}",
-                    style: heading11,
-                  )
+                  Expanded(
+                    child: Text(
+                      'Task Updated by',
+                      textAlign: TextAlign.start,
+                      style: heading7,
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [Text("${data?.creatorName}", style: heading11)],
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '& Date Time',
+                      textAlign: TextAlign.start,
+                      style: heading7,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [Text("${data?.updatedAt}", style: heading11)],
+              ),
+            ),
           ],
         ),
         Divider(),
@@ -458,9 +519,7 @@ class TaskOverview extends StatelessWidget {
                 style: heading7,
               ),
             ),
-            SizedBox(
-              width: 10.w,
-            ),
+            SizedBox(width: 10.w),
             if ((data?.assignedUsers?.length ?? 0) > 0)
               Expanded(
                 child: InkWell(
@@ -468,12 +527,16 @@ class TaskOverview extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      builder: (context) => Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: TaskDetailsUserList(
-                            data?.assignedUsersList ?? [], "Assigned"),
-                      ),
+                      builder:
+                          (context) => Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: TaskDetailsUserList(
+                              data?.assignedUsersList ?? [],
+                              "Assigned",
+                            ),
+                          ),
                     );
                   },
                   child: SizedBox(
@@ -488,9 +551,10 @@ class TaskOverview extends StatelessWidget {
                           if (index < 3) {
                             final leftPosition =
                                 index == 0 ? 0.0 : (index == 1 ? 22.w : 44.w);
-                            final bgColor = index == 0
-                                ? redColor
-                                : index == 1
+                            final bgColor =
+                                index == 0
+                                    ? redColor
+                                    : index == 1
                                     ? blueColor
                                     : secondaryColor;
 
@@ -501,12 +565,14 @@ class TaskOverview extends StatelessWidget {
                                 width: 30.w,
                                 decoration: BoxDecoration(
                                   color: backgroundColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                   child: Image.network(
                                     '${data?.assignedUsersList?[index].image ?? ""}',
                                     fit: BoxFit.cover,
@@ -517,7 +583,8 @@ class TaskOverview extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: backgroundColor,
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(15.r)),
+                                            Radius.circular(15.r),
+                                          ),
                                         ),
                                       );
                                     },
@@ -535,14 +602,17 @@ class TaskOverview extends StatelessWidget {
                                 width: 30.w,
                                 decoration: BoxDecoration(
                                   color: primaryButtonColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                 ),
                                 child: Center(
                                   child: Text(
                                     '+$extraCount',
-                                    style:
-                                        changeTextColor(heading9, whiteColor),
+                                    style: changeTextColor(
+                                      heading9,
+                                      whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -565,8 +635,11 @@ class TaskOverview extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text('Status',
-                        textAlign: TextAlign.start, style: heading6),
+                    child: Text(
+                      'Status',
+                      textAlign: TextAlign.start,
+                      style: heading6,
+                    ),
                   ),
                 ],
               ),
@@ -577,20 +650,23 @@ class TaskOverview extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: data?.effectiveStatus.toString().toLowerCase() ==
-                              'pending'
-                          ? buttonRedColor.withOpacity(0.28)
-                          : data?.effectiveStatus.toString().toLowerCase() ==
+                      color:
+                          data?.effectiveStatus.toString().toLowerCase() ==
+                                  'pending'
+                              ? buttonRedColor.withOpacity(0.28)
+                              : data?.effectiveStatus
+                                      .toString()
+                                      .toLowerCase() ==
                                   'progress'
                               ? warmYellowColor
                               : blueColor.withOpacity(0.28),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(7),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(7)),
                     ),
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 3),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 3,
+                      ),
                       child: Text(
                         "${data?.effectiveStatus}",
                         style: TextStyle(
@@ -601,18 +677,18 @@ class TaskOverview extends StatelessWidget {
                                       "pending"
                                   ? buttonRedColor
                                   : data?.effectiveStatus
-                                              .toString()
-                                              .toLowerCase() ==
-                                          "progress"
-                                      ? mediumColor
-                                      : blueColor,
+                                          .toString()
+                                          .toLowerCase() ==
+                                      "progress"
+                                  ? mediumColor
+                                  : blueColor,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         Divider(),
@@ -625,9 +701,7 @@ class TaskOverview extends StatelessWidget {
                 style: heading7,
               ),
             ),
-            SizedBox(
-              width: 10.w,
-            ),
+            SizedBox(width: 10.w),
             if ((data?.assignedReviewers?.length ?? 0) > 0)
               Expanded(
                 child: InkWell(
@@ -635,12 +709,16 @@ class TaskOverview extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      builder: (context) => Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: TaskDetailsUserList(
-                            data?.assignedReviewersList ?? [], "Reviewer"),
-                      ),
+                      builder:
+                          (context) => Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: TaskDetailsUserList(
+                              data?.assignedReviewersList ?? [],
+                              "Reviewer",
+                            ),
+                          ),
                     );
                   },
                   child: SizedBox(
@@ -655,9 +733,10 @@ class TaskOverview extends StatelessWidget {
                           if (index < 3) {
                             final leftPosition =
                                 index == 0 ? 0.0 : (index == 1 ? 22.w : 44.w);
-                            final bgColor = index == 0
-                                ? redColor
-                                : index == 1
+                            final bgColor =
+                                index == 0
+                                    ? redColor
+                                    : index == 1
                                     ? blueColor
                                     : secondaryColor;
 
@@ -668,12 +747,14 @@ class TaskOverview extends StatelessWidget {
                                 width: 30.w,
                                 decoration: BoxDecoration(
                                   color: backgroundColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                   child: Image.network(
                                     "${data?.assignedReviewersList?[index].image ?? ''}",
                                     fit: BoxFit.cover,
@@ -684,7 +765,8 @@ class TaskOverview extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: backgroundColor,
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(15.r)),
+                                            Radius.circular(15.r),
+                                          ),
                                         ),
                                       );
                                     },
@@ -702,14 +784,17 @@ class TaskOverview extends StatelessWidget {
                                 width: 30.w,
                                 decoration: BoxDecoration(
                                   color: primaryButtonColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.r)),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.r),
+                                  ),
                                 ),
                                 child: Center(
                                   child: Text(
                                     '+$extraCount',
-                                    style:
-                                        changeTextColor(heading9, whiteColor),
+                                    style: changeTextColor(
+                                      heading9,
+                                      whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -743,142 +828,150 @@ class TaskOverview extends StatelessWidget {
       ),
       width: double.infinity,
       height: 450.h,
-      child: progressList.isEmpty
-          ? Center(
-              child: Text(
-                'No progress list data',
-                style: TextStyle(
+      child:
+          progressList.isEmpty
+              ? Center(
+                child: Text(
+                  'No progress list data',
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: textColor),
-              ),
-            )
-          : ListView.separated(
-              itemCount: progressList.length,
-              reverse: false,
-              itemBuilder: (context, index) {
-                DateTime dateTime =
-                    DateTime.parse(progressList[index].createdAt.toString());
-                String formattedDate =
-                    DateFormat('dd-MM-yyyy').format(dateTime);
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => Padding(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
-                            child: progressDetailsBottomSheet(
-                                context, progressList[index], formattedDate),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: lightGreyColor.withOpacity(0.2),
-                                blurRadius: 13.0,
-                                spreadRadius: 2,
-                                blurStyle: BlurStyle.normal,
-                                offset: Offset(0, 4),
+                    color: textColor,
+                  ),
+                ),
+              )
+              : ListView.separated(
+                itemCount: progressList.length,
+                reverse: false,
+                itemBuilder: (context, index) {
+                  DateTime dateTime = DateTime.parse(
+                    progressList[index].createdAt.toString(),
+                  );
+                  String formattedDate = DateFormat(
+                    'dd-MM-yyyy',
+                  ).format(dateTime);
+                  return Column(
+                    children: [
+                      SizedBox(height: 10.h),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder:
+                                (context) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(
+                                          context,
+                                        ).viewInsets.bottom,
+                                  ),
+                                  child: progressDetailsBottomSheet(
+                                    context,
+                                    progressList[index],
+                                    formattedDate,
+                                  ),
+                                ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
                               ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8.w, vertical: 8.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Task ID ${progressList[index].taskId}",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 6.h,
-                                ),
-                                Text(
-                                  "${progressList[index].remarks ?? ""}",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 6.h,
-                                ),
-                                Text(
-                                  "${progressList[index].userName ?? ""}",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 6.h,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        '${progressList[index].status.toString() == "0" ? "Pending" : progressList[index].status.toString() == "1" ? "Process" : "Complete"}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: progressList[index]
-                                                      .status
-                                                      .toString() ==
-                                                  '0'
-                                              ? redColor
-                                              : progressList[index]
-                                                          .status
-                                                          .toString() ==
-                                                      '1'
-                                                  ? thirdPrimaryColor
-                                                  : blueColor,
-                                        ),
-                                      ),
-                                    ),
-                                    Center(
-                                        child: Text(
-                                            '${progressList[index].createddate}'))
-                                  ],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: lightGreyColor.withOpacity(0.2),
+                                  blurRadius: 13.0,
+                                  spreadRadius: 2,
+                                  blurStyle: BlurStyle.normal,
+                                  offset: Offset(0, 4),
                                 ),
                               ],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 8.h,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Task ID ${progressList[index].taskId}",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  Text(
+                                    "${progressList[index].remarks ?? ""}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  Text(
+                                    "${progressList[index].userName ?? ""}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          '${progressList[index].status.toString() == "0"
+                                              ? "Pending"
+                                              : progressList[index].status.toString() == "1"
+                                              ? "Process"
+                                              : "Complete"}',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color:
+                                                progressList[index].status
+                                                            .toString() ==
+                                                        '0'
+                                                    ? redColor
+                                                    : progressList[index].status
+                                                            .toString() ==
+                                                        '1'
+                                                    ? thirdPrimaryColor
+                                                    : blueColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          '${progressList[index].createddate}',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  height: 2.h,
-                );
-              },
-            ),
+                    ],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(height: 2.h);
+                },
+              ),
     );
   }
 
@@ -903,7 +996,10 @@ class TaskOverview extends StatelessWidget {
             Text(
               "Progress ID : ${progressList.id ?? ''}",
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
             ),
             SizedBox(height: 10.h),
             Container(
@@ -914,9 +1010,7 @@ class TaskOverview extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 8.h,
-                  ),
+                  SizedBox(height: 8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -931,9 +1025,7 @@ class TaskOverview extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 15.w,
-                      ),
+                      SizedBox(width: 15.w),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -947,17 +1039,24 @@ class TaskOverview extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w, vertical: 3),
+                                  horizontal: 8.w,
+                                  vertical: 3,
+                                ),
                                 child: Center(
                                   child: Text(
-                                    '${progressList.status.toString() == "0" ? "Pending" : progressList.status.toString() == "1" ? "Process" : "Complete"}',
+                                    '${progressList.status.toString() == "0"
+                                        ? "Pending"
+                                        : progressList.status.toString() == "1"
+                                        ? "Process"
+                                        : "Complete"}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
-                                      color: progressList.status.toString() ==
-                                              '0'
-                                          ? redColor
-                                          : progressList.status.toString() ==
+                                      color:
+                                          progressList.status.toString() == '0'
+                                              ? redColor
+                                              : progressList.status
+                                                      .toString() ==
                                                   '1'
                                               ? thirdPrimaryColor
                                               : blueColor,
@@ -968,12 +1067,10 @@ class TaskOverview extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
-                  Divider(
-                    color: secondaryColor,
-                  ),
+                  Divider(color: secondaryColor),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -988,22 +1085,20 @@ class TaskOverview extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 15.w,
-                      ),
+                      SizedBox(width: 15.w),
                       Expanded(
                         child: Text(
                           "$formattedDate",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 8.h,
-                  ),
+                  SizedBox(height: 8.h),
                 ],
               ),
             ),
@@ -1027,67 +1122,59 @@ class TaskOverview extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   '${progressList.remarks ?? ""}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
             progressList.attachment != null
                 ? Column(
-                    children: [
-                      SizedBox(
-                        height: 20.h,
+                  children: [
+                    SizedBox(height: 20.h),
+                    Text(
+                      'ATTACHMENT',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: secondTextColor,
                       ),
-                      Text(
-                        'ATTACHMENT',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: secondTextColor),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 100.h,
-                            width: 160.w,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.r),
-                              ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.r),
-                              ),
-                              child: Image.network(
-                                '${progressList.attachment ?? ''}',
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.r),
-                                      ),
-                                    ),
-                                    child: Image.asset(backgroundLogo),
-                                  );
-                                },
-                              ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 100.h,
+                          width: 160.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.r),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  )
-                : SizedBox(
-                    height: 20.h,
-                  ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.r),
+                            ),
+                            child: Image.network(
+                              '${progressList.attachment ?? ''}',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20.r),
+                                    ),
+                                  ),
+                                  child: Image.asset(backgroundLogo),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+                : SizedBox(height: 20.h),
           ],
         ),
       ),

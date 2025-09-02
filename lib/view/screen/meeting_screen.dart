@@ -34,7 +34,7 @@ class _MeetingListScreenState extends State<MeetingListScreen> {
   void callApi() async {
     await meetingController.meetingList();
     await meetingController.responsiblePersonListApi('', '');
-    await priorityController.priorityApi();
+    await priorityController.priorityApi(from: '');
     await taskController.allProjectListApi();
   }
 
@@ -70,15 +70,12 @@ class _MeetingListScreenState extends State<MeetingListScreen> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(20.r))),
+                    color: primaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: Icon(
-                      Icons.add,
-                      color: whiteColor,
-                      size: 16.sp,
-                    ),
+                    child: Icon(Icons.add, color: whiteColor, size: 16.sp),
                   ),
                 ),
               ),
@@ -88,234 +85,255 @@ class _MeetingListScreenState extends State<MeetingListScreen> {
         ),
         backgroundColor: whiteColor,
         body: Obx(
-          () => meetingController.isMeetingLoading.value == true
-              ? Center(child: CircularProgressIndicator())
-              : SafeArea(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: tabBackgroundColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(22.r)),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Obx(
-                                  () => InkWell(
-                                    onTap: () {
-                                      meetingController.isDoneSelected.value =
-                                          false;
-                                      meetingController
-                                          .isUpcomingSelected.value = true;
-                                      meetingController
-                                          .isOngoingSelected.value = false;
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: meetingController
-                                                    .isUpcomingSelected.value ==
-                                                true
-                                            ? primaryButtonColor
-                                            : tabBackgroundColor,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(22.r),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/images/svg/event_upcoming.svg',
-                                              height: 20.h,
-                                              color: meetingController
+          () =>
+              meetingController.isMeetingLoading.value == true
+                  ? Center(child: CircularProgressIndicator())
+                  : SafeArea(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: tabBackgroundColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(22.r),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(
+                                    () => InkWell(
+                                      onTap: () {
+                                        meetingController.isDoneSelected.value =
+                                            false;
+                                        meetingController
+                                            .isUpcomingSelected
+                                            .value = true;
+                                        meetingController
+                                            .isOngoingSelected
+                                            .value = false;
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              meetingController
                                                           .isUpcomingSelected
                                                           .value ==
                                                       true
-                                                  ? whiteColor
-                                                  : textColor,
-                                            ),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              'Upcoming',
-                                              style: TextStyle(
+                                                  ? primaryButtonColor
+                                                  : tabBackgroundColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(22.r),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 8.h,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/images/svg/event_upcoming.svg',
+                                                height: 20.h,
+                                                color:
+                                                    meetingController
+                                                                .isUpcomingSelected
+                                                                .value ==
+                                                            true
+                                                        ? whiteColor
+                                                        : textColor,
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Text(
+                                                'Upcoming',
+                                                style: TextStyle(
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w500,
-                                                  color: meetingController
-                                                              .isUpcomingSelected
-                                                              .value ==
-                                                          true
-                                                      ? whiteColor
-                                                      : textColor),
-                                            )
-                                          ],
+                                                  color:
+                                                      meetingController
+                                                                  .isUpcomingSelected
+                                                                  .value ==
+                                                              true
+                                                          ? whiteColor
+                                                          : textColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Obx(
-                                  () => InkWell(
-                                    onTap: () {
-                                      meetingController.isDoneSelected.value =
-                                          false;
-                                      meetingController
-                                          .isUpcomingSelected.value = false;
-                                      meetingController
-                                          .isOngoingSelected.value = true;
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: meetingController
-                                                    .isOngoingSelected.value ==
-                                                true
-                                            ? primaryButtonColor
-                                            : tabBackgroundColor,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(22.r),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/png/ongoing.png',
-                                              height: 20.h,
-                                              color: meetingController
+                                Expanded(
+                                  child: Obx(
+                                    () => InkWell(
+                                      onTap: () {
+                                        meetingController.isDoneSelected.value =
+                                            false;
+                                        meetingController
+                                            .isUpcomingSelected
+                                            .value = false;
+                                        meetingController
+                                            .isOngoingSelected
+                                            .value = true;
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              meetingController
                                                           .isOngoingSelected
                                                           .value ==
                                                       true
-                                                  ? whiteColor
-                                                  : textColor,
-                                            ),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              'Ongoing',
-                                              style: TextStyle(
+                                                  ? primaryButtonColor
+                                                  : tabBackgroundColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(22.r),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 8.h,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/png/ongoing.png',
+                                                height: 20.h,
+                                                color:
+                                                    meetingController
+                                                                .isOngoingSelected
+                                                                .value ==
+                                                            true
+                                                        ? whiteColor
+                                                        : textColor,
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Text(
+                                                'Ongoing',
+                                                style: TextStyle(
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w500,
-                                                  color: meetingController
-                                                              .isOngoingSelected
-                                                              .value ==
-                                                          true
-                                                      ? whiteColor
-                                                      : textColor),
-                                            )
-                                          ],
+                                                  color:
+                                                      meetingController
+                                                                  .isOngoingSelected
+                                                                  .value ==
+                                                              true
+                                                          ? whiteColor
+                                                          : textColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Obx(
-                                  () => InkWell(
-                                    onTap: () {
-                                      meetingController.isDoneSelected.value =
-                                          true;
-                                      meetingController
-                                          .isUpcomingSelected.value = false;
-                                      meetingController
-                                          .isOngoingSelected.value = false;
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: meetingController
-                                                    .isDoneSelected.value ==
-                                                true
-                                            ? primaryButtonColor
-                                            : tabBackgroundColor,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(22.r),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/images/svg/assignment_turned_in.svg',
-                                              height: 20.h,
-                                              color: meetingController
+                                Expanded(
+                                  child: Obx(
+                                    () => InkWell(
+                                      onTap: () {
+                                        meetingController.isDoneSelected.value =
+                                            true;
+                                        meetingController
+                                            .isUpcomingSelected
+                                            .value = false;
+                                        meetingController
+                                            .isOngoingSelected
+                                            .value = false;
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              meetingController
                                                           .isDoneSelected
                                                           .value ==
                                                       true
-                                                  ? whiteColor
-                                                  : textColor,
-                                            ),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              'Done',
-                                              style: TextStyle(
+                                                  ? primaryButtonColor
+                                                  : tabBackgroundColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(22.r),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 8.h,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/images/svg/assignment_turned_in.svg',
+                                                height: 20.h,
+                                                color:
+                                                    meetingController
+                                                                .isDoneSelected
+                                                                .value ==
+                                                            true
+                                                        ? whiteColor
+                                                        : textColor,
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Text(
+                                                'Done',
+                                                style: TextStyle(
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w500,
-                                                  color: meetingController
-                                                              .isDoneSelected
-                                                              .value ==
-                                                          true
-                                                      ? whiteColor
-                                                      : textColor),
-                                            )
-                                          ],
+                                                  color:
+                                                      meetingController
+                                                                  .isDoneSelected
+                                                                  .value ==
+                                                              true
+                                                          ? whiteColor
+                                                          : textColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: meetingController.isUpcomingSelected.value ==
-                                true
-                            ? MeetingList(
-                                meetingController.upcommingMeetingData,
-                                taskController.allProjectDataList,
-                                priorityController.priorityList,
-                                meetingController.responsiblePersonList,
-                              )
-                            : meetingController.isOngoingSelected.value == true
-                                ? OngoingMeetingList(
+                        Expanded(
+                          child:
+                              meetingController.isUpcomingSelected.value == true
+                                  ? MeetingList(
+                                    meetingController.upcommingMeetingData,
+                                    taskController.allProjectDataList,
+                                    priorityController.priorityList,
+                                    meetingController.responsiblePersonList,
+                                  )
+                                  : meetingController.isOngoingSelected.value ==
+                                      true
+                                  ? OngoingMeetingList(
                                     meetingController.ongoingMeetingData,
                                     taskController.allProjectDataList,
                                     priorityController.priorityList,
                                     meetingController.responsiblePersonList,
                                   )
-                                : DoneMeetingList(
+                                  : DoneMeetingList(
                                     meetingController.doneMeetingData,
                                     taskController.allProjectDataList,
                                     priorityController.priorityList,
                                     meetingController.responsiblePersonList,
                                   ),
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
         ),
       ),
     );

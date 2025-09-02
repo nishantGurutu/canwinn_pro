@@ -69,7 +69,7 @@ class _EditProjectState extends State<EditProject> {
     projectController.clientListApi();
     projectController.projectTimingApi();
     taskController.responsiblePersonListApi('', "");
-    priorityController.priorityApi();
+    priorityController.priorityApi(from: '');
     statusController.statusApi();
     projectController.teamLeaderApi();
     nameTextEditingControlelr.text =
@@ -110,282 +110,323 @@ class _EditProjectState extends State<EditProject> {
         title: Text(
           updateProject,
           style: TextStyle(
-              color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
       backgroundColor: whiteColor,
       body: Obx(
-        () => projectController.isProjectCalling.value == true &&
-                projectController.isProjectCategoryCalling.value == true &&
-                projectController.isTeamleadCalling.value == true &&
-                projectController.isClientCalling.value == true &&
-                projectController.isProjectTimingCalling.value == true &&
-                taskController.isResponsiblePersonLoading.value == true &&
-                priorityController.isPriorityLoading.value == true &&
-                statusController.isStatusLoading.value == true
-            ? SizedBox(
-                height: 700.h,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: primaryColor,
+        () =>
+            projectController.isProjectCalling.value == true &&
+                    projectController.isProjectCategoryCalling.value == true &&
+                    projectController.isTeamleadCalling.value == true &&
+                    projectController.isClientCalling.value == true &&
+                    projectController.isProjectTimingCalling.value == true &&
+                    taskController.isResponsiblePersonLoading.value == true &&
+                    priorityController.isPriorityLoading.value == true &&
+                    statusController.isStatusLoading.value == true
+                ? SizedBox(
+                  height: 700.h,
+                  child: Center(
+                    child: CircularProgressIndicator(color: primaryColor),
                   ),
-                ),
-              )
-            : Container(
-                width: double.infinity,
-                color: backgroundColor,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          CustomTextField(
-                            hintText: projectName,
-                            keyboardType: TextInputType.emailAddress,
-                            controller: nameTextEditingControlelr,
-                            textCapitalization: TextCapitalization.sentences,
-                          ),
-                          SizedBox(height: 10.h),
-                          Obx(
-                            () => CustomDropdown<AllProjectData>(
-                              items: projectController.projectDataList,
-                              itemLabel: (item) => item.projectTypeName ?? '',
-                              onChanged: (value) {
-                                projectController.selectedAllProjectData =
-                                    value;
-                              },
-                              hintText: selectProjectType,
+                )
+                : Container(
+                  width: double.infinity,
+                  color: backgroundColor,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10.h),
+                            CustomTextField(
+                              hintText: projectName,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: nameTextEditingControlelr,
+                              textCapitalization: TextCapitalization.sentences,
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            'Select Department',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          departmentGrid(profileController.departmentDataList),
-                          SizedBox(height: 10.h),
-                          CustomDropdown<TeamLeaderData>(
-                            items: projectController.teamLeaderDataList,
-                            itemLabel: (item) => item.name ?? '',
-                            onChanged: (value) {
-                              projectController.selectedTeamLeader = value;
-                            },
-                            hintText: selectLeader,
-                          ),
-                          SizedBox(height: 10.h),
-                          DropdownButtonHideUnderline(
-                            child: Obx(
-                              () => DropdownButton2<ResponsiblePersonData>(
-                                isExpanded: true,
-                                hint: Text(
-                                  selectPerson,
-                                  style: changeTextColor(
-                                      rubikRegular, darkGreyColor),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                items: taskController.responsiblePersonList
-                                    .map(
-                                      (ResponsiblePersonData item) =>
-                                          DropdownMenuItem<
-                                              ResponsiblePersonData>(
-                                        value: item,
-                                        child: Text(
-                                          item.name ?? '',
-                                          style: changeTextColor(
-                                              rubikRegular, Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                                value: taskController
-                                    .selectedResponsiblePersonData.value,
-                                onChanged: (ResponsiblePersonData? value) {
-                                  taskController.selectedResponsiblePersonData
-                                      .value = value;
+                            SizedBox(height: 10.h),
+                            Obx(
+                              () => CustomDropdown<AllProjectData>(
+                                items: projectController.projectDataList,
+                                itemLabel: (item) => item.projectTypeName ?? '',
+                                onChanged: (value) {
+                                  projectController.selectedAllProjectData =
+                                      value;
                                 },
-                                buttonStyleData: ButtonStyleData(
-                                  height: 45.h,
-                                  width: double.infinity,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 10.h,
+                                hintText: selectProjectType,
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Select Department',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 5.h),
+                            departmentGrid(
+                              profileController.departmentDataList,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomDropdown<TeamLeaderData>(
+                              items: projectController.teamLeaderDataList,
+                              itemLabel: (item) => item.name ?? '',
+                              onChanged: (value) {
+                                projectController.selectedTeamLeader = value;
+                              },
+                              hintText: selectLeader,
+                            ),
+                            SizedBox(height: 10.h),
+                            DropdownButtonHideUnderline(
+                              child: Obx(
+                                () => DropdownButton2<ResponsiblePersonData>(
+                                  isExpanded: true,
+                                  hint: Text(
+                                    selectPerson,
+                                    style: changeTextColor(
+                                      rubikRegular,
+                                      darkGreyColor,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.r),
-                                    border:
-                                        Border.all(color: lightSecondaryColor),
-                                    color: lightSecondaryColor,
+                                  items:
+                                      taskController.responsiblePersonList
+                                          .map(
+                                            (ResponsiblePersonData item) =>
+                                                DropdownMenuItem<
+                                                  ResponsiblePersonData
+                                                >(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: changeTextColor(
+                                                      rubikRegular,
+                                                      Colors.black,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                          )
+                                          .toList(),
+                                  value:
+                                      taskController
+                                          .selectedResponsiblePersonData
+                                          .value,
+                                  onChanged: (ResponsiblePersonData? value) {
+                                    taskController
+                                        .selectedResponsiblePersonData
+                                        .value = value;
+                                  },
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 45.h,
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w,
+                                      vertical: 10.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.r),
+                                      border: Border.all(
+                                        color: lightSecondaryColor,
+                                      ),
+                                      color: lightSecondaryColor,
+                                    ),
                                   ),
-                                ),
-                                iconStyleData: IconStyleData(
-                                  icon: Image.asset(
-                                    'assets/images/png/Vector 3.png',
-                                    color: secondaryColor,
-                                    height: 8.h,
+                                  iconStyleData: IconStyleData(
+                                    icon: Image.asset(
+                                      'assets/images/png/Vector 3.png',
+                                      color: secondaryColor,
+                                      height: 8.h,
+                                    ),
+                                    iconSize: 14,
+                                    iconEnabledColor: lightGreyColor,
+                                    iconDisabledColor: lightGreyColor,
                                   ),
-                                  iconSize: 14,
-                                  iconEnabledColor: lightGreyColor,
-                                  iconDisabledColor: lightGreyColor,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: 200.h,
-                                  width: 312.w,
-                                  decoration: BoxDecoration(
+                                  dropdownStyleData: DropdownStyleData(
+                                    maxHeight: 200.h,
+                                    width: 312.w,
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5.r),
                                       color: lightSecondaryColor,
                                       border: Border.all(
-                                          color: lightSecondaryColor)),
-                                  scrollbarTheme: ScrollbarThemeData(
-                                    radius: const Radius.circular(40),
-                                    thickness:
-                                        WidgetStateProperty.all<double>(6),
-                                    thumbVisibility:
-                                        WidgetStateProperty.all<bool>(true),
+                                        color: lightSecondaryColor,
+                                      ),
+                                    ),
+                                    scrollbarTheme: ScrollbarThemeData(
+                                      radius: const Radius.circular(40),
+                                      thickness:
+                                          WidgetStateProperty.all<double>(6),
+                                      thumbVisibility:
+                                          WidgetStateProperty.all<bool>(true),
+                                    ),
                                   ),
-                                ),
-                                menuItemStyleData: const MenuItemStyleData(
-                                  height: 40,
-                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                    padding: EdgeInsets.only(
+                                      left: 14,
+                                      right: 14,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomCalender(
-                            hintText: startDate,
-                            controller: startDateTextEditingControlelr,
-                            from: 'startDate',
-                            otherController: dueDateTextEditingControlelr,
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomCalender(
-                            hintText: dueDate,
-                            controller: dueDateTextEditingControlelr,
-                            from: 'dueDate',
-                            otherController: startDateTextEditingControlelr,
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomTimer(
-                            hintText: "Due Time",
-                            controller: dueTimeTextEditingControlelr,
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomDropdown<PriorityData>(
-                            items: priorityController.priorityList,
-                            itemLabel: (item) => item.priorityName ?? "",
-                            onChanged: (value) {
-                              priorityController.selectedPriorityData.value =
-                                  value;
-                            },
-                            hintText: selectPriority,
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomDropdown<StatusData>(
-                            items: statusController.statusList,
-                            itemLabel: (item) => item.statusName ?? "",
-                            onChanged: (value) {
-                              statusController.selectedStatusData = value;
-                            },
-                            hintText: status,
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomTextField(
-                            hintText: description,
-                            keyboardType: TextInputType.emailAddress,
-                            controller: descriptionTextEditingControlelr,
-                            textCapitalization: TextCapitalization.sentences,
-                            maxLine: 5,
-                          ),
-                          SizedBox(height: 20.h),
-                          Obx(
-                            () => CustomButton(
-                              onPressed: () {
-                                if (projectController.isProjectAdding.value ==
-                                    false) {
-                                  if (_formKey.currentState!.validate()) {
-                                    projectController.editProjectApi(
-                                      projectName:
-                                          nameTextEditingControlelr.text,
-                                      projectType: projectController
-                                          .selectedAllProjectData?.id,
-                                      client:
-                                          projectController.selectedClient?.id,
-                                      category: projectController
-                                          .selectedProjectCategory?.id,
-                                      projectTiming: projectController
-                                          .selectedProjectTiming?.id,
-                                      price: priceTextEditingControlelr.text,
-                                      amount: amountTextEditingControlelr.text,
-                                      total: totalTextEditingControlelr.text,
-                                      selectPerson: taskController
-                                          .selectedResponsiblePersonData
-                                          .value
-                                          ?.id,
-                                      selectedLeader: projectController
-                                          .selectedTeamLeader?.id,
-                                      startDate:
-                                          startDateTextEditingControlelr.text,
-                                      dueDate:
-                                          dueDateTextEditingControlelr.text,
-                                      selectedPriority: priorityController
-                                          .selectedPriorityData.value?.id,
-                                      selectedStatus: statusController
-                                          .selectedStatusData?.id,
-                                      description:
-                                          descriptionTextEditingControlelr.text,
-                                    );
-                                  }
-                                }
+                            SizedBox(height: 10.h),
+                            CustomCalender(
+                              hintText: startDate,
+                              controller: startDateTextEditingControlelr,
+                              from: 'startDate',
+                              otherController: dueDateTextEditingControlelr,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomCalender(
+                              hintText: dueDate,
+                              controller: dueDateTextEditingControlelr,
+                              from: 'dueDate',
+                              otherController: startDateTextEditingControlelr,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomTimer(
+                              hintText: "Due Time",
+                              controller: dueTimeTextEditingControlelr,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomDropdown<PriorityData>(
+                              items: priorityController.priorityList,
+                              itemLabel: (item) => item.priorityName ?? "",
+                              onChanged: (value) {
+                                priorityController.selectedPriorityData.value =
+                                    value;
                               },
-                              text: projectController.isProjectAdding.value ==
-                                      true
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          height: 30.h,
-                                          child: CircularProgressIndicator(
-                                            color: whiteColor,
+                              hintText: selectPriority,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomDropdown<StatusData>(
+                              items: statusController.statusList,
+                              itemLabel: (item) => item.statusName ?? "",
+                              onChanged: (value) {
+                                statusController.selectedStatusData = value;
+                              },
+                              hintText: status,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomTextField(
+                              hintText: description,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: descriptionTextEditingControlelr,
+                              textCapitalization: TextCapitalization.sentences,
+                              maxLine: 5,
+                            ),
+                            SizedBox(height: 20.h),
+                            Obx(
+                              () => CustomButton(
+                                onPressed: () {
+                                  if (projectController.isProjectAdding.value ==
+                                      false) {
+                                    if (_formKey.currentState!.validate()) {
+                                      projectController.editProjectApi(
+                                        projectName:
+                                            nameTextEditingControlelr.text,
+                                        projectType:
+                                            projectController
+                                                .selectedAllProjectData
+                                                ?.id,
+                                        client:
+                                            projectController
+                                                .selectedClient
+                                                ?.id,
+                                        category:
+                                            projectController
+                                                .selectedProjectCategory
+                                                ?.id,
+                                        projectTiming:
+                                            projectController
+                                                .selectedProjectTiming
+                                                ?.id,
+                                        price: priceTextEditingControlelr.text,
+                                        amount:
+                                            amountTextEditingControlelr.text,
+                                        total: totalTextEditingControlelr.text,
+                                        selectPerson:
+                                            taskController
+                                                .selectedResponsiblePersonData
+                                                .value
+                                                ?.id,
+                                        selectedLeader:
+                                            projectController
+                                                .selectedTeamLeader
+                                                ?.id,
+                                        startDate:
+                                            startDateTextEditingControlelr.text,
+                                        dueDate:
+                                            dueDateTextEditingControlelr.text,
+                                        selectedPriority:
+                                            priorityController
+                                                .selectedPriorityData
+                                                .value
+                                                ?.id,
+                                        selectedStatus:
+                                            statusController
+                                                .selectedStatusData
+                                                ?.id,
+                                        description:
+                                            descriptionTextEditingControlelr
+                                                .text,
+                                      );
+                                    }
+                                  }
+                                },
+                                text:
+                                    projectController.isProjectAdding.value ==
+                                            true
+                                        ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 30.h,
+                                              child: CircularProgressIndicator(
+                                                color: whiteColor,
+                                              ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              loading,
+                                              style: changeTextColor(
+                                                rubikBlack,
+                                                whiteColor,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                        : Text(
+                                          add,
+                                          style: changeTextColor(
+                                            rubikBlack,
+                                            whiteColor,
                                           ),
                                         ),
-                                        SizedBox(width: 10.w),
-                                        Text(
-                                          loading,
-                                          style: changeTextColor(
-                                              rubikBlack, whiteColor),
-                                        ),
-                                      ],
-                                    )
-                                  : Text(
-                                      add,
-                                      style: changeTextColor(
-                                          rubikBlack, whiteColor),
-                                    ),
-                              width: double.infinity,
-                              color: primaryColor,
-                              height: 45.h,
+                                width: double.infinity,
+                                color: primaryColor,
+                                height: 45.h,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                        ],
+                            SizedBox(height: 10.h),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
       ),
     );
   }
@@ -394,52 +435,51 @@ class _EditProjectState extends State<EditProject> {
     return Wrap(
       runSpacing: 10,
       spacing: 10,
-      children: List.generate(
-        departmentDataList.length,
-        (index2) {
-          return Obx(
-            () => GestureDetector(
-              onTap: () {
-                if (profileController.selectedDepartmentListId[index2] !=
-                    departmentDataList[index2].id.toString()) {
-                  profileController.selectedDepartmentListId[index2] =
-                      departmentDataList[index2].id.toString();
-                } else {
-                  profileController.selectedDepartmentListId[index2] = '';
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  border: Border.all(
-                      color:
-                          profileController.selectedDepartmentListId[index2] ==
-                                  departmentDataList[index2].id.toString()
-                              ? whiteColor
-                              : darkGreyColor),
-                  color: profileController.selectedDepartmentListId[index2] ==
-                          departmentDataList[index2].id.toString()
-                      ? secondaryColor
-                      : whiteColor,
+      children: List.generate(departmentDataList.length, (index2) {
+        return Obx(
+          () => GestureDetector(
+            onTap: () {
+              if (profileController.selectedDepartmentListId[index2] !=
+                  departmentDataList[index2].id.toString()) {
+                profileController.selectedDepartmentListId[index2] =
+                    departmentDataList[index2].id.toString();
+              } else {
+                profileController.selectedDepartmentListId[index2] = '';
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(9),
+                border: Border.all(
+                  color:
+                      profileController.selectedDepartmentListId[index2] ==
+                              departmentDataList[index2].id.toString()
+                          ? whiteColor
+                          : darkGreyColor,
                 ),
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                  child: Text(
-                    '${departmentDataList[index2].name}',
-                    style: changeTextColor(
-                        rubikRegular,
-                        profileController.selectedDepartmentListId[index2] ==
-                                departmentDataList[index2].id.toString()
-                            ? whiteColor
-                            : darkGreyColor),
+                color:
+                    profileController.selectedDepartmentListId[index2] ==
+                            departmentDataList[index2].id.toString()
+                        ? secondaryColor
+                        : whiteColor,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                child: Text(
+                  '${departmentDataList[index2].name}',
+                  style: changeTextColor(
+                    rubikRegular,
+                    profileController.selectedDepartmentListId[index2] ==
+                            departmentDataList[index2].id.toString()
+                        ? whiteColor
+                        : darkGreyColor,
                   ),
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      }),
     );
   }
 }

@@ -22,7 +22,7 @@ class _PriorityPageState extends State<PriorityPage> {
   final PriorityController priorityController = Get.put(PriorityController());
   @override
   void initState() {
-    priorityController.priorityApi();
+    priorityController.priorityApi(from: '');
     super.initState();
   }
 
@@ -46,49 +46,29 @@ class _PriorityPageState extends State<PriorityPage> {
           child: SizedBox(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 18.h),
-              child: Image.asset(
-                backArrowIcon,
-                color: whiteColor,
-              ),
+              child: Image.asset(backArrowIcon, color: whiteColor),
             ),
           ),
         ),
-        title: Text(
-          priority,
-          style: changeTextColor(robotoBlack, whiteColor),
-        ),
+        title: Text(priority, style: changeTextColor(robotoBlack, whiteColor)),
         centerTitle: true,
       ),
       body: Obx(
-        () => priorityController.isPriorityLoading.value == true
-            ? Center(
-                child: CircularProgressIndicator(
-                  color: primaryColor,
-                ),
-              )
-            : priorityController.priorityList.isEmpty
-                ? Center(
-                    child: Text(
-                      noPriority,
-                      style: rubikBold,
-                    ),
-                  )
+        () =>
+            priorityController.isPriorityLoading.value == true
+                ? Center(child: CircularProgressIndicator(color: primaryColor))
+                : priorityController.priorityList.isEmpty
+                ? Center(child: Text(noPriority, style: rubikBold))
                 : Column(
-                    children: [
-                      priorityList(priorityController.priorityList),
-                    ],
-                  ),
+                  children: [priorityList(priorityController.priorityList)],
+                ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           addPriorityWidget();
         },
         backgroundColor: primaryColor,
-        child: Icon(
-          Icons.add,
-          color: whiteColor,
-          size: 30.h,
-        ),
+        child: Icon(Icons.add, color: whiteColor, size: 30.h),
       ),
     );
   }
@@ -100,8 +80,9 @@ class _PriorityPageState extends State<PriorityPage> {
         itemCount: priorityDataList.length,
         itemBuilder: (BuildContext context, int index) {
           int colorIndex = index % colorList.length;
-          DateTime? dt =
-              DateTime.parse(priorityDataList[index].createdAt.toString());
+          DateTime? dt = DateTime.parse(
+            priorityDataList[index].createdAt.toString(),
+          );
           return Container(
             color: colorList[colorIndex],
             child: Padding(
@@ -115,8 +96,10 @@ class _PriorityPageState extends State<PriorityPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${priorityDataList[index].priorityName}',
-                            style: changeTextColor(rubikBold, darkGreyColor)),
+                        Text(
+                          '${priorityDataList[index].priorityName}',
+                          style: changeTextColor(rubikBold, darkGreyColor),
+                        ),
                         PopupMenuButton<String>(
                           padding: const EdgeInsets.all(0),
                           icon: const Icon(Icons.more_vert),
@@ -124,35 +107,38 @@ class _PriorityPageState extends State<PriorityPage> {
                             switch (result) {
                               case 'edit':
                                 editPriorityWidget(
-                                    priorityDataList[index].priorityName,
-                                    priorityDataList[index].status,
-                                    priorityDataList[index].id);
+                                  priorityDataList[index].priorityName,
+                                  priorityDataList[index].status,
+                                  priorityDataList[index].id,
+                                );
 
                                 break;
                               case 'delete':
-                                priorityController
-                                    .deletePriority(priorityDataList[index].id);
+                                priorityController.deletePriority(
+                                  priorityDataList[index].id,
+                                );
                                 break;
                             }
                           },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: 'edit',
-                              child: ListTile(
-                                leading: Icon(Icons.edit),
-                                title: Text('Edit'),
-                              ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'delete',
-                              child: ListTile(
-                                leading: Icon(Icons.delete),
-                                title: Text('Delete'),
-                              ),
-                            ),
-                          ],
-                        )
+                          itemBuilder:
+                              (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                    const PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: ListTile(
+                                        leading: Icon(Icons.edit),
+                                        title: Text('Edit'),
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: ListTile(
+                                        leading: Icon(Icons.delete),
+                                        title: Text('Delete'),
+                                      ),
+                                    ),
+                                  ],
+                        ),
                       ],
                     ),
                     SizedBox(height: 5.h),
@@ -165,12 +151,16 @@ class _PriorityPageState extends State<PriorityPage> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                              color: greenColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.r))),
+                            color: greenColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.r),
+                            ),
+                          ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 10.w, vertical: 4.h),
+                              horizontal: 10.w,
+                              vertical: 4.h,
+                            ),
                             child: Center(
                               child: Text(
                                 '${priorityDataList[index].status.toString() == "1" ? "Active" : ""}',
@@ -178,7 +168,7 @@ class _PriorityPageState extends State<PriorityPage> {
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ],
@@ -208,7 +198,9 @@ class _PriorityPageState extends State<PriorityPage> {
             width: double.infinity,
             height: 300.h,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: whiteColor),
+              borderRadius: BorderRadius.circular(15),
+              color: whiteColor,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,10 +211,7 @@ class _PriorityPageState extends State<PriorityPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        addPriority,
-                        style: robotoBlack,
-                      ),
+                      Text(addPriority, style: robotoBlack),
                       InkWell(
                         onTap: () {
                           Get.back();
@@ -230,9 +219,7 @@ class _PriorityPageState extends State<PriorityPage> {
                         child: SizedBox(
                           height: 35.h,
                           width: 35.w,
-                          child: const Center(
-                            child: Icon(Icons.close),
-                          ),
+                          child: const Center(child: Icon(Icons.close)),
                         ),
                       ),
                     ],
@@ -245,10 +232,7 @@ class _PriorityPageState extends State<PriorityPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        priority,
-                        style: rubikRegular,
-                      ),
+                      Text(priority, style: rubikRegular),
                       SizedBox(height: 5.h),
                       CustomTextField(
                         hintText: priority,
@@ -258,10 +242,7 @@ class _PriorityPageState extends State<PriorityPage> {
                         data: sourceName,
                       ),
                       SizedBox(height: 10.h),
-                      Text(
-                        status,
-                        style: rubikRegular,
-                      ),
+                      Text(status, style: rubikRegular),
                       Row(
                         children: [
                           Row(
@@ -281,10 +262,7 @@ class _PriorityPageState extends State<PriorityPage> {
                                 ),
                               ),
                               SizedBox(width: 10.w),
-                              Text(
-                                active,
-                                style: robotoRegular,
-                              )
+                              Text(active, style: robotoRegular),
                             ],
                           ),
                           SizedBox(width: 10.w),
@@ -305,10 +283,7 @@ class _PriorityPageState extends State<PriorityPage> {
                                 ),
                               ),
                               SizedBox(width: 10.w),
-                              Text(
-                                inActive,
-                                style: robotoRegular,
-                              ),
+                              Text(inActive, style: robotoRegular),
                             ],
                           ),
                         ],
@@ -344,32 +319,33 @@ class _PriorityPageState extends State<PriorityPage> {
                             if (priorityController.isPriorityAdding.value !=
                                 true) {
                               priorityController.addPriority(
-                                  priorityNameTextEditingControlelr.text,
-                                  priorityController.selectedStatus.value);
+                                priorityNameTextEditingControlelr.text,
+                                priorityController.selectedStatus.value,
+                              );
                             }
                           },
                           text:
                               priorityController.isPriorityAdding.value == true
                                   ? Center(
-                                      child: SizedBox(
-                                        height: 20.h,
-                                        width: 20.w,
-                                        child: CircularProgressIndicator(
-                                          color: whiteColor,
-                                        ),
+                                    child: SizedBox(
+                                      height: 20.h,
+                                      width: 20.w,
+                                      child: CircularProgressIndicator(
+                                        color: whiteColor,
                                       ),
-                                    )
-                                  : Text(
-                                      submit,
-                                      style: TextStyle(color: whiteColor),
                                     ),
+                                  )
+                                  : Text(
+                                    submit,
+                                    style: TextStyle(color: whiteColor),
+                                  ),
                           width: 100.w,
                           height: 45.h,
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -379,7 +355,10 @@ class _PriorityPageState extends State<PriorityPage> {
   }
 
   Future<void> editPriorityWidget(
-      String? sourceName2, int? statusVal, int? sourceId) {
+    String? sourceName2,
+    int? statusVal,
+    int? sourceId,
+  ) {
     priorityController.selectedStatus.value = '';
     priorityNameTextEditingControlelr2.text = sourceName2.toString();
     priorityController.selectedStatus2.value =
@@ -395,7 +374,9 @@ class _PriorityPageState extends State<PriorityPage> {
             width: double.infinity,
             height: 300.h,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: whiteColor),
+              borderRadius: BorderRadius.circular(15),
+              color: whiteColor,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,10 +387,7 @@ class _PriorityPageState extends State<PriorityPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        editPriority,
-                        style: robotoBlack,
-                      ),
+                      Text(editPriority, style: robotoBlack),
                       InkWell(
                         onTap: () {
                           Get.back();
@@ -417,9 +395,7 @@ class _PriorityPageState extends State<PriorityPage> {
                         child: SizedBox(
                           height: 35.h,
                           width: 35.w,
-                          child: const Center(
-                            child: Icon(Icons.close),
-                          ),
+                          child: const Center(child: Icon(Icons.close)),
                         ),
                       ),
                     ],
@@ -432,10 +408,7 @@ class _PriorityPageState extends State<PriorityPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        priority,
-                        style: rubikRegular,
-                      ),
+                      Text(priority, style: rubikRegular),
                       SizedBox(height: 5.h),
                       CustomTextField(
                         hintText: priority,
@@ -445,10 +418,7 @@ class _PriorityPageState extends State<PriorityPage> {
                         data: sourceName,
                       ),
                       SizedBox(height: 10.h),
-                      Text(
-                        status,
-                        style: rubikRegular,
-                      ),
+                      Text(status, style: rubikRegular),
                       Row(
                         children: [
                           Row(
@@ -458,8 +428,10 @@ class _PriorityPageState extends State<PriorityPage> {
                                 child: Obx(
                                   () => Radio(
                                     value: 'active',
-                                    groupValue: priorityController
-                                        .selectedStatus2.value,
+                                    groupValue:
+                                        priorityController
+                                            .selectedStatus2
+                                            .value,
                                     onChanged: (value) {
                                       priorityController.selectedStatus2.value =
                                           value!;
@@ -468,10 +440,7 @@ class _PriorityPageState extends State<PriorityPage> {
                                 ),
                               ),
                               SizedBox(width: 10.w),
-                              Text(
-                                active,
-                                style: robotoRegular,
-                              )
+                              Text(active, style: robotoRegular),
                             ],
                           ),
                           SizedBox(width: 10.w),
@@ -482,8 +451,10 @@ class _PriorityPageState extends State<PriorityPage> {
                                 child: Obx(
                                   () => Radio(
                                     value: 'inactive',
-                                    groupValue: priorityController
-                                        .selectedStatus2.value,
+                                    groupValue:
+                                        priorityController
+                                            .selectedStatus2
+                                            .value,
                                     onChanged: (value) {
                                       priorityController.selectedStatus2.value =
                                           value!;
@@ -492,10 +463,7 @@ class _PriorityPageState extends State<PriorityPage> {
                                 ),
                               ),
                               SizedBox(width: 10.w),
-                              Text(
-                                inActive,
-                                style: robotoRegular,
-                              ),
+                              Text(inActive, style: robotoRegular),
                             ],
                           ),
                         ],
@@ -531,32 +499,33 @@ class _PriorityPageState extends State<PriorityPage> {
                             if (priorityController.isPriorityEditing.value !=
                                 true) {
                               priorityController.editPriority(
-                                  priorityNameTextEditingControlelr2.text,
-                                  sourceId);
+                                priorityNameTextEditingControlelr2.text,
+                                sourceId,
+                              );
                             }
                           },
                           text:
                               priorityController.isPriorityEditing.value == true
                                   ? Center(
-                                      child: SizedBox(
-                                        height: 20.h,
-                                        width: 20.w,
-                                        child: CircularProgressIndicator(
-                                          color: whiteColor,
-                                        ),
+                                    child: SizedBox(
+                                      height: 20.h,
+                                      width: 20.w,
+                                      child: CircularProgressIndicator(
+                                        color: whiteColor,
                                       ),
-                                    )
-                                  : Text(
-                                      edit,
-                                      style: TextStyle(color: whiteColor),
                                     ),
+                                  )
+                                  : Text(
+                                    edit,
+                                    style: TextStyle(color: whiteColor),
+                                  ),
                           width: 100.w,
                           height: 45.h,
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
