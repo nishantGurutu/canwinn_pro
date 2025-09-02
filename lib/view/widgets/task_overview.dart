@@ -33,6 +33,22 @@ class TaskOverview extends StatelessWidget {
     }
   }
 
+  String getDayWithSuffix(int day) {
+    if (day >= 11 && day <= 13) {
+      return "${day}th";
+    }
+    switch (day % 10) {
+      case 1:
+        return "${day}st";
+      case 2:
+        return "${day}nd";
+      case 3:
+        return "${day}rd";
+      default:
+        return "${day}th";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -504,7 +520,16 @@ class TaskOverview extends StatelessWidget {
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [Text("${data?.updatedAt}", style: heading11)],
+                children: [
+                  Text(() {
+                    if (data?.updatedAt == null) return "";
+                    final dateTime = DateTime.parse(data?.updatedAt ?? "");
+                    final dayWithSuffix = getDayWithSuffix(dateTime.day);
+                    final formatted =
+                        "$dayWithSuffix ${DateFormat('MMM yyyy').format(dateTime)}";
+                    return formatted;
+                  }(), style: heading11),
+                ],
               ),
             ),
           ],
