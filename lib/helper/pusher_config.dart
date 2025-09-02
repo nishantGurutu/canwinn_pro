@@ -64,7 +64,7 @@ class PusherConfig {
                   DateTime inputDateTime = DateTime.now();
                   String dt = DateFormat.Hm().format(DateTime.now());
                   String displayDate = getDisplayDate(inputDateTime);
-                  print('653r65e e63563 f356 $displayDate');
+                  print('653r65e e63563 f356 ${eventData["msgid"]}');
                   final newMessage = ChatHistoryData(
                     message: eventData["message"],
                     senderId: eventData["senderId"],
@@ -74,7 +74,8 @@ class PusherConfig {
                     createdDate: displayDate,
                     createdAt: dt,
                   );
-                  await chatController.markSeen(roomId, []);
+                  // List<int> seenMessageIds = eventData["msgid"];
+                  // await chatController.markSeen(roomId, seenMessageIds);
                   chatController.chatHistoryList.add(newMessage);
                   chatController.chatHistoryList.refresh();
                 }
