@@ -93,8 +93,6 @@ class _EditTaskState extends State<EditTask> {
     if (assignUserList.isNotEmpty) {
       taskController.assignedUserId.addAll(assignUserList);
     }
-    print('ftwytd wytfwy w625w72 ${assignUserList.length}');
-    print('ftwytd wytfwy w625w72 ${reviewerUserList.length}');
     super.initState();
     updateData();
   }

@@ -34,15 +34,14 @@ class _ToAssignUserListState extends State<ToAssignUserList> {
     filteredList = RxList<ResponsiblePersonData>(
       homeController.responsiblePersonList,
     );
-    print("te376t73 e3f36e e36 ${widget.assignedTo}");
+    List<String> splitAssign = widget.assignedTo.toString().split(',');
 
-    for (int i = 0; i < homeController.responsiblePersonList.length; i++) {
-      print(
-        "te376t73 e3f36e e36 6et63 ${homeController.responsiblePersonList[i].id}",
-      );
-      if (homeController.responsiblePersonList[i].id.toString() ==
-          widget.assignedTo.toString()) {
-        taskController.toAssignedPersonCheckBox[filteredList[i].id] = true;
+    for (int j = 0; j < splitAssign.length; j++) {
+      for (int i = 0; i < homeController.responsiblePersonList.length; i++) {
+        if (homeController.responsiblePersonList[i].id.toString() ==
+            splitAssign[j].toString()) {
+          taskController.toAssignedPersonCheckBox[filteredList[i].id] = true;
+        }
       }
     }
   }
