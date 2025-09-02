@@ -44,6 +44,7 @@ class EditTask extends StatefulWidget {
   final dynamic assignedTo;
   final dynamic reviewer;
   final dynamic priority;
+  final dynamic attachment;
   const EditTask(
     this.priorityList,
     this.allProjectDataList,
@@ -56,7 +57,8 @@ class EditTask extends StatefulWidget {
     this.dueTimeController3,
     this.assignedTo,
     this.reviewer,
-    this.priority, {
+    this.priority,
+    this.attachment, {
     super.key,
   });
 
@@ -763,11 +765,56 @@ class _EditTaskState extends State<EditTask> {
                                         ],
                                       ),
                                       SizedBox(height: 10.h),
-                                      taskController
-                                              .profilePicPath
-                                              .value
-                                              .isEmpty
+                                      (taskController
+                                                  .profilePicPath
+                                                  .value
+                                                  .isEmpty &&
+                                              widget.attachment == null)
                                           ? SizedBox()
+                                          : widget.attachment != null
+                                          ? InkWell(
+                                            onTap: () {
+                                              networkOpenFile(
+                                                taskController
+                                                    .profilePicPath
+                                                    .value,
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 40.h,
+                                              width: 60.w,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: lightGreyColor,
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(8.r),
+                                                ),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                                child: Image.network(
+                                                  widget.attachment,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) {
+                                                    return Center(
+                                                      child: Text(
+                                                        "Invalid Image",
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          )
                                           : InkWell(
                                             onTap: () {
                                               openFile(
@@ -1343,6 +1390,30 @@ class _EditTaskState extends State<EditTask> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => PDFScreen(file: file)),
+      );
+    } else if (['xls', 'xlsx'].contains(fileExtension)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Excel file viewing not supported yet.')),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unsupported file type.')));
+    }
+  }
+
+  void networkOpenFile(String file) {
+    String fileExtension = file.split('.').last.toLowerCase();
+
+    if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NetworkImageScreen(file: file)),
+      );
+    } else if (fileExtension == 'pdf') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NetworkPDFScreen(file: file)),
       );
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(

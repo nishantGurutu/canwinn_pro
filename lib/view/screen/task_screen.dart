@@ -823,6 +823,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['assigned_to'],
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
+                                              newTaskList[index]['attachment'],
                                             ),
                                           ),
                                     );
@@ -1301,6 +1302,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['assigned_to'],
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
+                                              newTaskList[index]['attachment'],
                                             ),
                                           ),
                                     );
@@ -1768,6 +1770,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['assigned_to'],
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
+                                              newTaskList[index]['attachment'],
                                             ),
                                           ),
                                     );
@@ -2213,6 +2216,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['assigned_to'],
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
+                                              newTaskList[index]['attachment'],
                                             ),
                                           ),
                                     );
