@@ -1,6 +1,7 @@
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:task_management/helper/storage_helper.dart';
+import 'package:task_management/model/department_list_model.dart';
 import 'package:task_management/model/home_lead_model.dart';
 import 'package:task_management/model/home_secreen_data_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
@@ -14,10 +15,7 @@ class HomeController extends GetxController {
   var isTabIndexSelected = 0.obs;
   RxInt totalTask = 0.obs;
   var isTaskCommentSelected = false.obs;
-  RxList<String> timeList = <String>[
-    "Minutes",
-    "Hours",
-  ].obs;
+  RxList<String> timeList = <String>["Minutes", "Hours"].obs;
   RxString? selectedTime = "".obs;
   RxBool isButtonVisible = true.obs;
   var isHomeDataLoading = false.obs;
@@ -32,7 +30,8 @@ class HomeController extends GetxController {
       final result = await HomeService().homeDataApi(id);
       if (result != null) {
         homeDataModel.value = result.data;
-        totalTask.value = (homeDataModel.value?.totalTaskAssigned ?? 0) +
+        totalTask.value =
+            (homeDataModel.value?.totalTaskAssigned ?? 0) +
             (homeDataModel.value?.taskCreatedByMe ?? 0);
         refresh();
         print('API response: $result');
@@ -184,29 +183,31 @@ class HomeController extends GetxController {
       responsiblePersonList.clear();
       if (fromPage.toString() == "add_meeting") {
         responsiblePersonList.add(
-          ResponsiblePersonData(
-            id: 0,
-            name: "All user",
-            status: 1,
-          ),
+          ResponsiblePersonData(id: 0, name: "All user", status: 1),
         );
       }
       for (var person in responsiblePersonListModel.value.data!) {
         responsiblePersonList.add(person);
       }
       responsiblePersonList.refresh();
-      selectedSharedListPerson
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
-      responsiblePersonSelectedCheckBox
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
-      selectedResponsiblePersonId
-          .addAll(List<int>.filled(responsiblePersonList.length, 0));
-      selectedResponsiblePersonId
-          .addAll(List<int>.filled(responsiblePersonList.length, 0));
-      selectedLongPress
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
-      reviewerCheckBox
-          .addAll(List<bool>.filled(responsiblePersonList.length, false));
+      selectedSharedListPerson.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
+      responsiblePersonSelectedCheckBox.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
+      selectedResponsiblePersonId.addAll(
+        List<int>.filled(responsiblePersonList.length, 0),
+      );
+      selectedResponsiblePersonId.addAll(
+        List<int>.filled(responsiblePersonList.length, 0),
+      );
+      selectedLongPress.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
+      reviewerCheckBox.addAll(
+        List<bool>.filled(responsiblePersonList.length, false),
+      );
       responsiblePersonSelectedCheckBox2.clear();
       toAssignedPersonCheckBox.clear();
       for (var person in responsiblePersonList) {
@@ -215,6 +216,25 @@ class HomeController extends GetxController {
       for (var person in responsiblePersonList) {
         responsiblePersonSelectedCheckBox2[person.id] = false;
       }
+    }
+    Future.microtask(() {
+      isResponsiblePersonLoading.value = false;
+    });
+  }
+
+  RxList<DepartmentListData> selectedDepartMentListData2 =
+      <DepartmentListData>[].obs;
+  Future<void> responsiblePersonListApi2(
+    RxList<DepartmentListData> selectedDepartMentListData2,
+  ) async {
+    Future.microtask(() {
+      isResponsiblePersonLoading.value = true;
+    });
+    final result = await HomeService().responsiblePersonListApi2(
+      selectedDepartMentListData2,
+    );
+    if (result != null) {
+      responsiblePersonList.assignAll(result.data!);
     }
     Future.microtask(() {
       isResponsiblePersonLoading.value = false;

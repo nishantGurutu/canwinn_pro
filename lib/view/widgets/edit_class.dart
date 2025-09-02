@@ -293,9 +293,6 @@ class _EditTaskState extends State<EditTask> {
                                                   taskController
                                                       .selectedAllProjectListData
                                                       .value = value;
-                                                  print(
-                                                    "selected project id in add task ${taskController.selectedAllProjectListData.value?.id}",
-                                                  );
                                                 },
                                                 buttonStyleData: ButtonStyleData(
                                                   height: 47.h,
@@ -1310,7 +1307,7 @@ class _EditTaskState extends State<EditTask> {
                                               ],
                                             )
                                             : Text(
-                                              edit,
+                                              "Update",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
