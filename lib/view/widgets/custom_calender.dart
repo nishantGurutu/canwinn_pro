@@ -58,9 +58,9 @@ class CustomCalender extends StatelessWidget {
         DateTime initialDate = DateTime.now();
         DateTime firstDate =
             from == 'report'
-                ? DateTime(2100)
+                ? DateTime(1900)
                 : DateTime.now(); // Restrict to today or later
-        DateTime lastDate = DateTime(2100);
+        DateTime lastDate = DateTime(2200);
 
         // If selecting start date, ensure it's not after due date
         if (from == 'startDate' &&

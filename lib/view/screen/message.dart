@@ -376,12 +376,13 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   ' ',
                                                 )[0] ??
                                                 '';
-
                                             messageKeys.putIfAbsent(
                                               chat.id ?? 0,
                                               () => GlobalKey(),
                                             );
+
                                             String previousDate = '';
+                                            String previousSenderName = '';
                                             if (index > 0) {
                                               previousDate =
                                                   chatController
@@ -390,10 +391,22 @@ class _MessageScreenState extends State<MessageScreen> {
                                                       .createdDate
                                                       ?.split(' ')[0] ??
                                                   '';
+                                              previousSenderName =
+                                                  chatController
+                                                      .chatHistoryList[index -
+                                                          1]
+                                                      .senderName ??
+                                                  '';
                                             }
+
                                             final bool showDateHeader =
                                                 index == 0 ||
                                                 currentDate != previousDate;
+                                            final bool showSenderName =
+                                                index == 0 ||
+                                                chat.senderName !=
+                                                    previousSenderName;
+
                                             return Padding(
                                               key: messageKeys[chat.id],
                                               padding: EdgeInsets.only(
@@ -443,20 +456,26 @@ class _MessageScreenState extends State<MessageScreen> {
                                                           children: [
                                                             isCurrentUser
                                                                 ? SizedBox()
-                                                                : Text(
-                                                                  "${chat.senderName ?? ''}",
-                                                                  style: TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                                  maxLines:
-                                                                      100000,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
+                                                                : Column(
+                                                                  children: [
+                                                                    if (!isCurrentUser &&
+                                                                        showSenderName &&
+                                                                        widget.type.toString().toLowerCase() ==
+                                                                            "group")
+                                                                      Text(
+                                                                        "${chat.senderName ?? ''}",
+                                                                        style: TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                        maxLines:
+                                                                            100000,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                  ],
                                                                 ),
                                                             SizedBox(
                                                               height: 3.h,
