@@ -87,6 +87,12 @@ class _EditTaskState extends State<EditTask> {
   void initState() {
     assignUserList.assignAll(widget.assignedTo.toString().split(','));
     reviewerUserList.assignAll(widget.reviewer.toString().split(','));
+    if (reviewerUserList.isNotEmpty) {
+      taskController.reviewerUserId.addAll(reviewerUserList);
+    }
+    if (assignUserList.isNotEmpty) {
+      taskController.assignedUserId.addAll(assignUserList);
+    }
     print('ftwytd wytfwy w625w72 ${assignUserList.length}');
     print('ftwytd wytfwy w625w72 ${reviewerUserList.length}');
     super.initState();
