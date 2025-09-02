@@ -61,8 +61,12 @@ class AssignAssetsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildTaskCustomTextField(assetsNameTextController, assets, 0),
-                buildTaskCustomTextField(quantityTextController, qty, 1,
-                    isNumeric: true),
+                buildTaskCustomTextField(
+                  quantityTextController,
+                  qty,
+                  1,
+                  isNumeric: true,
+                ),
               ],
             ),
             SizedBox(height: 15.h),
@@ -81,8 +85,11 @@ class AssignAssetsWidget extends StatelessWidget {
   }
 
   Widget buildTaskCustomTextField(
-      TextEditingController controller, String hint, int index,
-      {bool isNumeric = false}) {
+    TextEditingController controller,
+    String hint,
+    int index, {
+    bool isNumeric = false,
+  }) {
     return SizedBox(
       width: 160.w,
       child: TaskCustomTextField(
@@ -109,12 +116,13 @@ class AssignAssetsWidget extends StatelessWidget {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          builder: (context) => Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: ResponsiblePersonList('assets',
-                 ),
-          ),
+          builder:
+              (context) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: ResponsiblePersonList('assets', ''),
+              ),
         );
       },
       child: Container(
@@ -126,10 +134,7 @@ class AssignAssetsWidget extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          child: Text(
-            'Select assign user',
-            style: TextStyle(fontSize: 16),
-          ),
+          child: Text('Select assign user', style: TextStyle(fontSize: 16)),
         ),
       ),
     );
@@ -148,11 +153,12 @@ class AssignAssetsWidget extends StatelessWidget {
       ),
       onPressed: () {
         int qty = int.parse(quantityTextController.text.trim());
-        List<String> serialNumbers = assetsSrnoTextController.text
-            .split(',')
-            .map((s) => s.trim())
-            .where((s) => s.isNotEmpty)
-            .toList();
+        List<String> serialNumbers =
+            assetsSrnoTextController.text
+                .split(',')
+                .map((s) => s.trim())
+                .where((s) => s.isNotEmpty)
+                .toList();
         if (assetsNameTextController.text.isNotEmpty &&
             quantityTextController.text.isNotEmpty &&
             assetsSrnoTextController.text.isNotEmpty) {
@@ -164,23 +170,29 @@ class AssignAssetsWidget extends StatelessWidget {
                 serialNo: serialNumbers,
               ),
             );
-            assetsListCheckbox
-                .addAll(List<bool>.filled(assetsList.length, false));
+            assetsListCheckbox.addAll(
+              List<bool>.filled(assetsList.length, false),
+            );
             assetsNameTextController.clear();
             quantityTextController.clear();
             assetsSrnoTextController.clear();
           } else {
-            Get.snackbar("Error", "Add serial number according to quantity.",
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: primaryColor,
-                colorText: Colors.white);
+            Get.snackbar(
+              "Error",
+              "Add serial number according to quantity.",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: primaryColor,
+              colorText: Colors.white,
+            );
           }
         } else {
           Get.snackbar(
-              "Error", "Please enter Asset Name, Quantity, and Serial Numbers",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: primaryColor,
-              colorText: Colors.white);
+            "Error",
+            "Please enter Asset Name, Quantity, and Serial Numbers",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: primaryColor,
+            colorText: Colors.white,
+          );
         }
       },
       width: 150.w,
@@ -212,8 +224,10 @@ class AssignAssetsWidget extends StatelessWidget {
                     ],
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 8.h,
+                    ),
                     child: Row(
                       children: [
                         Expanded(child: Text(srNumberString)),

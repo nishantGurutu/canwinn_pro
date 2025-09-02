@@ -10,18 +10,45 @@ import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
 
-class ToAssignUserList extends StatelessWidget {
+class ToAssignUserList extends StatefulWidget {
   final dynamic assignedTo;
-  ToAssignUserList(this.assignedTo, {super.key});
+  const ToAssignUserList(this.assignedTo, {super.key});
+
+  @override
+  State<ToAssignUserList> createState() => _ToAssignUserListState();
+}
+
+class _ToAssignUserListState extends State<ToAssignUserList> {
   final TaskController taskController = Get.find();
   final HomeController homeController = Get.find();
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController searchAssignController = TextEditingController();
-    RxList<ResponsiblePersonData> filteredList = RxList<ResponsiblePersonData>(
+  initState() {
+    super.initState();
+    updateData();
+  }
+
+  RxList<ResponsiblePersonData> filteredList = RxList<ResponsiblePersonData>();
+  TextEditingController searchAssignController = TextEditingController();
+  void updateData() {
+    filteredList = RxList<ResponsiblePersonData>(
       homeController.responsiblePersonList,
     );
+    print("te376t73 e3f36e e36 ${widget.assignedTo}");
+
+    for (int i = 0; i < homeController.responsiblePersonList.length; i++) {
+      print(
+        "te376t73 e3f36e e36 6et63 ${homeController.responsiblePersonList[i].id}",
+      );
+      if (homeController.responsiblePersonList[i].id.toString() ==
+          widget.assignedTo.toString()) {
+        taskController.toAssignedPersonCheckBox[filteredList[i].id] = true;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -140,7 +167,7 @@ class ToAssignUserList extends StatelessWidget {
                                   ? Text(
                                     "Self Assign",
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w500,
                                       color: secondaryColor,
                                     ),

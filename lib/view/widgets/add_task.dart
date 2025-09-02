@@ -688,6 +688,7 @@ class _AddTaskState extends State<AddTask> {
                                                         child:
                                                             ResponsiblePersonList(
                                                               'reviewer',
+                                                              '',
                                                             ),
                                                       ),
                                                 );

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +49,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
   final ProjectController projectController = Get.put(ProjectController());
   final ProfileController profileController = Get.put(ProfileController());
   ScrollController _scrollController = ScrollController();
-  final HomeController homeController = Get.find();
+  final HomeController homeController = Get.put(HomeController());
   final TextEditingController dueDateController = TextEditingController();
   @override
   void initState() {
@@ -824,6 +822,8 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               dueDateController3,
                                               dueTimeController3,
                                               newTaskList[index]['assigned_to'],
+                                              newTaskList[index]['reviewer'],
+                                              newTaskList[index]['priority'],
                                             ),
                                           ),
                                     );
@@ -1300,6 +1300,8 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               dueDateController3,
                                               dueTimeController3,
                                               newTaskList[index]['assigned_to'],
+                                              newTaskList[index]['reviewer'],
+                                              newTaskList[index]['priority'],
                                             ),
                                           ),
                                     );
@@ -1765,6 +1767,8 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               dueDateController3,
                                               dueTimeController3,
                                               newTaskList[index]['assigned_to'],
+                                              newTaskList[index]['reviewer'],
+                                              newTaskList[index]['priority'],
                                             ),
                                           ),
                                     );
@@ -2208,6 +2212,8 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               dueDateController3,
                                               dueTimeController3,
                                               newTaskList[index]['assigned_to'],
+                                              newTaskList[index]['reviewer'],
+                                              newTaskList[index]['priority'],
                                             ),
                                           ),
                                     );
