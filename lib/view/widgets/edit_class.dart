@@ -1252,88 +1252,159 @@ class _EditTaskState extends State<EditTask> {
                                   ],
                                 ),
                                 SizedBox(height: 15.h),
+
+                                // Obx(
+                                //   () => CustomButton(
+                                //     onPressed: () {
+                                //       if (taskController.isTaskAdding.value ==
+                                //           false) {
+                                //         if (taskController
+                                //             .assignedUserId
+                                //             .isNotEmpty) {
+                                //           if (taskController
+                                //               .reviewerUserId
+                                //               .isNotEmpty) {
+                                //             if (priorityController
+                                //                         .selectedPriorityData
+                                //                         .value !=
+                                //                     null &&
+                                //                 dueTimeController
+                                //                     .text
+                                //                     .isNotEmpty &&
+                                //                 dueDateController
+                                //                     .text
+                                //                     .isNotEmpty &&
+                                //                 startDateController
+                                //                     .text
+                                //                     .isNotEmpty) {
+                                //               if (profileController
+                                //                       .selectedDepartMentListData
+                                //                       .value !=
+                                //                   null) {
+                                //                 if (_formKey.currentState!
+                                //                     .validate()) {
+                                //                   taskController.addTask(
+                                //                     taskNameController.text,
+                                //                     remarkController.text,
+                                //                     taskController
+                                //                             .selectedAllProjectListData
+                                //                             .value
+                                //                             ?.id ??
+                                //                         0,
+                                //                     profileController
+                                //                         .selectedDepartMentListData
+                                //                         .value
+                                //                         ?.id,
+                                //                     startDateController.text,
+                                //                     dueDateController.text,
+                                //                     dueTimeController.text,
+                                //                     priorityController
+                                //                         .selectedPriorityData
+                                //                         .value
+                                //                         ?.id,
+                                //                     'bottom',
+                                //                     timeTextEditingController
+                                //                         .text,
+                                //                     homeController
+                                //                             .selectedTime
+                                //                             ?.value ??
+                                //                         '',
+                                //                   );
+                                //                 }
+                                //               } else {
+                                //                 CustomToast().showCustomToast(
+                                //                   "Please select department.",
+                                //                 );
+                                //               }
+                                //             } else {
+                                //               CustomToast().showCustomToast(
+                                //                 "Please select * value.",
+                                //               );
+                                //             }
+                                //           } else {
+                                //             CustomToast().showCustomToast(
+                                //               "Please select reviewer person.",
+                                //             );
+                                //           }
+                                //         } else {
+                                //           CustomToast().showCustomToast(
+                                //             "Please select assign person.",
+                                //           );
+                                //         }
+                                //       }
+                                //     },
+                                //     text:
+                                //         taskController.isTaskAdding.value ==
+                                //                 true
+                                //             ? Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.center,
+                                //               children: [
+                                //                 CircularProgressIndicator(
+                                //                   color: whiteColor,
+                                //                 ),
+                                //                 SizedBox(width: 8.w),
+                                //                 Text(
+                                //                   loading,
+                                //                   style: TextStyle(
+                                //                     fontSize: 16,
+                                //                     fontWeight: FontWeight.w500,
+                                //                     color: whiteColor,
+                                //                   ),
+                                //                 ),
+                                //               ],
+                                //             )
+                                //             : Text(
+                                //               edit,
+                                //               style: TextStyle(
+                                //                 color: whiteColor,
+                                //                 fontSize: 16,
+                                //                 fontWeight: FontWeight.w500,
+                                //               ),
+                                //             ),
+                                //     width: double.infinity,
+                                //     color: primaryColor,
+                                //     height: 45.h,
+                                //   ),
+                                // ),
                                 Obx(
                                   () => CustomButton(
                                     onPressed: () {
                                       if (taskController.isTaskAdding.value ==
                                           false) {
-                                        if (taskController
-                                            .assignedUserId
-                                            .isNotEmpty) {
-                                          if (taskController
-                                              .reviewerUserId
-                                              .isNotEmpty) {
-                                            if (priorityController
-                                                        .selectedPriorityData
-                                                        .value !=
-                                                    null &&
-                                                dueTimeController
-                                                    .text
-                                                    .isNotEmpty &&
-                                                dueDateController
-                                                    .text
-                                                    .isNotEmpty &&
-                                                startDateController
-                                                    .text
-                                                    .isNotEmpty) {
-                                              if (profileController
-                                                      .selectedDepartMentListData
-                                                      .value !=
-                                                  null) {
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  taskController.addTask(
-                                                    taskNameController.text,
-                                                    remarkController.text,
-                                                    taskController
-                                                            .selectedAllProjectListData
-                                                            .value
-                                                            ?.id ??
-                                                        0,
-                                                    profileController
-                                                        .selectedDepartMentListData
-                                                        .value
-                                                        ?.id,
-                                                    startDateController.text,
-                                                    dueDateController.text,
-                                                    dueTimeController.text,
-                                                    priorityController
-                                                        .selectedPriorityData
-                                                        .value
-                                                        ?.id,
-                                                    'bottom',
-                                                    timeTextEditingController
-                                                        .text,
-                                                    homeController
-                                                            .selectedTime
-                                                            ?.value ??
-                                                        '',
-                                                  );
-                                                }
-                                              } else {
-                                                CustomToast().showCustomToast(
-                                                  "Please select department.",
-                                                );
-                                              }
-                                            } else {
-                                              CustomToast().showCustomToast(
-                                                "Please select * value.",
-                                              );
-                                            }
-                                          } else {
-                                            CustomToast().showCustomToast(
-                                              "Please select reviewer person.",
-                                            );
-                                          }
-                                        } else {
-                                          CustomToast().showCustomToast(
-                                            "Please select assign person.",
+                                        if (_formKey.currentState!.validate()) {
+                                          taskController.editTask(
+                                            widget.taskNameController3.text,
+                                            widget.remarkController3.text,
+                                            projectController
+                                                .selectedAllProjectListData
+                                                .value
+                                                ?.id,
+                                            profileController
+                                                .selectedDepartMentListData
+                                                .value
+                                                ?.id,
+                                            taskController.assignedUserId,
+                                            taskController.reviewerUserId,
+                                            widget.startDateController3.text,
+                                            widget.dueDateController3.text,
+                                            widget.dueTimeController3.text,
+                                            priorityController
+                                                .selectedPriorityData
+                                                .value
+                                                ?.id,
+                                            widget.newTaskListId,
+                                            timeTextEditingController.text,
+                                            homeController
+                                                    .selectedTime
+                                                    ?.value ??
+                                                '',
                                           );
                                         }
                                       }
                                     },
                                     text:
-                                        taskController.isTaskAdding.value ==
+                                        taskController.isTaskEditing.value ==
                                                 true
                                             ? Row(
                                               mainAxisAlignment:
@@ -1356,9 +1427,9 @@ class _EditTaskState extends State<EditTask> {
                                             : Text(
                                               edit,
                                               style: TextStyle(
-                                                color: whiteColor,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
+                                                color: whiteColor,
                                               ),
                                             ),
                                     width: double.infinity,
