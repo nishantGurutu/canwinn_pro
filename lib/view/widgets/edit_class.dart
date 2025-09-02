@@ -22,7 +22,6 @@ import 'package:task_management/model/priority_model.dart' show PriorityData;
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/view/widgets/add_contact.dart';
 import 'package:task_management/view/widgets/custom_calender.dart';
-import 'package:task_management/view/widgets/custom_dropdawn.dart';
 import 'package:task_management/view/widgets/custom_timer.dart';
 import 'package:task_management/view/widgets/department_list_widget.dart';
 import 'package:task_management/view/widgets/image_screen.dart';
@@ -82,8 +81,14 @@ class _EditTaskState extends State<EditTask> {
   final ProjectController projectController = Get.find();
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
+  RxList<String> assignUserList = <String>[].obs;
+  RxList<String> reviewerUserList = <String>[].obs;
   @override
   void initState() {
+    assignUserList.assignAll(widget.assignedTo.toString().split(','));
+    reviewerUserList.assignAll(widget.reviewer.toString().split(','));
+    print('ftwytd wytfwy w625w72 ${assignUserList.length}');
+    print('ftwytd wytfwy w625w72 ${reviewerUserList.length}');
     super.initState();
     updateData();
   }
@@ -183,7 +188,7 @@ class _EditTaskState extends State<EditTask> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      createNewTask,
+                                      'Update Task',
                                       style: TextStyle(
                                         fontSize: 20.sp,
                                         fontWeight: FontWeight.w500,
@@ -609,13 +614,16 @@ class _EditTaskState extends State<EditTask> {
                                             backgroundColor:
                                                 secondaryPrimaryColor,
                                             isLabelVisible:
+                                                assignUserList.isNotEmpty ||
                                                 taskController
-                                                        .assignedUserId
-                                                        .isEmpty
-                                                    ? false
-                                                    : true,
+                                                    .assignedUserId
+                                                    .isNotEmpty,
                                             label: Text(
-                                              "${taskController.assignedUserId.length}",
+                                              taskController
+                                                      .assignedUserId
+                                                      .isNotEmpty
+                                                  ? "${taskController.assignedUserId.length}"
+                                                  : "${assignUserList.length}",
                                               style: TextStyle(
                                                 color: textColor,
                                                 fontSize: 16,
@@ -678,13 +686,16 @@ class _EditTaskState extends State<EditTask> {
                                             backgroundColor:
                                                 secondaryPrimaryColor,
                                             isLabelVisible:
+                                                reviewerUserList.isNotEmpty ||
                                                 taskController
-                                                        .reviewerUserId
-                                                        .isEmpty
-                                                    ? false
-                                                    : true,
+                                                    .reviewerUserId
+                                                    .isNotEmpty,
                                             label: Text(
-                                              "${taskController.reviewerUserId.length ?? ""}",
+                                              taskController
+                                                      .reviewerUserId
+                                                      .isNotEmpty
+                                                  ? "${taskController.reviewerUserId.length}"
+                                                  : "${reviewerUserList.length}",
                                               style: TextStyle(
                                                 color: textColor,
                                                 fontSize: 16,
