@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:task_management/constant/color_constant.dart';
+import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/constant/image_constant.dart';
 import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/controller/chat_controller.dart';
@@ -17,6 +18,7 @@ class NewGroupSecond extends StatelessWidget {
 
   final TextEditingController groupNameTextEditingController =
       TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,10 @@ class NewGroupSecond extends StatelessWidget {
         title: Text(
           newGroup,
           style: TextStyle(
-              color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -42,9 +47,7 @@ class NewGroupSecond extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: Column(
           children: [
-            SizedBox(
-              height: 5.h,
-            ),
+            SizedBox(height: 5.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
@@ -54,33 +57,27 @@ class NewGroupSecond extends StatelessWidget {
                     width: 40.w,
                     decoration: BoxDecoration(
                       color: lightBackgroundColor,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.r),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20.r)),
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(10.sp),
                       child: SvgPicture.asset(cameraIcon),
                     ),
                   ),
-                  SizedBox(
-                    width: 8.w,
-                  ),
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: TextFormField(
                       controller: groupNameTextEditingController,
-                      // autofocus: true,
                       decoration: InputDecoration(
-                          hintText: 'Group Name',
-                          hintStyle: TextStyle(color: lightGreyColor)),
+                        hintText: 'Group Name',
+                        hintStyle: TextStyle(color: lightGreyColor),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 10.h,
-            ),
+            SizedBox(height: 10.h),
             Padding(
               padding: EdgeInsets.only(left: 10.w),
               child: Row(
@@ -89,7 +86,7 @@ class NewGroupSecond extends StatelessWidget {
                     "${memberName} ",
                     style: changeTextColor(rubikRegular, lightGreyColor),
                   ),
-                  SvgPicture.asset(arrowRightIcon)
+                  SvgPicture.asset(arrowRightIcon),
                 ],
               ),
             ),
@@ -99,8 +96,11 @@ class NewGroupSecond extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding:
-                        EdgeInsets.only(left: 10.w, top: 10.h, right: 10.w),
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                      top: 10.h,
+                      right: 10.w,
+                    ),
                     child: Column(
                       children: [
                         Container(
@@ -128,9 +128,7 @@ class NewGroupSecond extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 7.h,
-                        ),
+                        SizedBox(height: 7.h),
                         SizedBox(
                           width: 82.w,
                           child: Text(
@@ -144,12 +142,9 @@ class NewGroupSecond extends StatelessWidget {
                       ],
                     ),
                   );
-                  // : SizedBox();
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 10.h,
-                  );
+                  return SizedBox(height: 10.h);
                 },
               ),
             ),
@@ -158,17 +153,20 @@ class NewGroupSecond extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (chatController.isGroupCreating.value == false) {
-            chatController.groupCreateApi(
-                groupNameTextEditingController.text, selectedList);
+          if (groupNameTextEditingController.text.isNotEmpty) {
+            if (chatController.isGroupCreating.value == false) {
+              chatController.groupCreateApi(
+                groupNameTextEditingController.text.trim(),
+                selectedList,
+              );
+            }
+          } else {
+            CustomToast().showCustomToast('Enter group name');
           }
         },
         shape: CircleBorder(),
         backgroundColor: primaryColor,
-        child: Icon(
-          Icons.done,
-          color: whiteColor,
-        ),
+        child: Icon(Icons.done, color: whiteColor),
       ),
     );
   }

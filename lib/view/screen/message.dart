@@ -559,7 +559,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                             "${chat.senderName ?? ''}",
                                                                                             style: TextStyle(
                                                                                               fontSize:
-                                                                                                  10.sp,
+                                                                                                  14.sp,
                                                                                               fontWeight:
                                                                                                   FontWeight.w500,
                                                                                               color:
