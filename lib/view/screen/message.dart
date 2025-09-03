@@ -546,10 +546,13 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                     crossAxisAlignment:
                                                                                         CrossAxisAlignment.start,
                                                                                     children: [
-                                                                                      if (!isCurrentUser &&
-                                                                                          showSenderName &&
-                                                                                          widget.type.toString().toLowerCase() ==
-                                                                                              "group")
+                                                                                      if ((showDateHeader &&
+                                                                                              widget.type.toString().toLowerCase() ==
+                                                                                                  "group") ||
+                                                                                          !isCurrentUser &&
+                                                                                              showSenderName &&
+                                                                                              widget.type.toString().toLowerCase() ==
+                                                                                                  "group")
                                                                                         Padding(
                                                                                           padding: EdgeInsets.symmetric(
                                                                                             horizontal:
