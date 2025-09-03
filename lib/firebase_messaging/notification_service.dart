@@ -205,16 +205,7 @@ class LocalNotificationService {
       () {},
     );
   }
-  // {sendername: IT Administrator, senderid: 97, productid: 8, type: emi_reminder, title: EMI Due Reminder, message: EMI of 12000 due today for vehicle 789456 on 2025-07-15}
-  // kiej8d99 payload data in push service {"sendername":"IT Administrator","senderid":"97","productid":"1","type":"lead","title":"Lead meeting is created","message":"Lead meeting for this lead Kallo is created"}
 
-  // {"sendername":"IT Administrator","senderid":"97","productid":"18","type":"dailymsg"} -- daily message
-
-  // Discussion
-  // kiej8d99 payload data in push service {"sendername":"IT Administrator","senderid":"97","productid":"1","type":"leadchat","title":"Discussion & Comments","message":"New comment on lead \"Kallo\""}
-
-  // kiej8d99 payload data in push service {"sendername":"Nishant Kumar Schotest","senderid":"262","productid":"5505","type":"task","title":"Task Assigned","message":"Task, Navigation test has been assigned to you."}
-  // kiej8d99 payload data in push service {"sendername":"Nishant Kumar Schotest","senderid":"262","productid":"29","type":"out_challan","title":"Thank you for creating the out gatepass.!","message":"you will get notified when further action is taken"}
   static void handleNavigation(String? payload) {
     if (payload == null) return;
     print("kiej8d99 payload data in push service ${payload}");
@@ -227,16 +218,6 @@ class LocalNotificationService {
         pendingPayload = payload;
         return;
       }
-      //{"page":"followup","taskId":44}
-      // {"sendername":"Nishant Kumar Schotest","senderid":"99","productid":"32","type":"leadchat","title":"Discussion & Comments","message":"New comment on lead \"weuiyiew\""}
-      // {"sendername":"Nishant Kumar Schotest","senderid":"99","productid":"1","type":"leadquotation","title":"Lead Quotation is created","message":"Lead Quotation for this lead New is created"}
-      // {"sendername":"Nishant Kumar Schotest","senderid":"99","productid":"38","type":"lead_followup","title":"New Lead Followup Created","message":"FollowUp for this lead New is created"}
-
-      // {"sendername":"Nishant Kumar45","senderid":"235","productid":"70","type":"note","title":"You have successfully added a note: Sbsb","message":"Sbsb"}
-      // {"sendername":"Nishant Kumar Schotest","senderid":"99","productid":"17","type":"gatepass","title":"Thank you for creating the gatepass.!","message":"you will get notified when further action is taken"}
-
-      // {sendername: IT Administrator, senderid: 97, productid: 23, type: sos, title: You got a SOS message please check! , message: Canwinn Foundation SOS}
-      // {"sendername":"Nishant Kumar","senderid":"99","productid":"37","type":"challan"}
       String? page = payloadData['page'];
       String? taskId = payloadData['taskId'].toString();
 
@@ -259,7 +240,6 @@ class LocalNotificationService {
         Get.put<BottomBarController>(BottomBarController())
             .currentPageIndex
             .value = 0;
-        // lead_meeting
         Get.to(
           () => BottomNavigationBarExample(
             from: 'true',

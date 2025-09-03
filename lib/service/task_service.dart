@@ -104,15 +104,11 @@ class TaskService {
       var url = "${ApiConstant.baseUrl}${ApiConstant.responsiblePersonList}";
 
       if (selectedDepartMentListData2.isNotEmpty) {
-        // Extract department IDs and join them with commas
         final departmentIds = selectedDepartMentListData2
-            .map(
-              (dept) => dept.id.toString(),
-            ) // Assuming 'id' is a field in DepartmentListData
-            .where((id) => id.isNotEmpty) // Filter out null or empty IDs
-            .join(','); // Join IDs with commas (e.g., "1,2,3")
+            .map((dept) => dept.id.toString())
+            .where((id) => id.isNotEmpty)
+            .join(',');
 
-        // Append department IDs to the URL as a query parameter
         url += "?department_id=$departmentIds";
       }
 
@@ -206,12 +202,12 @@ class TaskService {
 
   String assignedId = '';
   String reviewerId = '';
+  String departmentId = '';
   String reminderData = '';
   Future<bool> addTaskApi(
     String taskName,
     String remark,
     int selectedProjectId,
-    int? departmentId,
     Rx<File> pickedFile,
     RxList<String> assignedUserId,
     RxList<String> reviewerUserId,
@@ -222,10 +218,17 @@ class TaskService {
     String timeTextString,
     String timeType,
     RxList<ContactsData> addTaskContactList,
+    RxList<DepartmentListData> selectedDepartMentListData2,
   ) async {
     try {
       assignedId = assignedUserId.where((id) => id.isNotEmpty).join(',');
       reviewerId = reviewerUserId.where((id) => id.isNotEmpty).join(',');
+      departmentId = selectedDepartMentListData2
+          .map((dept) => dept.id.toString())
+          .where((id) => id.isNotEmpty)
+          .join(',');
+      print('ye37te e3f6r3 $departmentId');
+
       reminderData = "$timeTextString $timeType";
 
       var token = StorageHelper.getToken();
@@ -240,7 +243,7 @@ class TaskService {
         "user_id": userId.toString(),
         'title': taskName,
         'assigned_to': assignedId,
-        'department_id': departmentId?.toString(),
+        'department_id': departmentId,
         'start_date': startDate,
         'due_date': dueDate,
         'due_time': dueTime,

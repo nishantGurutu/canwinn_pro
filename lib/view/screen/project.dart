@@ -71,84 +71,86 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
         title: Text(
           "${project}s",
           style: TextStyle(
-              color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
       backgroundColor: whiteColor,
       body: Obx(
-        () => projectController.isAllProjectCalling.value == true
-            ? SizedBox(
-                height: 700.h,
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : Container(
-                color: backgroundColor,
-                child: Column(
-                  children: [
-                    TabBar(
-                      controller: _tabController,
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.grey,
-                      tabs: [
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.list),
-                              SizedBox(width: 5.w),
-                              const Text(
-                                'Created by me',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Tab(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.assignment_turned_in),
-                              SizedBox(width: 5.w),
-                              const Text(
-                                'Assigned to me',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: TabBarView(
+        () =>
+            projectController.isAllProjectCalling.value == true
+                ? SizedBox(
+                  height: 700.h,
+                  child: const Center(child: CircularProgressIndicator()),
+                )
+                : Container(
+                  color: backgroundColor,
+                  child: Column(
+                    children: [
+                      TabBar(
                         controller: _tabController,
-                        children: [
-                          CreatedByMeProject(
-                            projectController.createdProjectList,
-                            profileController,
-                            projectController,
-                            taskController,
-                            priorityController,
-                            homeController,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        tabs: [
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.list),
+                                SizedBox(width: 5.w),
+                                const Text(
+                                  'Created by me',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          AssignedToMeProject(
-                            projectController.assignedProjectList,
+                          Tab(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.assignment_turned_in),
+                                SizedBox(width: 5.w),
+                                const Text(
+                                  'Assigned to me',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            CreatedByMeProject(
+                              projectController.createdProjectList,
+                              profileController,
+                              projectController,
+                              taskController,
+                              priorityController,
+                              homeController,
+                            ),
+                            AssignedToMeProject(
+                              projectController.assignedProjectList,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -156,261 +158,310 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
         },
         shape: CircleBorder(),
         backgroundColor: primaryColor,
-        child: Icon(
-          Icons.add,
-          color: whiteColor,
-          size: 30.h,
-        ),
+        child: Icon(Icons.add, color: whiteColor, size: 30.h),
       ),
     );
   }
 
   Widget projectList(RxList<CreatedByMe> allProjectDataList) {
     return Expanded(
-      child: allProjectDataList.isEmpty
-          ? Center(
-              child: Text(
-                "No Project available",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: textColor,
+      child:
+          allProjectDataList.isEmpty
+              ? Center(
+                child: Text(
+                  "No Project available",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: textColor,
+                  ),
                 ),
-              ),
-            )
-          : ListView.separated(
-              itemCount: allProjectDataList.length,
-              itemBuilder: (BuildContext context, int index) {
-                print('date formate ${allProjectDataList[index].createdAt}');
-                DateTime dateTime = DateTime.parse(
-                    allProjectDataList[index].createdAt.toString());
-                String formattedDate =
-                    DateFormat('dd-MM-yyyy').format(dateTime);
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.to(ProjectDetails(allProjectDataList[index].id));
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: lightGreyColor.withOpacity(0.2),
-                                blurRadius: 13.0,
-                                spreadRadius: 2,
-                                blurStyle: BlurStyle.normal,
-                                offset: Offset(0, 4),
+              )
+              : ListView.separated(
+                itemCount: allProjectDataList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  print('date formate ${allProjectDataList[index].createdAt}');
+                  DateTime dateTime = DateTime.parse(
+                    allProjectDataList[index].createdAt.toString(),
+                  );
+                  String formattedDate = DateFormat(
+                    'dd-MM-yyyy',
+                  ).format(dateTime);
+                  return Column(
+                    children: [
+                      SizedBox(height: 5.h),
+                      InkWell(
+                        onTap: () {
+                          Get.to(ProjectDetails(allProjectDataList[index].id));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
                               ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 10.h),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Project ID ${allProjectDataList[index].id}',
-                                      style: TextStyle(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: lightGreyColor.withOpacity(0.2),
+                                  blurRadius: 13.0,
+                                  spreadRadius: 2,
+                                  blurStyle: BlurStyle.normal,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 10.h,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Project ID ${allProjectDataList[index].id}',
+                                        style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: textColor),
-                                    ),
-                                    Spacer(),
-                                    SizedBox(
-                                      height: 20.h,
-                                      width: 30.w,
-                                      child: PopupMenuButton<String>(
-                                        padding: const EdgeInsets.all(0),
-                                        icon: const Icon(Icons.more_vert),
-                                        onSelected: (String result) {
-                                          switch (result) {
-                                            case 'edit':
-                                              Get.to(EditProject(
-                                                  allProjectDataList[index]));
-                                              break;
-                                            case 'delete':
-                                              showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Text(
-                                                      "Delete Project",
-                                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                                    ),
-                                                    content: const Text("Are you sure you want to delete this project?"),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                        },
-                                                        child: const Text(
-                                                          "Cancel",
-                                                          style: TextStyle(color: Colors.grey),
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      SizedBox(
+                                        height: 20.h,
+                                        width: 30.w,
+                                        child: PopupMenuButton<String>(
+                                          padding: const EdgeInsets.all(0),
+                                          icon: const Icon(Icons.more_vert),
+                                          onSelected: (String result) {
+                                            switch (result) {
+                                              case 'edit':
+                                                Get.to(
+                                                  EditProject(
+                                                    allProjectDataList[index],
+                                                  ),
+                                                );
+                                                break;
+                                              case 'delete':
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (
+                                                    BuildContext context,
+                                                  ) {
+                                                    return AlertDialog(
+                                                      title: const Text(
+                                                        "Delete Project",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
-                                                      Obx(
-                                                            () => ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(
-                                                            backgroundColor: Colors.red,
-                                                          ),
-                                                          onPressed: projectController.isProjectDeleting.value
-                                                              ? null
-                                                              : () async {
-                                                            final id = allProjectDataList[index].id;
-                                                            await projectController.deleteProject(id);
-                                                            Navigator.of(context).pop(); // ✅ Dialog close after delete
-                                                          },
-                                                          child: projectController.isProjectDeleting.value
-                                                              ? const SizedBox(
-                                                            height: 20,
-                                                            width: 20,
-                                                            child: CircularProgressIndicator(
-                                                              color: Colors.white,
-                                                              strokeWidth: 2,
+                                                      content: const Text(
+                                                        "Are you sure you want to delete this project?",
+                                                      ),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              12,
                                                             ),
-                                                          )
-                                                              : const Text("OK"),
-                                                        ),
                                                       ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                              break;
-                                            case 'addTask':
-                                              for (var deptId
-                                                  in projectController
-                                                      .allProjectDataList) {
-                                                if (allProjectDataList[index]
-                                                        .id ==
-                                                    deptId.id) {
-                                                  projectController
-                                                      .selectedAllProjectListData
-                                                      .value = deptId;
-                                                  taskController
-                                                      .responsiblePersonListApi(
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                              context,
+                                                            ).pop();
+                                                          },
+                                                          child: const Text(
+                                                            "Cancel",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Obx(
+                                                          () => ElevatedButton(
+                                                            style:
+                                                                ElevatedButton.styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                ),
+                                                            onPressed:
+                                                                projectController
+                                                                        .isProjectDeleting
+                                                                        .value
+                                                                    ? null
+                                                                    : () async {
+                                                                      final id =
+                                                                          allProjectDataList[index]
+                                                                              .id;
+                                                                      await projectController
+                                                                          .deleteProject(
+                                                                            id,
+                                                                          );
+                                                                      Navigator.of(
+                                                                        context,
+                                                                      ).pop(); // ✅ Dialog close after delete
+                                                                    },
+                                                            child:
+                                                                projectController
+                                                                        .isProjectDeleting
+                                                                        .value
+                                                                    ? const SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                      width: 20,
+                                                                      child: CircularProgressIndicator(
+                                                                        color:
+                                                                            Colors.white,
+                                                                        strokeWidth:
+                                                                            2,
+                                                                      ),
+                                                                    )
+                                                                    : const Text(
+                                                                      "OK",
+                                                                    ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                                break;
+                                              case 'addTask':
+                                                for (var deptId
+                                                    in projectController
+                                                        .allProjectDataList) {
+                                                  if (allProjectDataList[index]
+                                                          .id ==
+                                                      deptId.id) {
+                                                    projectController
+                                                        .selectedAllProjectListData
+                                                        .value = deptId;
+                                                    taskController
+                                                        .responsiblePersonListApi(
                                                           profileController
                                                               .selectedDepartMentListData
                                                               .value
                                                               ?.id,
-                                                          "");
-                                                  profileController.departmentList(
-                                                      projectController
-                                                              .selectedAllProjectListData
-                                                              .value
-                                                              ?.id ??
-                                                          0);
-                                                  showModalBottomSheet(
-                                                    context: context,
-                                                    isScrollControlled: true,
-                                                    builder: (context) =>
-                                                        Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom: MediaQuery.of(
-                                                                  context)
-                                                              .viewInsets
-                                                              .bottom),
-                                                      child: addTaskBottomSheet(
-                                                          context,
-                                                          allProjectDataList[
-                                                                  index]
-                                                              .id),
-                                                    ),
-                                                  );
-                                                  return;
+                                                          "",
+                                                        );
+                                                    profileController
+                                                        .departmentList(
+                                                          projectController
+                                                                  .selectedAllProjectListData
+                                                                  .value
+                                                                  ?.id ??
+                                                              0,
+                                                        );
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      builder:
+                                                          (context) => Padding(
+                                                            padding: EdgeInsets.only(
+                                                              bottom:
+                                                                  MediaQuery.of(
+                                                                        context,
+                                                                      )
+                                                                      .viewInsets
+                                                                      .bottom,
+                                                            ),
+                                                            child: addTaskBottomSheet(
+                                                              context,
+                                                              allProjectDataList[index]
+                                                                  .id,
+                                                            ),
+                                                          ),
+                                                    );
+                                                    return;
+                                                  }
                                                 }
-                                              }
-                                              break;
-                                          }
-                                        },
-                                        itemBuilder: (BuildContext context) =>
-                                            <PopupMenuEntry<String>>[
-                                          const PopupMenuItem<String>(
-                                            value: 'edit',
-                                            child: ListTile(
-                                              leading: Icon(Icons.edit),
-                                              title: Text('Edit'),
-                                            ),
-                                          ),
-                                          const PopupMenuItem<String>(
-                                            value: 'delete',
-                                            child: ListTile(
-                                              leading: Icon(Icons.delete),
-                                              title: Text('Delete'),
-                                            ),
-                                          ),
-                                          const PopupMenuItem<String>(
-                                            value: 'addTask',
-                                            child: ListTile(
-                                              leading: Icon(Icons.task),
-                                              title: Text('Add Task'),
-                                            ),
-                                          ),
-                                        ],
+                                                break;
+                                            }
+                                          },
+                                          itemBuilder:
+                                              (
+                                                BuildContext context,
+                                              ) => <PopupMenuEntry<String>>[
+                                                const PopupMenuItem<String>(
+                                                  value: 'edit',
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.edit),
+                                                    title: Text('Edit'),
+                                                  ),
+                                                ),
+                                                const PopupMenuItem<String>(
+                                                  value: 'delete',
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.delete),
+                                                    title: Text('Delete'),
+                                                  ),
+                                                ),
+                                                const PopupMenuItem<String>(
+                                                  value: 'addTask',
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.task),
+                                                    title: Text('Add Task'),
+                                                  ),
+                                                ),
+                                              ],
+                                        ),
                                       ),
+                                    ],
+                                  ),
+                                  Text(
+                                    '${allProjectDataList[index].name}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: textColor,
                                     ),
-                                  ],
-                                ),
-                                Text(
-                                  '${allProjectDataList[index].name}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: textColor,
                                   ),
-                                ),
-                                SizedBox(height: 3.h),
-                                Text(
-                                  '${allProjectDataList[index].description}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: textColor,
+                                  SizedBox(height: 3.h),
+                                  Text(
+                                    '${allProjectDataList[index].description}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: textColor,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 3.h),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${allProjectDataList[index].priorityName}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: blueColor,
+                                  SizedBox(height: 3.h),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${allProjectDataList[index].priorityName}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: blueColor,
+                                        ),
                                       ),
-                                    ),
-                                    Spacer(),
-                                    Text('$formattedDate')
-                                  ],
-                                ),
-                              ],
+                                      Spacer(),
+                                      Text('$formattedDate'),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(height: 10.h);
-              },
-            ),
+                    ],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(height: 10.h);
+                },
+              ),
     );
   }
 
@@ -418,8 +469,10 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
 
   Future<void> takePhoto(ImageSource source) async {
     try {
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
       if (pickedImage == null) {
         return;
       }
@@ -469,13 +522,13 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     Text(
                       createNewTask,
                       style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.w500),
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 TaskCustomTextField(
                   controller: taskNameController,
                   textCapitalization: TextCapitalization.sentences,
@@ -485,9 +538,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                   index: 0,
                   focusedIndexNotifier: focusedIndexNotifier,
                 ),
-                SizedBox(
-                  height: 10.h,
-                ),
+                SizedBox(height: 10.h),
                 TaskCustomTextField(
                   controller: remarkController,
                   textCapitalization: TextCapitalization.sentences,
@@ -498,9 +549,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                   maxLine: 3,
                   focusedIndexNotifier: focusedIndexNotifier,
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -512,11 +561,11 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                           Text(
                             selectProject,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
+                          SizedBox(height: 3.w),
                           DropdownButtonHideUnderline(
                             child: Obx(
                               () => DropdownButton2<CreatedByMe>(
@@ -524,30 +573,40 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                                 hint: Text(
                                   "Select Project",
                                   style: changeTextColor(
-                                      rubikRegular, darkGreyColor),
+                                    rubikRegular,
+                                    darkGreyColor,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                items: projectController.allProjectDataList
-                                    .map(
-                                      (CreatedByMe item) =>
-                                          DropdownMenuItem<CreatedByMe>(
-                                        value: item,
-                                        child: Text(
-                                          item.name ?? '',
-                                          style: changeTextColor(
-                                              rubikRegular, Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                                value: projectController
-                                    .selectedAllProjectListData.value,
+                                items:
+                                    projectController.allProjectDataList
+                                        .map(
+                                          (CreatedByMe item) =>
+                                              DropdownMenuItem<CreatedByMe>(
+                                                value: item,
+                                                child: Text(
+                                                  item.name ?? '',
+                                                  style: changeTextColor(
+                                                    rubikRegular,
+                                                    Colors.black,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                        )
+                                        .toList(),
+                                value:
+                                    projectController
+                                        .selectedAllProjectListData
+                                        .value,
                                 onChanged: (CreatedByMe? value) {
-                                  projectController.selectedAllProjectListData
+                                  projectController
+                                      .selectedAllProjectListData
                                       .value = value!;
-                                  profileController
-                                      .departmentList(selectedProjectId);
+                                  profileController.departmentList(
+                                    selectedProjectId,
+                                  );
                                 },
                                 buttonStyleData: ButtonStyleData(
                                   height: 45.h,
@@ -558,8 +617,9 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                                   ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5.r),
-                                    border:
-                                        Border.all(color: lightSecondaryColor),
+                                    border: Border.all(
+                                      color: lightSecondaryColor,
+                                    ),
                                     color: lightSecondaryColor,
                                   ),
                                 ),
@@ -577,14 +637,17 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                                   maxHeight: 200.h,
                                   width: 312.w,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.r),
+                                    borderRadius: BorderRadius.circular(5.r),
+                                    color: lightSecondaryColor,
+                                    border: Border.all(
                                       color: lightSecondaryColor,
-                                      border: Border.all(
-                                          color: lightSecondaryColor)),
+                                    ),
+                                  ),
                                   scrollbarTheme: ScrollbarThemeData(
                                     radius: const Radius.circular(40),
-                                    thickness:
-                                        WidgetStateProperty.all<double>(6),
+                                    thickness: WidgetStateProperty.all<double>(
+                                      6,
+                                    ),
                                     thumbVisibility:
                                         WidgetStateProperty.all<bool>(true),
                                   ),
@@ -607,21 +670,25 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                           Text(
                             selectDepartment,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
+                          SizedBox(height: 3.w),
                           CustomDropdown<DepartmentListData>(
                             items: profileController.departmentDataList,
                             itemLabel: (item) => item.name ?? '',
                             onChanged: (value) {
                               profileController
-                                  .selectedDepartMentListData.value = value!;
+                                  .selectedDepartMentListData
+                                  .value = value!;
                               taskController.responsiblePersonListApi(
-                                  profileController
-                                      .selectedDepartMentListData.value?.id,
-                                  "");
+                                profileController
+                                    .selectedDepartMentListData
+                                    .value
+                                    ?.id,
+                                "",
+                              );
                             },
                             hintText: selectDepartment,
                           ),
@@ -630,9 +697,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -647,25 +712,26 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 12.w, vertical: 10.h),
+                            horizontal: 12.w,
+                            vertical: 10.h,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Attachment",
                                 style: TextStyle(
-                                    color: whiteColor,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500),
+                                  color: whiteColor,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                              SizedBox(
-                                width: 5.w,
-                              ),
+                              SizedBox(width: 5.w),
                               Image.asset(
                                 'assets/images/png/attachment_rounded.png',
                                 color: whiteColor,
                                 height: 20.h,
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -673,15 +739,20 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     ),
                     InkWell(
                       onTap: () {
-                        List<String> name =
-                            StorageHelper.getName().toString().split(' ');
+                        List<String> name = StorageHelper.getName()
+                            .toString()
+                            .split(' ');
                         String initials = name.map((word) => word[0]).join();
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) => Obx(
-                            () => assignedTask(context,
-                                taskController.responsiblePersonList, initials),
-                          ),
+                          builder:
+                              (context) => Obx(
+                                () => assignedTask(
+                                  context,
+                                  taskController.responsiblePersonList,
+                                  initials,
+                                ),
+                              ),
                         );
                       },
                       child: Container(
@@ -691,13 +762,16 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 17.w, vertical: 11.2.h),
+                            horizontal: 17.w,
+                            vertical: 11.2.h,
+                          ),
                           child: Text(
                             "Assigned To",
                             style: TextStyle(
-                                color: whiteColor,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500),
+                              color: whiteColor,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
@@ -705,13 +779,18 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     InkWell(
                       onTap: () {
                         taskController.reviewerCheckBox.addAll(
-                            List<bool>.filled(
-                                taskController.responsiblePersonList.length,
-                                false));
+                          List<bool>.filled(
+                            taskController.responsiblePersonList.length,
+                            false,
+                          ),
+                        );
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) => reviewerList(
-                              context, taskController.responsiblePersonList),
+                          builder:
+                              (context) => reviewerList(
+                                context,
+                                taskController.responsiblePersonList,
+                              ),
                         );
                       },
                       child: Container(
@@ -721,22 +800,23 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 11.2.h),
+                            horizontal: 20.w,
+                            vertical: 11.2.h,
+                          ),
                           child: Text(
                             "Reviewer",
                             style: TextStyle(
-                                color: whiteColor,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500),
+                              color: whiteColor,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -748,11 +828,11 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                           Text(
                             startDate,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
+                          SizedBox(height: 3.w),
                           CustomCalender(
                             hintText: dateFormate,
                             controller: startDateController,
@@ -768,11 +848,11 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                           Text(
                             dueDate,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
+                          SizedBox(height: 3.w),
                           CustomCalender(
                             hintText: dateFormate,
                             controller: dueDateController,
@@ -782,9 +862,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -796,11 +874,11 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                           Text(
                             dueTime,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
+                          SizedBox(height: 3.w),
                           CustomTimer(
                             hintText: "",
                             controller: dueTimeController,
@@ -816,11 +894,11 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                           Text(
                             selectPriority,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          SizedBox(
-                            height: 3.w,
-                          ),
+                          SizedBox(height: 3.w),
                           CustomDropdown<PriorityData>(
                             items: priorityController.priorityList,
                             itemLabel: (item) => item.priorityName ?? "",
@@ -835,9 +913,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -858,33 +934,37 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                         () => DropdownButtonHideUnderline(
                           child: DropdownButton2<String>(
                             isExpanded: true,
-                            items: homeController.timeList.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Roboto',
-                                    color: darkGreyColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              );
-                            }).toList(),
-                            value: homeController.selectedTime!.value.isEmpty
-                                ? null
-                                : homeController.selectedTime?.value,
+                            items:
+                                homeController.timeList.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(
+                                        decoration: TextDecoration.none,
+                                        fontFamily: 'Roboto',
+                                        color: darkGreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                            value:
+                                homeController.selectedTime!.value.isEmpty
+                                    ? null
+                                    : homeController.selectedTime?.value,
                             onChanged: (String? value) {
                               homeController.selectedTime?.value = value ?? '';
                             },
                             buttonStyleData: ButtonStyleData(
                               height: 50,
                               width: double.infinity,
-                              padding:
-                                  const EdgeInsets.only(left: 14, right: 14),
+                              padding: const EdgeInsets.only(
+                                left: 14,
+                                right: 14,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.r),
                                 border: Border.all(color: lightSecondaryColor),
@@ -916,16 +996,17 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                               maxHeight: 200,
                               width: 330,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.r),
-                                  color: lightSecondaryColor,
-                                  border:
-                                      Border.all(color: lightSecondaryColor)),
+                                borderRadius: BorderRadius.circular(5.r),
+                                color: lightSecondaryColor,
+                                border: Border.all(color: lightSecondaryColor),
+                              ),
                               offset: const Offset(0, 0),
                               scrollbarTheme: ScrollbarThemeData(
                                 radius: const Radius.circular(40),
                                 thickness: WidgetStateProperty.all<double>(6),
-                                thumbVisibility:
-                                    WidgetStateProperty.all<bool>(true),
+                                thumbVisibility: WidgetStateProperty.all<bool>(
+                                  true,
+                                ),
                               ),
                             ),
                             menuItemStyleData: const MenuItemStyleData(
@@ -938,9 +1019,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Obx(
                   () => CustomButton(
                     onPressed: () {
@@ -950,8 +1029,6 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                             taskNameController.text,
                             remarkController.text,
                             selectedProjectId,
-                            profileController
-                                .selectedDepartMentListData.value?.id,
                             startDateController.text,
                             dueDateController.text,
                             dueTimeController.text,
@@ -959,45 +1036,42 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                             'project',
                             timeTextEditingController.text,
                             homeController.selectedTime?.value ?? '',
+                            homeController.selectedDepartMentListData2,
                           );
                         }
                       }
                     },
-                    text: taskController.isTaskAdding.value == true
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                color: whiteColor,
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              Text(
-                                loading,
-                                style: TextStyle(
+                    text:
+                        taskController.isTaskAdding.value == true
+                            ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(color: whiteColor),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  loading,
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: whiteColor),
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ],
+                            )
+                            : Text(
+                              create,
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          )
-                        : Text(
-                            create,
-                            style: TextStyle(
-                              color: whiteColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
                             ),
-                          ),
                     width: double.infinity,
                     color: primaryColor,
                     height: 45.h,
                   ),
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
               ],
             ),
           ),
@@ -1006,8 +1080,10 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget reviewerList(BuildContext context,
-      RxList<ResponsiblePersonData> responsiblePersonList) {
+  Widget reviewerList(
+    BuildContext context,
+    RxList<ResponsiblePersonData> responsiblePersonList,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1020,9 +1096,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 10.h,
-            ),
+            SizedBox(height: 10.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -1032,9 +1106,7 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            SizedBox(
-              height: 10.h,
-            ),
+            SizedBox(height: 10.h),
             Expanded(
               child: ListView.separated(
                 itemCount: responsiblePersonList.length,
@@ -1042,92 +1114,88 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                 itemBuilder: (context, index) {
                   String initialsName = '';
                   if (index < responsiblePersonList.length) {
-                    List<String> nameList =
-                        responsiblePersonList[index].name.toString().split(' ');
+                    List<String> nameList = responsiblePersonList[index].name
+                        .toString()
+                        .split(' ');
                     initialsName = nameList.map((word) => word[0]).join();
                   }
                   return index == 0
                       ? SizedBox()
                       : Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 45.h,
-                              width: 45.w,
-                              decoration: BoxDecoration(
-                                color: thirdPrimryColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(22.5.r),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  initialsName,
-                                  style: TextStyle(
-                                      fontSize: 24, color: primaryColor),
-                                ),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 45.h,
+                            width: 45.w,
+                            decoration: BoxDecoration(
+                              color: thirdPrimryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(22.5.r),
                               ),
                             ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${responsiblePersonList[index].name}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: Obx(
-                                () => SizedBox(
-                                  height: 20.h,
-                                  width: 20.w,
-                                  child: Checkbox(
-                                    value:
-                                        taskController.reviewerCheckBox[index],
-                                    onChanged: (value) {
-                                      taskController.reviewerCheckBox[index] =
-                                          value!;
-                                      if (taskController.reviewerUserId
-                                          .contains(responsiblePersonList[index]
-                                              .id
-                                              .toString())) {
-                                        taskController.reviewerUserId.remove(
-                                            responsiblePersonList[index]
-                                                .id
-                                                .toString());
-                                      } else {
-                                        taskController.reviewerUserId.add(
-                                            responsiblePersonList[index]
-                                                .id
-                                                .toString());
-                                      }
-                                    },
-                                  ),
+                            child: Center(
+                              child: Text(
+                                initialsName,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: primaryColor,
                                 ),
                               ),
                             ),
-                          ],
-                        );
+                          ),
+                          SizedBox(width: 8.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${responsiblePersonList[index].name}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: Obx(
+                              () => SizedBox(
+                                height: 20.h,
+                                width: 20.w,
+                                child: Checkbox(
+                                  value: taskController.reviewerCheckBox[index],
+                                  onChanged: (value) {
+                                    taskController.reviewerCheckBox[index] =
+                                        value!;
+                                    if (taskController.reviewerUserId.contains(
+                                      responsiblePersonList[index].id
+                                          .toString(),
+                                    )) {
+                                      taskController.reviewerUserId.remove(
+                                        responsiblePersonList[index].id
+                                            .toString(),
+                                      );
+                                    } else {
+                                      taskController.reviewerUserId.add(
+                                        responsiblePersonList[index].id
+                                            .toString(),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 12.h,
-                  );
+                  return SizedBox(height: 12.h);
                 },
               ),
             ),
-            SizedBox(
-              height: 15.h,
-            ),
+            SizedBox(height: 15.h),
             CustomButton(
               onPressed: () {
                 // if (_formKey.currentState!.validate()) {
@@ -1140,25 +1208,23 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                 // }
                 Get.back();
               },
-              text: Text(
-                done,
-                style: changeTextColor(rubikBlack, whiteColor),
-              ),
+              text: Text(done, style: changeTextColor(rubikBlack, whiteColor)),
               color: primaryColor,
               height: 45.h,
               width: double.infinity,
             ),
-            SizedBox(
-              height: 15.h,
-            ),
+            SizedBox(height: 15.h),
           ],
         ),
       ),
     );
   }
 
-  Widget assignedTask(BuildContext context,
-      RxList<ResponsiblePersonData> responsiblePersonList, String initials) {
+  Widget assignedTask(
+    BuildContext context,
+    RxList<ResponsiblePersonData> responsiblePersonList,
+    String initials,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1171,22 +1237,20 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 15.h,
-            ),
+            SizedBox(height: 15.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   assignedTaskText2,
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 10.h,
-            ),
+            SizedBox(height: 10.h),
             Expanded(
               child: ListView.separated(
                 itemCount: responsiblePersonList.length,
@@ -1194,170 +1258,167 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                 itemBuilder: (context, index) {
                   String initialsName = '';
                   if (index < responsiblePersonList.length) {
-                    List<String> nameList =
-                        responsiblePersonList[index].name.toString().split(' ');
+                    List<String> nameList = responsiblePersonList[index].name
+                        .toString()
+                        .split(' ');
                     initialsName = nameList.map((word) => word[0]).join();
                   }
                   return index == 0
                       ? Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 50.h,
-                              width: 50.w,
-                              decoration: BoxDecoration(
-                                color: thirdPrimryColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(25.r),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  initials,
-                                  style: TextStyle(
-                                      fontSize: 24, color: primaryColor),
-                                ),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 50.h,
+                            width: 50.w,
+                            decoration: BoxDecoration(
+                              color: thirdPrimryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.r),
                               ),
                             ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  self,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: secondaryColor,
-                                  ),
+                            child: Center(
+                              child: Text(
+                                initials,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: primaryColor,
                                 ),
-                                SizedBox(
-                                  height: 3.h,
-                                ),
-                                Text(
-                                  "${StorageHelper.getName()}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                )
-                              ],
+                              ),
                             ),
-                            Spacer(),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: Obx(
-                                () => SizedBox(
-                                  height: 20.h,
-                                  width: 20.w,
-                                  child: Checkbox(
-                                    value: taskController
-                                            .responsiblePersonSelectedCheckBox[
-                                        index],
-                                    onChanged: (value) {
+                          ),
+                          SizedBox(width: 8.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                self,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: secondaryColor,
+                                ),
+                              ),
+                              SizedBox(height: 3.h),
+                              Text(
+                                "${StorageHelper.getName()}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: Obx(
+                              () => SizedBox(
+                                height: 20.h,
+                                width: 20.w,
+                                child: Checkbox(
+                                  value:
                                       taskController
-                                              .responsiblePersonSelectedCheckBox[
-                                          index] = value!;
-                                      if (taskController.assignedUserId
-                                          .contains(StorageHelper.getId()
-                                              .toString())) {
-                                        taskController.assignedUserId.remove(
-                                            StorageHelper.getId().toString());
-                                      } else {
-                                        taskController.assignedUserId.add(
-                                            StorageHelper.getId().toString());
-                                      }
-                                    },
-                                  ),
+                                          .responsiblePersonSelectedCheckBox[index],
+                                  onChanged: (value) {
+                                    taskController
+                                            .responsiblePersonSelectedCheckBox[index] =
+                                        value!;
+                                    if (taskController.assignedUserId.contains(
+                                      StorageHelper.getId().toString(),
+                                    )) {
+                                      taskController.assignedUserId.remove(
+                                        StorageHelper.getId().toString(),
+                                      );
+                                    } else {
+                                      taskController.assignedUserId.add(
+                                        StorageHelper.getId().toString(),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
                             ),
-                          ],
-                        )
+                          ),
+                        ],
+                      )
                       : Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 50.h,
-                              width: 50.w,
-                              decoration: BoxDecoration(
-                                color: thirdPrimryColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(25.r),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  initialsName,
-                                  style: TextStyle(
-                                      fontSize: 24, color: primaryColor),
-                                ),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 50.h,
+                            width: 50.w,
+                            decoration: BoxDecoration(
+                              color: thirdPrimryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.r),
                               ),
                             ),
-                            SizedBox(
-                              width: 8.w,
+                            child: Center(
+                              child: Text(
+                                initialsName,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: primaryColor,
+                                ),
+                              ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${responsiblePersonList[index].name}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: Obx(
-                                () => SizedBox(
-                                  height: 20.h,
-                                  width: 20.w,
-                                  child: Checkbox(
-                                    value: taskController
-                                            .responsiblePersonSelectedCheckBox[
-                                        index],
-                                    onChanged: (value) {
+                          ),
+                          SizedBox(width: 8.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${responsiblePersonList[index].name}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: Obx(
+                              () => SizedBox(
+                                height: 20.h,
+                                width: 20.w,
+                                child: Checkbox(
+                                  value:
                                       taskController
-                                              .responsiblePersonSelectedCheckBox[
-                                          index] = value!;
-                                      if (taskController.assignedUserId
-                                          .contains(responsiblePersonList[index]
-                                              .id
-                                              .toString())) {
-                                        taskController.assignedUserId.remove(
-                                            responsiblePersonList[index]
-                                                .id
-                                                .toString());
-                                      } else {
-                                        taskController.assignedUserId.add(
-                                            responsiblePersonList[index]
-                                                .id
-                                                .toString());
-                                      }
-                                    },
-                                  ),
+                                          .responsiblePersonSelectedCheckBox[index],
+                                  onChanged: (value) {
+                                    taskController
+                                            .responsiblePersonSelectedCheckBox[index] =
+                                        value!;
+                                    if (taskController.assignedUserId.contains(
+                                      responsiblePersonList[index].id
+                                          .toString(),
+                                    )) {
+                                      taskController.assignedUserId.remove(
+                                        responsiblePersonList[index].id
+                                            .toString(),
+                                      );
+                                    } else {
+                                      taskController.assignedUserId.add(
+                                        responsiblePersonList[index].id
+                                            .toString(),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
                             ),
-                          ],
-                        );
+                          ),
+                        ],
+                      );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 10.h,
-                  );
+                  return SizedBox(height: 10.h);
                 },
               ),
             ),
-            SizedBox(
-              height: 15.h,
-            ),
+            SizedBox(height: 15.h),
             CustomButton(
               onPressed: () {
                 // if (_formKey.currentState!.validate()) {
@@ -1370,17 +1431,12 @@ class _ProjectState extends State<Project> with SingleTickerProviderStateMixin {
                 // }
                 Get.back();
               },
-              text: Text(
-                done,
-                style: changeTextColor(rubikBlack, whiteColor),
-              ),
+              text: Text(done, style: changeTextColor(rubikBlack, whiteColor)),
               color: primaryColor,
               height: 45.h,
               width: double.infinity,
             ),
-            SizedBox(
-              height: 15.h,
-            ),
+            SizedBox(height: 15.h),
           ],
         ),
       ),

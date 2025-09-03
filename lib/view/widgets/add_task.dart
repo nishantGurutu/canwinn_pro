@@ -883,7 +883,7 @@ class _AddTaskState extends State<AddTask> {
                                           ),
                                           SizedBox(height: 3.w),
                                           SizedBox(
-                                            height: 50.h,
+                                            // height: 45.h,
                                             child: CustomDropdown<PriorityData>(
                                               items:
                                                   priorityController
@@ -1054,6 +1054,9 @@ class _AddTaskState extends State<AddTask> {
                                 Obx(
                                   () => CustomButton(
                                     onPressed: () {
+                                      print(
+                                        '3te6637 e36re63 7e63fr655 ${homeController.selectedDepartMentListData2.length}',
+                                      );
                                       if (taskController.isTaskAdding.value ==
                                           false) {
                                         if (taskController
@@ -1075,10 +1078,9 @@ class _AddTaskState extends State<AddTask> {
                                                 startDateController
                                                     .text
                                                     .isNotEmpty) {
-                                              if (profileController
-                                                      .selectedDepartMentListData
-                                                      .value !=
-                                                  null) {
+                                              if (homeController
+                                                  .selectedDepartMentListData2
+                                                  .isNotEmpty) {
                                                 if (_formKey.currentState!
                                                     .validate()) {
                                                   taskController.addTask(
@@ -1089,10 +1091,7 @@ class _AddTaskState extends State<AddTask> {
                                                             .value
                                                             ?.id ??
                                                         0,
-                                                    profileController
-                                                        .selectedDepartMentListData
-                                                        .value
-                                                        ?.id,
+
                                                     startDateController.text,
                                                     dueDateController.text,
                                                     dueTimeController.text,
@@ -1107,6 +1106,8 @@ class _AddTaskState extends State<AddTask> {
                                                             .selectedTime
                                                             ?.value ??
                                                         '',
+                                                    homeController
+                                                        .selectedDepartMentListData2,
                                                   );
                                                 }
                                               } else {

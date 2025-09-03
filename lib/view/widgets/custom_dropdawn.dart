@@ -55,18 +55,21 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             style: changeTextColor(rubikRegular, darkGreyColor),
             overflow: TextOverflow.ellipsis,
           ),
-          items: widget.items
-              .map(
-                (T item) => DropdownMenuItem<T>(
-                  value: item,
-                  child: Text(
-                    widget.itemLabel(item),
-                    style: changeTextColor(rubikRegular, Colors.black),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
-              .toList(),
+
+          items:
+              widget.items
+                  .map(
+                    (T item) => DropdownMenuItem<T>(
+                      value: item,
+                      child: Text(
+                        widget.itemLabel(item),
+                        style: changeTextColor(rubikRegular, Colors.black),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(),
+
           value: selectedValue.value,
           onChanged: (T? value) {
             selectedValue.value = value;
@@ -76,10 +79,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
           buttonStyleData: ButtonStyleData(
             height: 45.h,
             width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14.r),
               border: Border.all(color: lightBorderColor),

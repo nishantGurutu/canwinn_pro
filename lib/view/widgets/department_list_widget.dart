@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:task_management/constant/color_constant.dart';
-import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/home_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
 import 'package:task_management/controller/task_controller.dart';
@@ -23,6 +22,7 @@ class DepartmentList extends StatelessWidget {
       menuController.text =
           profileController.selectedDepartMentListData.value?.name ?? '';
       return Container(
+        height: 45.h,
         decoration: BoxDecoration(
           border: Border.all(color: lightBorderColor),
           borderRadius: BorderRadius.all(Radius.circular(14.r)),
@@ -52,7 +52,7 @@ class DepartmentList extends StatelessWidget {
               ),
               fieldDecoration: FieldDecoration(
                 borderRadius: BorderSide.strokeAlignCenter,
-                hintText: selectPerson,
+                hintText: 'Search...',
                 hintStyle: const TextStyle(color: Colors.black87),
                 backgroundColor: Colors.white,
                 showClearIcon: false,
@@ -85,74 +85,11 @@ class DepartmentList extends StatelessWidget {
                 await homeController.responsiblePersonListApi2(
                   homeController.selectedDepartMentListData2,
                 );
-                //  profileController.selectedDepartMentListData.value
-                // meetingController.selectdePersonIds.assignAll(selectedItems);
               },
             ),
           ),
         ),
       );
-      // Container(
-      //   height: 45.h,
-      //   decoration: BoxDecoration(
-      //     color: whiteColor,
-      //     border: Border.all(color: lightBorderColor),
-      //     borderRadius: BorderRadius.all(Radius.circular(14.r)),
-      //   ),
-      //   child: DropdownMenu<DepartmentListData>(
-      //     controller: menuController,
-      //     width: double.infinity,
-      //     trailingIcon: Image.asset(
-      //       'assets/images/png/Vector 3.png',
-      //       color: secondaryColor,
-      //       height: 8.h,
-      //     ),
-      //     selectedTrailingIcon: Image.asset(
-      //       'assets/images/png/Vector 3.png',
-      //       color: secondaryColor,
-      //       height: 8.h,
-      //     ),
-      //     menuHeight: 350.h,
-      //     hintText: "Search Department",
-      //     requestFocusOnTap: true,
-      //     enableSearch: true,
-      //     enableFilter: true,
-      //     inputDecorationTheme: InputDecorationTheme(
-      //       contentPadding: EdgeInsets.symmetric(
-      //         horizontal: 5.w,
-      //         vertical: 5.h,
-      //       ),
-      //       border: OutlineInputBorder(
-      //         borderSide: BorderSide.none,
-      //         borderRadius: BorderRadius.all(Radius.circular(14.r)),
-      //       ),
-      //     ),
-      //     menuStyle: MenuStyle(
-      //       backgroundColor: WidgetStateProperty.all<Color>(whiteColor),
-      //     ),
-      //     initialSelection: profileController.selectedDepartMentListData.value,
-      //     onSelected: (DepartmentListData? menu) {
-      //       if (menu != null) {
-      //         profileController.selectedDepartMentListData.value = menu;
-      //         homeController.taskResponsiblePersonListApi(
-      //           profileController.selectedDepartMentListData.value?.id,
-      //           "",
-      //         );
-      //       }
-      //     },
-      //     dropdownMenuEntries:
-      //         profileController.departmentDataList
-      //             .map<DropdownMenuEntry<DepartmentListData>>((
-      //               DepartmentListData menu,
-      //             ) {
-      //               return DropdownMenuEntry<DepartmentListData>(
-      //                 value: menu,
-      //                 label: menu.name ?? '',
-      //               );
-      //             })
-      //             .toList(),
-      //   ),
-      // );
     });
   }
 }

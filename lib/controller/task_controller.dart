@@ -521,7 +521,6 @@ class TaskController extends GetxController {
     String taskName,
     String remark,
     int selectedProjectId,
-    int? departmentId,
     String startDate,
     String dueDate,
     String dueTime,
@@ -529,6 +528,7 @@ class TaskController extends GetxController {
     String s,
     String timeTextString,
     String timeType,
+    RxList<DepartmentListData> selectedDepartMentListData2,
   ) async {
     isTaskAdding.value = true;
     try {
@@ -536,7 +536,6 @@ class TaskController extends GetxController {
         taskName,
         remark,
         selectedProjectId,
-        departmentId,
         pickedFile,
         assignedUserId,
         reviewerUserId,
@@ -547,6 +546,7 @@ class TaskController extends GetxController {
         timeTextString,
         timeType,
         addTaskContactList,
+        selectedDepartMentListData2,
       );
       if (result) {
         Get.back();
