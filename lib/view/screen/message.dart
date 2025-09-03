@@ -543,6 +543,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                               isCurrentUser
                                                                                   ? SizedBox()
                                                                                   : Column(
+                                                                                    crossAxisAlignment:
+                                                                                        CrossAxisAlignment.start,
                                                                                     children: [
                                                                                       if (!isCurrentUser &&
                                                                                           showSenderName &&

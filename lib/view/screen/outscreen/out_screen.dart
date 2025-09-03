@@ -24,8 +24,9 @@ class OutScreen extends StatefulWidget {
 }
 
 class _OutScreenState extends State<OutScreen> {
-  final OutScreenController outScreenController =
-      Get.put(OutScreenController());
+  final OutScreenController outScreenController = Get.put(
+    OutScreenController(),
+  );
   final ProfileController profileController = Get.put(ProfileController());
 
   ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
@@ -46,10 +47,12 @@ class _OutScreenState extends State<OutScreen> {
 
   final ImagePicker imagePicker = ImagePicker();
 
-  Future<void> takePhoto(ImageSource source) async {
+  Future<void> takePhoto(ImageSource source, String s) async {
     try {
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 30);
+      final pickedImage = await imagePicker.pickImage(
+        source: source,
+        imageQuality: 30,
+      );
       if (pickedImage == null) {
         return;
       }
@@ -81,7 +84,10 @@ class _OutScreenState extends State<OutScreen> {
         title: Text(
           outScreen,
           style: TextStyle(
-              color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -95,61 +101,129 @@ class _OutScreenState extends State<OutScreen> {
               child: Column(
                 spacing: 15.h,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      takePhoto(ImageSource.camera);
-                    },
-                    child: Obx(
-                      () => outScreenController.chalanPicPath.value.isEmpty
-                          ? Column(
-                              children: [
-                                Container(
-                                  height: 92.h,
-                                  width: 92.w,
-                                  decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    border: Border.all(color: lightBorderColor),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10.r),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          takePhoto(ImageSource.camera, '1');
+                        },
+                        child: Obx(
+                          () =>
+                              outScreenController.chalanPicPath.value.isEmpty
+                                  ? Column(
+                                    children: [
+                                      Container(
+                                        height: 85.h,
+                                        width: 85.w,
+                                        decoration: BoxDecoration(
+                                          color: whiteColor,
+                                          border: Border.all(
+                                            color: lightBorderColor,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            'assets/image/svg/add_photo.svg',
+                                            height: 59.h,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        "Upload Image 1",
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : Container(
+                                    height: 85.h,
+                                    width: 85.w,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10.r),
+                                      ),
+                                      child: Image.file(
+                                        File(
+                                          outScreenController
+                                              .chalanPicPath
+                                              .value,
+                                        ),
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
                                   ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      'assets/image/svg/add_photo.svg',
-                                      height: 59.h,
-                                      fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      InkWell(
+                        onTap: () {
+                          takePhoto(ImageSource.camera, '2');
+                        },
+                        child: Obx(
+                          () =>
+                              outScreenController.chalanPicPath.value.isEmpty
+                                  ? Column(
+                                    children: [
+                                      Container(
+                                        height: 85.h,
+                                        width: 85.w,
+                                        decoration: BoxDecoration(
+                                          color: whiteColor,
+                                          border: Border.all(
+                                            color: lightBorderColor,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            'assets/image/svg/add_photo.svg',
+                                            height: 59.h,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        "Upload Image 2",
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : Container(
+                                    height: 85.h,
+                                    width: 85.w,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10.r),
+                                      ),
+                                      child: Image.file(
+                                        File(
+                                          outScreenController
+                                              .chalanPicPath
+                                              .value,
+                                        ),
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Text(
-                                  "Upload Image",
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Container(
-                              height: 92.h,
-                              width: 92.w,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.r),
-                                ),
-                                child: Image.file(
-                                  File(
-                                    outScreenController.chalanPicPath.value,
-                                  ),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                   TaskCustomTextField(
                     controller: dateController,
@@ -176,8 +250,9 @@ class _OutScreenState extends State<OutScreen> {
                       );
 
                       if (pickedDate != null) {
-                        String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        String formattedDate = DateFormat(
+                          'dd-MM-yyyy',
+                        ).format(pickedDate);
                         dateController.text = formattedDate;
                       }
                     },
@@ -231,24 +306,22 @@ class _OutScreenState extends State<OutScreen> {
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            builder: (context2) => Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: MediaQuery.of(context2)
-                                      .viewInsets
-                                      .bottom),
-                              child: addDataTableBottomSheet(
-                                context2,
-                              ),
-                            ),
+                            builder:
+                                (context2) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(
+                                          context2,
+                                        ).viewInsets.bottom,
+                                  ),
+                                  child: addDataTableBottomSheet(context2),
+                                ),
                           );
                         },
                         child: SizedBox(
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.add,
-                                color: Color(0xff0078AC),
-                              ),
+                              Icon(Icons.add, color: Color(0xff0078AC)),
                               Text(
                                 'Add Items',
                                 style: TextStyle(
@@ -267,9 +340,7 @@ class _OutScreenState extends State<OutScreen> {
                     height: 200.h,
                     child: Obx(
                       () => ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.r),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(20.r)),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
@@ -292,23 +363,29 @@ class _OutScreenState extends State<OutScreen> {
                             decoration: BoxDecoration(color: whiteColor),
                             columns: [
                               DataColumn2(
-                                  label: Text('S. No.'),
-                                  size: ColumnSize.S,
-                                  fixedWidth: 50.0),
+                                label: Text('S. No.'),
+                                size: ColumnSize.S,
+                                fixedWidth: 50.0,
+                              ),
                               DataColumn2(
-                                  label: Text('Items'), size: ColumnSize.S),
+                                label: Text('Items'),
+                                size: ColumnSize.S,
+                              ),
                               DataColumn2(
-                                  label: Text('RETURNABLE/NON-RETURNABLE'),
-                                  size: ColumnSize.L),
+                                label: Text('RETURNABLE/NON-RETURNABLE'),
+                                size: ColumnSize.L,
+                              ),
                               DataColumn2(
-                                  label: Text('QTY'),
-                                  size: ColumnSize.S,
-                                  fixedWidth: 40.0),
+                                label: Text('QTY'),
+                                size: ColumnSize.S,
+                                fixedWidth: 40.0,
+                              ),
                               DataColumn2(
-                                  label: Text('REMARKS'),
-                                  size: ColumnSize.S,
-                                  numeric: true,
-                                  fixedWidth: 70.0),
+                                label: Text('REMARKS'),
+                                size: ColumnSize.S,
+                                numeric: true,
+                                fixedWidth: 70.0,
+                              ),
                             ],
                             rows: List<DataRow>.generate(
                               outScreenController.tableData.length,
@@ -316,25 +393,30 @@ class _OutScreenState extends State<OutScreen> {
                                 cells: [
                                   DataCell(
                                     Text(
-                                        '${outScreenController.tableData[index].srno}'),
-                                  ),
-                                  DataCell(
-                                    Text(
-                                        '${outScreenController.tableData[index].itemName}'),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: Text(
-                                          '${outScreenController.tableData[index].isReturnable.toString() == "0" ? "RETURNABLE" : "NON-RETURNABLE"}'),
+                                      '${outScreenController.tableData[index].srno}',
                                     ),
                                   ),
                                   DataCell(
                                     Text(
-                                        '${outScreenController.tableData[index].quantity}'),
+                                      '${outScreenController.tableData[index].itemName}',
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Center(
+                                      child: Text(
+                                        '${outScreenController.tableData[index].isReturnable.toString() == "0" ? "RETURNABLE" : "NON-RETURNABLE"}',
+                                      ),
+                                    ),
                                   ),
                                   DataCell(
                                     Text(
-                                        '${outScreenController.tableData[index].remarks}'),
+                                      '${outScreenController.tableData[index].quantity}',
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Text(
+                                      '${outScreenController.tableData[index].remarks}',
+                                    ),
                                   ),
                                 ],
                               ),
@@ -367,12 +449,15 @@ class _OutScreenState extends State<OutScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (outScreenController
-                                  .isOutScreenChalanAdding.value !=
+                                  .isOutScreenChalanAdding
+                                  .value !=
                               true) {
                             outScreenController.addOutScreenChalanApi(
                               dateController.text,
                               profileController
-                                  .selectedDepartMentListData.value?.id,
+                                  .selectedDepartMentListData
+                                  .value
+                                  ?.id,
                               dispatchToController.text,
                               contactController.text,
                               preparedByController.text,
@@ -382,47 +467,47 @@ class _OutScreenState extends State<OutScreen> {
                           }
                         }
                       },
-                      text: outScreenController.isOutScreenChalanAdding.value ==
-                              true
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 30.h,
-                                  child: CircularProgressIndicator(
-                                    color: whiteColor,
+                      text:
+                          outScreenController.isOutScreenChalanAdding.value ==
+                                  true
+                              ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 30.h,
+                                    child: CircularProgressIndicator(
+                                      color: whiteColor,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  loading,
-                                  style:
-                                      changeTextColor(rubikBlack, whiteColor),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: whiteColor,
-                                ),
-                                Text(
-                                  create,
-                                  style:
-                                      changeTextColor(rubikBlack, whiteColor),
-                                ),
-                              ],
-                            ),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    loading,
+                                    style: changeTextColor(
+                                      rubikBlack,
+                                      whiteColor,
+                                    ),
+                                  ),
+                                ],
+                              )
+                              : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add, color: whiteColor),
+                                  Text(
+                                    create,
+                                    style: changeTextColor(
+                                      rubikBlack,
+                                      whiteColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
                       color: primaryColor,
                       height: 45.h,
                       width: double.infinity,
                     ),
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
+                  SizedBox(height: 15.h),
                 ],
               ),
             ),
@@ -433,9 +518,7 @@ class _OutScreenState extends State<OutScreen> {
   }
 
   final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
-  Widget addDataTableBottomSheet(
-    BuildContext context,
-  ) {
+  Widget addDataTableBottomSheet(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -473,7 +556,8 @@ class _OutScreenState extends State<OutScreen> {
                   onChanged: (value) {
                     outScreenController.selectedReturnableValue.value = value!;
                     print(
-                        'returnable and non-returnable data vlaue ${outScreenController.selectedReturnableValue.value}');
+                      'returnable and non-returnable data vlaue ${outScreenController.selectedReturnableValue.value}',
+                    );
                   },
                   hintText: selectReturnable,
                 ),
@@ -515,41 +599,37 @@ class _OutScreenState extends State<OutScreen> {
                         );
                       }
                     },
-                    text: outScreenController.isDataAdding.value == true
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                color: whiteColor,
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              Text(
-                                loading,
-                                style: TextStyle(
+                    text:
+                        outScreenController.isDataAdding.value == true
+                            ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(color: whiteColor),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  loading,
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: whiteColor),
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ],
+                            )
+                            : Text(
+                              add,
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          )
-                        : Text(
-                            add,
-                            style: TextStyle(
-                              color: whiteColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
                             ),
-                          ),
                     width: double.infinity,
                     color: primaryColor,
                     height: 40.h,
                   ),
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
               ],
             ),
           ),
