@@ -13,8 +13,6 @@ class HomeService {
       var token = StorageHelper.getToken();
 
       var url = "${ApiConstant.baseUrl + ApiConstant.homeData}?user_id=$id";
-      print('user id in home $id');
-      print('user id in home 2 $url');
       _dio.options.headers["Authorization"] = "Bearer $token";
       final response = await _dio.get(url);
 
@@ -28,36 +26,12 @@ class HomeService {
       return null;
     }
   }
-  // Future<dynamic> homeDataApi(id) async {
-  //   try {
-  //     var token = StorageHelper.getToken();
-
-  //     var url = "${ApiConstant.baseUrl + ApiConstant.homeData}?user_id=$id";
-  //     print('user id in home $id');
-  //     print('user id in home 2 $url');
-  //     _dio.options.headers["Authorization"] = "Bearer $token";
-  //     final response = await _dio.get(
-  //       url,
-  //     );
-
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       return response.data;
-  //     } else {
-  //       throw Exception('Failed notes list');
-  //     }
-  //   } catch (e) {
-  //     print('Error in NotesService: $e');
-  //     return null;
-  //   }
-  // }
 
   Future<HomeScreenHomeScreenDataModel?> userhomeDataApi(id) async {
     try {
       var token = StorageHelper.getToken();
 
       var url = "${ApiConstant.baseUrl + ApiConstant.homeData}?user_id=$id";
-      print('user id in home $id');
-      print('user id in home 2 $url');
       _dio.options.headers["Authorization"] = "Bearer $token";
       final response = await _dio.get(url);
 
@@ -115,9 +89,7 @@ class HomeService {
   ) async {
     try {
       var token = StorageHelper.getToken();
-      print('Responsible person API URL: 873ye8738 $id');
       var url = "${ApiConstant.baseUrl + ApiConstant.responsiblePersonList}";
-
       _dio.options.headers["Authorization"] = "Bearer $token";
 
       final response = await _dio.get(url);
@@ -141,21 +113,12 @@ class HomeService {
       var url = "${ApiConstant.baseUrl}${ApiConstant.responsiblePersonList}";
       print('trf36e e36fe673 e763t87 ${selectedDepartMentListData2.length}');
       if (selectedDepartMentListData2.isNotEmpty) {
-        // Extract department IDs and join them with commas
         final departmentIds = selectedDepartMentListData2
-            .map(
-              (dept) => dept.id.toString(),
-            ) // Assuming 'id' is a field in DepartmentListData
-            .where((id) => id.isNotEmpty) // Filter out null or empty IDs
-            .join(','); // Join IDs with commas (e.g., "1,2,3")
-
-        // Append department IDs to the URL as a query parameter
+            .map((dept) => dept.id.toString())
+            .where((id) => id.isNotEmpty)
+            .join(',');
         url += "?department_id=$departmentIds";
       }
-
-      print('Responsible person API URL: $url');
-      print('Responsible person API URL: $token');
-
       _dio.options.headers["Authorization"] = "Bearer $token";
 
       final response = await _dio.get(url);

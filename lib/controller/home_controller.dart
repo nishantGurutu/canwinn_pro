@@ -235,6 +235,7 @@ class HomeController extends GetxController {
     );
     if (result != null) {
       responsiblePersonList.assignAll(result.data!);
+      isResponsiblePersonLoading.value = false;
     }
     Future.microtask(() {
       isResponsiblePersonLoading.value = false;

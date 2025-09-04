@@ -123,9 +123,9 @@ class TaskController extends GetxController {
       selectedAllProjectListData.refresh();
       isAllProjectCalling.value = false;
       isAllProjectCalling.refresh();
-      await profileController.departmentList(
-        selectedAllProjectListData.value?.id ?? 0,
-      );
+      // await profileController.departmentList(
+      //   selectedAllProjectListData.value?.id ?? 0,
+      // );
     }
     isAllProjectCalling.value = false;
   }

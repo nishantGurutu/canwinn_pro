@@ -112,6 +112,7 @@ flutter:
     - assets/gif/
     - assets/task_images/
     - assets/mp3/alarm.mp3
+    - assets/mp3/alarmtone.mp3
     - assets/mp3/notificationtone.mp3
     - assets/mp3/alarmsound.mp3
     - assets/mp3/emergency_alarm_69780.mp3

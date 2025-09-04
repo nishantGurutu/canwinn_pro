@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:task_management/controller/bottom_bar_navigation_controller.dart';
@@ -185,7 +184,7 @@ class LocalNotificationService {
           'your_channel_id',
           'your_channel_name',
           channelDescription: 'your channel description',
-          sound: RawResourceAndroidNotificationSound("alarmsound"),
+          sound: RawResourceAndroidNotificationSound("alarmtone"),
           autoCancel: true,
           playSound: true,
           priority: Priority.max,

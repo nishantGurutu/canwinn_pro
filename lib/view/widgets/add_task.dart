@@ -88,9 +88,13 @@ class _AddTaskState extends State<AddTask> {
   }
 
   var isLoading = false.obs;
-  void apiCall() {
+  void apiCall() async {
     isLoading.value = true;
-    taskController.allProjectListApi(projectId: widget.id);
+    await taskController.allProjectListApi(projectId: widget.id);
+    priorityController.priorityApi(from: '');
+    await profileController.departmentList(
+      taskController.selectedAllProjectListData.value?.id ?? 0,
+    );
     isLoading.value = false;
   }
 
@@ -131,21 +135,21 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () =>
-          isLoading.value == true
-              ? Center(child: CircularProgressIndicator())
-              : Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.r),
-                    topRight: Radius.circular(20.r),
-                  ),
-                ),
-                width: double.infinity,
-                height: 680.h,
-                child: SafeArea(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.r),
+          topRight: Radius.circular(20.r),
+        ),
+      ),
+      width: double.infinity,
+      height: 680.h,
+      child: Obx(
+        () =>
+            isLoading.value == true
+                ? Center(child: CircularProgressIndicator())
+                : SafeArea(
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -1175,7 +1179,7 @@ class _AddTaskState extends State<AddTask> {
                     ),
                   ),
                 ),
-              ),
+      ),
     );
   }
 
