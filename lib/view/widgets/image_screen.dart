@@ -34,10 +34,7 @@ class ImageScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10.w),
-            child: Image.asset(
-              'assets/images/png/Download.png',
-              height: 28.h,
-            ),
+            child: Image.asset('assets/images/png/Download.png', height: 28.h),
           ),
         ],
       ),
@@ -45,9 +42,7 @@ class ImageScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           color: backgroundColor,
-          child: Center(
-            child: Image.file(file),
-          ),
+          child: Center(child: Image.file(file)),
         ),
       ),
     );
@@ -138,7 +133,14 @@ class NetworkImageScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           color: backgroundColor,
-          child: Center(child: Image.network(file.toString())),
+          child: Center(
+            child: InteractiveViewer(
+              panEnabled: true,
+              minScale: 0.9,
+              maxScale: 4.0,
+              child: Image.network(file.toString()),
+            ),
+          ),
         ),
       ),
     );
