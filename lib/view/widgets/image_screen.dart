@@ -131,15 +131,13 @@ class NetworkImageScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Container(
-          color: backgroundColor,
-          child: Center(
-            child: InteractiveViewer(
-              panEnabled: true,
-              minScale: 0.9,
-              maxScale: 4.0,
-              child: Image.network(file.toString()),
-            ),
+        child: InteractiveViewer(
+          panEnabled: true,
+          minScale: 0.9,
+          maxScale: 4.0,
+          child: Container(
+            color: backgroundColor,
+            child: Center(child: Image.network(file.toString())),
           ),
         ),
       ),
