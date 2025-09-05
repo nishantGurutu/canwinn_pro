@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/constant/style_constant.dart';
@@ -18,13 +19,13 @@ import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/task_text_field.dart';
 import 'package:task_management/custom_widget/text_field.dart';
 import 'package:task_management/model/all_project_list_model.dart';
+import 'package:task_management/model/department_list_model.dart';
 import 'package:task_management/model/priority_model.dart' show PriorityData;
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/view/widgets/add_contact.dart';
 import 'package:task_management/view/widgets/custom_calender.dart';
 import 'package:task_management/view/widgets/custom_dropdawn.dart';
 import 'package:task_management/view/widgets/custom_timer.dart';
-import 'package:task_management/view/widgets/department_list_widget.dart';
 import 'package:task_management/view/widgets/image_screen.dart';
 import 'package:task_management/view/widgets/pdf_screen.dart';
 import 'package:task_management/view/widgets/responsible_person_list.dart';
@@ -370,7 +371,91 @@ class _AddTaskState extends State<AddTask> {
                                           SizedBox(height: 3.w),
                                           SizedBox(
                                             width: 161.w,
-                                            child: DepartmentList(),
+                                            // child: DepartmentList(),
+                                            child: Obx(
+                                              () =>
+                                                  profileController
+                                                              .isdepartmentListLoading
+                                                              .value ==
+                                                          true
+                                                      ? Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                      : Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                Radius.circular(
+                                                                  12.r,
+                                                                ),
+                                                              ),
+                                                          border: Border.all(
+                                                            color:
+                                                                lightBorderColor,
+                                                          ),
+                                                        ),
+                                                        child: MultiDropdown<
+                                                          DepartmentListData
+                                                        >(
+                                                          fieldDecoration: FieldDecoration(
+                                                            border:
+                                                                OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide
+                                                                          .none,
+                                                                ),
+                                                            disabledBorder:
+                                                                OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                        Radius.circular(
+                                                                          10.r,
+                                                                        ),
+                                                                      ),
+                                                                ),
+                                                          ),
+
+                                                          items:
+                                                              profileController
+                                                                  .departmentDataList
+                                                                  .map(
+                                                                    (
+                                                                      item,
+                                                                    ) => DropdownItem<
+                                                                      DepartmentListData
+                                                                    >(
+                                                                      value:
+                                                                          item,
+                                                                      label:
+                                                                          item.name ??
+                                                                          '',
+                                                                    ),
+                                                                  )
+                                                                  .toList(),
+                                                          controller:
+                                                              MultiSelectController<
+                                                                DepartmentListData
+                                                              >(),
+                                                          enabled: true,
+                                                          searchEnabled: true,
+                                                          onSelectionChange: (
+                                                            selectedItems,
+                                                          ) async {
+                                                            homeController
+                                                                .selectedDepartMentListData2
+                                                                .assignAll(
+                                                                  selectedItems,
+                                                                );
+                                                            await homeController
+                                                                .responsiblePersonListApi2(
+                                                                  homeController
+                                                                      .selectedDepartMentListData2,
+                                                                );
+                                                          },
+                                                        ),
+                                                      ),
+                                            ),
                                           ),
                                         ],
                                       ),

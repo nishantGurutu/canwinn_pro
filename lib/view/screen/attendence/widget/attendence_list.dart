@@ -27,16 +27,16 @@ class AttendenceList extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 5.h),
           child: InkWell(
             onTap: () {
-              Get.to(() =>
-                  AttendenceDetail(list?[index] ?? UserAttendenseDataList()));
+              Get.to(
+                () =>
+                    AttendenceDetail(list?[index] ?? UserAttendenseDataList()),
+              );
             },
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 color: whiteColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8.r),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
               ),
               child: Column(
                 children: [
@@ -66,10 +66,7 @@ class AttendenceList extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 5.w),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 18.h,
-                      ),
+                      Icon(Icons.arrow_forward_ios, size: 18.h),
                     ],
                   ),
                   Divider(),

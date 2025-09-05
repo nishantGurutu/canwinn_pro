@@ -82,15 +82,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final PriorityController priorityController = Get.find();
   final ProjectController projectController = Get.find();
   DateTime dt = DateTime.now();
-  // ScrollController _scrollController = ScrollController();
   late Animation<double> _animation;
   late AnimationController _animationController;
 
-  // late TabController _tabController;
   @override
   void initState() {
-    // _scrollController.addListener(_scrollListener);
-    // _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     apiCall(context);
     _animationController = AnimationController(
       vsync: this,
@@ -129,16 +125,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
       });
     }
-
-    // _scrollController.addListener(() {
-    //   if (_scrollController.position.userScrollDirection ==
-    //       ScrollDirection.reverse) {
-    //     homeController.isButtonVisible.value = false;
-    //   } else if (_scrollController.position.pixels ==
-    //       _scrollController.position.minScrollExtent) {
-    //     homeController.isButtonVisible.value = true;
-    //   }
-    // });
   }
 
   _launchURL(param0) async {
@@ -231,26 +217,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<void> checkForAppUpdate(BuildContext context) async {
     print("checkForAppUpdate() called");
 
-    /* if (kDebugMode) {
-      Get.dialog(
-        AlertDialog(
-          title: const Text("Fake Update Available"),
-          content: const Text(
-            "Testing only - Play Store update dialog.\n\n"
-            "Release build me real update check hoga.",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: const Text("Cancel"),
-            ),
-            TextButton(onPressed: () => Get.back(), child: const Text("OK")),
-          ],
-        ),
-      );
-      return;
-    }
-*/
     if (Platform.isAndroid) {
       try {
         print("Platform is Android, checking update...");

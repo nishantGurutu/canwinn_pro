@@ -57,7 +57,10 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
         title: Text(
           attendenceDetails,
           style: TextStyle(
-              color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -66,16 +69,12 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         child: Column(
           children: [
-            SizedBox(
-              height: 30.h,
-            ),
+            SizedBox(height: 30.h),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: lightGreyColor),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8.r),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
@@ -93,7 +92,8 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                           ),
                         ),
                         Text(
-                            '${widget.list?.checkIn ?? "N/A"} - ${widget.list?.checkOut ?? "N/A"}'),
+                          '${widget.list?.checkIn ?? "N/A"} - ${widget.list?.checkOut ?? "N/A"}',
+                        ),
                       ],
                     ),
                     Text(
@@ -108,14 +108,10 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 20.h,
-            ),
+            SizedBox(height: 20.h),
             Container(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: whiteColor,
-              ),
+              decoration: BoxDecoration(color: whiteColor),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -124,9 +120,7 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   Divider(),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -164,42 +158,38 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
+                      SizedBox(width: 10.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             '${widget.list?.approvalStatus ?? "N/A"}',
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: textColor),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
                           ),
-                          SizedBox(
-                            height: 5.h,
-                          ),
+                          SizedBox(height: 5.h),
                           Text(
                             '${widget.list?.approvedByName ?? "N/A"}',
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: textColor),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: textColor,
+                            ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       InkWell(
                         onTap: () {
-                          openFile(widget.list?.checkInImage ?? '');
+                          openFile(widget.list?.checkOutImage ?? '');
                         },
                         child: Container(
                           height: 40.h,
@@ -231,9 +221,7 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
+                      SizedBox(width: 10.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -244,41 +232,41 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 5.h,
-                          ),
+                          SizedBox(height: 5.h),
                           SizedBox(
                             width: 285.w,
-                            child: widget.list?.checkOut == null
-                                ? Text(
-                                    'N/A',
-                                    style: TextStyle(
+                            child:
+                                widget.list?.checkOut == null
+                                    ? Text(
+                                      'N/A',
+                                      style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: textColor),
-                                  )
-                                : Text(
-                                    'By ${StorageHelper.getName()} On ${formatDateTime(widget.list?.checkOut ?? "")}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                        color: textColor,
+                                      ),
+                                    )
+                                    : Text(
+                                      'By ${StorageHelper.getName()} On ${formatDateTime(widget.list?.checkOut ?? "")}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: textColor),
-                                  ),
+                                        color: textColor,
+                                      ),
+                                    ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -316,9 +304,7 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
+                      SizedBox(width: 10.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -329,33 +315,35 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 5.h,
-                          ),
+                          SizedBox(height: 5.h),
                           SizedBox(
                             width: 285.w,
-                            child: widget.list?.checkIn == null
-                                ? Text(
-                                    "N/A",
-                                    style: TextStyle(
+                            child:
+                                widget.list?.checkIn == null
+                                    ? Text(
+                                      "N/A",
+                                      style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: textColor),
-                                  )
-                                : Text(
-                                    'By ${StorageHelper.getName()} On ${formatDateTime(widget.list?.checkIn ?? "")}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                        color: textColor,
+                                      ),
+                                    )
+                                    : Text(
+                                      'By ${StorageHelper.getName()} On ${formatDateTime(widget.list?.checkIn ?? "")}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: textColor),
-                                  ),
+                                        color: textColor,
+                                      ),
+                                    ),
                           ),
                         ],
                       ),
@@ -363,7 +351,7 @@ class _AttendenceDetailState extends State<AttendenceDetail> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

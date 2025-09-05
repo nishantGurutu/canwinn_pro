@@ -16,8 +16,10 @@ class OutScreenController extends GetxController {
   var isOutScreenChalanAdding = false.obs;
   var isChalanPicUploading = false.obs;
   var chalanPicPath = "".obs;
+  var chalanPicPath2 = "".obs;
   var isPicUpdated = false.obs;
   Rx<File> pickedFile = File('').obs;
+  Rx<File> pickedFile2 = File('').obs;
   Future<void> addOutScreenChalanApi(
     String date,
     int? deptValue,
@@ -43,11 +45,24 @@ class OutScreenController extends GetxController {
     isOutScreenChalanAdding.value = false;
   }
 
-  Future<void> addInScreenChalanApi(String name, String date, int? deptId,
-      String purpose, String contact, String addresstext) async {
+  Future<void> addInScreenChalanApi(
+    String name,
+    String date,
+    int? deptId,
+    String purpose,
+    String contact,
+    String addresstext,
+  ) async {
     isOutScreenChalanAdding.value = true;
     final result = await OutScreenChalanService().addInScreenChalanApi(
-        name, date, deptId, purpose, contact, pickedFile, addresstext);
+      name,
+      date,
+      deptId,
+      purpose,
+      contact,
+      pickedFile,
+      addresstext,
+    );
     inScreenChalanApi();
     Get.back();
     isOutScreenChalanAdding.value = false;
@@ -63,7 +78,11 @@ class OutScreenController extends GetxController {
   final TextEditingController remarkController = TextEditingController();
 
   void tableDataAdding(
-      String itemName, int returnType, String quantity, String remark) {
+    String itemName,
+    int returnType,
+    String quantity,
+    String remark,
+  ) {
     isDataAdding.value = true;
     int parsedQuantity = int.tryParse(quantity) ?? 0;
     int newSrno = tableData.length + 1;
@@ -124,8 +143,12 @@ class OutScreenController extends GetxController {
   var isStatusUpdating = false.obs;
   Future<void> updateStatus(int? id, int status, String remark) async {
     isStatusUpdating.value = true;
-    final result = await OutScreenChalanService()
-        .updateStatus(id, status, remark, pickedFile);
+    final result = await OutScreenChalanService().updateStatus(
+      id,
+      status,
+      remark,
+      pickedFile,
+    );
     if (result) {
       await outChalanDetails();
       await outDepartmentScreenChalanApi();
@@ -136,8 +159,12 @@ class OutScreenController extends GetxController {
 
   Future<void> inupdateStatus(int? id, int status, String remark) async {
     isStatusUpdating.value = true;
-    final result = await OutScreenChalanService()
-        .inUpdateStatus(id, status, remark, pickedFile);
+    final result = await OutScreenChalanService().inUpdateStatus(
+      id,
+      status,
+      remark,
+      pickedFile,
+    );
     if (result) {
       await inScreenChalanApi();
       await inChalanDetails();

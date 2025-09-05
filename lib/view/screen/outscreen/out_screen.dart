@@ -57,8 +57,13 @@ class _OutScreenState extends State<OutScreen> {
         return;
       }
       outScreenController.isChalanPicUploading.value = true;
-      outScreenController.pickedFile.value = File(pickedImage.path);
-      outScreenController.chalanPicPath.value = pickedImage.path.toString();
+      if (s == '1') {
+        outScreenController.pickedFile.value = File(pickedImage.path);
+        outScreenController.chalanPicPath.value = pickedImage.path.toString();
+      } else {
+        outScreenController.pickedFile2.value = File(pickedImage.path);
+        outScreenController.chalanPicPath2.value = pickedImage.path.toString();
+      }
       outScreenController.isChalanPicUploading.value = false;
     } catch (e) {
       outScreenController.isChalanPicUploading.value = false;
@@ -144,22 +149,35 @@ class _OutScreenState extends State<OutScreen> {
                                       ),
                                     ],
                                   )
-                                  : Container(
-                                    height: 85.h,
-                                    width: 85.w,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r),
-                                      ),
-                                      child: Image.file(
-                                        File(
-                                          outScreenController
-                                              .chalanPicPath
-                                              .value,
+                                  : Column(
+                                    children: [
+                                      Container(
+                                        height: 85.h,
+                                        width: 85.w,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                          child: Image.file(
+                                            File(
+                                              outScreenController
+                                                  .chalanPicPath
+                                                  .value,
+                                            ),
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
-                                        fit: BoxFit.fill,
                                       ),
-                                    ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        "",
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                         ),
                       ),
@@ -170,7 +188,7 @@ class _OutScreenState extends State<OutScreen> {
                         },
                         child: Obx(
                           () =>
-                              outScreenController.chalanPicPath.value.isEmpty
+                              outScreenController.chalanPicPath2.value.isEmpty
                                   ? Column(
                                     children: [
                                       Container(
@@ -204,22 +222,35 @@ class _OutScreenState extends State<OutScreen> {
                                       ),
                                     ],
                                   )
-                                  : Container(
-                                    height: 85.h,
-                                    width: 85.w,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r),
-                                      ),
-                                      child: Image.file(
-                                        File(
-                                          outScreenController
-                                              .chalanPicPath
-                                              .value,
+                                  : Column(
+                                    children: [
+                                      Container(
+                                        height: 85.h,
+                                        width: 85.w,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                          child: Image.file(
+                                            File(
+                                              outScreenController
+                                                  .chalanPicPath2
+                                                  .value,
+                                            ),
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
-                                        fit: BoxFit.fill,
                                       ),
-                                    ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        "",
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                         ),
                       ),
