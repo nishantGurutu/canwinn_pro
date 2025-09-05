@@ -362,50 +362,63 @@ class _AddMeetingState extends State<AddMeeting> {
                             //     },
                             //   ),
                             // ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(12.r),
-                                ),
-                                border: Border.all(color: lightBorderColor),
-                              ),
-                              child: Obx(
-                                () => MultiDropdown<ResponsiblePersonData>(
-                                  fieldDecoration: FieldDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    disabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r),
-                                      ),
-                                    ),
-                                  ),
-
-                                  items:
-                                      homeController.responsiblePersonList
-                                          .map(
-                                            (item) => DropdownItem<
-                                              ResponsiblePersonData
-                                            >(
-                                              value: item,
-                                              label: item.name ?? '',
+                            Obx(
+                              () =>
+                                  homeController
+                                              .isResponsiblePersonLoading
+                                              .value ==
+                                          true
+                                      ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                      : Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(12.r),
+                                          ),
+                                          border: Border.all(
+                                            color: lightBorderColor,
+                                          ),
+                                        ),
+                                        child: MultiDropdown<
+                                          ResponsiblePersonData
+                                        >(
+                                          fieldDecoration: FieldDecoration(
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
                                             ),
-                                          )
-                                          .toList(),
-                                  controller:
-                                      MultiSelectController<
-                                        ResponsiblePersonData
-                                      >(),
-                                  enabled: true,
-                                  searchEnabled: true,
-                                  onSelectionChange: (selectedItems) {
-                                    meetingController.selectdePersonIds
-                                        .assignAll(selectedItems);
-                                    // print(selectedItems.map((e) => e).toList());
-                                  },
-                                ),
-                              ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.r),
+                                              ),
+                                            ),
+                                          ),
+
+                                          items:
+                                              homeController
+                                                  .responsiblePersonList
+                                                  .map(
+                                                    (item) => DropdownItem<
+                                                      ResponsiblePersonData
+                                                    >(
+                                                      value: item,
+                                                      label: item.name ?? '',
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                          controller:
+                                              MultiSelectController<
+                                                ResponsiblePersonData
+                                              >(),
+                                          enabled: true,
+                                          searchEnabled: true,
+                                          onSelectionChange: (selectedItems) {
+                                            meetingController.selectdePersonIds
+                                                .assignAll(selectedItems);
+                                            // print(selectedItems.map((e) => e).toList());
+                                          },
+                                        ),
+                                      ),
                             ),
                             SizedBox(height: 15.h),
                             Text(
