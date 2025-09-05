@@ -8,6 +8,7 @@ import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/constant/text_constant.dart';
+import 'package:task_management/controller/home_controller.dart';
 import 'package:task_management/controller/meeting_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
 import 'package:task_management/controller/task_controller.dart';
@@ -28,6 +29,7 @@ class AddMeeting extends StatefulWidget {
 class _AddMeetingState extends State<AddMeeting> {
   final MeetingController meetingController = Get.put(MeetingController());
   final TaskController taskController = Get.find();
+  final HomeController homeController = Get.find();
   final ProfileController profileController = Get.find();
   final TextEditingController reminderController = TextEditingController();
   final TextEditingController meetingTitleController = TextEditingController();
@@ -134,14 +136,40 @@ class _AddMeetingState extends State<AddMeeting> {
                                       profileController
                                           .selectedDepartMentListData
                                           .value,
-                                  onChanged: (DepartmentListData? value) {
+                                  onChanged: (DepartmentListData? value) async {
                                     profileController
                                         .selectedDepartMentListData
                                         .value = value;
-                                    taskController.responsiblePersonListApi(
-                                      value?.id,
-                                      "",
-                                    );
+                                    // homeController.responsiblePersonListApi2(
+                                    //   value?.id,
+                                    //   "",
+                                    // );
+
+                                    final selected =
+                                        profileController
+                                            .selectedDepartMentListData
+                                            .value;
+
+                                    if (selected != null) {
+                                      homeController.selectedDepartMentListData2
+                                          .assignAll([selected]);
+                                    } else {
+                                      homeController.selectedDepartMentListData2
+                                          .clear();
+                                    }
+
+                                    // await homeController
+                                    //     .selectedDepartMentListData2
+                                    //     .assignAll(
+                                    //       profileController
+                                    //           .selectedDepartMentListData
+                                    //           .value,
+                                    //     );
+                                    await homeController
+                                        .responsiblePersonListApi2(
+                                          homeController
+                                              .selectedDepartMentListData2,
+                                        );
                                   },
                                   buttonStyleData: ButtonStyleData(
                                     height: 42.h,
@@ -247,88 +275,122 @@ class _AddMeetingState extends State<AddMeeting> {
                                 ),
                               ],
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: lightBorderColor),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(14.r),
-                                ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(14.r),
-                                ),
-                                child: Obx(
-                                  () => MultiDropdown<ResponsiblePersonData>(
-                                    items:
-                                        meetingController.responsiblePersonList
-                                            .map(
-                                              (item) => DropdownItem<
-                                                ResponsiblePersonData
-                                              >(
-                                                value: item,
-                                                label: item.name ?? '',
-                                              ),
-                                            )
-                                            .toList(),
-                                    controller: controller,
-                                    enabled: true,
-                                    searchEnabled: true,
-                                    chipDecoration: ChipDecoration(
-                                      backgroundColor: Colors.white,
-                                      wrap: true,
-                                      runSpacing: 2,
-                                      spacing: 10,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(14.r),
-                                      ),
-                                    ),
-                                    fieldDecoration: FieldDecoration(
-                                      borderRadius:
-                                          BorderSide.strokeAlignCenter,
-                                      hintText: selectPerson,
-                                      hintStyle: const TextStyle(
-                                        color: Colors.black87,
-                                      ),
-                                      backgroundColor: Colors.white,
-                                      showClearIcon: false,
-                                      border: InputBorder.none,
-                                    ),
-                                    dropdownDecoration: DropdownDecoration(
-                                      marginTop: 2,
-                                      maxHeight: 500,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(14.r),
-                                      ),
-                                      header: Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Text(
-                                          'Select from list',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                            // Container(
+                            //   decoration: BoxDecoration(
+                            //     border: Border.all(color: lightBorderColor),
+                            //     borderRadius: BorderRadius.all(
+                            //       Radius.circular(14.r),
+                            //     ),
+                            //   ),
+                            //   child: ClipRRect(
+                            //     borderRadius: BorderRadius.all(
+                            //       Radius.circular(14.r),
+                            //     ),
+                            //     child: Obx(
+                            //       () => MultiDropdown<ResponsiblePersonData>(
+                            //         items:
+                            //             meetingController.responsiblePersonList
+                            //                 .map(
+                            //                   (item) => DropdownItem<
+                            //                     ResponsiblePersonData
+                            //                   >(
+                            //                     value: item,
+                            //                     label: item.name ?? '',
+                            //                   ),
+                            //                 )
+                            //                 .toList(),
+                            //         controller: controller,
+                            //         enabled: true,
+                            //         searchEnabled: true,
+                            //         chipDecoration: ChipDecoration(
+                            //           backgroundColor: Colors.white,
+                            //           wrap: true,
+                            //           runSpacing: 2,
+                            //           spacing: 10,
+                            //           borderRadius: BorderRadius.all(
+                            //             Radius.circular(14.r),
+                            //           ),
+                            //         ),
+                            //         fieldDecoration: FieldDecoration(
+                            //           borderRadius:
+                            //               BorderSide.strokeAlignCenter,
+                            //           hintText: selectPerson,
+                            //           hintStyle: const TextStyle(
+                            //             color: Colors.black87,
+                            //           ),
+                            //           backgroundColor: Colors.white,
+                            //           showClearIcon: false,
+                            //           border: InputBorder.none,
+                            //         ),
+                            //         dropdownDecoration: DropdownDecoration(
+                            //           marginTop: 2,
+                            //           maxHeight: 500,
+                            //           borderRadius: BorderRadius.all(
+                            //             Radius.circular(14.r),
+                            //           ),
+                            //           header: Padding(
+                            //             padding: const EdgeInsets.all(8),
+                            //             child: Text(
+                            //               'Select from list',
+                            //               textAlign: TextAlign.start,
+                            //               style: const TextStyle(
+                            //                 fontSize: 16,
+                            //                 fontWeight: FontWeight.bold,
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //         dropdownItemDecoration:
+                            //             DropdownItemDecoration(
+                            //               selectedIcon: Icon(
+                            //                 Icons.check_box,
+                            //                 color: Colors.green,
+                            //               ),
+                            //               disabledIcon: Icon(
+                            //                 Icons.lock,
+                            //                 color: Colors.grey.shade300,
+                            //               ),
+                            //             ),
+                            //         onSelectionChange: (selectedItems) {
+                            //           meetingController.selectdePersonIds
+                            //               .assignAll(selectedItems);
+                            //         },
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // Obx(()=> MultiDropdown<ResponsiblePersonData>(
+                            //     items:  meetingController.responsiblePersonList,
+                            //     controller: MultiSelectController<ResponsiblePersonData>(),
+                            //     enabled: true,
+                            //     searchEnabled: true,
+                            //     onSelectionChange: (selectedItems) {
+                            //       print(selectedItems.map((e) => e).toList());
+                            //     },
+                            //   ),
+                            // ),
+                            Obx(
+                              () => MultiDropdown<ResponsiblePersonData>(
+                                items:
+                                    homeController.responsiblePersonList
+                                        .map(
+                                          (item) => DropdownItem<
+                                            ResponsiblePersonData
+                                          >(
+                                            value: item,
+                                            label: item.name ?? '',
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    dropdownItemDecoration:
-                                        DropdownItemDecoration(
-                                          selectedIcon: Icon(
-                                            Icons.check_box,
-                                            color: Colors.green,
-                                          ),
-                                          disabledIcon: Icon(
-                                            Icons.lock,
-                                            color: Colors.grey.shade300,
-                                          ),
-                                        ),
-                                    onSelectionChange: (selectedItems) {
-                                      meetingController.selectdePersonIds
-                                          .assignAll(selectedItems);
-                                    },
-                                  ),
-                                ),
+                                        )
+                                        .toList(),
+                                controller:
+                                    MultiSelectController<
+                                      ResponsiblePersonData
+                                    >(),
+                                enabled: true,
+                                searchEnabled: true,
+                                onSelectionChange: (selectedItems) {
+                                  print(selectedItems.map((e) => e).toList());
+                                },
                               ),
                             ),
                             SizedBox(height: 15.h),
