@@ -27,16 +27,17 @@ class MeetingController extends GetxController {
   RxList<String> meetingType = <String>["Meeting Link", "In App"].obs;
   RxString selectedMeetingType = "".obs;
 
-  Future<void> addMeeting(
-      {int? deptId,
-      required userIds,
-      required String meetingTitle,
-      required String meetingVinue,
-      required String meetingLink,
-      required String meetingDate,
-      required String meetingTime,
-      required String meetingEndTime,
-      required String reminder}) async {
+  Future<void> addMeeting({
+    int? deptId,
+    required userIds,
+    required String meetingTitle,
+    required String meetingVinue,
+    required String meetingLink,
+    required String meetingDate,
+    required String meetingTime,
+    required String meetingEndTime,
+    required String reminder,
+  }) async {
     isMeetingAdding.value = true;
     final result = await MeetingService().addMeeting(
       deptId,
@@ -127,7 +128,8 @@ class MeetingController extends GetxController {
             );
             if (dt.reminder != null && dt.reminder is int) {
               targetDate = targetDate.subtract(
-                  Duration(minutes: int.parse(dt.reminder.toString())));
+                Duration(minutes: int.parse(dt.reminder.toString())),
+              );
             }
             if (targetDate.isAfter(dtNow)) {
               final notificationId =
@@ -149,8 +151,11 @@ class MeetingController extends GetxController {
 
   var isAttendStatusUpdating = false.obs;
 
-  Future<void> attendMeeting(BuildContext context,
-      {int? meetingId, required int status}) async {
+  Future<void> attendMeeting(
+    BuildContext context, {
+    int? meetingId,
+    required int status,
+  }) async {
     isAttendStatusUpdating.value = true;
     final result = await MeetingService().attendMeeting(meetingId, status);
     await meetingList();
@@ -162,10 +167,7 @@ class MeetingController extends GetxController {
   ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
   final TextEditingController momController = TextEditingController();
 
-  Future<void> showAlertDialog(
-    BuildContext context,
-    int? meetingId,
-  ) async {
+  Future<void> showAlertDialog(BuildContext context, int? meetingId) async {
     return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
@@ -182,8 +184,10 @@ class MeetingController extends GetxController {
                   borderRadius: BorderRadius.circular(15.r),
                 ),
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 10.h,
+                  ),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -199,9 +203,7 @@ class MeetingController extends GetxController {
                           index: 1,
                           focusedIndexNotifier: focusedIndexNotifier,
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
+                        SizedBox(height: 15.h),
                         CustomButton(
                           onPressed: () {
                             if (isMomLoading.value == false) {
@@ -238,7 +240,7 @@ class MeetingController extends GetxController {
                     icon: Icon(Icons.close),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -276,11 +278,14 @@ class MeetingController extends GetxController {
       isMomLoading.value = true;
 
       final result = await MeetingService().meetingMom(meetingId, description);
-
-      isMomLoading.value = false;
-      Get.back();
+      if (result != null) {
+        isMomLoading.value = false;
+        await meetingList();
+        Get.back();
+      }
     } catch (e) {
       print("Token API Error: $e");
+
       Get.snackbar("Error", "Something went wrong");
     } finally {
       isMomLoading.value = false;
@@ -303,11 +308,13 @@ class MeetingController extends GetxController {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          builder: (context) => Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: AttendentUserBotomsheet(attendeesList),
-          ),
+          builder:
+              (context) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: AttendentUserBotomsheet(attendeesList),
+              ),
         );
       } else {
         Get.snackbar("Error", "Failed to get meeting token");
