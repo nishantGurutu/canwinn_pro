@@ -158,13 +158,6 @@ class _AddMeetingState extends State<AddMeeting> {
                                           .clear();
                                     }
 
-                                    // await homeController
-                                    //     .selectedDepartMentListData2
-                                    //     .assignAll(
-                                    //       profileController
-                                    //           .selectedDepartMentListData
-                                    //           .value,
-                                    //     );
                                     await homeController
                                         .responsiblePersonListApi2(
                                           homeController
@@ -369,28 +362,49 @@ class _AddMeetingState extends State<AddMeeting> {
                             //     },
                             //   ),
                             // ),
-                            Obx(
-                              () => MultiDropdown<ResponsiblePersonData>(
-                                items:
-                                    homeController.responsiblePersonList
-                                        .map(
-                                          (item) => DropdownItem<
-                                            ResponsiblePersonData
-                                          >(
-                                            value: item,
-                                            label: item.name ?? '',
-                                          ),
-                                        )
-                                        .toList(),
-                                controller:
-                                    MultiSelectController<
-                                      ResponsiblePersonData
-                                    >(),
-                                enabled: true,
-                                searchEnabled: true,
-                                onSelectionChange: (selectedItems) {
-                                  print(selectedItems.map((e) => e).toList());
-                                },
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12.r),
+                                ),
+                                border: Border.all(color: lightBorderColor),
+                              ),
+                              child: Obx(
+                                () => MultiDropdown<ResponsiblePersonData>(
+                                  fieldDecoration: FieldDecoration(
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10.r),
+                                      ),
+                                    ),
+                                  ),
+
+                                  items:
+                                      homeController.responsiblePersonList
+                                          .map(
+                                            (item) => DropdownItem<
+                                              ResponsiblePersonData
+                                            >(
+                                              value: item,
+                                              label: item.name ?? '',
+                                            ),
+                                          )
+                                          .toList(),
+                                  controller:
+                                      MultiSelectController<
+                                        ResponsiblePersonData
+                                      >(),
+                                  enabled: true,
+                                  searchEnabled: true,
+                                  onSelectionChange: (selectedItems) {
+                                    meetingController.selectdePersonIds
+                                        .assignAll(selectedItems);
+                                    // print(selectedItems.map((e) => e).toList());
+                                  },
+                                ),
                               ),
                             ),
                             SizedBox(height: 15.h),
