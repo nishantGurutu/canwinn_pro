@@ -14,11 +14,15 @@ class PDFScreen extends StatelessWidget {
     print('pdf file path ${file}');
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar:
-          AppBar(backgroundColor: whiteColor, title: const Text('PDF Viewer')),
-      body: SfPdfViewer.file(
-        file,
-        key: _pdfViewerKey,
+      appBar: AppBar(
+        backgroundColor: whiteColor,
+        title: const Text('PDF Viewer'),
+      ),
+      body: InteractiveViewer(
+        panEnabled: true,
+        minScale: 0.9,
+        maxScale: 4.0,
+        child: SfPdfViewer.file(file, key: _pdfViewerKey),
       ),
     );
   }
@@ -35,11 +39,15 @@ class NetworkPDFScreen extends StatelessWidget {
     print('pdf file path ${file}');
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar:
-          AppBar(backgroundColor: whiteColor, title: const Text('PDF Viewer')),
-      body: SfPdfViewer.network(
-        file.toString(),
-        key: _pdfViewerKey,
+      appBar: AppBar(
+        backgroundColor: whiteColor,
+        title: const Text('PDF Viewer'),
+      ),
+      body: InteractiveViewer(
+        panEnabled: true,
+        minScale: 0.9,
+        maxScale: 4.0,
+        child: SfPdfViewer.network(file.toString(), key: _pdfViewerKey),
       ),
     );
   }

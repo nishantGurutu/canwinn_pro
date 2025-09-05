@@ -40,9 +40,14 @@ class ImageScreen extends StatelessWidget {
       ),
       backgroundColor: whiteColor,
       body: SafeArea(
-        child: Container(
-          color: backgroundColor,
-          child: Center(child: Image.file(file)),
+        child: InteractiveViewer(
+          panEnabled: true,
+          minScale: 0.9,
+          maxScale: 4.0,
+          child: Container(
+            color: backgroundColor,
+            child: Center(child: Image.file(file)),
+          ),
         ),
       ),
     );
