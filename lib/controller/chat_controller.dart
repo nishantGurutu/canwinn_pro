@@ -289,11 +289,6 @@ class ChatController extends GetxController {
     final result = await ChatService().markSeen(chatId, seenMessageIds);
     if (result != null) {
       isMemberLoading.value = false;
-      // PusherConfig().initPusher(
-      //   onPusherEvent,
-      //   channelName: "chat",
-      //   roomId: chatId,
-      // );
     } else {
       isMemberLoading.value = false;
     }
@@ -307,11 +302,6 @@ class ChatController extends GetxController {
     final result = await ChatService().chatTyping(chatId);
     if (result != null) {
       isChatTyping.value = false;
-      // PusherConfig().initPusher(
-      //   onPusherEvent,
-      //   channelName: "chat",
-      //   roomId: chatId,
-      // );
     } else {
       isChatTyping.value = false;
     }

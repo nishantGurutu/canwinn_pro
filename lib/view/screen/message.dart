@@ -117,18 +117,19 @@ class _MessageScreenState extends State<MessageScreen> {
     if (_scrollController.position.pixels >
         _scrollController.position.minScrollExtent) {
       isScrolling.value = true;
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        chatController.pageCountValue.value += 1;
+        await chatController.chatHistoryListApi(
+          widget.chatId,
+          chatController.pageCountValue.value,
+          'pagination',
+        );
+      }
       print("w2e42 2w4e5 ${_scrollController.position.minScrollExtent}");
     } else if (_scrollController.position.pixels ==
         _scrollController.position.minScrollExtent) {
       isScrolling.value = false;
-    } else if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      chatController.pageCountValue.value += 1;
-      await chatController.chatHistoryListApi(
-        widget.chatId,
-        chatController.pageCountValue.value,
-        'pagination',
-      );
     }
   }
 

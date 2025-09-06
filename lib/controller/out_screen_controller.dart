@@ -39,6 +39,7 @@ class OutScreenController extends GetxController {
       pickedFile,
       tableData,
       receivedBy,
+      pickedFile2,
     );
     outScreenChalanApi();
     Get.back();

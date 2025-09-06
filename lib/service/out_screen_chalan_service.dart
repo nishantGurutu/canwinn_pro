@@ -20,6 +20,7 @@ class OutScreenChalanService {
     Rx<File> pickedFile,
     RxList<DataTableModel> tableData,
     String receivedBy,
+    Rx<File> pickedFile2,
   ) async {
     try {
       var token = StorageHelper.getToken();
@@ -44,6 +45,12 @@ class OutScreenChalanService {
           filename: pickedFile.value.path.split('/').last,
         );
       }
+      if (pickedFile2.value.path.isNotEmpty) {
+        formDataMap['upload_image2'] = await MultipartFile.fromFile(
+          pickedFile2.value.path,
+          filename: pickedFile2.value.path.split('/').last,
+        );
+      }
 
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(
@@ -64,13 +71,14 @@ class OutScreenChalanService {
   }
 
   Future<bool> addInScreenChalanApi(
-      String name,
-      String date,
-      int? deptId,
-      String purpose,
-      String contact,
-      Rx<File> pickedFile,
-      String addresstext) async {
+    String name,
+    String date,
+    int? deptId,
+    String purpose,
+    String contact,
+    Rx<File> pickedFile,
+    String addresstext,
+  ) async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -183,10 +191,7 @@ class OutScreenChalanService {
       print('chalan details status update $id');
       print('chalan details status update 2 $status');
       print('chalan details status update 3 $remark');
-      final Map<String, dynamic> formDataMap = {
-        'id': id,
-        'status': status,
-      };
+      final Map<String, dynamic> formDataMap = {'id': id, 'status': status};
 
       if (remark.isNotEmpty) {
         formDataMap['remark'] = remark;
@@ -265,9 +270,7 @@ class OutScreenChalanService {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
-      final Map<String, dynamic> formDataMap = {
-        'id': id,
-      };
+      final Map<String, dynamic> formDataMap = {'id': id};
 
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(
@@ -291,9 +294,7 @@ class OutScreenChalanService {
       var token = StorageHelper.getToken();
       print('details id 34r34f3 : $id');
       _dio.options.headers["Authorization"] = "Bearer $token";
-      final Map<String, dynamic> formDataMap = {
-        'id': id,
-      };
+      final Map<String, dynamic> formDataMap = {'id': id};
 
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(
