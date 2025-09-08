@@ -71,7 +71,6 @@ class OutScreenController extends GetxController {
 
   var isDataAdding = false.obs;
   RxList<String> returnableValue = <String>["false", "true"].obs;
-  // RxString? selectedReturnableValue;
   RxString selectedReturnableValue = "false".obs;
   final TextEditingController itemController = TextEditingController();
   final TextEditingController returnableController = TextEditingController();

@@ -14,14 +14,12 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.cannwin.task_management"
     compileSdk = 35
-    // ndkVersion = "27.0.12077973"
-
-    ndkVersion = "25.1.8937393"
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled =true
+        coreLibraryDesugaringEnabled = true
     } 
 
     lintOptions {
@@ -32,18 +30,14 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
- 
+
     defaultConfig {
         applicationId = "com.cannwin.task_management"
-        minSdkVersion flutter.minSdkVersion  
+        minSdkVersion = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
-
-        ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a"
-        }
     }
 
     packagingOptions {
@@ -52,35 +46,33 @@ android {
         exclude 'META-INF/DEPENDENCIES'  
     }
 
-
-   signingConfigs {
-       release {
-           keyAlias = keystoreProperties['keyAlias']
-           keyPassword = keystoreProperties['keyPassword']
-           storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword = keystoreProperties['storePassword']
-       }
-   }
-
-   signingConfigs{
-       debug {
-           keyAlias 'test'
-           keyPassword '123456'
-           storeFile file('test.jks')
-           storePassword '123456'
-       }
-   }
+    
+    signingConfigs {
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
  
+
     buildTypes {
         release {
-           signingConfig signingConfigs.release
-            // signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
+        //    signingConfig = signingConfigs.getByName("debug") // Update to release signing config (see Step 2)
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            ndk {
-                debugSymbolLevel 'NONE'
-            }
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4' // Already implied by coreLibraryDesugaringEnabled
+    configurations.all {
+        resolutionStrategy {
+            force 'com.google.android.material:material:1.4.0' // Use a version that avoids lStar issues
         }
     }
 }
@@ -104,3 +96,4 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk15on:1.69'
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.69'
 }
+ 

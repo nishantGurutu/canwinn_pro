@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-// import 'package:image_picker/image_picker.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/expense_controller.dart';
@@ -290,47 +288,90 @@ class _AddExpenseState extends State<AddExpense> {
                             Expanded(
                               child: InkWell(
                                 onTap: () async {
-                                  if (expenseController.isExpenseAdding.value == false) {
-                                    String expenseType = expenseTypeTextController.value.text.trim();
-                                    String billNumber = billNumberTextController.text.trim();
-                                    String amount = amountTextController.text.trim();
-                                    String description = descriptionTextController.text.trim();
-                                    String expenseDate = expenseDateTextController.text.trim();
+                                  if (expenseController.isExpenseAdding.value ==
+                                      false) {
+                                    String expenseType =
+                                        expenseTypeTextController.value.text
+                                            .trim();
+                                    String billNumber =
+                                        billNumberTextController.text.trim();
+                                    String amount =
+                                        amountTextController.text.trim();
+                                    String description =
+                                        descriptionTextController.text.trim();
+                                    String expenseDate =
+                                        expenseDateTextController.text.trim();
 
                                     // Mandatory field checks
                                     if (expenseType.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Please select expense type')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Please select expense type',
+                                          ),
+                                        ),
                                       );
                                       return;
                                     }
                                     if (billNumber.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Please enter bill number')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Please enter bill number',
+                                          ),
+                                        ),
                                       );
                                       return;
                                     }
                                     if (amount.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Please enter an amount')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Please enter an amount',
+                                          ),
+                                        ),
                                       );
                                       return;
                                     }
                                     if (!RegExp(r'^\d+$').hasMatch(amount)) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Amount must contain only digits')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Amount must contain only digits',
+                                          ),
+                                        ),
                                       );
                                       return;
                                     }
                                     if (description.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Please enter description')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Please enter description',
+                                          ),
+                                        ),
                                       );
                                       return;
                                     }
                                     if (expenseDate.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Please select expense date')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Please select expense date',
+                                          ),
+                                        ),
                                       );
                                       return;
                                     }
@@ -351,11 +392,15 @@ class _AddExpenseState extends State<AddExpense> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: const Text('Success'),
-                                            content: const Text('Expense Added Successfully'),
+                                            content: const Text(
+                                              'Expense Added Successfully',
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
-                                                  Navigator.of(context).pop(); // Close the dialog
+                                                  Navigator.of(
+                                                    context,
+                                                  ).pop(); // Close the dialog
                                                 },
                                                 child: const Text('OK'),
                                               ),
@@ -370,11 +415,15 @@ class _AddExpenseState extends State<AddExpense> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: const Text('Error'),
-                                            content: const Text('Oh! Expense Not Submitted, Sorry!'),
+                                            content: const Text(
+                                              'Oh! Expense Not Submitted, Sorry!',
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
-                                                  Navigator.of(context).pop(); // Close the dialog
+                                                  Navigator.of(
+                                                    context,
+                                                  ).pop(); // Close the dialog
                                                 },
                                                 child: const Text('OK'),
                                               ),

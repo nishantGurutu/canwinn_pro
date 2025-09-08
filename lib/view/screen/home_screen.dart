@@ -6,13 +6,9 @@ import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io' show Platform;
 import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -264,14 +260,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         );
                       } else {
                         print("Could not open Play Store");
-                        // Fluttertoast.showToast(
-                        //   msg: "Could not open Play Store",
-                        //   toastLength: Toast.LENGTH_SHORT,
-                        //   gravity: ToastGravity.CENTER,
-                        //   backgroundColor: Colors.red,
-                        //   textColor: Colors.white,
-                        //   fontSize: 16.0,
-                        // );
                       }
                       Get.back();
                     },
@@ -291,14 +279,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
       } catch (e) {
         print('Error checking for app update: $e');
-        // Fluttertoast.showToast(
-        //   msg: "Failed to check for updates: $e",
-        //   toastLength: Toast.LENGTH_SHORT,
-        //   gravity: ToastGravity.CENTER,
-        //   backgroundColor: Colors.red,
-        //   textColor: Colors.white,
-        //   fontSize: 16.0,
-        // );
       }
     } else if (Platform.isIOS) {
       print("Platform is iOS, showing App Store dialog...");
@@ -329,14 +309,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   );
                 } else {
                   print("Could not open App Store");
-                  // Fluttertoast.showToast(
-                  //   msg: "Could not open App Store",
-                  //   toastLength: Toast.LENGTH_SHORT,
-                  //   gravity: ToastGravity.CENTER,
-                  //   backgroundColor: Colors.red,
-                  //   textColor: Colors.white,
-                  //   fontSize: 16.0,
-                  // );
                 }
                 Get.back();
               },
@@ -437,8 +409,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return RefreshIndicator(
       onRefresh: onrefresher,
       child: SingleChildScrollView(
-        // controller: _scrollController,
-        // physics: const AlwaysScrollableScrollPhysics(),
         child: Obx(() {
           return Column(
             children: [
@@ -498,7 +468,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return RefreshIndicator(
       onRefresh: onrefresher,
       child: SingleChildScrollView(
-        // controller: _scrollController,
         child: Obx(() {
           return Column(
             children: [
@@ -944,8 +913,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Color.fromARGB(255, 152, 33, 243),
                     whiteColor,
                     whiteColor,
-                    // dueTodayTaskBoxColor1,
-                    // gradientSecondaryBoxColor2,
                   ),
                 ),
               ),
