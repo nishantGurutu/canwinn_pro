@@ -45,6 +45,7 @@ class TaskController extends GetxController {
       '',
       '',
       '',
+      '',
     );
   }
 
@@ -138,6 +139,7 @@ class TaskController extends GetxController {
       '',
       '',
       '',
+      '',
     );
   }
 
@@ -178,6 +180,7 @@ class TaskController extends GetxController {
     String type,
     String date,
     String? userId,
+    String selectAlarmTyle,
   ) async {
     if (type == 'scroll') {
       isScrolling.value = true;
@@ -323,6 +326,7 @@ class TaskController extends GetxController {
                   'en_US',
                 );
                 print('Formatted Date Input: 65ew54 $dateTime');
+                print('Formatted Date Input: 65ew54 2 $selectAlarmTyle');
                 String dateOutput = outputFormat.format(dateTime);
                 List<String> splitDt = dateOutput.split(" ");
                 List<String> splitDt2 = splitDt.first.split('-');
@@ -529,6 +533,7 @@ class TaskController extends GetxController {
     String timeTextString,
     String timeType,
     RxList<DepartmentListData> selectedDepartMentListData2,
+    String selectAlarmTyle,
   ) async {
     isTaskAdding.value = true;
     try {
@@ -547,6 +552,7 @@ class TaskController extends GetxController {
         timeType,
         addTaskContactList,
         selectedDepartMentListData2,
+        selectAlarmTyle,
       );
       if (result) {
         Get.back();
@@ -566,6 +572,7 @@ class TaskController extends GetxController {
           '',
           '',
           '',
+          selectAlarmTyle,
         );
 
         // Invalidate home data cache
@@ -584,52 +591,6 @@ class TaskController extends GetxController {
       isTaskAdding.value = false;
     }
   }
-  // Future<void> addTask(
-  //     String taskName,
-  //     String remark,
-  //     int selectedProjectId,
-  //     int? departmentId,
-  //     String startDate,
-  //     String dueDate,
-  //     String dueTime,
-  //     int? priorityId,
-  //     String s,
-  //     String timeTextString,
-  //     String timeType) async {
-  //   isTaskAdding.value = true;
-  //   final result = await TaskService().addTaskApi(
-  //     taskName,
-  //     remark,
-  //     selectedProjectId,
-  //     departmentId,
-  //     pickedFile,
-  //     assignedUserId,
-  //     reviewerUserId,
-  //     startDate,
-  //     dueDate,
-  //     dueTime,
-  //     priorityId,
-  //     timeTextString,
-  //     timeType,
-  //     addTaskContactList,
-  //   );
-  //   if (result) {
-  //     Get.back();
-  //     responsiblePersonSelectedCheckBox
-  //         .addAll(List<bool>.filled(responsiblePersonList.length, false));
-  //     reviewerCheckBox
-  //         .addAll(List<bool>.filled(responsiblePersonList.length, false));
-  //     assignedUserId.clear();
-  //     reviewerUserId.clear();
-  //     await taskListApi(
-  //         selectedTaskType.value, selectedAssignedTask.value, '', '', '');
-
-  //     if (s == 'bottom') {
-  //       Get.back();
-  //     }
-  //   }
-  //   isTaskAdding.value = false;
-  // }
 
   var isSubTaskAdding = false.obs;
   Future<void> addSubTask(
@@ -719,6 +680,7 @@ class TaskController extends GetxController {
         '',
         '',
         '',
+        '',
       );
       Get.back();
     }
@@ -733,6 +695,7 @@ class TaskController extends GetxController {
       await taskListApi(
         selectedTaskType.value,
         selectedAssignedTask.value,
+        '',
         '',
         '',
         '',
@@ -779,12 +742,14 @@ class TaskController extends GetxController {
           '',
           '',
           '',
+          '',
         );
         await taskDetailsApi(taskIdFromDetails);
       } else {
         await taskListApi(
           selectedTaskType.value,
           selectedAssignedTask.value,
+          '',
           '',
           '',
           '',

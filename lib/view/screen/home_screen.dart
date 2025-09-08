@@ -33,20 +33,16 @@ import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/assets_submit_model.dart';
 import 'package:task_management/model/home_lead_model.dart';
 import 'package:task_management/model/home_secreen_data_model.dart';
-import 'package:task_management/model/lead_contact_list_model.dart';
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/view/screen/all_followups.dart';
 import 'package:task_management/view/screen/bootom_bar.dart';
 import 'package:task_management/view/screen/leads_list.dart';
-import 'package:task_management/view/screen/meeting/get_meeting.dart'
-    show GetMeetingList;
 import 'package:task_management/view/screen/task_screen.dart';
 import 'package:task_management/view/widgets/add_task.dart';
 import 'package:task_management/view/widgets/admin_user_list.dart';
 import 'package:task_management/view/widgets/autoScrollListInfo.dart';
 import 'package:task_management/view/widgets/home_discussion_list.dart';
 import 'package:task_management/view/widgets/home_event_data.dart';
-import 'package:task_management/view/widgets/home_leads.dart';
 import 'package:task_management/view/widgets/home_task.dart';
 import 'package:task_management/view/widgets/home_task_list.dart';
 import 'package:task_management/view/widgets/home_title.dart';
@@ -80,6 +76,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   DateTime dt = DateTime.now();
   late Animation<double> _animation;
   late AnimationController _animationController;
+
+  // final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -451,50 +449,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       (homeController.homeDataModel.value?.pinnedNotes ?? [])
                           .obs,
                     ),
-                    SizedBox(height: 10.h),
-                    HomeEventSummary(),
-                    SizedBox(height: 10.h),
-                  ],
-                ),
-              ),
-            ],
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget _buildHomeLeadContent() {
-    return RefreshIndicator(
-      onRefresh: onrefresher,
-      child: SingleChildScrollView(
-        child: Obx(() {
-          return Column(
-            children: [
-              if (homeController.anniversaryListData.isNotEmpty)
-                AutoScrollList(homeController.anniversaryListData),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Column(
-                  children: [
-                    SizedBox(height: 10.h),
-                    leadTodaySummary(homeController.homeLeadData.value),
-                    SizedBox(height: 10.h),
-                    leadDailyActivityAndPending(
-                      homeController.homeLeadData.value,
-                    ),
-                    SizedBox(height: 10.h),
-                    leadSummary(homeController.homeLeadData.value),
-                    SizedBox(height: 10.h),
-                    HomeLeads(homeController.homeLeadData.value),
-                    SizedBox(height: 10.h),
-                    leadDiscussion(
-                      (homeController.homeDataModel.value?.chatlist ?? []).obs,
-                      (homeController.homeDataModel.value?.latestComments ?? [])
-                          .obs,
-                    ),
-                    SizedBox(height: 10.h),
-                    leadPinedData(homeController.homeLeadData.value),
                     SizedBox(height: 10.h),
                     HomeEventSummary(),
                     SizedBox(height: 10.h),
@@ -923,130 +877,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget leadTodaySummary(HomeLeadData? leadData) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HomeTitle(todaySummaryText),
-          SizedBox(height: 5.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    Get.to(() => LeadList(status: 'new lead'));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: boxBorderColor),
-                      borderRadius: BorderRadius.all(Radius.circular(18.r)),
-                      color: whiteColor,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 8.h,
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          newTaskSvgIcon,
-                          height: 34.sp,
-                          width: 34.sp,
-                          fit: BoxFit.contain,
-                        ),
-                        SizedBox(width: 5.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "New Leads",
-                                style: heading7,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                "${leadData?.newLeads ?? ""}",
-                                style: heading9,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    Get.to(
-                      () => GetMeetingList(
-                        leadId: '',
-                        contactList: <LeadContactData>[].obs,
-                        from: 'home',
-                        addPeople: [],
-                        assignPeople: [],
-                      ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: boxBorderColor),
-                      borderRadius: BorderRadius.all(Radius.circular(18.r)),
-                      color: whiteColor,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 8.h,
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/image/svg/assigned_new_icon.png",
-                          height: 34.sp,
-                          width: 34.sp,
-                          fit: BoxFit.contain,
-                        ),
-                        SizedBox(width: 5.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Visits/Meeting",
-                                style: heading7,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                "${leadData?.totalmeedtings ?? ""}",
-                                style: heading9,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget summary() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1103,8 +933,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     const Color.fromARGB(255, 244, 54, 54),
                     whiteColor,
                     whiteColor,
-                    // asignedTaskBoxColor1,
-                    // gradientSecondaryBoxColor2,
                   ),
                 ),
               ),
@@ -1136,8 +964,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Colors.blue,
                     whiteColor,
                     whiteColor,
-                    // totalTaskBoxColor1,
-                    // gradientSecondaryBoxColor2,
                   ),
                 ),
               ),
@@ -1162,8 +988,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     homeController.homeDataModel.value?.totalTasksPastDue ?? 0,
                     assignedTaskSvgIcon,
                     const Color.fromARGB(255, 255, 163, 59),
-                    // pastDueTaskBoxColor1,
-                    // gradientSecondaryBoxColor2,
                     whiteColor,
                     whiteColor,
                   ),
@@ -1198,8 +1022,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   const Color.fromARGB(255, 76, 175, 175),
                   whiteColor,
                   whiteColor,
-                  // totalTaskBoxColor1,
-                  // gradientSecondaryBoxColor2,
                 ),
               ),
             ),
@@ -1214,8 +1036,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   leadData?.plLeads ?? 0,
                   'assets/image/svg/new_task.svg',
                   const Color.fromARGB(255, 244, 54, 54),
-                  // asignedTaskBoxColor1,
-                  // gradientSecondaryBoxColor2,
                   whiteColor,
                   whiteColor,
                 ),
@@ -1239,8 +1059,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   Color.fromARGB(255, 152, 33, 243),
                   whiteColor,
                   whiteColor,
-                  // dueTodayTaskBoxColor1,
-                  // gradientSecondaryBoxColor2,
                 ),
               ),
             ),
@@ -1257,8 +1075,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   const Color.fromARGB(255, 255, 163, 59),
                   whiteColor,
                   whiteColor,
-                  // pastDueTaskBoxColor1,
-                  // gradientSecondaryBoxColor2,
                 ),
               ),
             ),
@@ -1281,8 +1097,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Colors.blue,
                       whiteColor,
                       whiteColor,
-                      // totalTaskBoxColor1,
-                      // gradientSecondaryBoxColor2,
                     ),
                   ),
                 ),
@@ -1299,29 +1113,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Colors.blue,
                       whiteColor,
                       whiteColor,
-                      // totalTaskBoxColor1,
-                      // gradientSecondaryBoxColor2,
                     ),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 10),
-            // Add spacing if needed
-            // Remove Expanded here unless it's inside a scrollable or constrained widget
-            // InkWell(
-            //   onTap: () {
-            //     Get.to(LeadPaymentsScreens());
-            //   },
-            //   child: TaskInfo(
-            //     "Lead Payment",
-            //     leadData?.closedLeads ?? 0,
-            //     totalTaskSvgIcon,
-            //     Colors.blue,
-            //     totalTaskBoxColor1,
-            //     gradientSecondaryBoxColor2,
-            //   ),
-            // ),
           ],
         ),
       ],

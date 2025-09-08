@@ -18,13 +18,9 @@ class HomeTask extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            HomeTitle('My Task'),
-          ],
+          children: [HomeTitle('My Task')],
         ),
-        SizedBox(
-          height: 10.h,
-        ),
+        SizedBox(height: 10.h),
         ClipRRect(
           borderRadius: BorderRadius.circular(14.r),
           child: Container(
@@ -45,9 +41,7 @@ class HomeTask extends StatelessWidget {
             ),
             child: Column(
               children: [
-                SizedBox(
-                  height: 5.h,
-                ),
+                SizedBox(height: 5.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Row(
@@ -76,7 +70,7 @@ class HomeTask extends StatelessWidget {
                             style: TextStyle(fontSize: 14.sp),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -89,12 +83,14 @@ class HomeTask extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              Get.to(() => TaskDetails(
-                                    taskId: homeTaskList[index].id,
-                                    assignedStatus: taskController
-                                        .selectedAssignedTask.value,
-                                    initialIndex: 0,
-                                  ));
+                              Get.to(
+                                () => TaskDetails(
+                                  taskId: homeTaskList[index].id,
+                                  assignedStatus:
+                                      taskController.selectedAssignedTask.value,
+                                  initialIndex: 0,
+                                ),
+                              );
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -123,14 +119,13 @@ class HomeTask extends StatelessWidget {
                                     flex: 1,
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: homeTaskList[index]
-                                                    .effectiveStatus
-                                                    .toString()
-                                                    .toLowerCase() ==
-                                                'pending'
-                                            ? Color(0xffD045FF)
-                                            : homeTaskList[index]
-                                                        .status
+                                        color:
+                                            homeTaskList[index].effectiveStatus
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    'pending'
+                                                ? Color(0xffD045FF)
+                                                : homeTaskList[index].status
                                                         .toString()
                                                         .toLowerCase() ==
                                                     'progress'
@@ -142,12 +137,12 @@ class HomeTask extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          homeTaskList[index]
-                                              .effectiveStatus
+                                          homeTaskList[index].effectiveStatus
                                               .toString(),
                                           style: TextStyle(
-                                              fontSize: 14.sp,
-                                              color: whiteColor),
+                                            fontSize: 14.sp,
+                                            color: whiteColor,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -156,10 +151,7 @@ class HomeTask extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Divider(
-                            thickness: 0.5,
-                            color: lightBorderColor,
-                          )
+                          Divider(thickness: 0.5, color: lightBorderColor),
                         ],
                       );
                     },

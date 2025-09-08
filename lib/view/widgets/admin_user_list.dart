@@ -15,8 +15,11 @@ class AdminUserList extends StatelessWidget {
   final TaskController taskController;
   final HomeController homeController;
   const AdminUserList(
-      this.homeAdminUserList, this.taskController, this.homeController,
-      {super.key});
+    this.homeAdminUserList,
+    this.taskController,
+    this.homeController, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +27,9 @@ class AdminUserList extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            HomeTitle('User Task Preview'),
-          ],
+          children: [HomeTitle('User Task Preview')],
         ),
-        SizedBox(
-          height: 10.h,
-        ),
+        SizedBox(height: 10.h),
         ClipRRect(
           borderRadius: BorderRadius.circular(14.r),
           child: Container(
@@ -51,9 +50,7 @@ class AdminUserList extends StatelessWidget {
             ),
             child: Column(
               children: [
-                SizedBox(
-                  height: 5.h,
-                ),
+                SizedBox(height: 5.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Row(
@@ -82,110 +79,123 @@ class AdminUserList extends StatelessWidget {
                             style: TextStyle(fontSize: 14.sp),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Divider(),
                 Expanded(
                   child: Obx(
-                    () => homeController.isUserReportLoading.value == true
-                        ? Center(child: CircularProgressIndicator())
-                        : ListView.builder(
-                            itemCount: homeController.userReportDataList.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      String cacheKey = 'home_data_cache';
-                                      final cacheManager =
-                                          DefaultCacheManager();
-                                      await cacheManager
-                                          .removeFile('$cacheKey');
-                                      Get.to(() => UserWiseHomeScreen(
-                                          homeController
-                                              .userReportDataList[index]?.id,
-                                          homeController
-                                                  .userReportDataList[index]
-                                                  ?.name ??
-                                              ""));
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.w),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: 40.h,
-                                            width: 40.h,
-                                            decoration: BoxDecoration(
-                                              color: Colors.purple,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20.h)),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                '${CustomTextConvert().getNameChar(homeController.userReportDataList[index]?.name ?? "")}',
-                                                style: TextStyle(
-                                                  color: whiteColor,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
+                    () =>
+                        homeController.isUserReportLoading.value == true
+                            ? Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                              itemCount:
+                                  homeController.userReportDataList.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        String cacheKey = 'home_data_cache';
+                                        final cacheManager =
+                                            DefaultCacheManager();
+                                        await cacheManager.removeFile(
+                                          '$cacheKey',
+                                        );
+                                        Get.to(
+                                          () => UserWiseHomeScreen(
+                                            homeController
+                                                .userReportDataList[index]
+                                                ?.id,
+                                            homeController
+                                                    .userReportDataList[index]
+                                                    ?.name ??
+                                                "",
                                           ),
-                                          SizedBox(width: 8.w),
-                                          Expanded(
-                                            flex: 2,
-                                            child: Text(
-                                              "${homeController.userReportDataList[index]?.name ?? ""}",
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(fontSize: 14.sp),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Center(
-                                              child: Text(
-                                                "${homeController.userReportDataList[index]?.inProgressTaskCount ?? 0}",
-                                                style:
-                                                    TextStyle(fontSize: 14.sp),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8.w,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: 40.h,
+                                              width: 40.h,
                                               decoration: BoxDecoration(
+                                                color: Colors.purple,
                                                 borderRadius: BorderRadius.all(
-                                                  Radius.circular(10.r),
+                                                  Radius.circular(20.h),
                                                 ),
                                               ),
                                               child: Center(
                                                 child: Text(
-                                                  "${homeController.userReportDataList[index]?.completedTaskCount ?? 0}",
+                                                  '${CustomTextConvert().getNameChar(homeController.userReportDataList[index]?.name ?? "")}',
+                                                  style: TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                "${homeController.userReportDataList[index]?.name ?? ""}",
+                                                textAlign: TextAlign.left,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Center(
+                                                child: Text(
+                                                  "${homeController.userReportDataList[index]?.inProgressTaskCount ?? 0}",
                                                   style: TextStyle(
                                                     fontSize: 14.sp,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radius.circular(10.r),
+                                                      ),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "${homeController.userReportDataList[index]?.completedTaskCount ?? 0}",
+                                                    style: TextStyle(
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Divider(
-                                    thickness: 0.5,
-                                    color: lightBorderColor,
-                                  )
-                                ],
-                              );
-                            },
-                          ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: lightBorderColor,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                   ),
                 ),
               ],

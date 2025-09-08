@@ -15,7 +15,9 @@ class HomeController extends GetxController {
   var isTabIndexSelected = 0.obs;
   RxInt totalTask = 0.obs;
   var isTaskCommentSelected = false.obs;
-  RxList<String> timeList = <String>["Minutes", "Hours"].obs;
+  RxList<String> timeList = <String>["Minutes", "Hours", "Daily"].obs;
+  RxList<String> alarmTypeList = <String>["Repeated", "Not Repeated"].obs;
+  RxString? selectedAlarmTypeTime = "".obs;
   RxString? selectedTime = "".obs;
   RxBool isButtonVisible = true.obs;
   var isHomeDataLoading = false.obs;
@@ -25,7 +27,6 @@ class HomeController extends GetxController {
     Future.microtask(() {
       isHomeDataLoading.value = true;
     });
-
     try {
       final result = await HomeService().homeDataApi(id);
       if (result != null) {

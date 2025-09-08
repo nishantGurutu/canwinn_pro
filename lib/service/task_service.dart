@@ -219,6 +219,7 @@ class TaskService {
     String timeType,
     RxList<ContactsData> addTaskContactList,
     RxList<DepartmentListData> selectedDepartMentListData2,
+    String selectAlarmTyle,
   ) async {
     try {
       assignedId = assignedUserId.where((id) => id.isNotEmpty).join(',');
