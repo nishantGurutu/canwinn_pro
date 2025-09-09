@@ -140,6 +140,8 @@ class MeetingController extends GetxController {
                 dt.id ?? 0,
                 dt.title ?? "",
                 'meeting',
+                '',
+                '',
               );
             }
           }

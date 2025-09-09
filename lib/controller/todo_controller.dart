@@ -16,20 +16,18 @@ class TodoController extends GetxController {
   final TextEditingController timeTextEditingController =
       TextEditingController();
   RxBool isMarkCompleted = false.obs;
-  RxList<String> sortList = <String>[
-    "Inbox",
-    "Ascending",
-    "Descending",
-    "Recently Added",
-    "Done",
-    "Important",
-    "Trash",
-  ].obs;
+  RxList<String> sortList =
+      <String>[
+        "Inbox",
+        "Ascending",
+        "Descending",
+        "Recently Added",
+        "Done",
+        "Important",
+        "Trash",
+      ].obs;
   String? selectedSortData;
-  RxList<String> timeList = <String>[
-    "Minutes",
-    "Hours",
-  ].obs;
+  RxList<String> timeList = <String>["Minutes", "Hours"].obs;
   RxString? selectedTime = "".obs;
   RxList<int> completedTodoCheckList = <int>[].obs;
   RxList<bool> todoListCheckbox = <bool>[].obs;
@@ -81,8 +79,10 @@ class TodoController extends GetxController {
 
             if (dateTime == null) {
               try {
-                DateFormat inputFormat =
-                    DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                DateFormat inputFormat = DateFormat(
+                  "dd-MM-yyyy h:mm a",
+                  'en_US',
+                );
                 dateTime = inputFormat.parse(dateInput.toUpperCase());
               } catch (e) {
                 print("Error parsing with uppercase AM/PM: $e");
@@ -130,7 +130,8 @@ class TodoController extends GetxController {
                   dt.id ?? 0,
                   dt.title.toString(),
                   'todo',
-                  // dt.id,
+                  '',
+                  '',
                 );
               }
             } else {
@@ -163,25 +164,27 @@ class TodoController extends GetxController {
   Rx<TagData?> selectedTagData = Rx<TagData?>(null);
   var isTodoAdding = false.obs;
   Future<void> addTodoApi(
-      String title,
-      int? tag,
-      int? priorityId,
-      String description,
-      String dueTime,
-      String dueDate,
-      String reminderTime,
-      String selectedReminderTime) async {
+    String title,
+    int? tag,
+    int? priorityId,
+    String description,
+    String dueTime,
+    String dueDate,
+    String reminderTime,
+    String selectedReminderTime,
+  ) async {
     isTodoAdding.value = true;
     final result = await TodoService().addTodoApi(
-        title,
-        tag,
-        priorityId,
-        description,
-        dueTime,
-        dueDate,
-        reminderTime,
-        selectedReminderTime,
-        pickedFile);
+      title,
+      tag,
+      priorityId,
+      description,
+      dueTime,
+      dueDate,
+      reminderTime,
+      selectedReminderTime,
+      pickedFile,
+    );
     if (result != null) {
       titleTextEditingController.clear();
       descriptionTextEditingController.clear();
@@ -203,8 +206,18 @@ class TodoController extends GetxController {
     String? reminderValue,
   ) async {
     isTodoAdding.value = true;
-    final result = await TodoService().editTodoApi(titleText, tagId, priorityId,
-        descText, id, date, time, pickedFile, reminderText, reminderValue);
+    final result = await TodoService().editTodoApi(
+      titleText,
+      tagId,
+      priorityId,
+      descText,
+      id,
+      date,
+      time,
+      pickedFile,
+      reminderText,
+      reminderValue,
+    );
     if (result != null) {
       Get.back();
       todoListApi(selectedSortData);
@@ -223,10 +236,14 @@ class TodoController extends GetxController {
   }
 
   Future<void> completeTodoApi(
-      RxList<int> completedTodoCheckList, int i) async {
+    RxList<int> completedTodoCheckList,
+    int i,
+  ) async {
     isTodoDeleting.value = true;
-    final result =
-        await TodoService().completeTodoApi(completedTodoCheckList, i);
+    final result = await TodoService().completeTodoApi(
+      completedTodoCheckList,
+      i,
+    );
     if (result != null) {
       todoListApi(selectedSortData);
     } else {}

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,10 +6,7 @@ import 'package:task_management/model/callender_eventList_model.dart';
 import 'package:task_management/service/calender_service.dart';
 
 class CalenderController extends GetxController {
-  RxList<String> timeList = <String>[
-    "Minutes",
-    "Hours",
-  ].obs;
+  RxList<String> timeList = <String>["Minutes", "Hours"].obs;
   RxString? selectedTime = "".obs;
 
   RxList<String> categoryColorName = <String>[].obs;
@@ -42,8 +38,10 @@ class CalenderController extends GetxController {
 
             if (dateTime == null) {
               try {
-                DateFormat inputFormat =
-                    DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                DateFormat inputFormat = DateFormat(
+                  "dd-MM-yyyy h:mm a",
+                  'en_US',
+                );
                 dateTime = inputFormat.parse(dateInput.toUpperCase());
               } catch (e) {
                 print("Error parsing with uppercase AM/PM: $e");
@@ -85,13 +83,13 @@ class CalenderController extends GetxController {
 
               print("todoi9hn9i8j9 alarm date in controller $targetDate");
               if (targetDate.isAfter(dtNow)) {
-                final randomId = Random().nextInt(1000);
                 LocalNotificationService().scheduleNotification(
                   targetDate,
                   dt.id ?? 0,
                   dt.eventName.toString(),
                   'calender',
-                  // dt.id,
+                  '',
+                  '',
                 );
               }
             } else {
@@ -112,11 +110,21 @@ class CalenderController extends GetxController {
       TextEditingController();
 
   var isEventAdding = false.obs;
-  Future<void> addEventApi(String text, String date, String time,
-      String reminder, String? reminderType) async {
+  Future<void> addEventApi(
+    String text,
+    String date,
+    String time,
+    String reminder,
+    String? reminderType,
+  ) async {
     isEventAdding.value = true;
-    final result = await CalenderService()
-        .addEventApi(text, date, time, reminder, reminderType);
+    final result = await CalenderService().addEventApi(
+      text,
+      date,
+      time,
+      reminder,
+      reminderType,
+    );
     isEventAdding.value = false;
     eventControllerEditingController.clear();
     eventDateControllerEditingController.clear();

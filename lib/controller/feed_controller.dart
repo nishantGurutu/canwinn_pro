@@ -27,29 +27,31 @@ class FeedController extends GetxController {
   RxList<ResponsiblePersonData> selectedGuest = <ResponsiblePersonData>[].obs;
   var isEventAdding = false.obs;
   Future<void> addEvent(
-      String title,
-      String description,
-      String dueDate,
-      String dueTime,
-      int guest,
-      String reminder,
-      String event,
-      String? timeType,
-      String venueType,
-      String urlText) async {
+    String title,
+    String description,
+    String dueDate,
+    String dueTime,
+    int guest,
+    String reminder,
+    String event,
+    String? timeType,
+    String venueType,
+    String urlText,
+  ) async {
     isEventAdding.value = true;
     final result = await FeedService().addEvent(
-        title,
-        description,
-        dueDate,
-        dueTime,
-        guest,
-        reminder,
-        event,
-        timeType,
-        venueType,
-        urlText,
-        selectedGuest);
+      title,
+      description,
+      dueDate,
+      dueTime,
+      guest,
+      reminder,
+      event,
+      timeType,
+      venueType,
+      urlText,
+      selectedGuest,
+    );
     if (result != null) {
       isEventAdding.value = false;
       await eventList();
@@ -83,8 +85,10 @@ class FeedController extends GetxController {
 
             if (dateTime == null) {
               try {
-                DateFormat inputFormat =
-                    DateFormat("dd-MM-yyyy h:mm a", 'en_US');
+                DateFormat inputFormat = DateFormat(
+                  "dd-MM-yyyy h:mm a",
+                  'en_US',
+                );
                 dateTime = inputFormat.parse(dateInput.toUpperCase());
               } catch (e) {
                 print("Error parsing with uppercase AM/PM: $e");
@@ -132,6 +136,8 @@ class FeedController extends GetxController {
                   dt.id ?? 0,
                   dt.title.toString(),
                   'todo',
+                  '',
+                  '',
                   // dt.id,
                 );
               }

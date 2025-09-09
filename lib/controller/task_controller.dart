@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/controller/home_controller.dart';
@@ -14,6 +16,7 @@ import 'package:task_management/model/task_category_list_model.dart';
 import 'package:task_management/model/task_details_model.dart';
 import 'package:task_management/service/project_service.dart';
 import 'package:task_management/service/task_service.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class TaskController extends GetxController {
   final ProfileController profileController = Get.put(ProfileController());
@@ -320,6 +323,7 @@ class TaskController extends GetxController {
                   print("Error parsing with uppercase AM/PM: $e");
                 }
               }
+              String reminderTimeType = "";
               if (dateTime != null) {
                 DateFormat outputFormat = DateFormat(
                   "dd-MM-yyyy HH:mm",
@@ -339,7 +343,7 @@ class TaskController extends GetxController {
                 if (strReminder != "null") {
                   List<String> splitReminder = strReminder.split(" ");
                   int reminderTime = int.parse(splitReminder.first);
-                  String reminderTimeType = splitReminder.last.toLowerCase();
+                  reminderTimeType = splitReminder.last.toLowerCase();
 
                   if (reminderTimeType == 'minutes') {
                     minute -= reminderTime;
@@ -359,14 +363,121 @@ class TaskController extends GetxController {
                 );
 
                 print("task alarm date in controller $targetDate");
+                // if (targetDate.isAfter(dtNow)) {
+                //   if (selectAlarmTyle == 'Not Repeated') {
+                //     LocalNotificationService().scheduleNotification(
+                //       targetDate,
+                //       dt['id'],
+                //       dt['title'],
+                //       'task',
+                //     );
+                //   }else if( selectAlarmTyle =='Repeated'){
+
+                //   }
+                // }
+
                 if (targetDate.isAfter(dtNow)) {
-                  final randomId = Random().nextInt(1000);
+                  // if (selectAlarmTyle == 'Not Repeated') {
+                  // 🔔 One-time alarm
                   LocalNotificationService().scheduleNotification(
                     targetDate,
                     dt['id'],
                     dt['title'],
                     'task',
+                    reminderTimeType,
+                    selectAlarmTyle,
                   );
+                  // }
+
+                  //  else if (selectAlarmTyle == 'Repeated') {
+                  //   if (reminderTimeType == 'minutes') {
+                  //     // 🔔 Repeats every minute
+                  //     await _notificationsPlugin.periodicallyShow(
+                  //       dt['id'],
+                  //       '${dt['title']} task reminder',
+                  //       'Task reminder every minute',
+                  //       RepeatInterval.everyMinute,
+                  //       NotificationDetails(
+                  //         android: AndroidNotificationDetails(
+                  //           'your_channel_id',
+                  //           'your_channel_name',
+                  //           channelDescription: 'your channel description',
+                  //           sound: RawResourceAndroidNotificationSound(
+                  //             "alarmtone",
+                  //           ),
+                  //           playSound: true,
+                  //           priority: Priority.max,
+                  //           enableVibration: true,
+                  //           fullScreenIntent: true,
+                  //         ),
+                  //       ),
+                  //       androidAllowWhileIdle: true,
+                  //       payload: jsonEncode({
+                  //         'page': 'task',
+                  //         'taskId': dt['id'],
+                  //       }),
+                  //     );
+                  //   } else if (reminderTimeType == 'hours') {
+                  //     // 🔔 Repeats every hour
+                  //     await _notificationsPlugin.periodicallyShow(
+                  //       dt['id'],
+                  //       '${dt['title']} task reminder',
+                  //       'Task reminder every hour',
+                  //       RepeatInterval.hourly,
+                  //       NotificationDetails(
+                  //         android: AndroidNotificationDetails(
+                  //           'your_channel_id',
+                  //           'your_channel_name',
+                  //           channelDescription: 'your channel description',
+                  //           sound: RawResourceAndroidNotificationSound(
+                  //             "alarmtone",
+                  //           ),
+                  //           playSound: true,
+                  //           priority: Priority.max,
+                  //           enableVibration: true,
+                  //           fullScreenIntent: true,
+                  //         ),
+                  //       ),
+                  //       androidAllowWhileIdle: true,
+                  //       payload: jsonEncode({
+                  //         'page': 'task',
+                  //         'taskId': dt['id'],
+                  //       }),
+                  //     );
+                  //   } else if (reminderTimeType == 'daily') {
+                  //     // 🔔 Repeats daily at target time
+                  //     await _notificationsPlugin.zonedSchedule(
+                  //       dt['id'],
+                  //       '${dt['title']} task reminder',
+                  //       'Daily task reminder',
+                  //       tz.TZDateTime.from(targetDate, tz.local),
+                  //       NotificationDetails(
+                  //         android: AndroidNotificationDetails(
+                  //           'your_channel_id',
+                  //           'your_channel_name',
+                  //           channelDescription: 'your channel description',
+                  //           sound: RawResourceAndroidNotificationSound(
+                  //             "alarmtone",
+                  //           ),
+                  //           playSound: true,
+                  //           priority: Priority.max,
+                  //           enableVibration: true,
+                  //           fullScreenIntent: true,
+                  //         ),
+                  //       ),
+                  //       androidScheduleMode:
+                  //           AndroidScheduleMode.exactAllowWhileIdle,
+                  //       matchDateTimeComponents:
+                  //           DateTimeComponents.time, // ⏰ repeats daily
+                  //       uiLocalNotificationDateInterpretation:
+                  //           UILocalNotificationDateInterpretation.absoluteTime,
+                  //       payload: jsonEncode({
+                  //         'page': 'task',
+                  //         'taskId': dt['id'],
+                  //       }),
+                  //     );
+                  //   }
+                  // }
                 }
               } else {
                 print("Failed to parse date for task: ${dt.taskName}");

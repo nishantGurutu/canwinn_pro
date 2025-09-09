@@ -84,8 +84,18 @@ class LocalNotificationService {
 
     await _notificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
         debugPrint('Foreground notification payload: ${response.payload}');
+
+        if (response.actionId != null &&
+            response.actionId!.startsWith("STOP_")) {
+          int id =
+              int.tryParse(response.actionId!.replaceFirst("STOP_", "")) ?? 0;
+          await _notificationsPlugin.cancel(id); // ⛔ stop this alarm
+          print("⏹️ Alarm $id stopped by user.");
+          return; // don’t call handleNavigation if Stop
+        }
+
         handleNavigation(response.payload);
       },
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
@@ -160,49 +170,92 @@ class LocalNotificationService {
     int notificationId,
     String title,
     String s,
+    String reminderTimeType,
+    String selectAlarmTyle,
   ) async {
     print('Scheduled Notification Time: $notificationId $s');
 
-    int millisecondsUntilNotification =
+    final millisecondsUntilNotification =
         dateTime.millisecondsSinceEpoch - DateTime.now().millisecondsSinceEpoch;
 
-    await _notificationsPlugin.zonedSchedule(
-      notificationId,
-      '$title $s reminder',
-      '${s.contains('task')
-          ? "Task is due!"
-          : s.contains('sos')
-          ? "SOS Reminder"
-          : s.contains('event')
-          ? "Event Reminder"
-          : "Calendar Reminder"}',
-      tz.TZDateTime.now(
-        tz.local,
-      ).add(Duration(milliseconds: millisecondsUntilNotification)),
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'your_channel_id',
-          'your_channel_name',
-          channelDescription: 'your channel description',
-          sound: RawResourceAndroidNotificationSound("alarmtone"),
-          autoCancel: true,
-          playSound: true,
-          priority: Priority.max,
-          enableVibration: true,
-          fullScreenIntent: true,
-        ),
+    final notificationDetails = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'your_channel_id',
+        'your_channel_name',
+        channelDescription: 'your channel description',
+        sound: RawResourceAndroidNotificationSound("alarmtone"),
+        autoCancel: false,
+        playSound: true,
+        priority: Priority.max,
+        importance: Importance.max,
+        enableVibration: true,
+        fullScreenIntent: true,
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(
+            'STOP_$notificationId',
+            'Stop',
+            showsUserInterface: true,
+            cancelNotification: false,
+          ),
+        ],
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      // uiLscalNotificationDateInterpretation.absoluteTime,
-      payload: jsonEncode({'page': s, 'taskId': notificationId}),
     );
-
-    Future.delayed(
-      Duration(milliseconds: millisecondsUntilNotification),
-      () {},
-    );
+    if (selectAlarmTyle == "Not Repeated") {
+      await _notificationsPlugin.zonedSchedule(
+        notificationId,
+        '$title $s reminder',
+        s.contains('task')
+            ? "Task is due!"
+            : s.contains('sos')
+            ? "SOS Reminder"
+            : s.contains('event')
+            ? "Event Reminder"
+            : "Calendar Reminder",
+        tz.TZDateTime.now(
+          tz.local,
+        ).add(Duration(milliseconds: millisecondsUntilNotification)),
+        notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: jsonEncode({'page': s, 'taskId': notificationId}),
+      );
+    } else if (selectAlarmTyle == 'Repeated') {
+      if (reminderTimeType == 'minutes') {
+        await _notificationsPlugin.periodicallyShow(
+          notificationId,
+          '$title $s reminder',
+          "Task reminder every minute",
+          RepeatInterval.everyMinute,
+          notificationDetails,
+          payload: jsonEncode({'page': s, 'taskId': notificationId}),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        );
+      } else if (reminderTimeType == 'hours') {
+        await _notificationsPlugin.periodicallyShow(
+          notificationId,
+          '$title $s reminder',
+          "Task reminder every hour",
+          RepeatInterval.hourly,
+          notificationDetails,
+          payload: jsonEncode({'page': s, 'taskId': notificationId}),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        );
+      } else if (reminderTimeType == 'daily') {
+        await _notificationsPlugin.zonedSchedule(
+          notificationId,
+          '$title $s reminder',
+          "Daily reminder",
+          tz.TZDateTime.from(dateTime, tz.local),
+          notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          matchDateTimeComponents: DateTimeComponents.time,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: jsonEncode({'page': s, 'taskId': notificationId}),
+        );
+      }
+    }
   }
 
   static void handleNavigation(String? payload) {

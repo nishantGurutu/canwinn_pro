@@ -198,247 +198,237 @@ class _AddTaskState extends State<AddTask> {
                               ),
                               SizedBox(height: 15.h),
                               Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      selectProject,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 7.w),
+                                  Expanded(
+                                    child: Text(
+                                      selectDepartment,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5.h),
+
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 161.w,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          selectProject,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
+                                  Expanded(
+                                    child: Obx(
+                                      () => DropdownButtonHideUnderline(
+                                        child: DropdownButton2<CreatedByMe>(
+                                          isExpanded: true,
+                                          items:
+                                              taskController.allProjectDataList
+                                                  .map((CreatedByMe item) {
+                                                    return DropdownMenuItem<
+                                                      CreatedByMe
+                                                    >(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.name ?? "",
+                                                        style: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none,
+                                                          fontFamily: 'Roboto',
+                                                          color: darkGreyColor,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 16.sp,
+                                                        ),
+                                                        overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                      ),
+                                                    );
+                                                  })
+                                                  .toList(),
+                                          value:
+                                              taskController
+                                                  .selectedAllProjectListData
+                                                  .value,
+                                          onChanged: (CreatedByMe? value) {
+                                            taskController
+                                                .selectedAllProjectListData
+                                                .value = value;
+                                            print(
+                                              "selected project id in add task ${taskController.selectedAllProjectListData.value?.id}",
+                                            );
+                                          },
+                                          buttonStyleData: ButtonStyleData(
+                                            height: 47.h,
+                                            width: double.infinity,
+                                            padding: EdgeInsets.only(
+                                              left: 14.w,
+                                              right: 14.w,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(14.r),
+                                              border: Border.all(
+                                                color: lightBorderColor,
+                                              ),
+                                              color: whiteColor,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 3.w),
-                                        Obx(
-                                          () => DropdownButtonHideUnderline(
-                                            child: DropdownButton2<CreatedByMe>(
-                                              isExpanded: true,
-                                              items:
-                                                  taskController
-                                                      .allProjectDataList
-                                                      .map((CreatedByMe item) {
-                                                        return DropdownMenuItem<
-                                                          CreatedByMe
-                                                        >(
-                                                          value: item,
-                                                          child: Text(
-                                                            item.name ?? "",
-                                                            style: TextStyle(
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .none,
-                                                              fontFamily:
-                                                                  'Roboto',
-                                                              color:
-                                                                  darkGreyColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontSize: 16.sp,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        );
-                                                      })
-                                                      .toList(),
-                                              value:
-                                                  taskController
-                                                      .selectedAllProjectListData
-                                                      .value,
-                                              onChanged: (CreatedByMe? value) {
-                                                taskController
-                                                    .selectedAllProjectListData
-                                                    .value = value;
-                                                print(
-                                                  "selected project id in add task ${taskController.selectedAllProjectListData.value?.id}",
-                                                );
-                                              },
-                                              buttonStyleData: ButtonStyleData(
-                                                height: 47.h,
-                                                width: double.infinity,
-                                                padding: EdgeInsets.only(
-                                                  left: 14.w,
-                                                  right: 14.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        14.r,
-                                                      ),
-                                                  border: Border.all(
-                                                    color: lightBorderColor,
-                                                  ),
-                                                  color: whiteColor,
-                                                ),
+                                          hint: Text(
+                                            'Select Project'.tr,
+                                            style: TextStyle(
+                                              decoration: TextDecoration.none,
+                                              fontFamily: 'Roboto',
+                                              color: darkGreyColor,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16.sp,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          iconStyleData: IconStyleData(
+                                            icon: Image.asset(
+                                              'assets/images/png/Vector 3.png',
+                                              color: secondaryColor,
+                                              height: 8.h,
+                                            ),
+                                            iconSize: 14.sp,
+                                            iconEnabledColor: lightGreyColor,
+                                            iconDisabledColor: lightGreyColor,
+                                          ),
+                                          dropdownStyleData: DropdownStyleData(
+                                            maxHeight: 200.h,
+                                            width: 161.w,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(14.r),
+                                              color: whiteColor,
+                                              border: Border.all(
+                                                color: lightBorderColor,
                                               ),
-                                              hint: Text(
-                                                'Select Project'.tr,
-                                                style: TextStyle(
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                  fontFamily: 'Roboto',
-                                                  color: darkGreyColor,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16.sp,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              iconStyleData: IconStyleData(
-                                                icon: Image.asset(
-                                                  'assets/images/png/Vector 3.png',
-                                                  color: secondaryColor,
-                                                  height: 8.h,
-                                                ),
-                                                iconSize: 14.sp,
-                                                iconEnabledColor:
-                                                    lightGreyColor,
-                                                iconDisabledColor:
-                                                    lightGreyColor,
-                                              ),
-                                              dropdownStyleData: DropdownStyleData(
-                                                maxHeight: 200.h,
-                                                width: 161.w,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        14.r,
-                                                      ),
-                                                  color: whiteColor,
-                                                  border: Border.all(
-                                                    color: lightBorderColor,
-                                                  ),
-                                                ),
-                                                offset: const Offset(0, 0),
-                                                scrollbarTheme: ScrollbarThemeData(
-                                                  radius: Radius.circular(40.r),
-                                                  thickness:
-                                                      WidgetStateProperty.all<
-                                                        double
-                                                      >(6),
-                                                  thumbVisibility:
-                                                      WidgetStateProperty.all<
-                                                        bool
-                                                      >(true),
-                                                ),
-                                              ),
-                                              menuItemStyleData:
-                                                  MenuItemStyleData(
-                                                    height: 40.h,
-                                                    padding: EdgeInsets.only(
-                                                      left: 14.w,
-                                                      right: 14.w,
-                                                    ),
+                                            ),
+                                            offset: const Offset(0, 0),
+                                            scrollbarTheme: ScrollbarThemeData(
+                                              radius: Radius.circular(40.r),
+                                              thickness:
+                                                  WidgetStateProperty.all<
+                                                    double
+                                                  >(6),
+                                              thumbVisibility:
+                                                  WidgetStateProperty.all<bool>(
+                                                    true,
                                                   ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 161.w,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          selectDepartment,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
+                                          menuItemStyleData: MenuItemStyleData(
+                                            height: 40.h,
+                                            padding: EdgeInsets.only(
+                                              left: 14.w,
+                                              right: 14.w,
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(height: 3.w),
-                                        Obx(
-                                          () =>
-                                              profileController
-                                                          .isdepartmentListLoading
-                                                          .value ==
-                                                      true
-                                                  ? Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  )
-                                                  : Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                            Radius.circular(
-                                                              12.r,
-                                                            ),
-                                                          ),
-                                                      border: Border.all(
-                                                        color: lightBorderColor,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 7.w),
+                                  Expanded(
+                                    child: Obx(
+                                      () =>
+                                          profileController
+                                                      .isdepartmentListLoading
+                                                      .value ==
+                                                  true
+                                              ? Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              )
+                                              : Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radius.circular(14.r),
                                                       ),
-                                                    ),
-                                                    child: MultiDropdown<
-                                                      DepartmentListData
-                                                    >(
-                                                      fieldDecoration: FieldDecoration(
-                                                        border:
-                                                            OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none,
-                                                            ),
-                                                        disabledBorder:
-                                                            OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                    Radius.circular(
-                                                                      10.r,
-                                                                    ),
-                                                                  ),
-                                                            ),
-                                                      ),
-                                                      items:
-                                                          profileController
-                                                              .departmentDataList
-                                                              .map(
-                                                                (
-                                                                  item,
-                                                                ) => DropdownItem<
-                                                                  DepartmentListData
-                                                                >(
-                                                                  value: item,
-                                                                  label:
-                                                                      item.name ??
-                                                                      '',
-                                                                ),
-                                                              )
-                                                              .toList(),
-                                                      controller:
-                                                          MultiSelectController<
-                                                            DepartmentListData
-                                                          >(),
-                                                      enabled: true,
-                                                      searchEnabled: true,
-                                                      onSelectionChange: (
-                                                        selectedItems,
-                                                      ) async {
-                                                        homeController
-                                                            .selectedDepartMentListData2
-                                                            .assignAll(
-                                                              selectedItems,
-                                                            );
-                                                        await homeController
-                                                            .responsiblePersonListApi2(
-                                                              homeController
-                                                                  .selectedDepartMentListData2,
-                                                            );
-                                                      },
-                                                    ),
+                                                  border: Border.all(
+                                                    color: lightBorderColor,
                                                   ),
-                                        ),
-                                      ],
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 4.h,
+                                                  ),
+                                                  child: MultiDropdown<
+                                                    DepartmentListData
+                                                  >(
+                                                    fieldDecoration: FieldDecoration(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            vertical: 5.h,
+                                                          ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide.none,
+                                                          ),
+                                                      disabledBorder:
+                                                          OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                  Radius.circular(
+                                                                    10.r,
+                                                                  ),
+                                                                ),
+                                                          ),
+                                                    ),
+                                                    items:
+                                                        profileController
+                                                            .departmentDataList
+                                                            .map(
+                                                              (
+                                                                item,
+                                                              ) => DropdownItem<
+                                                                DepartmentListData
+                                                              >(
+                                                                value: item,
+                                                                label:
+                                                                    item.name ??
+                                                                    '',
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                    controller:
+                                                        MultiSelectController<
+                                                          DepartmentListData
+                                                        >(),
+                                                    enabled: true,
+                                                    searchEnabled: true,
+                                                    onSelectionChange: (
+                                                      selectedItems,
+                                                    ) async {
+                                                      homeController
+                                                          .selectedDepartMentListData2
+                                                          .assignAll(
+                                                            selectedItems,
+                                                          );
+                                                      await homeController
+                                                          .responsiblePersonListApi2(
+                                                            homeController
+                                                                .selectedDepartMentListData2,
+                                                          );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
                                     ),
                                   ),
                                 ],
@@ -901,64 +891,55 @@ class _AddTaskState extends State<AddTask> {
                               ),
                               SizedBox(height: 15.h),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 161.w,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${dueTime} *",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3.w),
-                                        SizedBox(
-                                          height: 50.h,
-                                          child: CustomTimer(
-                                            hintText: "",
-                                            controller: dueTimeController,
-                                          ),
-                                        ),
-                                      ],
+                                  Expanded(
+                                    child: Text(
+                                      "${dueTime} *",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 161.w,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${selectPriority} *",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 3.w),
-                                        SizedBox(
-                                          child: CustomDropdown<PriorityData>(
-                                            items:
-                                                priorityController.priorityList,
-                                            itemLabel:
-                                                (item) =>
-                                                    item.priorityName ?? "",
-                                            selectedValue: null,
-                                            onChanged: (value) {
-                                              priorityController
-                                                  .selectedPriorityData
-                                                  .value = value;
-                                            },
-                                            hintText: selectPriority,
-                                          ),
-                                        ),
-                                      ],
+                                  SizedBox(width: 7.w),
+                                  Expanded(
+                                    child: Text(
+                                      "${selectPriority} *",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 3.h),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50.h,
+                                      child: CustomTimer(
+                                        hintText: "",
+                                        controller: dueTimeController,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 7.w),
+                                  Expanded(
+                                    child: SizedBox(
+                                      child: CustomDropdown<PriorityData>(
+                                        items: priorityController.priorityList,
+                                        itemLabel:
+                                            (item) => item.priorityName ?? "",
+                                        selectedValue: null,
+                                        onChanged: (value) {
+                                          priorityController
+                                              .selectedPriorityData
+                                              .value = value;
+                                        },
+                                        hintText: selectPriority,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -1104,107 +1085,116 @@ class _AddTaskState extends State<AddTask> {
                                 ],
                               ),
                               SizedBox(height: 10.h),
-                              Obx(
-                                () => DropdownButtonHideUnderline(
-                                  child: DropdownButton2<String>(
-                                    isExpanded: true,
-                                    items:
-                                        homeController.timeList.map((
-                                          String item,
-                                        ) {
-                                          return DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: TextStyle(
-                                                decoration: TextDecoration.none,
-                                                fontFamily: 'Roboto',
-                                                color: darkGreyColor,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 16.sp,
+                              SizedBox(
+                                height: 47.h,
+                                child: Obx(
+                                  () => DropdownButtonHideUnderline(
+                                    child: DropdownButton2<String>(
+                                      isExpanded: true,
+                                      items:
+                                          homeController.timeList.map((
+                                            String item,
+                                          ) {
+                                            return DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                  fontFamily: 'Roboto',
+                                                  color: darkGreyColor,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 16.sp,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          }).toList(),
+                                      value:
+                                          homeController
+                                                  .selectedTime!
+                                                  .value
+                                                  .isEmpty
+                                              ? null
+                                              : homeController
+                                                  .selectedTime
+                                                  ?.value,
+                                      onChanged: (String? value) {
+                                        homeController.selectedTime?.value =
+                                            value ?? '';
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 50.h,
+                                        width: double.infinity,
+                                        padding: EdgeInsets.only(
+                                          left: 14.w,
+                                          right: 14.w,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            14.r,
+                                          ),
+                                          border: Border.all(
+                                            color: lightBorderColor,
+                                          ),
+                                          color: whiteColor,
+                                        ),
+                                      ),
+                                      hint: Text(
+                                        'Select type',
+                                        style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontFamily: 'Roboto',
+                                          color: darkGreyColor,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16.sp,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      iconStyleData: IconStyleData(
+                                        icon: Image.asset(
+                                          'assets/images/png/Vector 3.png',
+                                          color: secondaryColor,
+                                          height: 8.h,
+                                        ),
+                                        iconSize: 14.sp,
+                                        iconEnabledColor: lightGreyColor,
+                                        iconDisabledColor: lightGreyColor,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200.h,
+                                        width: 330.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            14.r,
+                                          ),
+                                          color: whiteColor,
+                                          border: Border.all(
+                                            color: lightBorderColor,
+                                          ),
+                                        ),
+                                        offset: const Offset(0, 0),
+                                        scrollbarTheme: ScrollbarThemeData(
+                                          radius: const Radius.circular(40),
+                                          thickness:
+                                              WidgetStateProperty.all<double>(
+                                                6,
+                                              ),
+                                          thumbVisibility:
+                                              WidgetStateProperty.all<bool>(
+                                                true,
+                                              ),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                            height: 40,
+                                            padding: EdgeInsets.only(
+                                              left: 14,
+                                              right: 14,
                                             ),
-                                          );
-                                        }).toList(),
-                                    value:
-                                        homeController
-                                                .selectedTime!
-                                                .value
-                                                .isEmpty
-                                            ? null
-                                            : homeController
-                                                .selectedTime
-                                                ?.value,
-                                    onChanged: (String? value) {
-                                      homeController.selectedTime?.value =
-                                          value ?? '';
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 50.h,
-                                      width: double.infinity,
-                                      padding: EdgeInsets.only(
-                                        left: 14.w,
-                                        right: 14.w,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          14.r,
-                                        ),
-                                        border: Border.all(
-                                          color: lightBorderColor,
-                                        ),
-                                        color: whiteColor,
-                                      ),
-                                    ),
-                                    hint: Text(
-                                      'Select type',
-                                      style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Roboto',
-                                        color: darkGreyColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16.sp,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    iconStyleData: IconStyleData(
-                                      icon: Image.asset(
-                                        'assets/images/png/Vector 3.png',
-                                        color: secondaryColor,
-                                        height: 8.h,
-                                      ),
-                                      iconSize: 14.sp,
-                                      iconEnabledColor: lightGreyColor,
-                                      iconDisabledColor: lightGreyColor,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200.h,
-                                      width: 330.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          14.r,
-                                        ),
-                                        color: whiteColor,
-                                        border: Border.all(
-                                          color: lightBorderColor,
-                                        ),
-                                      ),
-                                      offset: const Offset(0, 0),
-                                      scrollbarTheme: ScrollbarThemeData(
-                                        radius: const Radius.circular(40),
-                                        thickness:
-                                            WidgetStateProperty.all<double>(6),
-                                        thumbVisibility:
-                                            WidgetStateProperty.all<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding: EdgeInsets.only(
-                                        left: 14,
-                                        right: 14,
-                                      ),
+                                          ),
                                     ),
                                   ),
                                 ),

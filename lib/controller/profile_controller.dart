@@ -342,6 +342,8 @@ class ProfileController extends GetxController {
               dt.id ?? 0,
               dt.taskName ?? '',
               'daily-task',
+              '',
+              '',
             );
           }
         } else {}
