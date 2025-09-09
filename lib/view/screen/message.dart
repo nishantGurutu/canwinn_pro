@@ -56,28 +56,33 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   void initState() {
     super.initState();
+    functionCalling();
+  }
+
+  Future<void> functionCalling() async {
     chatController.pageCountValue.value = 1;
     chatController.selectedMessage.value = "";
     chatController.selectedParentMessageSender.value = '';
     chatController.chatIdvalue.value = widget.chatId.toString();
+
     _scrollController.addListener(_scrollListener);
-    chatController.chatHistoryListApi(
+
+    await chatController.chatHistoryListApi(
       widget.chatId,
       chatController.pageCountValue.value,
       'initstate',
     );
+
     if (chatController.chatIdvalue.value.isNotEmpty) {
-      PusherConfig().initPusher(
+      await PusherConfig().initPusher(
         chatController.onPusherEvent,
         channelName: "chat",
         roomId: chatController.chatIdvalue.value,
       );
     }
-    PusherConfigSeen().initPusher(
-      chatController.onPusherEvent,
-      channelName: "chatseen",
-      roomId: chatController.chatIdvalue.value,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkIfAtBottomAndMarkSeen();
+    });
   }
 
   @override
@@ -190,6 +195,21 @@ class _MessageScreenState extends State<MessageScreen> {
         Color(0xff6a329f),
         Color(0xff744700),
       ].obs;
+  // List<int> seenMessageIds = [];
+  Future<void> _checkIfAtBottomAndMarkSeen() async {
+    if (_scrollController.hasClients) {
+      final atBottom =
+          _scrollController.offset >=
+          _scrollController.position.minScrollExtent;
+
+      if (atBottom) {
+        await chatController.markSeen(
+          chatController.chatIdvalue.value,
+          chatController.seenMessageIds,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -406,9 +426,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                     .chatHistoryList
                                                     .length,
                                                 (index) {
-                                                  print(
-                                                    "twr53 e365re635 $index",
-                                                  );
                                                   final chat =
                                                       chatController
                                                           .chatHistoryList[index];

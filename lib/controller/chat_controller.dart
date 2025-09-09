@@ -95,7 +95,7 @@ class ChatController extends GetxController {
   var isChatHistoryLoading = false.obs;
   var chatHistoryModel = ChatHistoryModel().obs;
   RxList<ChatHistoryData> chatHistoryList = <ChatHistoryData>[].obs;
-
+  RxList<int> seenMessageIds = <int>[].obs;
   RxBool hasMoreMessages = true.obs;
   RxInt pageCountValue = 1.obs;
   RxInt prePageCount = 1.obs;
@@ -112,17 +112,25 @@ class ChatController extends GetxController {
 
     if (result != null && result.data!.isNotEmpty) {
       List<ChatHistoryData> newMessages = result.data!.reversed.toList();
-
+      seenMessageIds.clear();
       if (fromRoute == 'initstate') {
         chatHistoryList.assignAll(newMessages);
       } else {
         chatHistoryList.insertAll(0, newMessages);
       }
+
       chatHistoryList.refresh();
       hasMoreMessages.refresh();
+
       isChatHistoryLoading.refresh();
       hasMoreMessages.value = result.data!.length >= 20;
       prePageCount.value = pageCount;
+      for (var msg in newMessages) {
+        if ((msg.readAt == null || msg.readAt.toString() == "null")) {
+          seenMessageIds.add(msg.id!);
+        }
+      }
+      print('rs4e4 s43s326 44q3 ${seenMessageIds.length}');
     } else {
       hasMoreMessages.value = false;
     }

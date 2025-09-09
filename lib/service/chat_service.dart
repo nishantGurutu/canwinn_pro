@@ -232,7 +232,20 @@ class ChatService {
       var token = StorageHelper.getToken();
       print("uey376te7 e36e37 ${chatId}");
       print("uey376te7 e36e37 ${seenMessageIds}");
+
       _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+          logPrint: (object) {
+            print('Add lead log print data value ${object}');
+          },
+        ),
+      );
+
       final response = await _dio.post(
         "${ApiConstant.baseUrl + ApiConstant.mark_seen}",
         data: {"chat_id": chatId, "message_ids": seenMessageIds},
@@ -243,8 +256,11 @@ class ChatService {
       } else {
         throw Exception('Failed to send message');
       }
-    } catch (e) {
-      return null;
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      return false;
     }
   }
 
