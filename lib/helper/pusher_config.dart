@@ -51,12 +51,10 @@ class PusherConfig {
           log("✅ Subscribed: $channelName data: $data");
         },
         onEvent: (event) async {
-          log("📩 Received event: ${event.eventName} - ${event.data}");
-
+          chatController.seenMessageIds.clear();
           try {
             final eventData = jsonDecode(event.data);
-
-            // 🔹 Message Event
+            print('e54r56e e365r653r ${eventData}');
             if (event.eventName == "message") {
               if (eventData.containsKey("message")) {
                 if (StorageHelper.getId() != eventData["senderId"]) {
@@ -79,10 +77,13 @@ class PusherConfig {
                   chatController.chatHistoryList.add(newMessage);
                   chatController.chatHistoryList.refresh();
                 }
+
+                await chatController.markSeen(
+                  chatController.chatIdvalue.value,
+                  chatController.seenMessageIds,
+                );
               }
-            }
-            // 🔹 Seen Event
-            else if (event.eventName == "message_seen") {
+            } else if (event.eventName == "message_seen") {
               final messageId = eventData["messageId"];
               final seenBy = eventData["seenBy"];
 

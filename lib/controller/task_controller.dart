@@ -766,6 +766,7 @@ class TaskController extends GetxController {
     newTaskListId,
     String timeTextEditingController,
     String timeType,
+    String? selectedAlarmTypeTime,
   ) async {
     isTaskEditing.value = true;
     final result = await TaskService().editTaskApi(
@@ -791,7 +792,7 @@ class TaskController extends GetxController {
         '',
         '',
         '',
-        '',
+        selectedAlarmTypeTime ?? '',
       );
       Get.back();
     }

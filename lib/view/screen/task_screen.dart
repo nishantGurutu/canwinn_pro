@@ -154,6 +154,13 @@ class _TaskListPageState extends State<TaskScreenPage> {
     }
   }
 
+  final TextEditingController _searchAllController = TextEditingController();
+  final TextEditingController _searchNewController = TextEditingController();
+  final TextEditingController _searchProgressController =
+      TextEditingController();
+  final TextEditingController _searchCompleteController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -457,32 +464,187 @@ class _TaskListPageState extends State<TaskScreenPage> {
                   ),
                 ),
               ),
-
+              SizedBox(height: 8.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: Obx(
+                  () => TextFormField(
+                    controller:
+                        taskController.selectedTaskType.value == "All Task"
+                            ? _searchAllController
+                            : taskController.selectedTaskType.value ==
+                                    "New Task" ||
+                                taskController.selectedTaskType.value ==
+                                    "Past Due" ||
+                                taskController.selectedTaskType.value ==
+                                    "Due Today"
+                            ? _searchNewController
+                            : taskController.selectedTaskType.value ==
+                                "Progress"
+                            ? _searchProgressController
+                            : _searchCompleteController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search here...',
+                      fillColor: Colors.white,
+                      filled: true,
+                      labelStyle: TextStyle(color: secondaryColor),
+                      counterText: "",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: secondaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: secondaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: secondaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 10.h,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: 5.h),
 
-              Expanded(
-                child: Obx(() {
-                  if (taskController.isTaskLoading.value) {
-                    return Center(
-                      child: CircularProgressIndicator(color: primaryColor),
-                    );
-                  }
+              // Expanded(
+              //   child: Obx(() {
+              //     if (taskController.isTaskLoading.value) {
+              //       return Center(
+              //         child: CircularProgressIndicator(color: primaryColor),
+              //       );
+              //     }
 
-                  if (taskController.selectedTaskType.value == "All Task") {
-                    return allTaskList(taskController.allTaskList);
-                  } else if ([
-                    "New Task",
-                    "Past Due",
-                    "Due Today",
-                  ].contains(taskController.selectedTaskType.value)) {
-                    return newTaskList(taskController.newTaskList);
-                  } else if (taskController.selectedTaskType.value ==
-                      "Progress") {
-                    return progressTaskList(taskController.progressTaskList);
-                  } else {
-                    return completeTaskList(taskController.completeTaskList);
-                  }
-                }),
+              //     if (taskController.selectedTaskType.value == "All Task") {
+              //       return allTaskList(taskController.allTaskList);
+              //     } else if ([
+              //       "New Task",
+              //       "Past Due",
+              //       "Due Today",
+              //     ].contains(taskController.selectedTaskType.value)) {
+              //       return newTaskList(taskController.newTaskList);
+              //     } else if (taskController.selectedTaskType.value ==
+              //         "Progress") {
+              //       return progressTaskList(taskController.progressTaskList);
+              //     } else {
+              //       return completeTaskList(taskController.completeTaskList);
+              //     }
+              //   }),
+              // ),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  child: Obx(
+                    () =>
+                        taskController.isTaskLoading.value == true
+                            ? SizedBox(
+                              height: 700.h,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: primaryColor,
+                                ),
+                              ),
+                            )
+                            : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Obx(
+                                  () =>
+                                      taskController.selectedTaskType.value ==
+                                              "All Task"
+                                          ? allTaskList(
+                                            RxList(
+                                              taskController.allTaskList
+                                                  .where(
+                                                    (task) => task['title']
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains(
+                                                          _searchAllController
+                                                              .text
+                                                              .toLowerCase(),
+                                                        ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          )
+                                          : taskController
+                                                      .selectedTaskType
+                                                      .value ==
+                                                  "New Task" ||
+                                              taskController
+                                                      .selectedTaskType
+                                                      .value ==
+                                                  "Past Due" ||
+                                              taskController
+                                                      .selectedTaskType
+                                                      .value ==
+                                                  "Due Today"
+                                          ? newTaskList(
+                                            RxList(
+                                              taskController.newTaskList
+                                                  .where(
+                                                    (task) => task['title']
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains(
+                                                          _searchNewController
+                                                              .text
+                                                              .toLowerCase(),
+                                                        ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          )
+                                          : taskController
+                                                  .selectedTaskType
+                                                  .value ==
+                                              "Progress"
+                                          ? progressTaskList(
+                                            RxList(
+                                              taskController.progressTaskList
+                                                  .where(
+                                                    (task) => task['title']
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains(
+                                                          _searchProgressController
+                                                              .text
+                                                              .toLowerCase(),
+                                                        ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          )
+                                          : completeTaskList(
+                                            RxList(
+                                              taskController.completeTaskList
+                                                  .where(
+                                                    (task) => task['title']
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains(
+                                                          _searchCompleteController
+                                                              .text
+                                                              .toLowerCase(),
+                                                        ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          ),
+                                ),
+                              ],
+                            ),
+                  ),
+                ),
               ),
             ],
           ),

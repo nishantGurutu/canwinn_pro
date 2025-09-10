@@ -252,6 +252,7 @@ class ChatService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        CustomToast().showCustomToast(response.data['message']);
         return response.data;
       } else {
         throw Exception('Failed to send message');

@@ -195,7 +195,6 @@ class _MessageScreenState extends State<MessageScreen> {
         Color(0xff6a329f),
         Color(0xff744700),
       ].obs;
-  // List<int> seenMessageIds = [];
   Future<void> _checkIfAtBottomAndMarkSeen() async {
     if (_scrollController.hasClients) {
       final atBottom =
@@ -757,7 +756,12 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                       4.w,
                                                                                                 ),
                                                                                                 child: Text(
-                                                                                                  "${chat.message ?? ''}              ",
+                                                                                                  isCurrentUser
+                                                                                                      ? "${chat.message ?? ''}                 "
+                                                                                                      : chat.readAt.toString() !=
+                                                                                                          "null"
+                                                                                                      ? "${chat.message ?? ''}                  "
+                                                                                                      : "${chat.message ?? ''}                 ",
                                                                                                   style: changeTextColor(
                                                                                                     heading8,
                                                                                                     Colors.black,
@@ -783,17 +787,34 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                       3.h,
                                                                                   right:
                                                                                       7.w,
-                                                                                  child: Text(
-                                                                                    DateConverter.convertTo12HourFormat(
-                                                                                      chat.createdAt ??
-                                                                                          "",
-                                                                                    ),
-                                                                                    style: TextStyle(
-                                                                                      color:
-                                                                                          Colors.black,
-                                                                                      fontSize:
-                                                                                          10.sp,
-                                                                                    ),
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        DateConverter.convertTo12HourFormat(
+                                                                                          chat.createdAt ??
+                                                                                              "",
+                                                                                        ),
+                                                                                        style: TextStyle(
+                                                                                          color:
+                                                                                              Colors.black,
+                                                                                          fontSize:
+                                                                                              10.sp,
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        width:
+                                                                                            2.w,
+                                                                                      ),
+                                                                                      if (isCurrentUser)
+                                                                                        chat.readAt.toString() ==
+                                                                                                "null"
+                                                                                            ? SvgPicture.asset(
+                                                                                              'assets/image/svg/single_seen_icon.svg',
+                                                                                            )
+                                                                                            : SvgPicture.asset(
+                                                                                              'assets/image/svg/seen_icon.svg',
+                                                                                            ),
+                                                                                    ],
                                                                                   ),
                                                                                 ),
                                                                             ],
