@@ -221,7 +221,6 @@ class _AddTaskState extends State<AddTask> {
                                 ],
                               ),
                               SizedBox(height: 5.h),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
