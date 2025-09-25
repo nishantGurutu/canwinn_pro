@@ -293,6 +293,8 @@ class _TaskListDataState extends State<TaskListData> {
                                                             .newTaskList[index]['priority'],
                                                         widget
                                                             .newTaskList[index]['attachment'],
+                                                        widget
+                                                            .newTaskList[index]['department_id'],
                                                       ),
                                                     ),
                                               );

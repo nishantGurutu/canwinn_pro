@@ -992,6 +992,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
                                               newTaskList[index]['attachment'],
+                                              newTaskList[index]['department_id'],
                                             ),
                                           ),
                                     );
@@ -1471,6 +1472,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
                                               newTaskList[index]['attachment'],
+                                              newTaskList[index]['department_id'],
                                             ),
                                           ),
                                     );
@@ -1684,17 +1686,6 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         Container(
                                           width: 90.w,
                                           decoration: BoxDecoration(
-                                            // color: newTaskList[index]
-                                            //                 ['priority_name']
-                                            //             ?.toLowerCase() ==
-                                            //         'medium'
-                                            //     ? softYellowColor
-                                            //     : newTaskList[index]
-                                            //                     ['priority_name']
-                                            //                 ?.toLowerCase() ==
-                                            //             'low'
-                                            //         ? completeBackgroundColor
-                                            //         : softredColor,
                                             color:
                                                 newTaskList[index]['priority_name']
                                                             ?.toLowerCase() ==
@@ -1721,17 +1712,6 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
                                                   color: whiteColor,
-                                                  // newTaskList[index][
-                                                  //                 'priority_name']
-                                                  //             ?.toLowerCase() ==
-                                                  //         'medium'
-                                                  //     ? mediumColor
-                                                  //     : newTaskList[index][
-                                                  //                     'priority_name']
-                                                  //                 ?.toLowerCase() ==
-                                                  //             'low'
-                                                  //         ? blueColor
-                                                  //         : slightlyDarkColor,
                                                 ),
                                               ),
                                             ),
@@ -1741,19 +1721,6 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         Container(
                                           width: 90.w,
                                           decoration: BoxDecoration(
-                                            // color: newTaskList[index]
-                                            //                 ['effective_status']
-                                            //             .toString()
-                                            //             .toLowerCase() ==
-                                            //         "pending"
-                                            //     ? pendingBackgroundColor
-                                            //     : newTaskList[index][
-                                            //                     'effective_status']
-                                            //                 .toString()
-                                            //                 .toLowerCase() ==
-                                            //             "progress"
-                                            //         ? progressBackgroundColor
-                                            //         : completeBackgroundColor,
                                             color:
                                                 newTaskList[index]['effective_status']
                                                             .toString()
@@ -1782,19 +1749,6 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
                                                   color: whiteColor,
-                                                  // newTaskList[index][
-                                                  //                 'effective_status']
-                                                  //             .toString()
-                                                  //             .toLowerCase() ==
-                                                  //         "pending"
-                                                  //     ? pendingColor
-                                                  //     : newTaskList[index][
-                                                  //                     'effective_status']
-                                                  //                 .toString()
-                                                  //                 .toLowerCase() ==
-                                                  //             "progress"
-                                                  //         ? elegentGreenColor
-                                                  //         : blueColor,
                                                 ),
                                               ),
                                             ),
@@ -1939,6 +1893,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
                                               newTaskList[index]['attachment'],
+                                              newTaskList[index]['department_id'],
                                             ),
                                           ),
                                     );
@@ -2295,7 +2250,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                               shadowColor: lightGreyColor,
                               padding: const EdgeInsets.all(0),
                               icon: const Icon(Icons.more_vert),
-                              onSelected: (String result) {
+                              onSelected: (String result)async {
                                 switch (result) {
                                   case 'edit':
                                     for (var projectData
@@ -2307,7 +2262,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         projectController
                                             .selectedAllProjectListData
                                             .value = projectData;
-                                        profileController.departmentList(
+                                       await profileController.departmentList(
                                           projectController
                                               .selectedAllProjectListData
                                               .value
@@ -2316,7 +2271,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         break;
                                       }
                                     }
-                                    taskController.responsiblePersonListApi(
+                                  await taskController.responsiblePersonListApi(
                                       profileController
                                           .selectedDepartMentListData
                                           .value
@@ -2358,7 +2313,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         break;
                                       }
                                     }
-                                    showModalBottomSheet(
+                                  await  showModalBottomSheet(
                                       context: context,
                                       isScrollControlled: true,
                                       builder:
@@ -2385,12 +2340,13 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                               newTaskList[index]['reviewer'],
                                               newTaskList[index]['priority'],
                                               newTaskList[index]['attachment'],
+                                              newTaskList[index]['department_id'],
                                             ),
                                           ),
                                     );
                                     break;
                                   case 'delete':
-                                    taskController.deleteTask(
+                                  await  taskController.deleteTask(
                                       newTaskList[index]['id'],
                                     );
                                     break;
@@ -2401,7 +2357,7 @@ class _TaskListPageState extends State<TaskScreenPage> {
                                         false;
                                     statusRemarkController.clear();
                                     taskController.profilePicPath2.value = '';
-                                    changeStatusDialog(
+                                   await changeStatusDialog(
                                       context,
                                       newTaskList[index]['id'],
                                       newTaskList[index]['status'],

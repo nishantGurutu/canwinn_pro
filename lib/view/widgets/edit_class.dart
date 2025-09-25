@@ -44,6 +44,7 @@ class EditTask extends StatefulWidget {
   final dynamic reviewer;
   final dynamic priority;
   final dynamic attachment;
+  final dynamic deptId;
   const EditTask(
     this.priorityList,
     this.allProjectDataList,
@@ -57,7 +58,7 @@ class EditTask extends StatefulWidget {
     this.assignedTo,
     this.reviewer,
     this.priority,
-    this.attachment, {
+    this.attachment, this.deptId, {
     super.key,
   });
 
@@ -94,12 +95,20 @@ class _EditTaskState extends State<EditTask> {
     if (assignUserList.isNotEmpty) {
       taskController.assignedUserId.addAll(assignUserList);
     }
+    profileController.deptIdfromdetails.value = widget.deptId.toString();
+    apiCall();
     super.initState();
     updateData();
   }
 
+  Future<void> apiCall() async {
+   await profileController.departmentList(
+      taskController.selectedAllProjectListData.value?.id ?? 0,
+    );
+  }
+
   var isLoading = false.obs;
-  void updateData() async {
+  Future<void> updateData() async {
     isLoading.value = true;
     for (int i = 0; i < priorityController.priorityList.length; i++) {
       if (widget.priority.toString() ==
@@ -1011,7 +1020,7 @@ class _EditTaskState extends State<EditTask> {
                                               ),
                                             ),
                                             hint: Text(
-                                              'Select Lead Type'.tr,
+                                              'Select Priority'.tr,
                                               style: TextStyle(
                                                 decoration: TextDecoration.none,
                                                 fontFamily: 'Roboto',
@@ -1413,7 +1422,7 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  void openFile(File file) {
+  Future<void> openFile(File file) async{
     String fileExtension = file.path.split('.').last.toLowerCase();
 
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
@@ -1437,7 +1446,7 @@ class _EditTaskState extends State<EditTask> {
     }
   }
 
-  void networkOpenFile(String file) {
+  Future<void> networkOpenFile(String file)async {
     String fileExtension = file.split('.').last.toLowerCase();
 
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {

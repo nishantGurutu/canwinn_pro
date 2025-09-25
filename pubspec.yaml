@@ -50,7 +50,7 @@ dependencies:
   timezone: ^0.10.1
   readmore:
   pusher_channels_flutter:
-  multi_dropdown: ^3.0.1
+  # multi_dropdown: ^3.0.1
   flutter_searchable_dropdown: ^2.0.0
   sqflite:
   dropdown_search: ^6.0.2

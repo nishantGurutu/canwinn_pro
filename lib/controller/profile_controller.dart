@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
@@ -158,7 +159,10 @@ class ProfileController extends GetxController {
 
   final UserPageControlelr userPageControlelr = Get.put(UserPageControlelr());
   RxList<String> selectedDepartmentListId = <String>[].obs;
+  MultiSelectController<DepartmentListData> multiSelectController =
+      MultiSelectController<DepartmentListData>();
   var isdepartmentListLoading = false.obs;
+  var deptIdfromdetails = "".obs;
   Rx<DepartmentListData?> selectedDepartMentListData = Rx<DepartmentListData?>(
     null,
   );
@@ -184,12 +188,27 @@ class ProfileController extends GetxController {
         if (userProfileModel.value?.data?.departmentId.toString() ==
             deptId.id.toString()) {
           departmentTextEditingController.value.text = deptId.name ?? '';
+          selectedDepartMentListData.value = deptId;
           await userPageControlelr.roleListApi(
             selectedDepartMentListData.value?.id,
           );
           return;
         }
       }
+      for (var deptId in departmentDataList) {
+        if (userProfileModel.value?.data?.departmentId.toString() ==
+            deptId.id.toString()) {
+          departmentTextEditingController.value.text = deptId.name ?? '';
+          selectedDepartMentListData.value = deptId;
+          homeController.selectedDepartMentListData2.add(deptId);
+          await userPageControlelr.roleListApi(
+            selectedDepartMentListData.value?.id,
+          );
+          return;
+        }
+      }
+ 
+      isdepartmentListLoading.value = false;
     } else {}
     isdepartmentListLoading.value = false;
   }

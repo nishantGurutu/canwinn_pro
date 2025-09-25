@@ -86,8 +86,6 @@ class AttendenceController extends GetxController {
                 placeMarks.first.country,
               ].where((e) => e != null && e.isNotEmpty).toSet().join(", ")
               : "";
-
-      // StorageHelper.setUserLocation(locationString?.value ?? "");
       isCheckingLoading.value = false;
       print("User position: $placeMarks");
       print("User position: $latitude");
@@ -180,31 +178,20 @@ class AttendenceController extends GetxController {
 
   var isLeaveLoading = false.obs;
   RxList<LeaveListData> leaveListData = <LeaveListData>[].obs;
-  /*Future<void> leaveLoading() async {
-    isLeaveLoading.value = true;
-    final result = await AttendenceService().leaveList();
-    if (result != null) {
-      leaveListData.assignAll(result.data!);
-      isLeaveLoading.value = false;
-    } else {}
-    isLeaveLoading.value = false;
-  }*/
+  
   Future<void> leaveLoading() async {
     try {
       isLeaveLoading.value = true;
       final result = await AttendenceService().leaveList();
       if (result != null && result.data != null) {
         leaveListData.assignAll(result.data!);
-        print('Deleted done: $result');// Update the list
       } else {
-        print('Error loading leave list: $result');
-        leaveListData.clear(); // Optional: Clear the list on failure
+        leaveListData.clear();  
       }
     } catch (e) {
-      print('Error loading leave list: $e');
-      leaveListData.clear(); // Optional: Clear the list on error
+      leaveListData.clear();  
     } finally {
-      isLeaveLoading.value = false; // Always reset loading state
+      isLeaveLoading.value = false; 
     }
   }
 

@@ -37,30 +37,7 @@ import 'package:task_management/view/widgets/humangatepass/human_gatepass_detail
 import 'package:task_management/view/widgets/notes_folder.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:geolocator/geolocator.dart' as geolocator;
-
-// class MyHttpOverrides extends HttpOverrides {
-//   @override
-//   HttpClient createHttpClient(SecurityContext? context) {
-//     return super.createHttpClient(context)
-//       ..badCertificateCallback =
-//           (X509Certificate cert, String host, int port) => true;
-//   }
-// }
-
-// final BottomBarController bottomBarController = Get.put(BottomBarController());
-
-// @pragma('vm:entry-point')
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   String? messageData = jsonEncode(message.data);
-//   debugPrint('3re763t8e93 e3ye7636er36 e635re653 ${messageData}');
-//   final AudioPlayer _audioPlayer = AudioPlayer();
-//   await _audioPlayer.play(AssetSource('mp3/emergency_alarm_69780.mp3'));
-// }
-
-// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
-
+ 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {

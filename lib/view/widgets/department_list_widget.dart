@@ -15,7 +15,7 @@ class DepartmentList extends StatelessWidget {
   final TaskController taskController = Get.find();
   final HomeController homeController = Get.find();
   final TextEditingController menuController = TextEditingController();
-  // final controller = MultiSelectController<DepartmentListData>();
+  
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -48,7 +48,7 @@ class DepartmentList extends StatelessWidget {
                   enabled: true,
                   searchEnabled: true,
                   onSelectionChange: (selectedItems) async {
-                    homeController.selectedDepartMentListData2.assignAll(
+                     homeController.selectedDepartMentListData2.assignAll(
                       selectedItems,
                     );
                     await homeController.responsiblePersonListApi2(

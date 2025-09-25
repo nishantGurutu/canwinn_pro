@@ -93,7 +93,7 @@ class _AddTaskState extends State<AddTask> {
   void apiCall() async {
     isLoading.value = true;
     await taskController.allProjectListApi(projectId: widget.id);
-    priorityController.priorityApi(from: '');
+    await priorityController.priorityApi(from: '');
     await profileController.departmentList(
       taskController.selectedAllProjectListData.value?.id ?? 0,
     );
