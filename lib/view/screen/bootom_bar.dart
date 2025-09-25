@@ -100,7 +100,7 @@ class _BottomNavigationBarExampleState
 
     await notificationController.notificationListApi('');
     await homeController.homeDataApi(StorageHelper.getId());
-    await homeController.leadHomeApi();
+    // await homeController.leadHomeApi();
     // if (StorageHelper.getAssignedDept() != null) {
     await homeController.userReportApi(StorageHelper.getId());
     // }

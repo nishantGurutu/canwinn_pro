@@ -24,11 +24,12 @@ class NotesPages extends StatefulWidget {
   final String fromName;
   final String from;
   final int folderId;
-  const NotesPages(
-      {super.key,
-      required this.fromName,
-      required this.folderId,
-      required this.from});
+  const NotesPages({
+    super.key,
+    required this.fromName,
+    required this.folderId,
+    required this.from,
+  });
 
   @override
   State<NotesPages> createState() => _NotesPagesState();
@@ -45,7 +46,6 @@ class _NotesPagesState extends State<NotesPages> {
     super.initState();
   }
 
-// ListViewNotes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +63,10 @@ class _NotesPagesState extends State<NotesPages> {
         title: Text(
           widget.fromName,
           style: TextStyle(
-              color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+            color: textColor,
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         actions: [
@@ -72,20 +75,14 @@ class _NotesPagesState extends State<NotesPages> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: lightBorderColor),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.r),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.r)),
               ),
               height: 30.h,
               width: 25.w,
               child: PopupMenuButton<String>(
                 color: whiteColor,
-                constraints: BoxConstraints(
-                  maxWidth: 200.w,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.r),
-                ),
+                constraints: BoxConstraints(maxWidth: 200.w),
+                borderRadius: BorderRadius.all(Radius.circular(20.r)),
                 shadowColor: lightGreyColor,
                 padding: const EdgeInsets.all(0),
                 icon: const Icon(Icons.more_horiz),
@@ -97,18 +94,19 @@ class _NotesPagesState extends State<NotesPages> {
                       break;
                   }
                 },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: 'sort',
-                    child: ListTile(
-                      leading: Icon(Icons.arrow_right),
-                      title: Text(
-                        'Sort By',
-                        style: TextStyle(fontSize: 16),
+                itemBuilder:
+                    (BuildContext context) => <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'sort',
+                        child: ListTile(
+                          leading: Icon(Icons.arrow_right),
+                          title: Text(
+                            'Sort By',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
               ),
             ),
           ),
@@ -119,56 +117,58 @@ class _NotesPagesState extends State<NotesPages> {
           width: double.infinity,
           color: backgroundColor,
           child: Obx(
-            () => notesController.isNotesLoading.value == true
-                ? SizedBox(
-                    height: 700.h,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : notesController.notesList.isEmpty
+            () =>
+                notesController.isNotesLoading.value == true
+                    ? SizedBox(
+                      height: 700.h,
+                      child: const Center(child: CircularProgressIndicator()),
+                    )
+                    : notesController.notesList.isEmpty
                     ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "No Notes data",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "Click on add button to create note.",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Column(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Obx(() =>
-                              notesController.isGridViewVisible.value == true
-                                  ? GridNotes(notesController.notesList)
-                                  : ListViewNotes(notesController.notesList)),
+                          Text(
+                            "No Notes data",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            "Click on add button to create note.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
+                    )
+                    : Column(
+                      children: [
+                        Obx(
+                          () =>
+                              notesController.isGridViewVisible.value == true
+                                  ? GridNotes(notesController.notesList)
+                                  : ListViewNotes(notesController.notesList),
+                        ),
+                      ],
+                    ),
           ),
         ),
       ),
       floatingActionButton: Obx(
-        () => todoController.isTagLoading.value == true
-            ? SizedBox()
-            : FloatingActionButton(
-                onPressed: () {
-                  Get.to(() => NoteEditorScreen(folderId: widget.folderId));
-                },
-                backgroundColor: darkBlue,
-                child: Icon(
-                  Icons.add,
-                  color: whiteColor,
-                  size: 30.h,
+        () =>
+            todoController.isTagLoading.value == true
+                ? SizedBox()
+                : FloatingActionButton(
+                  onPressed: () {
+                    Get.to(() => NoteEditorScreen(folderId: widget.folderId));
+                  },
+                  backgroundColor: darkBlue,
+                  child: Icon(Icons.add, color: whiteColor, size: 30.h),
                 ),
-              ),
       ),
     );
   }
@@ -192,8 +192,10 @@ class _NotesPagesState extends State<NotesPages> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${notesList[index].title}',
-                          style: changeTextColor(rubikBlack, darkGreyColor)),
+                      Text(
+                        '${notesList[index].title}',
+                        style: changeTextColor(rubikBlack, darkGreyColor),
+                      ),
                       SizedBox(
                         height: 20.h,
                         width: 30.w,
@@ -222,68 +224,79 @@ class _NotesPagesState extends State<NotesPages> {
                                           .toString() ==
                                       pd.id.toString()) {
                                     priorityController
-                                        .selectedPriorityData.value = pd;
+                                        .selectedPriorityData
+                                        .value = pd;
                                     break;
                                   }
                                 }
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
-                                  builder: (context) => Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                    child: editBottomSheet(
-                                        context, notesList[index].id, tagList),
-                                  ),
+                                  builder:
+                                      (context) => Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              MediaQuery.of(
+                                                context,
+                                              ).viewInsets.bottom,
+                                        ),
+                                        child: editBottomSheet(
+                                          context,
+                                          notesList[index].id,
+                                          tagList,
+                                        ),
+                                      ),
                                 );
                                 break;
                               case 'delete':
-                                notesController.deleteNote(
-                                  notesList[index].id,
-                                );
+                                notesController.deleteNote(notesList[index].id);
                                 break;
                               case 'view':
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
-                                  builder: (context) => Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                    child: viewNotesBottomSheet(
-                                        context, notesList[index]),
-                                  ),
+                                  builder:
+                                      (context) => Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              MediaQuery.of(
+                                                context,
+                                              ).viewInsets.bottom,
+                                        ),
+                                        child: viewNotesBottomSheet(
+                                          context,
+                                          notesList[index],
+                                        ),
+                                      ),
                                 );
                                 break;
                             }
                           },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: 'edit',
-                              child: ListTile(
-                                leading: Icon(Icons.edit),
-                                title: Text('Edit'),
-                              ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'delete',
-                              child: ListTile(
-                                leading: Icon(Icons.delete),
-                                title: Text('Delete'),
-                              ),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'view',
-                              child: ListTile(
-                                leading: Icon(Icons.view_agenda),
-                                title: Text('View'),
-                              ),
-                            ),
-                          ],
+                          itemBuilder:
+                              (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                    const PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: ListTile(
+                                        leading: Icon(Icons.edit),
+                                        title: Text('Edit'),
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: ListTile(
+                                        leading: Icon(Icons.delete),
+                                        title: Text('Delete'),
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: 'view',
+                                      child: ListTile(
+                                        leading: Icon(Icons.view_agenda),
+                                        title: Text('View'),
+                                      ),
+                                    ),
+                                  ],
                         ),
                       ),
                     ],
@@ -291,10 +304,12 @@ class _NotesPagesState extends State<NotesPages> {
                   SizedBox(height: 3.h),
                   SizedBox(
                     width: 335.w,
-                    child: Text('${notesList[index].description}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: changeTextColor(rubikRegular, lightGreyColor)),
+                    child: Text(
+                      '${notesList[index].description}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: changeTextColor(rubikRegular, lightGreyColor),
+                    ),
                   ),
                   SizedBox(height: 3.h),
                   Row(
@@ -303,38 +318,47 @@ class _NotesPagesState extends State<NotesPages> {
                         height: 10.h,
                         width: 10.w,
                         decoration: BoxDecoration(
-                          color: notesList[index].tags.toString() == '1'
-                              ? Colors.blue
-                              : notesList[index].tags.toString() == '2'
+                          color:
+                              notesList[index].tags.toString() == '1'
+                                  ? Colors.blue
+                                  : notesList[index].tags.toString() == '2'
                                   ? Colors.green
                                   : notesList[index].tags.toString() == '3'
-                                      ? Colors.yellow[800]
-                                      : Colors.redAccent,
+                                  ? Colors.yellow[800]
+                                  : Colors.redAccent,
                           borderRadius: BorderRadius.circular(5.r),
                         ),
                       ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
+                      SizedBox(width: 10.w),
                       Text(
-                        '${notesList[index].tags.toString() == '1' ? "Work" : notesList[index].tags.toString() == '2' ? 'Social' : notesList[index].tags.toString() == '3' ? 'Personal' : 'Public'}',
+                        '${notesList[index].tags.toString() == '1'
+                            ? "Work"
+                            : notesList[index].tags.toString() == '2'
+                            ? 'Social'
+                            : notesList[index].tags.toString() == '3'
+                            ? 'Personal'
+                            : 'Public'}',
                         style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            color: notesList[index].tags.toString() == '1'
-                                ? Colors.blue
-                                : notesList[index].tags.toString() == '2'
-                                    ? Colors.green
-                                    : notesList[index].tags.toString() == '3'
-                                        ? Colors.yellow[800]
-                                        : Colors.redAccent),
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color:
+                              notesList[index].tags.toString() == '1'
+                                  ? Colors.blue
+                                  : notesList[index].tags.toString() == '2'
+                                  ? Colors.green
+                                  : notesList[index].tags.toString() == '3'
+                                  ? Colors.yellow[800]
+                                  : Colors.redAccent,
+                        ),
                       ),
                       Spacer(),
                       InkWell(
                         onTap: () {
                           if (!notesController.isNotesPinnAdding.value) {
                             notesController.showPinLoadingDialog(
-                                context, notesList[index].isImportant);
+                              context,
+                              notesList[index].isImportant,
+                            );
                             notesController.pinNote(notesList[index].id);
                           }
                         },
@@ -370,9 +394,7 @@ class _NotesPagesState extends State<NotesPages> {
     );
   }
 
-  Future<void> showAlertDialog(
-    BuildContext context,
-  ) async {
+  Future<void> showAlertDialog(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
@@ -392,15 +414,10 @@ class _NotesPagesState extends State<NotesPages> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
-                  SizedBox(
-                    width: 10.w,
-                  ),
+                  SizedBox(width: 10.w),
                   Text(
                     'Marking as important....',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -431,8 +448,9 @@ class _NotesPagesState extends State<NotesPages> {
   ) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20.r))),
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+      ),
       width: double.infinity,
       height: 400.h,
       padding: const EdgeInsets.all(20),
@@ -445,13 +463,8 @@ class _NotesPagesState extends State<NotesPages> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    editNotes,
-                    style: rubikBlack,
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  Text(editNotes, style: rubikBlack),
+                  SizedBox(height: 10.h),
                   CustomTextField(
                     hintText: title,
                     keyboardType: TextInputType.emailAddress,
@@ -459,9 +472,7 @@ class _NotesPagesState extends State<NotesPages> {
                     data: title,
                     textCapitalization: TextCapitalization.sentences,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   CustomTextField(
                     hintText: description,
                     keyboardType: TextInputType.emailAddress,
@@ -469,32 +480,32 @@ class _NotesPagesState extends State<NotesPages> {
                     data: description,
                     textCapitalization: TextCapitalization.sentences,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   Obx(
                     () => DropdownButtonHideUnderline(
                       child: DropdownButton2<TagData>(
                         isExpanded: true,
-                        items: tagList.map((TagData item) {
-                          return DropdownMenuItem<TagData>(
-                            value: item,
-                            child: Text(
-                              item.tagName ?? "",
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Roboto',
-                                color: darkGreyColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
-                        value: todoController.selectedTagData.value == null
-                            ? null
-                            : todoController.selectedTagData.value,
+                        items:
+                            tagList.map((TagData item) {
+                              return DropdownMenuItem<TagData>(
+                                value: item,
+                                child: Text(
+                                  item.tagName ?? "",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Roboto',
+                                    color: darkGreyColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                        value:
+                            todoController.selectedTagData.value == null
+                                ? null
+                                : todoController.selectedTagData.value,
                         onChanged: (TagData? value) {
                           todoController.selectedTagData.value = value;
                         },
@@ -533,15 +544,17 @@ class _NotesPagesState extends State<NotesPages> {
                           maxHeight: 200,
                           width: 330,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.r),
-                              color: lightSecondaryColor,
-                              border: Border.all(color: lightSecondaryColor)),
+                            borderRadius: BorderRadius.circular(5.r),
+                            color: lightSecondaryColor,
+                            border: Border.all(color: lightSecondaryColor),
+                          ),
                           offset: const Offset(0, 0),
                           scrollbarTheme: ScrollbarThemeData(
                             radius: const Radius.circular(40),
                             thickness: WidgetStateProperty.all<double>(6),
-                            thumbVisibility:
-                                WidgetStateProperty.all<bool>(true),
+                            thumbVisibility: WidgetStateProperty.all<bool>(
+                              true,
+                            ),
                           ),
                         ),
                         menuItemStyleData: const MenuItemStyleData(
@@ -551,34 +564,35 @@ class _NotesPagesState extends State<NotesPages> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   Obx(
                     () => DropdownButtonHideUnderline(
                       child: DropdownButton2<PriorityData>(
                         isExpanded: true,
-                        items: priorityController.priorityList
-                            .map((PriorityData item) {
-                          return DropdownMenuItem<PriorityData>(
-                            value: item,
-                            child: Text(
-                              item.priorityName ?? "",
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Roboto',
-                                color: darkGreyColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
-                        value: priorityController.selectedPriorityData.value ==
-                                null
-                            ? null
-                            : priorityController.selectedPriorityData.value,
+                        items:
+                            priorityController.priorityList.map((
+                              PriorityData item,
+                            ) {
+                              return DropdownMenuItem<PriorityData>(
+                                value: item,
+                                child: Text(
+                                  item.priorityName ?? "",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Roboto',
+                                    color: darkGreyColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                        value:
+                            priorityController.selectedPriorityData.value ==
+                                    null
+                                ? null
+                                : priorityController.selectedPriorityData.value,
                         onChanged: (PriorityData? value) {
                           priorityController.selectedPriorityData.value = value;
                         },
@@ -617,15 +631,17 @@ class _NotesPagesState extends State<NotesPages> {
                           maxHeight: 200,
                           width: 330,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.r),
-                              color: lightSecondaryColor,
-                              border: Border.all(color: lightSecondaryColor)),
+                            borderRadius: BorderRadius.circular(5.r),
+                            color: lightSecondaryColor,
+                            border: Border.all(color: lightSecondaryColor),
+                          ),
                           offset: const Offset(0, 0),
                           scrollbarTheme: ScrollbarThemeData(
                             radius: const Radius.circular(40),
                             thickness: WidgetStateProperty.all<double>(6),
-                            thumbVisibility:
-                                WidgetStateProperty.all<bool>(true),
+                            thumbVisibility: WidgetStateProperty.all<bool>(
+                              true,
+                            ),
                           ),
                         ),
                         menuItemStyleData: const MenuItemStyleData(
@@ -635,9 +651,7 @@ class _NotesPagesState extends State<NotesPages> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
+                  SizedBox(height: 20.h),
                   Obx(
                     () => CustomButton(
                       onPressed: () {
@@ -653,28 +667,31 @@ class _NotesPagesState extends State<NotesPages> {
                           }
                         }
                       },
-                      text: notesController.isNotesEditing.value == true
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 30.h,
-                                  child: CircularProgressIndicator(
-                                    color: whiteColor,
+                      text:
+                          notesController.isNotesEditing.value == true
+                              ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 30.h,
+                                    child: CircularProgressIndicator(
+                                      color: whiteColor,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  loading,
-                                  style:
-                                      changeTextColor(rubikBlack, whiteColor),
-                                ),
-                              ],
-                            )
-                          : Text(
-                              submit,
-                              style: TextStyle(color: whiteColor),
-                            ),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    loading,
+                                    style: changeTextColor(
+                                      rubikBlack,
+                                      whiteColor,
+                                    ),
+                                  ),
+                                ],
+                              )
+                              : Text(
+                                submit,
+                                style: TextStyle(color: whiteColor),
+                              ),
                       width: double.infinity,
                       color: primaryColor,
                       height: 45.h,
@@ -692,26 +709,22 @@ class _NotesPagesState extends State<NotesPages> {
                 child: SizedBox(
                   width: 20.w,
                   height: 20.h,
-                  child: Icon(
-                    Icons.close,
-                  ),
+                  child: Icon(Icons.close),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget addBottomSheet(
-    BuildContext context,
-    RxList<TagData> tagList,
-  ) {
+  Widget addBottomSheet(BuildContext context, RxList<TagData> tagList) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20.r))),
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+      ),
       width: double.infinity,
       height: 400.h,
       padding: const EdgeInsets.all(20),
@@ -724,13 +737,8 @@ class _NotesPagesState extends State<NotesPages> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    addNotes,
-                    style: rubikBlack,
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  Text(addNotes, style: rubikBlack),
+                  SizedBox(height: 10.h),
                   CustomTextField(
                     hintText: title,
                     keyboardType: TextInputType.emailAddress,
@@ -738,9 +746,7 @@ class _NotesPagesState extends State<NotesPages> {
                     data: title,
                     textCapitalization: TextCapitalization.sentences,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   CustomTextField(
                     hintText: description,
                     keyboardType: TextInputType.emailAddress,
@@ -748,9 +754,7 @@ class _NotesPagesState extends State<NotesPages> {
                     data: description,
                     textCapitalization: TextCapitalization.sentences,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   CustomDropdown<TagData>(
                     items: tagList,
                     itemLabel: (item) => item.tagName ?? '',
@@ -759,9 +763,7 @@ class _NotesPagesState extends State<NotesPages> {
                     },
                     hintText: selectTag,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                   CustomDropdown<PriorityData>(
                     items: priorityController.priorityList,
                     itemLabel: (item) => item.priorityName ?? "",
@@ -770,9 +772,7 @@ class _NotesPagesState extends State<NotesPages> {
                     },
                     hintText: selectPriority,
                   ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
+                  SizedBox(height: 20.h),
                   Obx(
                     () => CustomButton(
                       onPressed: () async {
@@ -787,28 +787,31 @@ class _NotesPagesState extends State<NotesPages> {
                           }
                         }
                       },
-                      text: notesController.isNotesAdding.value == true
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 30.h,
-                                  child: CircularProgressIndicator(
-                                    color: whiteColor,
+                      text:
+                          notesController.isNotesAdding.value == true
+                              ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 30.h,
+                                    child: CircularProgressIndicator(
+                                      color: whiteColor,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  loading,
-                                  style:
-                                      changeTextColor(rubikBlack, whiteColor),
-                                ),
-                              ],
-                            )
-                          : Text(
-                              submit,
-                              style: TextStyle(color: whiteColor),
-                            ),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    loading,
+                                    style: changeTextColor(
+                                      rubikBlack,
+                                      whiteColor,
+                                    ),
+                                  ),
+                                ],
+                              )
+                              : Text(
+                                submit,
+                                style: TextStyle(color: whiteColor),
+                              ),
                       width: double.infinity,
                       color: primaryColor,
                       height: 45.h,
@@ -826,26 +829,22 @@ class _NotesPagesState extends State<NotesPages> {
                 child: SizedBox(
                   width: 20.w,
                   height: 20.h,
-                  child: Icon(
-                    Icons.close,
-                  ),
+                  child: Icon(Icons.close),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget viewNotesBottomSheet(
-    BuildContext context,
-    NoteData notesList,
-  ) {
+  Widget viewNotesBottomSheet(BuildContext context, NoteData notesList) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20.r))),
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+      ),
       width: double.infinity,
       height: 400.h,
       padding: const EdgeInsets.all(20),
@@ -857,15 +856,19 @@ class _NotesPagesState extends State<NotesPages> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('${notesList.title}',
-                    style: changeTextColor(rubikBlack, darkGreyColor)),
+                Text(
+                  '${notesList.title}',
+                  style: changeTextColor(rubikBlack, darkGreyColor),
+                ),
               ],
             ),
             SizedBox(height: 3.h),
             SizedBox(
               width: 335.w,
-              child: Text('${notesList.description}',
-                  style: changeTextColor(rubikRegular, lightGreyColor)),
+              child: Text(
+                '${notesList.description}',
+                style: changeTextColor(rubikRegular, lightGreyColor),
+              ),
             ),
             SizedBox(height: 3.h),
             Row(
@@ -874,31 +877,38 @@ class _NotesPagesState extends State<NotesPages> {
                   height: 10.h,
                   width: 10.w,
                   decoration: BoxDecoration(
-                    color: notesList.tags.toString() == '1'
-                        ? Colors.blue
-                        : notesList.tags.toString() == '2'
+                    color:
+                        notesList.tags.toString() == '1'
+                            ? Colors.blue
+                            : notesList.tags.toString() == '2'
                             ? Colors.green
                             : notesList.tags.toString() == '3'
-                                ? Colors.yellow[800]
-                                : Colors.redAccent,
+                            ? Colors.yellow[800]
+                            : Colors.redAccent,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                 ),
-                SizedBox(
-                  width: 10.w,
-                ),
+                SizedBox(width: 10.w),
                 Text(
-                  '${notesList.tags.toString() == '1' ? "Work" : notesList.tags.toString() == '2' ? 'Social' : notesList.tags.toString() == '3' ? 'Personal' : 'Public'}',
+                  '${notesList.tags.toString() == '1'
+                      ? "Work"
+                      : notesList.tags.toString() == '2'
+                      ? 'Social'
+                      : notesList.tags.toString() == '3'
+                      ? 'Personal'
+                      : 'Public'}',
                   style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: notesList.tags.toString() == '1'
-                          ? Colors.blue
-                          : notesList.tags.toString() == '2'
-                              ? Colors.green
-                              : notesList.tags.toString() == '3'
-                                  ? Colors.yellow[800]
-                                  : Colors.redAccent),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color:
+                        notesList.tags.toString() == '1'
+                            ? Colors.blue
+                            : notesList.tags.toString() == '2'
+                            ? Colors.green
+                            : notesList.tags.toString() == '3'
+                            ? Colors.yellow[800]
+                            : Colors.redAccent,
+                  ),
                 ),
               ],
             ),
