@@ -5,9 +5,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' show Platform;
-import 'dart:io';
+import 'package:url_launcher/url_launcher.dart'; 
 import 'package:get/get.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,8 +74,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   DateTime dt = DateTime.now();
   late Animation<double> _animation;
   late AnimationController _animationController;
-
-  // final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {

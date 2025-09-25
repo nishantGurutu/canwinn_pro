@@ -268,31 +268,31 @@ class ContactsData {
 
 class Subtask {
   int? id;
-  int? parentId;
-  int? userId;
-  String? title;
-  String? description;
-  int? departmentId;
-  String? projectId;
-  String? assignedTo;
-  String? reviewer;
-  String? startDate;
+  dynamic parentId;
+  dynamic userId;
+  dynamic title;
+  dynamic description;
+  dynamic departmentId;
+  dynamic projectId;
+  dynamic assignedTo;
+  dynamic reviewer;
+  dynamic startDate;
   dynamic attachment;
-  String? dueDate;
-  String? dueTime;
+  dynamic dueDate;
+  dynamic dueTime;
   dynamic repeatTask;
-  int? priority;
-  int? status;
-  int? isImportant;
+  dynamic priority;
+  dynamic status;
+  dynamic isImportant;
   dynamic reminder;
-  String? createdAt;
-  String? updatedAt;
-  String? priorityName;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic priorityName;
   dynamic projectName;
-  String? departmentName;
-  String? taskDate;
-  String? taskTime;
-  String? effectiveStatus;
+  dynamic departmentName;
+  dynamic taskDate;
+  dynamic taskTime;
+  dynamic effectiveStatus;
 
   Subtask(
       {this.id,
@@ -385,17 +385,17 @@ class Subtask {
 
 class ProgressData {
   int? id;
-  int? parentId;
-  int? taskId;
-  int? userId;
-  int? status;
-  String? remarks;
+  dynamic parentId;
+  dynamic taskId;
+  dynamic userId;
+  dynamic status;
+  dynamic remarks;
   dynamic attachment;
-  String? createdAt;
-  String? updatedAt;
-  String? userName;
-  String? createddate;
-  String? reviewers;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic userName;
+  dynamic createddate;
+  dynamic reviewers;
 
   ProgressData(
       {this.id,
@@ -472,44 +472,44 @@ class TaskDetailsModel {
 
 class TaskDetailsData {
   int? id;
-  int? parentId;
-  int? userId;
-  String? title;
-  String? description;
-  int? departmentId;
-  String? projectId;
-  String? assignedTo;
-  String? reviewer;
-  String? startDate;
-  String? attachment;
-  String? dueDate;
-  String? dueTime;
+  dynamic parentId;
+  dynamic userId;
+  dynamic title;
+  dynamic description;
+  dynamic departmentId;
+  dynamic projectId;
+  dynamic assignedTo;
+  dynamic reviewer;
+  dynamic startDate;
+  dynamic attachment;
+  dynamic dueDate;
+  dynamic dueTime;
   dynamic repeatTask;
-  int? priority;
-  int? status;
-  int? isImportant;
-  String? reminder;
-  String? createdAt;
-  String? updatedAt;
-  String? priorityName;
+  dynamic priority;
+  dynamic status;
+  dynamic isImportant;
+  dynamic reminder;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic priorityName;
   dynamic projectName;
-  String? departmentName;
-  String? taskDate;
-  String? taskTime;
-  String? effectiveStatus;
+  dynamic departmentName;
+  dynamic taskDate;
+  dynamic taskTime;
+  dynamic effectiveStatus;
   List<ContactsData>? contacts;
-  String? completedusers;
-  String? inProgressUsers;
-  String? pendingUsers;
-  String? assignedUsers;
+  dynamic completedusers;
+  dynamic inProgressUsers;
+  dynamic pendingUsers;
+  dynamic assignedUsers;
   List<AssignedUsersList>? assignedUsersList;
-  String? assignedDepartments;
-  String? assignedReviewers;
+  dynamic assignedDepartments;
+  dynamic assignedReviewers;
   List<AssignedReviewersList>? assignedReviewersList;
-  String? creatorName;
+  dynamic creatorName;
   List<Subtask>? subtask;
   List<ProgressData>? progress;
-  int? isLateCompleted;
+  dynamic isLateCompleted;
 
   TaskDetailsData(
       {this.id,

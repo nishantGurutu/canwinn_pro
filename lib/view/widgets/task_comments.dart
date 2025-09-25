@@ -313,7 +313,7 @@ class _TaskCommentsState extends State<TaskComments> {
                 ),
               ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: Column(
               children: [
                 Obx(
@@ -371,16 +371,14 @@ class _TaskCommentsState extends State<TaskComments> {
                 SafeArea(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 8.w,
                       vertical: 6.h,
                     ),
                     child: Row(
                       children: [
-                        // Chat Input Box
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 12.w,
+                              horizontal: 8.w,
                               vertical: 6.h,
                             ),
                             decoration: BoxDecoration(

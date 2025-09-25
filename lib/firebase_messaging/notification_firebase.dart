@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -76,11 +78,28 @@ Future<void> firebaseNotification(BuildContext context) async {
   });
 
   /// Get our device token here
+  
+
+
+   /// Get our device token here
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-  final token = await _fcm.getToken();
-  deviceTokenToSendPushNotification = token.toString();
-  print(
-    "My Device Token ==================> $deviceTokenToSendPushNotification",
-  );
+
+   if (Platform.isIOS) {
+          String? apnsToken = await _fcm.getAPNSToken();
+          deviceTokenToSendPushNotification = apnsToken ?? '';
+          print('APNS Token: $apnsToken');
+          await Future.delayed(Duration(seconds: 2));
+    }else{
+      String? fcmToken = await _fcm.getToken();
+      deviceTokenToSendPushNotification = fcmToken ?? '';
+      print('FCM Token: $fcmToken');
+      await Future.delayed(Duration(seconds: 2));
+    }
+  // final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  // final token = await _fcm.getToken();
+  // deviceTokenToSendPushNotification = token.toString();
+  // print(
+  //   "My Device Token ==================> $deviceTokenToSendPushNotification",
+  // );
   RegisterController().fcm_token_api(deviceTokenToSendPushNotification);
 }
