@@ -118,25 +118,21 @@ class _NotesFolderState extends State<NotesFolder> {
     if (['jpg', 'jpeg', 'png'].contains(fileExtension)) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => ImageScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => ImageScreen(file: file)),
       );
     } else if (fileExtension == 'pdf') {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => PDFScreen(file: file),
-        ),
+        MaterialPageRoute(builder: (context) => PDFScreen(file: file)),
       );
     } else if (['xls', 'xlsx'].contains(fileExtension)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Excel file viewing not supported yet.')),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unsupported file type.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unsupported file type.')));
     }
   }
 
@@ -177,113 +173,135 @@ class _NotesFolderState extends State<NotesFolder> {
           title: Text(
             notesFolderText,
             style: TextStyle(
-                color: textColor, fontSize: 21, fontWeight: FontWeight.bold),
+              color: textColor,
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
         ),
-        body: Obx(() => notesController.isFolderLoading.value
-            ? const Center(child: CircularProgressIndicator())
-            : Container(
-                color: backgroundColor,
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (documentController.navigationStack.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 10.h),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                if (documentController
-                                    .navigationStack.isNotEmpty) {
-                                  setState(() {
-                                    currentPath = documentController
+        body: Obx(
+          () =>
+              notesController.isFolderLoading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : Container(
+                    color: backgroundColor,
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (documentController.navigationStack.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10.h),
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (documentController
                                         .navigationStack
-                                        .removeLast();
-                                  });
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.arrow_back,
-                                      color: Colors.black),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    "${currentPath.split('/').last}",
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
+                                        .isNotEmpty) {
+                                      setState(() {
+                                        currentPath =
+                                            documentController.navigationStack
+                                                .removeLast();
+                                      });
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.black,
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        "${currentPath.split('/').last}",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    Expanded(
-                      child: Obx(() {
-                        if (notesController.noteFolderList.isEmpty) {
-                          return const Center(
-                              child: Text('No folders or files.'));
-                        }
-
-                        return ListView.builder(
-                          itemCount: notesController.noteFolderList.length,
-                          itemBuilder: (context, index) {
-                            final folder =
-                                notesController.noteFolderList[index];
-                            return InkWell(
-                              onLongPress: () {
-                                // Optional bottom sheet
-                              },
-                              child: ListTile(
-                                leading: const Icon(Icons.folder,
-                                    color: Colors.orange),
-                                title: Text("${folder['name']}"),
-                                onTap: () {
-                                  Get.to(() => NotesPages(
-                                        fromName: folder['name'],
-                                        folderId: folder['id'],
-                                        from: '',
-                                      ));
-                                },
-                              ),
-                            );
-                          },
-                        );
-                      }),
-                    ),
-
-                    /// Folder create button
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              showFolderCreationDialog();
-                            },
-                            child: Image.asset(
-                              'assets/image/png/create_folder-removebg-preview.png',
-                              height: 30.h,
-                              color: const Color.fromARGB(255, 172, 156, 12),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+
+                        Expanded(
+                          child: Obx(() {
+                            if (notesController.noteFolderList.isEmpty) {
+                              return const Center(
+                                child: Text('No folders or files.'),
+                              );
+                            }
+
+                            return ListView.builder(
+                              itemCount: notesController.noteFolderList.length,
+                              itemBuilder: (context, index) {
+                                final folder =
+                                    notesController.noteFolderList[index];
+                                return InkWell(
+                                  onLongPress: () {
+                                    // Optional bottom sheet
+                                  },
+                                  child: ListTile(
+                                    leading: const Icon(
+                                      Icons.folder,
+                                      color: Colors.orange,
+                                    ),
+                                    title: Text("${folder['name']}"),
+                                    onTap: () {
+                                      Get.to(
+                                        () => NotesPages(
+                                          fromName: folder['name'],
+                                          folderId: folder['id'],
+                                          from: '',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                        ),
+
+                        /// Folder create button
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showFolderCreationDialog();
+                                },
+                                child: Image.asset(
+                                  'assets/image/png/create_folder-removebg-preview.png',
+                                  height: 30.h,
+                                  color: const Color.fromARGB(
+                                    255,
+                                    172,
+                                    156,
+                                    12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )),
+                  ),
+        ),
       ),
     );
   }
 
-  Widget fileBottomSheet(BuildContext context,
-      {required FileSystemEntity item}) {
+  Widget fileBottomSheet(
+    BuildContext context, {
+    required FileSystemEntity item,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -308,12 +326,11 @@ class _NotesFolderState extends State<NotesFolder> {
             label: "Share",
             onTap: () async {
               if (item is File) {
-                Share.share(
-                  item.path,
-                );
+                Share.share(item.path);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Cannot share a folder!")));
+                  SnackBar(content: Text("Cannot share a folder!")),
+                );
               }
             },
           ),
@@ -327,10 +344,11 @@ class _NotesFolderState extends State<NotesFolder> {
     );
   }
 
-  Widget bottomSheetOption(
-      {required IconData icon,
-      required String label,
-      required VoidCallback onTap}) {
+  Widget bottomSheetOption({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -349,68 +367,74 @@ class _NotesFolderState extends State<NotesFolder> {
   void confirmDelete(BuildContext context, FileSystemEntity item) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Confirm Delete"),
-        content: Text(
-            "Are you sure you want to delete '${item.path.split('/').last}'?"),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-          TextButton(
-            onPressed: () {
-              item.deleteSync(recursive: true);
-              Navigator.pop(context);
-              Get.back();
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Deleted successfully")));
-            },
-            child: Text("Delete", style: TextStyle(color: Colors.red)),
+      builder:
+          (context) => AlertDialog(
+            title: Text("Confirm Delete"),
+            content: Text(
+              "Are you sure you want to delete '${item.path.split('/').last}'?",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  item.deleteSync(recursive: true);
+                  Navigator.pop(context);
+                  Get.back();
+                  setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Deleted successfully")),
+                  );
+                },
+                child: Text("Delete", style: TextStyle(color: Colors.red)),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   void showRenameDialog(BuildContext context, FileSystemEntity item) {
-    TextEditingController renameController =
-        TextEditingController(text: item.path.split('/').last);
+    TextEditingController renameController = TextEditingController(
+      text: item.path.split('/').last,
+    );
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Rename"),
-        content: TextField(controller: renameController),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-          TextButton(
-            onPressed: () {
-              String newPath =
-                  "${item.parent.path}/${renameController.text.trim()}";
-              item.renameSync(newPath);
-              Navigator.pop(context);
-              Get.back();
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Renamed successfully")));
-            },
-            child: Text("Rename"),
+      builder:
+          (context) => AlertDialog(
+            title: Text("Rename"),
+            content: TextField(controller: renameController),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  String newPath =
+                      "${item.parent.path}/${renameController.text.trim()}";
+                  item.renameSync(newPath);
+                  Navigator.pop(context);
+                  Get.back();
+                  setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Renamed successfully")),
+                  );
+                },
+                child: Text("Rename"),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   final TextEditingController renameFileTextEditingController =
       TextEditingController();
-  Widget renameFileBottomSheet(
-    BuildContext context,
-  ) {
+  Widget renameFileBottomSheet(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
+      decoration: BoxDecoration(color: Colors.white),
       width: double.infinity,
       height: 160.h,
       padding: EdgeInsets.all(10.w),
@@ -447,10 +471,7 @@ class _NotesFolderState extends State<NotesFolder> {
     );
   }
 
-  Widget selectOptionBottomSheet(
-    BuildContext context,
-    FileSystemEntity item,
-  ) {
+  Widget selectOptionBottomSheet(BuildContext context, FileSystemEntity item) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -467,48 +488,41 @@ class _NotesFolderState extends State<NotesFolder> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Select Option",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
+                SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
                       onTap: () {
                         if (item is File) {
-                          Share.shareXFiles([
-                            XFile('${item.path}'),
-                          ]);
+                          Share.shareXFiles([XFile('${item.path}')]);
                         }
                       },
                       child: Container(
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.share,
-                              color: secondaryColor,
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
+                            Icon(Icons.share, color: secondaryColor),
+                            SizedBox(width: 8.w),
                             Text(
                               'Share',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            )
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -525,23 +539,21 @@ class _NotesFolderState extends State<NotesFolder> {
                         child: Row(
                           children: [
                             Icon(Icons.delete),
-                            SizedBox(
-                              width: 8.w,
-                            ),
+                            SizedBox(width: 8.w),
                             Text(
                               "Delete",
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            )
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
               ],
             ),
           ),
@@ -590,9 +602,7 @@ class _NotesFolderState extends State<NotesFolder> {
       onTap: () {
         showModalBottomSheet(
           context: context,
-          builder: (context) => bottomSheet(
-            context,
-          ),
+          builder: (context) => bottomSheet(context),
         );
       },
       child: Container(
@@ -600,9 +610,7 @@ class _NotesFolderState extends State<NotesFolder> {
         width: 50.w,
         decoration: BoxDecoration(
           color: primaryColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(27.r),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(27.r)),
           boxShadow: [
             BoxShadow(
               color: lightGreyColor.withOpacity(0.2),
@@ -614,11 +622,7 @@ class _NotesFolderState extends State<NotesFolder> {
           ],
         ),
         child: Center(
-          child: Icon(
-            Icons.upload,
-            color: whiteColor,
-            size: 30.sp,
-          ),
+          child: Icon(Icons.upload, color: whiteColor, size: 30.sp),
         ),
       ),
     );
@@ -644,22 +648,20 @@ class _NotesFolderState extends State<NotesFolder> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Upload Documents",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
+                SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -671,14 +673,14 @@ class _NotesFolderState extends State<NotesFolder> {
                         child: Row(
                           children: [
                             Icon(Icons.folder, color: Colors.orange),
-                            SizedBox(
-                              width: 8.w,
-                            ),
+                            SizedBox(width: 8.w),
                             Text(
                               'Create Folder',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            )
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -691,23 +693,21 @@ class _NotesFolderState extends State<NotesFolder> {
                         child: Row(
                           children: [
                             Icon(Icons.file_copy, color: Colors.blue),
-                            SizedBox(
-                              width: 8.w,
-                            ),
+                            SizedBox(width: 8.w),
                             Text(
                               "Upload File",
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            )
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15.h,
-                ),
+                SizedBox(height: 15.h),
               ],
             ),
           ),
@@ -730,9 +730,9 @@ class _NotesFolderState extends State<NotesFolder> {
         String? filePath = result.files.single.path;
 
         if (filePath == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: File path is null')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: File path is null')));
           return;
         }
 
@@ -747,19 +747,19 @@ class _NotesFolderState extends State<NotesFolder> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content:
-                  Text('${path.basename(file.path)} uploaded successfully.')),
+            content: Text('${path.basename(file.path)} uploaded successfully.'),
+          ),
         );
         Get.back();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No file selected.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('No file selected.')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading file: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error uploading file: $e')));
     }
   }
 }

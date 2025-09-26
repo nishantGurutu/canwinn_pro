@@ -1389,134 +1389,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         pinnedColor7,
       ].obs;
 
-  Widget leadPinedData(HomeLeadData? leadData) {
-    return Container(
-      height: 300.h,
-      width: double.infinity,
-      padding: EdgeInsets.all(0.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              HomeTitle(pinedText),
-              InkWell(
-                onTap: () {
-                  Get.to(() => NotesFolder());
-                },
-                child: Text(
-                  seeAll,
-                  style: changeTextColor(heading7, seeAllColor),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14.r),
-                border: Border.all(color: boxBorderColor),
-                color: whiteColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: lightGreyColor.withOpacity(0.1),
-                    blurRadius: 13.0,
-                    spreadRadius: 2,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child:
-                  (leadData?.pinnedNotes ?? []).isEmpty
-                      ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/image/png/pinned 1 (1).png',
-                              height: 80.h,
-                            ),
-                            SizedBox(height: 10.h),
-                            Text(
-                              'No pinned notes available',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: textColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                      : ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: leadData?.pinnedNotes?.length,
-                        itemBuilder: (context, index) {
-                          var note = leadData?.pinnedNotes?[index];
-                          quill.QuillController? quillController;
-                          return InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder:
-                                    (context) => Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom:
-                                            MediaQuery.of(
-                                              context,
-                                            ).viewInsets.bottom,
-                                      ),
-                                      child: viewNotesBottomSheet(
-                                        context,
-                                        note,
-                                      ),
-                                    ),
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                vertical: 6.h,
-                                horizontal: 8.w,
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8.w,
-                                vertical: 5.h,
-                              ),
-                              decoration: BoxDecoration(
-                                color:
-                                    pinnedColorList[index %
-                                        pinnedColorList.length],
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${leadData?.pinnedNotes?[index].title ?? ""}',
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget pinedData(RxList<HomePinnedNotes> homePinnedNotes) {
     return Container(
       height: 300.h,
@@ -1584,7 +1456,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           padding: EdgeInsets.zero,
                           itemCount: homePinnedNotes.length,
                           itemBuilder: (context, index) {
-                            var note = homePinnedNotes[index];
                             quill.QuillController? quillController;
                             return InkWell(
                               onTap: () {
@@ -1601,7 +1472,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         ),
                                         child: viewNotesBottomSheet(
                                           context,
-                                          note,
+                                          homePinnedNotes[index],
                                         ),
                                       ),
                                 );
@@ -1659,7 +1530,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget viewNotesBottomSheet(BuildContext context, dynamic homePinnedNot) {
+  Widget viewNotesBottomSheet(
+    BuildContext context,
+    HomePinnedNotes homePinnedNot,
+  ) {
+    print('uehiude eyg pinned $homePinnedNot');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1677,7 +1552,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${homePinnedNot['title']}',
+                  '${homePinnedNot.title ?? ""}',
                   style: changeTextColor(rubikBlack, darkGreyColor),
                 ),
               ],
@@ -1686,7 +1561,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             SizedBox(
               width: 335.w,
               child: Text(
-                '${homePinnedNot['description']}',
+                '${homePinnedNot.description}',
                 style: changeTextColor(rubikRegular, lightGreyColor),
               ),
             ),
@@ -1698,11 +1573,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   width: 10.w,
                   decoration: BoxDecoration(
                     color:
-                        homePinnedNot['tags'].toString() == '1'
+                        homePinnedNot.tags.toString() == '1'
                             ? Colors.blue
-                            : homePinnedNot['tags'].toString() == '2'
+                            : homePinnedNot.tags.toString() == '2'
                             ? Colors.green
-                            : homePinnedNot['tags'].toString() == '3'
+                            : homePinnedNot.tags.toString() == '3'
                             ? Colors.yellow[800]
                             : Colors.redAccent,
                     borderRadius: BorderRadius.circular(5.r),
@@ -1710,22 +1585,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
                 SizedBox(width: 10.w),
                 Text(
-                  '${homePinnedNot['tags'].toString() == '1'
+                  '${homePinnedNot.tags.toString() == '1'
                       ? "Work"
-                      : homePinnedNot['tags'].toString() == '2'
+                      : homePinnedNot.tags.toString() == '2'
                       ? 'Social'
-                      : homePinnedNot['tags'].toString() == '3'
+                      : homePinnedNot.tags.toString() == '3'
                       ? 'Personal'
                       : 'Public'}',
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     color:
-                        homePinnedNot['tags'].toString() == '1'
+                        homePinnedNot.tags.toString() == '1'
                             ? Colors.blue
-                            : homePinnedNot['tags'].toString() == '2'
+                            : homePinnedNot.tags.toString() == '2'
                             ? Colors.green
-                            : homePinnedNot['tags'].toString() == '3'
+                            : homePinnedNot.tags.toString() == '3'
                             ? Colors.yellow[800]
                             : Colors.redAccent,
                   ),

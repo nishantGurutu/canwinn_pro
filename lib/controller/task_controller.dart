@@ -16,7 +16,6 @@ import 'package:task_management/model/task_category_list_model.dart';
 import 'package:task_management/model/task_details_model.dart';
 import 'package:task_management/service/project_service.dart';
 import 'package:task_management/service/task_service.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class TaskController extends GetxController {
   final ProfileController profileController = Get.put(ProfileController());

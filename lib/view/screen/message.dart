@@ -73,16 +73,13 @@ class _MessageScreenState extends State<MessageScreen> {
       'initstate',
     );
 
-    if (chatController.chatIdvalue.value.isNotEmpty) {
-      await PusherConfig().initPusher(
-        chatController.onPusherEvent,
-        channelName: "chat",
-        roomId: chatController.chatIdvalue.value,
-      );
+   if (chatController.chatIdvalue.value.isNotEmpty) {
+      PusherConfig().initPusher(chatController.onPusherEvent,
+          channelName: "chat", roomId: chatController.chatIdvalue.value);
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkIfAtBottomAndMarkSeen();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _checkIfAtBottomAndMarkSeen();
+    // });
   }
 
   @override
