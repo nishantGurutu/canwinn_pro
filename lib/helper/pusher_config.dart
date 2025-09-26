@@ -77,7 +77,7 @@ class PusherConfig {
                   chatController.chatHistoryList.add(newMessage);
                   chatController.chatHistoryList.refresh();
                 }
-
+                chatController.seenMessageIds.add(eventData["msgid"]);
                 await chatController.markSeen(
                   chatController.chatIdvalue.value,
                   chatController.seenMessageIds,
