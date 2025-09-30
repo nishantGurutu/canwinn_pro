@@ -64,7 +64,7 @@ class ChatService {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
-
+      print("chat id in history service $id");
       final response = await _dio.get(
         "${ApiConstant.baseUrl}${ApiConstant.chatHistory}?chat_id=$id&page=$page",
       );

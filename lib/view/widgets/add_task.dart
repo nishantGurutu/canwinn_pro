@@ -190,8 +190,8 @@ class _AddTaskState extends State<AddTask> {
                                 textCapitalization:
                                     TextCapitalization.sentences,
                                 data: enterRemark,
-                                hintText: enterRemark,
-                                labelText: enterRemark,
+                                hintText: "Clearly describe the task: what, who, and\nkey details.",
+                                labelText: "Clearly describe the task: what, who, and\nkey details.",
                                 index: 1,
                                 maxLine: 3,
                                 focusedIndexNotifier: focusedIndexNotifier,
