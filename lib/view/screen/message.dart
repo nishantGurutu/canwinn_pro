@@ -64,22 +64,18 @@ class _MessageScreenState extends State<MessageScreen> {
     chatController.selectedMessage.value = "";
     chatController.selectedParentMessageSender.value = '';
     chatController.chatIdvalue.value = widget.chatId.toString();
-
     _scrollController.addListener(_scrollListener);
-
     await chatController.chatHistoryListApi(
       widget.chatId,
       chatController.pageCountValue.value,
       'initstate',
     );
-
     if(chatController.chatIdvalue.value.isNotEmpty) {
       PusherConfig().initPusher(chatController.onPusherEvent,
           channelName: "chat", roomId: chatController.chatIdvalue.value);
       PusherConfig2().initPusher(chatController.onPusherEvent,
           channelName: "chatseen", roomId: chatController.chatIdvalue.value);
     } 
- 
   }
 
   @override

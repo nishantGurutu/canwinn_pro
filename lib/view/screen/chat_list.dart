@@ -31,9 +31,17 @@ class _ChatListState extends State<ChatList> {
   void initState() {
     chatController.selectedChatId.clear();
     chatController.chatListApi("");
-
-       homeController.userActiveStatusApi(status: "online");
+    SosPusherConfigOnline().initPusher(
+      _onPusherEvent,
+      channelName: "online-users",
+      context: context,
+    ); 
+    homeController.userActiveStatusApi(status: "online");
     super.initState();
+  }
+
+  Future<void> _onPusherEvent(PusherEvent event) async {
+    log("Pusher event received: ${event.eventName} - ${event.data}");
   }
    
   Future onRefresher() async {

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
+import 'package:task_management/constant/dialog_class.dart';
 import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/home_controller.dart';
@@ -927,17 +928,88 @@ class _AddTaskState extends State<AddTask> {
                                   SizedBox(width: 7.w),
                                   Expanded(
                                     child: SizedBox(
-                                      child: CustomDropdown<PriorityData>(
-                                        items: priorityController.priorityList,
-                                        itemLabel:
-                                            (item) => item.priorityName ?? "",
-                                        selectedValue: null,
-                                        onChanged: (value) {
-                                          priorityController
-                                              .selectedPriorityData
-                                              .value = value;
-                                        },
-                                        hintText: selectPriority,
+                                      child: DropdownButtonHideUnderline(
+                                        child: Obx(
+                                          () => DropdownButton2<PriorityData>(
+                                            isExpanded: true,
+                                            hint: Text(
+                                              "Select Priority",
+                                              style: changeTextColor(
+                                                  rubikRegular, darkGreyColor),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            items: priorityController.priorityList
+                                                .map(
+                                                  (PriorityData item) =>
+                                                      DropdownMenuItem<PriorityData>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.priorityName ?? '',
+                                                      style: changeTextColor(
+                                                          rubikRegular, Colors.black),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                            value: priorityController
+                                                              .selectedPriorityData
+                                                              .value,
+                                            onChanged: (PriorityData? value) {
+                                                if(value?.priorityName == "High"){
+                                                    ShowDialogFunction().priorityDialog(context, value, priorityController);
+                                                }else{
+                                                      priorityController
+                                                          .selectedPriorityData
+                                                          .value = value;
+                                                }
+                                            },
+                                            buttonStyleData: ButtonStyleData(
+                                              height: 45.h,
+                                              width: double.infinity,
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 10.h,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(14.r),
+                                                border:
+                                                    Border.all(color: lightBorderColor),
+                                                color: whiteColor,
+                                              ),
+                                            ),
+                                            iconStyleData: IconStyleData(
+                                              icon: Image.asset(
+                                                'assets/images/png/Vector 3.png',
+                                                color: secondaryColor,
+                                                height: 8.h,
+                                              ),
+                                              iconSize: 14,
+                                              iconEnabledColor: lightGreyColor,
+                                              iconDisabledColor: lightGreyColor,
+                                            ),
+                                            dropdownStyleData: DropdownStyleData(
+                                              maxHeight: 200.h,
+                                              width: 160.w,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(14.r),
+                                                  color: whiteColor,
+                                                  border: Border.all(
+                                                      color: lightSecondaryColor)),
+                                              scrollbarTheme: ScrollbarThemeData(
+                                                radius: const Radius.circular(40),
+                                                thickness:
+                                                    WidgetStateProperty.all<double>(6),
+                                                thumbVisibility:
+                                                    WidgetStateProperty.all<bool>(true),
+                                              ),
+                                            ),
+                                            menuItemStyleData: const MenuItemStyleData(
+                                              height: 40,
+                                              padding: EdgeInsets.only(left: 14, right: 14),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

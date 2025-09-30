@@ -137,11 +137,11 @@ class _BottomNavigationBarExampleState
       channelName: "test-channel",
       context: context,
     ); 
-    await SosPusherConfigOnline().initPusher(
-      _onPusherEvent,
-      channelName: "online-users",
-      context: context,
-    ); 
+    // await SosPusherConfigOnline().initPusher(
+    //   _onPusherEvent,
+    //   channelName: "online-users",
+    //   context: context,
+    // ); 
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
@@ -195,7 +195,6 @@ class _BottomNavigationBarExampleState
                     bottomBarController.currentPageIndex.value = 0;
                     return;
                   }
-
                   final bool? shouldExit = await showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -211,7 +210,6 @@ class _BottomNavigationBarExampleState
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // Top Icon
                                 Container(
                                   padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
@@ -225,8 +223,6 @@ class _BottomNavigationBarExampleState
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-
-                                // Title
                                 const Text(
                                   "Confirm Exit",
                                   style: TextStyle(
@@ -235,10 +231,7 @@ class _BottomNavigationBarExampleState
                                     color: Colors.black87,
                                   ),
                                 ),
-
                                 const SizedBox(height: 12),
-
-                                // Message
                                 const Text(
                                   "Are you sure you want to exit the app?",
                                   textAlign: TextAlign.center,
@@ -247,10 +240,7 @@ class _BottomNavigationBarExampleState
                                     color: Colors.black54,
                                   ),
                                 ),
-
                                 const SizedBox(height: 25),
-
-                                // Buttons
                                 Row(
                                   children: [
                                     Expanded(
