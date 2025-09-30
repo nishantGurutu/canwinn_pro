@@ -133,4 +133,26 @@ class HomeService {
       return null;
     }
   }
+  Future<bool> userActiveStatusApi(String status
+  ) async {
+    try {
+      var token = StorageHelper.getToken();
+      var url = "${ApiConstant.baseUrl}${ApiConstant.user_online_status}";
+      
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      final Map<String, dynamic> formDataMap = {
+        "status": status,
+      };
+      final formData = FormData.fromMap(formDataMap);
+      final response = await _dio.post(url, data: formData);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      } else {
+        throw Exception('Failed to fetch responsible person list');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
 }

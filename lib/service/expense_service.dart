@@ -16,15 +16,7 @@ class ExpenseService {
       _dio.options.headers = {
         "Authorization": "Bearer $token",
         "Content-Type": "multipart/form-data",
-      };
-      print('expense data 87y8e $expenseType');
-      print('expense data 87y8e 2 $billNumber');
-      print('expense data 87y8e 3 $amount');
-      print('expense data 87y8e 4 $description');
-      print('expense data 87y8e 5 $pickedFile');
-      print('expense data 87y8e 6 $expensedate');
-      print('expense data 87y8e 7 $token');
-
+      }; 
       final Map<String, dynamic> formDataMap = {
         "expense_type": expenseType == "Travel Expense" ? 1 : 2,
         "expense_date": expensedate,

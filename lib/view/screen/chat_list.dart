@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/image_constant.dart';
 import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/controller/chat_controller.dart';
+import 'package:task_management/controller/home_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
+import 'package:task_management/helper/sos_pusher.dart';
 import 'package:task_management/view/screen/select_contact.dart';
 import 'package:task_management/view/widgets/discussion_list.dart';
 import 'package:task_management/view/widgets/image_screen.dart';
@@ -20,14 +25,17 @@ class ChatList extends StatefulWidget {
 class _ChatListState extends State<ChatList> {
   final ChatController chatController = Get.find();
   final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
 
   @override
   void initState() {
     chatController.selectedChatId.clear();
     chatController.chatListApi("");
+
+       homeController.userActiveStatusApi(status: "online");
     super.initState();
   }
-
+   
   Future onRefresher() async {
     await chatController.chatListApi("refresh");
   }

@@ -240,4 +240,5 @@ class ApiConstant {
       "change-lead-followup-status";
   static const String mark_seen = "mark-seen";
   static const String chat_typing = "chat-typing";
+  static const String user_online_status = "user-online-status";
 }

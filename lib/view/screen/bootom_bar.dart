@@ -88,22 +88,15 @@ class _BottomNavigationBarExampleState
 
   @override
   void initState() {
-    super.initState();
-
+    super.initState(); 
     callApi();
   }
-
   var isLoading = false.obs;
-
   Future<void> callApi() async {
     isLoading.value = true;
-
     await notificationController.notificationListApi('');
-    await homeController.homeDataApi(StorageHelper.getId());
-    // await homeController.leadHomeApi();
-    // if (StorageHelper.getAssignedDept() != null) {
-    await homeController.userReportApi(StorageHelper.getId());
-    // }
+    await homeController.homeDataApi(StorageHelper.getId()); 
+    await homeController.userReportApi(StorageHelper.getId()); 
     await homeController.taskResponsiblePersonListApi(
       StorageHelper.getAssignedDept(),
       "",
@@ -111,15 +104,13 @@ class _BottomNavigationBarExampleState
     await leadController.statusListApi(status: '');
     await leadController.sourceList(source: '');
     isLoading.value = false;
-
+    // await homeController.userActiveStatusApi(status: "online");
     homeController.isButtonVisible.value = true;
     await userPageControlelr.roleListApi(StorageHelper.getDepartmentId());
-    print('s value in tasklist api 1 ${widget.from}');
     debugPrint('s value in tasklist api 2 ${widget.payloadData}');
     if (widget.from == "reminder") {
       await profileController.dailyTaskList(context, 'reminder', '');
     }
-
     if (widget.from == "true") {
       DateTime dt = DateTime.now();
       if (widget.payloadData['type'].toString() == "sos") {
@@ -134,8 +125,7 @@ class _BottomNavigationBarExampleState
       }
     }
 
-    profilePicPath.value = await StorageHelper.getImage() ?? "";
-    // await priorityController.priorityApi(from: '');
+    profilePicPath.value = await StorageHelper.getImage() ?? ""; 
     await taskController.allProjectListApi();
     await taskController.responsiblePersonListApi(
       StorageHelper.getDepartmentId(),
@@ -146,7 +136,12 @@ class _BottomNavigationBarExampleState
       _onPusherEvent,
       channelName: "test-channel",
       context: context,
-    );
+    ); 
+    await SosPusherConfigOnline().initPusher(
+      _onPusherEvent,
+      channelName: "online-users",
+      context: context,
+    ); 
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
@@ -182,9 +177,8 @@ class _BottomNavigationBarExampleState
                   notificationController.isNotificationLoading.value == true &&
                   chatController.isChatLoading.value == true
               ? Center(child: CircularProgressIndicator())
-              : /*WillPopScope(
-                onWillPop: _onWillPop,*/ PopScope(
-                canPop: false, // Prevent auto-pop
+              : PopScope(
+                canPop: false,  
                 onPopInvoked: (didPop) async {
                   if (didPop) {
                     return;

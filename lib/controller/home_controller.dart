@@ -242,4 +242,18 @@ class HomeController extends GetxController {
       isResponsiblePersonLoading.value = false;
     });
   }
+  var isUserActiveLoading = false.obs;
+  Future<void> userActiveStatusApi({required String status}) async {
+    Future.microtask(() {
+      isUserActiveLoading.value = true;
+    });
+    final result = await HomeService().userActiveStatusApi(status
+    );
+    if (result != null) {
+      isUserActiveLoading.value = false;
+    }
+    Future.microtask(() {
+      isUserActiveLoading.value = false;
+    });
+  }
 }
