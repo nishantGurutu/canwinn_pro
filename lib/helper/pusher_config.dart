@@ -48,13 +48,11 @@ class PusherConfig {
         onConnectionStateChange: onConnectionStateChange,
         onError: onError,
         onSubscriptionSucceeded: (channelName, data) {
-          log("✅ Subscribed: $channelName data: $data");
         },
         onEvent: (event) async {
           chatController.seenMessageIds.clear();
           try {
             final eventData = jsonDecode(event.data);
-            print('e54r56e e365r653r dfw45r345 ${eventData}');
             if (event.eventName == "message") {
               if (eventData.containsKey("message")) {
                 if (StorageHelper.getId() != eventData["senderId"]) {
@@ -85,7 +83,6 @@ class PusherConfig {
               }
             } else if (event.eventName == "message_seen") {
               final messageId = eventData["messageId"];
-              final seenBy = eventData["seenBy"];
 
               int index = chatController.chatHistoryList.indexWhere(
                 (msg) => msg.id == messageId,
@@ -95,11 +92,8 @@ class PusherConfig {
                 chatController.chatHistoryList[index].readAt = "";
                 chatController.chatHistoryList.refresh();
               }
-
-              log("👀 Message $messageId seen by $seenBy");
             }
           } catch (e) {
-            log("❌ Error parsing event: $e");
           }
         },
         onSubscriptionError: onSubscriptionError,
@@ -108,14 +102,9 @@ class PusherConfig {
         onMemberRemoved: onMemberRemoved,
       );
 
-      // 🔹 Dono channels ek hi connection me subscribe karo
       await pusher?.subscribe(channelName: "chat.$roomId");
-      // await pusher?.subscribe(channelName: "chatseen.$roomId");
-
-      log("✅ Subscribed to chat.$roomId and chatseen.$roomId");
       await pusher?.connect();
     } catch (e) {
-      log("❌ Error in initialization: $e");
     }
   }
 
@@ -190,21 +179,15 @@ class PusherConfig2 {
         onConnectionStateChange: onConnectionStateChange,
         onError: onError,
         onSubscriptionSucceeded: (channelName, data) {
-          log("✅ Subscribed: $channelName data: $data");
         },
         onEvent: (event) async {
           chatController.seenMessageIds.clear();
           try {
             final eventData = jsonDecode(event.data);
-            print('e54r56e e365r653r dfw45r345 ${eventData}');
-            print('e54r56e e365r653r dfw45r345 34 ${StorageHelper.getId()}');
-            // if (event.eventName == "message") {
               if (eventData.containsKey("message")) {
-                // if (StorageHelper.getId() != eventData["senderId"]) {
                   DateTime inputDateTime = DateTime.now();
                   String dt = DateFormat.Hm().format(DateTime.now());
                   String displayDate = getDisplayDate(inputDateTime);
-
                   final newMessage = ChatHistoryData(
                     id: eventData["msgid"],
                     message: eventData["message"],
@@ -231,44 +214,32 @@ class PusherConfig2 {
                     chatController.seenMessageIds,
                   );
                 }
-              }
-             else if (eventData.containsKey("messageIds")) {
-              List<dynamic> messageIds = eventData["messageIds"];
-              List<dynamic> readAtList = eventData["readAtList"];
-              
-              print("📱 Processing markSeen response for messages: $messageIds with readAt: $readAtList"); 
-              for (int i = 0; i < messageIds.length && i < readAtList.length; i++) {
-                int messageId = messageIds[i];
-                String readAt = readAtList[i].toString();
-                for (var message in chatController.chatHistoryList) {
-                  if (message.id == messageId) {
-                    message.readAt = readAt;
-                    print("✅ Updated message $messageId with readAt: $readAt");
-                    break;
+              }else if (eventData.containsKey("messageIds")) {
+                List<dynamic> messageIds = eventData["messageIds"];
+                List<dynamic> readAtList = eventData["readAtList"];
+                for (int i = 0; i < messageIds.length && i < readAtList.length; i++) {
+                  int messageId = messageIds[i];
+                  String readAt = readAtList[i].toString();
+                  for (var message in chatController.chatHistoryList) {
+                    if (message.id == messageId) {
+                      message.readAt = readAt;
+                      break;
+                    }
                   }
                 }
+                chatController.chatHistoryList.refresh();
               }
-              chatController.chatHistoryList.refresh();
-
-            }
           } catch (e) {
-            log("❌ Error parsing event: $e");
           }
         },
         onSubscriptionError: onSubscriptionError,
         onDecryptionFailure: onDecryptionFailure,
         onMemberAdded: onMemberAdded,
         onMemberRemoved: onMemberRemoved,
-      );
-
-      // 🔹 Dono channels ek hi connection me subscribe karo
-      // await pusher?.subscribe(channelName: "chat.$roomId");
+      ); 
       await pusher?.subscribe(channelName: "chatseen.$roomId");
-
-      log("✅ Subscribed to chat.$roomId and chatseen.$roomId");
       await pusher?.connect();
     } catch (e) {
-      log("❌ Error in initialization: $e");
     }
   }
 
