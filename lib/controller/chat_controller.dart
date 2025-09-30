@@ -130,6 +130,7 @@ class ChatController extends GetxController {
           seenMessageIds.add(msg.id!);
         }
       }
+      await markSeen(chatId, seenMessageIds);
       print('rs4e4 s43s326 44q3 ${seenMessageIds.length}');
     } else {
       hasMoreMessages.value = false;

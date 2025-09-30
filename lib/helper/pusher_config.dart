@@ -54,7 +54,7 @@ class PusherConfig {
           chatController.seenMessageIds.clear();
           try {
             final eventData = jsonDecode(event.data);
-            print('e54r56e e365r653r ${eventData}');
+            print('e54r56e e365r653r dfw45r345 ${eventData}');
             if (event.eventName == "message") {
               if (eventData.containsKey("message")) {
                 if (StorageHelper.getId() != eventData["senderId"]) {
@@ -196,7 +196,8 @@ class PusherConfig2 {
           chatController.seenMessageIds.clear();
           try {
             final eventData = jsonDecode(event.data);
-            print('e54r56e e365r653r ${eventData}');
+            print('e54r56e e365r653r dfw45r345 ${eventData}');
+            print('e54r56e e365r653r dfw45r345 34 ${StorageHelper.getId()}');
             // if (event.eventName == "message") {
               if (eventData.containsKey("message")) {
                 // if (StorageHelper.getId() != eventData["senderId"]) {
@@ -219,6 +220,9 @@ class PusherConfig2 {
                       chatController.chatHistoryList.last.id = newMessage.id;
                       chatController.chatHistoryList.last.readAt = 'null';
                   }
+                    if (StorageHelper.getId() != eventData["senderId"]) {
+                      chatController.chatHistoryList.add(newMessage);
+                    }
                   chatController.chatHistoryList.refresh();
                 if (StorageHelper.getId() != eventData["senderId"]) {
                   chatController.seenMessageIds.add(eventData["msgid"]);
@@ -229,16 +233,22 @@ class PusherConfig2 {
                 }
               }
              else if (eventData.containsKey("messageIds")) {
-              final messageId = eventData["messageId"];
-
-              int index = chatController.chatHistoryList.indexWhere(
-                (msg) => msg.id == messageId,
-              );
-
-              if (index != -1) {
-                chatController.chatHistoryList[index].readAt = "sdfsgrsdf";
-                chatController.chatHistoryList.refresh();
+              List<dynamic> messageIds = eventData["messageIds"];
+              List<dynamic> readAtList = eventData["readAtList"];
+              
+              print("📱 Processing markSeen response for messages: $messageIds with readAt: $readAtList"); 
+              for (int i = 0; i < messageIds.length && i < readAtList.length; i++) {
+                int messageId = messageIds[i];
+                String readAt = readAtList[i].toString();
+                for (var message in chatController.chatHistoryList) {
+                  if (message.id == messageId) {
+                    message.readAt = readAt;
+                    print("✅ Updated message $messageId with readAt: $readAt");
+                    break;
+                  }
+                }
               }
+              chatController.chatHistoryList.refresh();
 
             }
           } catch (e) {
