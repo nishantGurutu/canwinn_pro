@@ -79,8 +79,7 @@ class _MessageScreenState extends State<MessageScreen> {
       PusherConfig2().initPusher(chatController.onPusherEvent,
           channelName: "chatseen", roomId: chatController.chatIdvalue.value);
     } 
-
-    // await chatController.markSeen(widget.chatId, chatController.seenMessageIds);
+ 
   }
 
   @override
@@ -758,7 +757,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                       ? "${chat.message ?? ''}                 "
                                                                                                       : chat.readAt.toString() !=
                                                                                                           "null"
-                                                                                                      ? "${chat.message ?? ''}                  "
+                                                                                                      ? "${chat.message ?? ''}              " 
                                                                                                       : "${chat.message ?? ''}                 ",
                                                                                                   style: changeTextColor(
                                                                                                     heading8,
