@@ -257,15 +257,11 @@ class AttendenceController extends GetxController {
   Future<void> sallarySlipDownload(String text) async {
     try {
       isSallarySlipLoading.value = true;
-      
-      print('Starting salary slip download for: $text');
       final Uint8List? pdfData = await AttendenceService().sallarySlipDownload(text);
-      
       if (pdfData != null && pdfData.isNotEmpty) {
         final now = DateTime.now();
         final formattedDate = '${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}-${now.year}_${now.hour}${now.minute}${now.second}';
         final fileName = 'salary_slip_${formattedDate}.pdf';
-        
         try {
           final externalDir = await getExternalStorageDirectory();
           if (externalDir != null) {
@@ -277,7 +273,6 @@ class AttendenceController extends GetxController {
             final deviceFilePath = '$downloadsPath/$fileName';
             final deviceFile = File(deviceFilePath);
             await deviceFile.writeAsBytes(pdfData);
-            print('File saved to device Downloads: $deviceFilePath');
           }
         } catch (e) {
           print('Error saving to device Downloads: $e');
