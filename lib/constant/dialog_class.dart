@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/image_constant.dart';
+import 'package:task_management/constant/style_constant.dart';
+import 'package:task_management/constant/text_constant.dart';
+import 'package:task_management/controller/attendence/attendence_controller.dart';
 import 'package:task_management/controller/priority_controller.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/lead_contact_list_model.dart';
@@ -14,6 +18,8 @@ import 'package:task_management/view/screen/leads_list.dart';
 import 'package:task_management/view/screen/meeting/get_meeting.dart';
 import 'package:task_management/view/screen/meeting_screen.dart';
 import 'package:task_management/view/screen/task_screen.dart';
+import 'package:task_management/view/widgets/custom_calender.dart'; 
+import 'package:task_management/view/widgets/custom_date_picker.dart';
 import 'package:task_management/view/widgets/pending_box.dart';
 
 class ShowDialogFunction {
@@ -368,6 +374,139 @@ class ShowDialogFunction {
                      ),
                     ],
                   ),
+                ),
+              ),
+              Positioned(
+                top: 8.h,
+                right: 10.w,
+                child: InkWell(
+                  onTap: () async {
+                    Get.back();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  final TextEditingController selectedDateTextController =
+    TextEditingController();
+  Future<void> salarySlipDialog(
+    BuildContext context, AttendenceController attendenceController  
+  ) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: 22.w),
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: whiteColor,
+                ),
+                padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 16.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 200.w,
+                                  child: TextField(
+                                    controller: selectedDateTextController,
+                                    decoration: InputDecoration(
+                                      fillColor: whiteColor,
+                                      filled: true,
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: Image.asset(
+                                          'assets/images/png/callender.png',
+                                          color: secondaryColor,
+                                          height: 10.h,
+                                        ),
+                                      ),
+                                      hintText: 'yyyy-MM',
+                                      hintStyle: rubikRegular,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: lightBorderColor),
+                                        borderRadius: BorderRadius.all(Radius.circular(14.r)),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: lightBorderColor),
+                                        borderRadius: BorderRadius.all(Radius.circular(14.r)),
+                                      ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: lightBorderColor),
+                                        borderRadius: BorderRadius.all(Radius.circular(14.r)),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: secondaryColor),
+                                        borderRadius: BorderRadius.all(Radius.circular(14.r)),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+                                    ),
+                                    readOnly: true,
+                                    onTap: () async {
+                                      DateTime initialDate = DateTime.now();
+                                      DateTime firstDate = DateTime(1900);  
+                                      DateTime lastDate = DateTime(2200);
+                                      final DateTime? pickedDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: initialDate,
+                                        firstDate: firstDate,
+                                        lastDate: lastDate,
+                                      );
+                                      if (pickedDate != null) {
+                                        final formattedDate = DateFormat('yyyy-MM').format(pickedDate);
+                                        selectedDateTextController.text = formattedDate;
+                                        print('837y8e7 e3873563 ${selectedDateTextController.text}');
+                                      }
+                                    }
+                                  ),
+                                  // CustomCalender(
+                                  //   hintText: dateFormate,
+                                  //   controller: selectedDateTextController,
+                                  //   from: 'report',
+                                  // ),
+                                ),
+                                SizedBox(width: 15.w),
+                                InkWell(
+                                  onTap: () async {
+                                    // await downloadReport(
+                                    //   date: selectedDateTextController.text,
+                                    // );
+                                    attendenceController.sallarySlipDownload(selectedDateTextController.text);
+                                  },
+                                  child: SizedBox(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'assets/images/png/download_image.png',
+                                        height: 30.h,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ), 
+                  ],
                 ),
               ),
               Positioned(

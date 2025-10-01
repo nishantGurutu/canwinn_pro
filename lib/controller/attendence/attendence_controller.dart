@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart'; 
 import 'package:get/get.dart'; 
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:task_management/component/location_handler.dart';
+import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/attendence_list_model.dart';
 import 'package:task_management/model/attendence_user_details.dart';
@@ -249,4 +252,59 @@ class AttendenceController extends GetxController {
     await leaveLoading();
     isApplyingLeaveDeleting.value = false;
   }
+  
+  var isSallarySlipLoading = false.obs;
+  Future<void> sallarySlipDownload(String text) async {
+    try {
+      isSallarySlipLoading.value = true;
+      
+      print('Starting salary slip download for: $text');
+      final Uint8List? pdfData = await AttendenceService().sallarySlipDownload(text);
+      
+      if (pdfData != null && pdfData.isNotEmpty) {
+        final now = DateTime.now();
+        final formattedDate = '${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}-${now.year}_${now.hour}${now.minute}${now.second}';
+        final fileName = 'salary_slip_${formattedDate}.pdf';
+        
+        try {
+          final externalDir = await getExternalStorageDirectory();
+          if (externalDir != null) {
+            final downloadsPath = '${externalDir.path}/Downloads';
+            final downloadsDir = Directory(downloadsPath);
+            if (!await downloadsDir.exists()) {
+              await downloadsDir.create(recursive: true);
+            }
+            final deviceFilePath = '$downloadsPath/$fileName';
+            final deviceFile = File(deviceFilePath);
+            await deviceFile.writeAsBytes(pdfData);
+            print('File saved to device Downloads: $deviceFilePath');
+          }
+        } catch (e) {
+          print('Error saving to device Downloads: $e');
+        }
+        
+        try {
+          final appDir = await getApplicationDocumentsDirectory();
+          final appFilePath = '${appDir.path}/$fileName';
+          final appFile = File(appFilePath);
+          await appFile.writeAsBytes(pdfData);
+          print('File saved to app folder: $appFilePath');
+        } catch (e) {
+          print('Error saving to app folder: $e');
+        }
+        
+        CustomToast().showCustomToast("Salary slip downloaded successfully to both Downloads and app folder.");
+        Get.back();
+      } else {
+        print('No PDF data received or data is empty');
+        CustomToast().showCustomToast("No salary slip data received from server.");
+      }
+    } catch (e) {
+      print('Error in salary slip download: $e');
+      CustomToast().showCustomToast("Error downloading salary slip: $e");
+    } finally {
+      isSallarySlipLoading.value = false;
+    }
+  }
+ 
 }

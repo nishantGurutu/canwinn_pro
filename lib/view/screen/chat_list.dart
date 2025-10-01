@@ -35,7 +35,9 @@ class _ChatListState extends State<ChatList> {
       channelName: "online-users",
       context: context,
     ); 
-    homeController.userActiveStatusApi(status: "online");
+    Future.delayed(const Duration(seconds: 2), () {
+      homeController.userActiveStatusApi(status: "online");
+    });
     super.initState();
   }
 

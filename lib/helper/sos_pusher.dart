@@ -60,7 +60,7 @@ class SosPusherConfig {
         onMemberRemoved: onMemberRemoved,
       );
 
-      await pusher?.subscribe(channelName: "test-channel");
+      await pusher?.subscribe(channelName: channelName ?? "test-channel");
       // await pusher?.subscribe(channelName: "online-users");
 
       print("Subscribed to: $channelName");
@@ -155,7 +155,7 @@ class SosPusherConfigOnline {
         onMemberRemoved: onMemberRemoved,
       );
       // await pusher?.subscribe(channelName: "test-channel");
-      await pusher?.subscribe(channelName: "online-users");
+      await pusher?.subscribe(channelName: channelName ?? "online-users");
 
       print("Subscribed to: $channelName");
       await pusher?.connect();

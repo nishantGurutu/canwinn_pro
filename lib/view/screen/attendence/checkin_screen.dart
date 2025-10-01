@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
+import 'package:task_management/constant/dialog_class.dart';
 import 'package:task_management/controller/attendence/attendence_controller.dart';
 import 'package:task_management/controller/attendence/checkin_user_details.dart';
 import 'package:task_management/controller/register_controller.dart';
@@ -43,7 +44,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
       );
     }
     await checkAndResetAttendanceData();
-    // await locationName();
   }
 
   Future<void> logoutApp() async {
@@ -353,6 +353,54 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       SizedBox(height: 8.h),
                                       Text(
                                         'Human\nGate Pass',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                 InkWell(
+                                  onTap: () async{
+                                    ShowDialogFunction().salarySlipDialog(context, attendenceController);
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 55.h,
+                                        width: 55.w,
+                                        decoration: BoxDecoration(
+                                          color: lightGreenColor,
+                                          border: Border.all(
+                                            color: lightGreenColor2,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8.sp),
+                                            child: Image.asset(
+                                              'assets/image/png/pay_slip.png',
+                                              height: 65.h,
+                                              fit: BoxFit.cover,
+                                              color: greenColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Text(
+                                        'Salary Slip',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,

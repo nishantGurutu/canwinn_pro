@@ -137,11 +137,11 @@ class _BottomNavigationBarExampleState
       channelName: "test-channel",
       context: context,
     ); 
-    // await SosPusherConfigOnline().initPusher(
-    //   _onPusherEvent,
-    //   channelName: "online-users",
-    //   context: context,
-    // ); 
+    await SosPusherConfigOnline().initPusher(
+      _onPusherEvent,
+      channelName: "online-users",
+      context: context,
+    ); 
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {

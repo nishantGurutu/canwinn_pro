@@ -241,4 +241,5 @@ class ApiConstant {
   static const String mark_seen = "mark-seen";
   static const String chat_typing = "chat-typing";
   static const String user_online_status = "user-online-status";
+  static const String salary_slip_download = "salary-slip/download";
 }

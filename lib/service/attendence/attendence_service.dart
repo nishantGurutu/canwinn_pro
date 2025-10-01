@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management/api/api_constant.dart';
@@ -169,7 +170,7 @@ class AttendenceService {
       return null;
     }
   }
-
+ 
   Future<LeaveListModel?> leaveList() async {
     try {
       var token = StorageHelper.getToken();
@@ -194,7 +195,7 @@ class AttendenceService {
     }
   }
 
-  Future<LeaveTypeModel?> leaveTypeList() async {
+ Future<LeaveTypeModel?> leaveTypeList() async {
     try {
       var token = StorageHelper.getToken();
       _dio.options.headers = {
@@ -356,6 +357,37 @@ class AttendenceService {
     } catch (e) {
       print('Error in Attendence punch: $e');
       return false;
+    }
+  }
+
+  Future<Uint8List?> sallarySlipDownload(String text) async {
+    try {
+      var token = StorageHelper.getToken();
+      _dio.options.headers = {
+        "Authorization": "Bearer $token",
+        "Accept": "application/pdf",
+      };
+      print('download text value $text'); 
+
+      final response = await _dio.get(
+        "${ApiConstant.baseUrl + ApiConstant.salary_slip_download}/$text",
+        options: Options(
+          responseType: ResponseType.bytes,
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('PDF data received, size: ${response.data.length} bytes');
+        return Uint8List.fromList(response.data);
+      } else {
+        print('Unexpected response: ${response.statusCode}');
+        CustomToast().showCustomToast("Failed to download salary slip");
+        return null;
+      }
+    } catch (e) {
+      print('Error in salary slip download: $e');
+      CustomToast().showCustomToast("Error downloading salary slip: $e");
+      return null;
     }
   }
 }
