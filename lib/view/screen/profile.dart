@@ -634,9 +634,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     );
                   }).toList(),
-              value: profileController.genderList.contains(profileController.selectedGender?.value)
-    ? profileController.selectedGender?.value
-    : null,
+                value: profileController.genderList.contains(profileController.selectedGender?.value)
+        ? profileController.selectedGender?.value
+        : null,
               onChanged: (String? value) {
                 profileController.selectedGender?.value = value ?? '';
               },

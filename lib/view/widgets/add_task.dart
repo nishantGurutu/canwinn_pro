@@ -24,8 +24,7 @@ import 'package:task_management/model/department_list_model.dart';
 import 'package:task_management/model/priority_model.dart' show PriorityData;
 import 'package:task_management/model/responsible_person_list_model.dart';
 import 'package:task_management/view/widgets/add_contact.dart';
-import 'package:task_management/view/widgets/custom_calender.dart';
-import 'package:task_management/view/widgets/custom_dropdawn.dart';
+import 'package:task_management/view/widgets/custom_calender.dart'; 
 import 'package:task_management/view/widgets/custom_timer.dart';
 import 'package:task_management/view/widgets/image_screen.dart';
 import 'package:task_management/view/widgets/pdf_screen.dart';
@@ -69,6 +68,10 @@ class _AddTaskState extends State<AddTask> {
   final ProjectController projectController = Get.find();
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
+  
+  // Create a persistent MultiSelectController for department dropdown
+  final MultiSelectController<DepartmentListData> departmentController = 
+      MultiSelectController<DepartmentListData>();
 
   @override
   void initState() {
@@ -87,6 +90,7 @@ class _AddTaskState extends State<AddTask> {
     taskController.assignedUserId.clear();
     taskController.responsiblePersonSelectedCheckBox2.clear();
     taskController.addTaskContactList.clear();
+    departmentController.dispose();
   }
 
   var isLoading = false.obs;
@@ -407,9 +411,7 @@ class _AddTaskState extends State<AddTask> {
                                                             )
                                                             .toList(),
                                                     controller:
-                                                        MultiSelectController<
-                                                          DepartmentListData
-                                                        >(),
+                                                        departmentController,
                                                     enabled: true,
                                                     searchEnabled: true,
                                                     onSelectionChange: (
