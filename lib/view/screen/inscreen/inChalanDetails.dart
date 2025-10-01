@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -711,6 +712,10 @@ class _InChalanDetailsState extends State<InChalanDetails> {
 
   Future<void> generatePdf() async {
     final pdf = pw.Document();
+    
+    // Load the logo image
+    final logoImage = await rootBundle.load('assets/image/png/canwinn_task_app_logo1.png');
+    final logoBytes = logoImage.buffer.asUint8List();
 
     pdf.addPage(
       pw.Page(
@@ -725,6 +730,18 @@ class _InChalanDetailsState extends State<InChalanDetails> {
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
+                // Add logo at the top
+                pw.Container(
+                  alignment: pw.Alignment.center,
+                  margin: pw.EdgeInsets.only(bottom: 20),
+                  child: pw.Image(
+                    pw.MemoryImage(logoBytes),
+                    width: 170,
+                    height: 90,
+                    fit: pw.BoxFit.contain,
+                  ),
+                ),
+                pw.SizedBox(height: 10),
                 pw.Text(
                     'Chalan Number: ${outScreenController.inScreenChalanDetailsModel.value?.data?.challanNumber ?? ""}',
                     style: pw.TextStyle(

@@ -73,6 +73,8 @@ dependencies {
     configurations.all {
         resolutionStrategy {
             force 'com.google.android.material:material:1.4.0' // Use a version that avoids lStar issues
+            force 'androidx.core:core:1.12.0' // Force compatible version
+            force 'androidx.core:core-ktx:1.12.0' // Force compatible version
         }
     }
 }
