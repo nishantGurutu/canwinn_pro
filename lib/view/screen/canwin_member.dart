@@ -85,83 +85,83 @@ class _CanwinMemberState extends State<CanwinMember> {
                   ),
                 )
                 : Expanded(
-      child: ListView.separated(
-        itemCount: memberList.length,
-        itemBuilder: (BuildContext context, int index) {
-          int colorIndex = index % colorList.length;
-          DateTime? dt = DateTime.parse(memberList[index].createdAt.toString());
-          return Container(
-            color: colorList[colorIndex],
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Name : ${memberList[index].name}',
-                      style: changeTextColor(rubikBold, darkGreyColor),
-                    ),
-                    SizedBox(height: 3.h),
-                    Text(
-                      'Phone : ${memberList[index].phone}',
-                      style: TextStyle(color: darkGreyColor),
-                    ),
-                    SizedBox(height: 3.h),
-                    Text(
-                      'Email : ${memberList[index].email}',
-                      style: TextStyle(color: darkGreyColor),
-                    ),
-                    SizedBox(height: 3.h),
-                    Text(
-                      'Location : ${memberList[index].countryName}',
-                      style: TextStyle(color: darkGreyColor),
-                    ),
-                    SizedBox(height: 3.h),
-                    Text(
-                      'Role : ${memberList[index].roleName}',
-                      style: TextStyle(color: darkGreyColor),
-                    ),
-                    SizedBox(height: 5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          DateConverter.formatDate(dt),
-                          style: changeTextColor(rubikMedium, darkGreyColor),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: greenColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.r))),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.w, vertical: 4.h),
-                            child: Center(
-                              child: Text(
-                                memberList[index].status.toString() == "1"
-                                    ? "Active"
-                                    : "",
-                                style: changeTextColor(rubikBold, whiteColor),
+                      child: ListView.separated(
+                        itemCount: memberList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          int colorIndex = index % colorList.length;
+                          DateTime? dt = DateTime.parse(memberList[index].createdAt.toString());
+                          return Container(
+                            color: colorList[colorIndex],
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Name : ${memberList[index].name}',
+                                      style: changeTextColor(rubikBold, darkGreyColor),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Phone : ${memberList[index].phone}',
+                                      style: TextStyle(color: darkGreyColor),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Email : ${memberList[index].email}',
+                                      style: TextStyle(color: darkGreyColor),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Location : ${memberList[index].countryName}',
+                                      style: TextStyle(color: darkGreyColor),
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Role : ${memberList[index].roleName}',
+                                      style: TextStyle(color: darkGreyColor),
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          DateConverter.formatDate(dt),
+                                          style: changeTextColor(rubikMedium, darkGreyColor),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: greenColor,
+                                              borderRadius:
+                                                  BorderRadius.all(Radius.circular(5.r))),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w, vertical: 4.h),
+                                            child: Center(
+                                              child: Text(
+                                                memberList[index].status.toString() == "1"
+                                                    ? "Active"
+                                                    : "",
+                                                style: changeTextColor(rubikBold, whiteColor),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(height: 5.h);
-        },
-      ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(height: 5.h);
+                        },
+                      ),
     );
   }
 }
