@@ -170,6 +170,8 @@ class ChatController extends GetxController {
   Rx<File> selectedFile = File('').obs;
   var selectedMessageId = "".obs;
   var selectedParentMessageSender = "".obs;
+  var selectedReplyType = "".obs;
+  var selectedAttachment = "".obs;
   Future<void> updateMessageData({
     required String message,
     required File attachment,
@@ -203,7 +205,7 @@ class ChatController extends GetxController {
     await sendMessageApi(
       userId,
       message,
-      chatId ?? "",
+      chatId,
       fromPage,
       attachment,
       messageId: messageId,

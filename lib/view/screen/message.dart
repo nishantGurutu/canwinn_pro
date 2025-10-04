@@ -63,6 +63,8 @@ class _MessageScreenState extends State<MessageScreen> {
     chatController.pageCountValue.value = 1;
     chatController.selectedMessage.value = "";
     chatController.selectedParentMessageSender.value = '';
+    chatController.selectedReplyType.value = "";
+    chatController.selectedAttachment.value = "";
     chatController.chatIdvalue.value = widget.chatId.toString();
     _scrollController.addListener(_scrollListener);
     await chatController.chatHistoryListApi(
@@ -83,6 +85,8 @@ class _MessageScreenState extends State<MessageScreen> {
     chatController.selectedMessage.value = "";
     chatController.selectedMessageId.value = "";
     chatController.selectedParentMessageSender.value = '';
+    chatController.selectedReplyType.value = "";
+    chatController.selectedAttachment.value = "";
     _scrollController.removeListener(_scrollListener);
     chatController.chatHistoryList.clear();
     PusherConfig().disconnect();
@@ -188,20 +192,6 @@ class _MessageScreenState extends State<MessageScreen> {
         Color(0xff6a329f),
         Color(0xff744700),
       ].obs;
-  Future<void> _checkIfAtBottomAndMarkSeen() async {
-    if (_scrollController.hasClients) {
-      final atBottom =
-          _scrollController.offset >=
-          _scrollController.position.minScrollExtent;
-
-      if (atBottom) {
-        await chatController.markSeen(
-          chatController.chatIdvalue.value,
-          chatController.seenMessageIds,
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -470,20 +460,33 @@ class _MessageScreenState extends State<MessageScreen> {
                                                     child: SwipeTo(
                                                       key: ValueKey(chat.id),
                                                       onRightSwipe: (details) {
-                                                        chatController
-                                                            .selectedMessage
-                                                            .value = chat
-                                                                .message
-                                                                .toString();
-                                                        chatController
-                                                            .selectedMessageId
-                                                            .value = chat.id
-                                                                .toString();
-                                                        chatController
-                                                            .selectedParentMessageSender
-                                                            .value = chat
-                                                                .senderName
-                                                                .toString();
+                                                        String replyContent = '';
+                                                        String replyType = 'text';
+                                                        
+                                                        if (chat.message != null && chat.message!.isNotEmpty) {
+                                                          replyContent = chat.message.toString();
+                                                          replyType = 'text';
+                                                        } else if (chat.attachment != null && chat.attachment!.isNotEmpty) {
+                                                          String fileExtension = chat.attachment!.split('.').last.toLowerCase();
+                                                          if (['jpg', 'jpeg', 'png', 'gif', 'webp'].contains(fileExtension)) {
+                                                            replyContent = '📷 Photo';
+                                                            replyType = 'image';
+                                                          } else if (fileExtension == 'pdf') {
+                                                            replyContent = '📄 Document';
+                                                            replyType = 'document';
+                                                          } else if (fileExtension == 'm4a' || fileExtension == 'mp3' || fileExtension == 'wav') {
+                                                            replyContent = '🎵 Audio';
+                                                            replyType = 'audio';
+                                                          } else {
+                                                            replyContent = '📎 File';
+                                                            replyType = 'file';
+                                                          }
+                                                        }
+                                                        chatController.selectedMessage.value = replyContent;
+                                                        chatController.selectedMessageId.value = chat.id.toString();
+                                                        chatController.selectedParentMessageSender.value = chat.senderName.toString();
+                                                        chatController.selectedReplyType.value = replyType;
+                                                        chatController.selectedAttachment.value = chat.attachment ?? '';
                                                       },
                                                       child: Column(
                                                         children: [
@@ -933,9 +936,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                         ),
                                                         child: Stack(
                                                           children: [
-                                                            Text(
-                                                              '${chatController.selectedMessage.value ?? ''}',
-                                                            ),
                                                             Container(
                                                               width:
                                                                   double
@@ -975,7 +975,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                           .start,
                                                                   children: [
                                                                     Text(
-                                                                      '${chatController.selectedParentMessageSender.value ?? ''}',
+                                                                      '${chatController.selectedParentMessageSender.value}',
                                                                       textAlign:
                                                                           TextAlign
                                                                               .left,
@@ -986,18 +986,88 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                             textColor,
                                                                       ),
                                                                     ),
-                                                                    Text(
-                                                                      '${chatController.selectedMessage.value ?? ''}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: TextStyle(
-                                                                        fontSize:
-                                                                            12.sp,
-                                                                        color:
-                                                                            textColor,
+                                                                    // Show different content based on reply type
+                                                                    if (chatController.selectedReplyType.value == 'image')
+                                                                      Row(
+                                                                        children: [
+                                                                          Icon(Icons.image, size: 16, color: textColor),
+                                                                          SizedBox(width: 4),
+                                                                          Expanded(
+                                                                            child: Text(
+                                                                              '${chatController.selectedMessage.value}',
+                                                                              textAlign: TextAlign.left,
+                                                                              style: TextStyle(
+                                                                                fontSize: 12.sp,
+                                                                                color: textColor,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    else if (chatController.selectedReplyType.value == 'document')
+                                                                      Row(
+                                                                        children: [
+                                                                          Icon(Icons.picture_as_pdf, size: 16, color: textColor),
+                                                                          SizedBox(width: 4),
+                                                                          Expanded(
+                                                                            child: Text(
+                                                                              '${chatController.selectedMessage.value}',
+                                                                              textAlign: TextAlign.left,
+                                                                              style: TextStyle(
+                                                                                fontSize: 12.sp,
+                                                                                color: textColor,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    else if (chatController.selectedReplyType.value == 'audio')
+                                                                      Row(
+                                                                        children: [
+                                                                          Icon(Icons.audiotrack, size: 16, color: textColor),
+                                                                          SizedBox(width: 4),
+                                                                          Expanded(
+                                                                            child: Text(
+                                                                              '${chatController.selectedMessage.value}',
+                                                                              textAlign: TextAlign.left,
+                                                                              style: TextStyle(
+                                                                                fontSize: 12.sp,
+                                                                                color: textColor,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    else if (chatController.selectedReplyType.value == 'file')
+                                                                      Row(
+                                                                        children: [
+                                                                          Icon(Icons.attach_file, size: 16, color: textColor),
+                                                                          SizedBox(width: 4),
+                                                                          Expanded(
+                                                                            child: Text(
+                                                                              '${chatController.selectedMessage.value}',
+                                                                              textAlign: TextAlign.left,
+                                                                              style: TextStyle(
+                                                                                fontSize: 12.sp,
+                                                                                color: textColor,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    else
+                                                                      Text(
+                                                                        '${chatController.selectedMessage.value}',
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .left,
+                                                                        style: TextStyle(
+                                                                          fontSize:
+                                                                              12.sp,
+                                                                          color:
+                                                                              textColor,
+                                                                        ),
                                                                       ),
-                                                                    ),
                                                                   ],
                                                                 ),
                                                               ),
@@ -1007,9 +1077,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               top: 3.h,
                                                               child: InkWell(
                                                                 onTap: () {
-                                                                  chatController
-                                                                      .selectedMessage
-                                                                      .value = "";
+                                                                  chatController.selectedMessage.value = "";
+                                                                  chatController.selectedMessageId.value = "";
+                                                                  chatController.selectedParentMessageSender.value = "";
+                                                                  chatController.selectedReplyType.value = "";
+                                                                  chatController.selectedAttachment.value = "";
                                                                 },
                                                                 child: Icon(
                                                                   Icons.close,
@@ -1140,10 +1212,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 String selectedMessage =
                                                     chatController
                                                         .selectedMessage
-                                                        .value = '';
-                                                chatController
-                                                    .selectedMessage
-                                                    .value = "";
+                                                        .value;
                                                 String message =
                                                     messageTextEditingController
                                                         .text;
@@ -1164,12 +1233,13 @@ class _MessageScreenState extends State<MessageScreen> {
                                                     chatController
                                                         .selectedParentMessageSender
                                                         .value;
-                                                chatController
-                                                    .selectedMessageId
-                                                    .value = "";
-                                                chatController
-                                                    .selectedParentMessageSender
-                                                    .value = '';
+                                                
+                                                // Clear all reply-related variables
+                                                chatController.selectedMessage.value = "";
+                                                chatController.selectedMessageId.value = "";
+                                                chatController.selectedParentMessageSender.value = "";
+                                                chatController.selectedReplyType.value = "";
+                                                chatController.selectedAttachment.value = "";
                                                 await chatController
                                                     .updateMessageData(
                                                       message: message,

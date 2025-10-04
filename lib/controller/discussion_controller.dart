@@ -28,7 +28,7 @@ class DiscussionController extends GetxController {
     isDiscussionAdding.value = true;
     final result =
         await DiscussionService().addDiscussion(comment, taskId, attachment);
-    pickedFile.value = File('');
+    // Don't clear pickedFile here - let user manually clear it
     isDiscussionAdding.value = false;
   }
 
