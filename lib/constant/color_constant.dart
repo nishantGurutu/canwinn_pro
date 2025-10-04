@@ -69,14 +69,12 @@ Color progressBackgroundColor = const Color(0xffCEFFCF);
 Color pendingBackgroundColor = const Color(0xffF6DAFF);
 Color completeBackgroundColor = const Color(0xffCBE6FF);
 Color pendingColor = const Color(0xffBF00FF);
-
-// Task app color
+ 
 Color darkBlue = const Color(0xff1E94FF);
 Color darkGreen = const Color.fromARGB(255, 30, 155, 82);
 Color lightSecondaryGreenColor = const Color.fromARGB(255, 207, 230, 216);
 Color lightBlueColor = const Color.fromARGB(255, 237, 239, 243);
-
-//New figma design
+ 
 Color taskMasterGradientColor1 = const Color(0xff00FFB1);
 Color taskMasterGradientColor2 = const Color(0xff08795D);
 Color boxBackgroundColor = const Color(0xffEFEFEF);

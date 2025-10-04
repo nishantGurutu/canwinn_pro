@@ -61,17 +61,7 @@ class _CanwinMemberState extends State<CanwinMember> {
                   ),
                 ),
               )
-            : canwinMemberController.memberList.isEmpty
-                ? Container(
-                    color: backgroundColor,
-                    child: Center(
-                      child: Text(
-                        noIndustry,
-                        style: rubikBold,
-                      ),
-                    ),
-                  )
-                : Container(
+            :  Container(
                     color: backgroundColor,
                     child: Column(
                       children: [
@@ -80,23 +70,21 @@ class _CanwinMemberState extends State<CanwinMember> {
                     ),
                   ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Get.to(const AddProject());
-      //   },
-      //   backgroundColor: primaryColor,
-      //   child: Icon(
-      //     Icons.add,
-      //     color: whiteColor,
-      //     size: 30.h,
-      //   ),
-      // ),
     );
   }
 
   List<Color> colorList = [backgroundColor, whiteColor];
   Widget sourceList(RxList<MemberData> memberList) {
-    return Expanded(
+    return memberList.isEmpty
+                ? Expanded(
+                  child: Center(
+                    child: Text(
+                      "No Data Found",
+                      style: rubikBold,
+                    ),
+                  ),
+                )
+                : Expanded(
       child: ListView.separated(
         itemCount: memberList.length,
         itemBuilder: (BuildContext context, int index) {

@@ -73,8 +73,6 @@ dependencies {
     configurations.all {
         resolutionStrategy {
             force 'com.google.android.material:material:1.4.0' // Use a version that avoids lStar issues
-            force 'androidx.core:core:1.12.0' // Force compatible version
-            force 'androidx.core:core-ktx:1.12.0' // Force compatible version
         }
     }
 }
@@ -87,8 +85,15 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.13.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging:23.2.1'
-//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    // coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+    
+    // Add missing AndroidX dependencies
+    implementation 'androidx.core:core:1.17.0'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.activity:activity:1.8.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.slf4j:slf4j-simple:1.7.32'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'

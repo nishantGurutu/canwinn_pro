@@ -404,7 +404,13 @@ class _InChalanDetailsState extends State<InChalanDetails> {
                                           if (outScreenController
                                                   .isStatusUpdating.value ==
                                               false) {
-                                            if (StorageHelper
+                                            if (outScreenController
+                                                        .inScreenChalanDetailsModel
+                                                        .value
+                                                        ?.data
+                                                        ?.status
+                                                        .toString() ==
+                                                    "0" ||StorageHelper
                                                         .getDepartmentId() ==
                                                     7 &&
                                                 outScreenController

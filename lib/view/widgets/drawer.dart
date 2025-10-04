@@ -367,63 +367,63 @@ class _SideDrawerState extends State<SideDrawer> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10.h),
-                        InkWell(
-                          onTap: () {
-                            bottomBarController.selectedTabIndex.value = 50;
-                            Get.back();
-                            Get.to(() => LocationPage());
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          50
-                                      ? selectedTabColor
-                                      : whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6.r),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                left: 10.w,
-                                top: 7.h,
-                                bottom: 7.h,
-                              ),
-                              child: Row(
-                                spacing: 10.w,
-                                children: [
-                                  SvgPicture.asset(
-                                    drawerTaskicon,
-                                    color:
-                                        bottomBarController
-                                                    .selectedTabIndex
-                                                    .value ==
-                                                50
-                                            ? whiteColor
-                                            : textColor,
-                                    height: 20.h,
-                                  ),
-                                  Text(
-                                    "Location Page",
-                                    style: TextStyle(
-                                      color:
-                                          bottomBarController
-                                                      .selectedTabIndex
-                                                      .value ==
-                                                  50
-                                              ? whiteColor
-                                              : textColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // SizedBox(height: 10.h),
+                        // InkWell(
+                        //   onTap: () {
+                        //     bottomBarController.selectedTabIndex.value = 50;
+                        //     Get.back();
+                        //     Get.to(() => LocationPage());
+                        //   },
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color:
+                        //           bottomBarController.selectedTabIndex.value ==
+                        //                   50
+                        //               ? selectedTabColor
+                        //               : whiteColor,
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(6.r),
+                        //       ),
+                        //     ),
+                        //     child: Padding(
+                        //       padding: EdgeInsets.only(
+                        //         left: 10.w,
+                        //         top: 7.h,
+                        //         bottom: 7.h,
+                        //       ),
+                        //       child: Row(
+                        //         spacing: 10.w,
+                        //         children: [
+                        //           SvgPicture.asset(
+                        //             drawerTaskicon,
+                        //             color:
+                        //                 bottomBarController
+                        //                             .selectedTabIndex
+                        //                             .value ==
+                        //                         50
+                        //                     ? whiteColor
+                        //                     : textColor,
+                        //             height: 20.h,
+                        //           ),
+                        //           Text(
+                        //             "Location Page",
+                        //             style: TextStyle(
+                        //               color:
+                        //                   bottomBarController
+                        //                               .selectedTabIndex
+                        //                               .value ==
+                        //                           50
+                        //                       ? whiteColor
+                        //                       : textColor,
+                        //               fontSize: 18,
+                        //               fontWeight: FontWeight.w500,
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         // SizedBox(height: 10.h),
                         // InkWell(
                         //   onTap: () {
@@ -764,71 +764,71 @@ class _SideDrawerState extends State<SideDrawer> {
                               ),
                             ),
                           ),
-                        SizedBox(height: 10.h),
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                            bottomBarController.selectedTabIndex.value = 6;
-                            feedController.fromPage.value = 'home';
-                            bottomBarController.currentPageIndex.value = 2;
-                            Get.to(
-                              BottomNavigationBarExample(
-                                from: 'home',
-                                payloadData: {},
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          6
-                                      ? selectedTabColor
-                                      : whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6.r),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                left: 10.w,
-                                top: 7.h,
-                                bottom: 7.h,
-                              ),
-                              child: Row(
-                                spacing: 10.w,
-                                children: [
-                                  SvgPicture.asset(
-                                    celebrationIcon,
-                                    color:
-                                        bottomBarController
-                                                    .selectedTabIndex
-                                                    .value ==
-                                                6
-                                            ? whiteColor
-                                            : textColor,
-                                    height: 22.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Text(
-                                    "Event",
-                                    style: TextStyle(
-                                      color:
-                                          bottomBarController
-                                                      .selectedTabIndex
-                                                      .value ==
-                                                  6
-                                              ? whiteColor
-                                              : textColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // SizedBox(height: 10.h),
+                        // InkWell(
+                        //   onTap: () {
+                        //     Get.back();
+                        //     bottomBarController.selectedTabIndex.value = 6;
+                        //     feedController.fromPage.value = 'home';
+                        //     bottomBarController.currentPageIndex.value = 2;
+                        //     Get.to(
+                        //       BottomNavigationBarExample(
+                        //         from: 'home',
+                        //         payloadData: {},
+                        //       ),
+                        //     );
+                        //   },
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color:
+                        //           bottomBarController.selectedTabIndex.value ==
+                        //                   6
+                        //               ? selectedTabColor
+                        //               : whiteColor,
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(6.r),
+                        //       ),
+                        //     ),
+                        //     child: Padding(
+                        //       padding: EdgeInsets.only(
+                        //         left: 10.w,
+                        //         top: 7.h,
+                        //         bottom: 7.h,
+                        //       ),
+                        //       child: Row(
+                        //         spacing: 10.w,
+                        //         children: [
+                        //           SvgPicture.asset(
+                        //             celebrationIcon,
+                        //             color:
+                        //                 bottomBarController
+                        //                             .selectedTabIndex
+                        //                             .value ==
+                        //                         6
+                        //                     ? whiteColor
+                        //                     : textColor,
+                        //             height: 22.h,
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //           Text(
+                        //             "Event",
+                        //             style: TextStyle(
+                        //               color:
+                        //                   bottomBarController
+                        //                               .selectedTabIndex
+                        //                               .value ==
+                        //                           6
+                        //                       ? whiteColor
+                        //                       : textColor,
+                        //               fontSize: 18,
+                        //               fontWeight: FontWeight.w500,
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () async {
