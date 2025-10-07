@@ -667,17 +667,39 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                       textColor,
                                                                                                 ),
                                                                                               ),
-                                                                                              Text(
-                                                                                                '${chat.parentMessage ?? ''}',
-                                                                                                textAlign:
-                                                                                                    TextAlign.left,
-                                                                                                style: TextStyle(
-                                                                                                  fontSize:
-                                                                                                      12.sp,
-                                                                                                  color:
-                                                                                                      textColor,
+                                                                                              // Show parent message text if available
+                                                                                              if (chat.parentMessage != null && chat.parentMessage.toString().isNotEmpty)
+                                                                                                Text(
+                                                                                                  '${chat.parentMessage ?? ''}',
+                                                                                                  textAlign:
+                                                                                                      TextAlign.left,
+                                                                                                  style: TextStyle(
+                                                                                                    fontSize:
+                                                                                                        12.sp,
+                                                                                                    color:
+                                                                                                        textColor,
+                                                                                                  ),
                                                                                                 ),
-                                                                                              ),
+                                                                                              // Show parent attachment if available
+                                                                                              if (chat.parentAttachment != null && chat.parentAttachment.toString().isNotEmpty)
+                                                                                                Container(
+                                                                                                  margin: EdgeInsets.only(top: 4.h),
+                                                                                                  child: Row(
+                                                                                                    children: [
+                                                                                                      Icon(Icons.image, size: 16, color: textColor),
+                                                                                                      SizedBox(width: 4),
+                                                                                                      Expanded(
+                                                                                                        child: Text(
+                                                                                                          '📷 Photo',
+                                                                                                          style: TextStyle(
+                                                                                                            fontSize: 12.sp,
+                                                                                                            color: textColor,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ),
                                                                                             ],
                                                                                           ),
                                                                                         ),
@@ -1255,6 +1277,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                                           selectedMessageSender,
                                                       selectedMessage:
                                                           selectedMessage,
+                                                      selectedAttachment:
+                                                          chatController.selectedAttachment.value,
                                                     );
                                                 attachment = File('');
                                               }

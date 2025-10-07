@@ -182,6 +182,7 @@ class ChatController extends GetxController {
     required String messageId,
     required String parrent_message_sender_name,
     required String selectedMessage,
+    String? selectedAttachment,
   }) async {
     DateTime inputDateTime = DateTime.now();
 
@@ -199,6 +200,7 @@ class ChatController extends GetxController {
       parentSenderName: parrent_message_sender_name,
       parentMessageId: messageId.isNotEmpty ? int.parse(messageId) : 0,
       parentMessage: selectedMessage,
+      parentAttachment: selectedAttachment,
     );
     chatHistoryList.add(newMessage);
     print("message api calling after ");
