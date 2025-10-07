@@ -461,8 +461,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                       key: ValueKey(chat.id),
                                                       onRightSwipe: (details) {
                                                         String replyContent = '';
-                                                        String replyType = 'text';
-                                                        
+                                                        String replyType = 'text'; 
                                                         if (chat.message != null && chat.message!.isNotEmpty) {
                                                           replyContent = chat.message.toString();
                                                           replyType = 'text';

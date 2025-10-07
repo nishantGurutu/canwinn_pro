@@ -26,41 +26,41 @@ class ChatHistoryModel {
 
 class ChatHistoryData {
   int? id;
-  String? message;
-  String? readAt;
-  int? parentMessageId;
-  String? attachment;
-  int? senderId;
-  String? senderName;
-  String? senderEmail;
-  String? senderImage;
-  String? createdAt;
-  String? createdDate;
-  int? parentSenderId;
-  String? parentSenderName;
+  dynamic message;
+  dynamic parentMessageId;
+  dynamic attachment;
+  dynamic senderId;
+  dynamic senderName;
+  dynamic senderEmail;
+  dynamic senderImage;
+  dynamic createdAt;
+  dynamic createdDate;
+  dynamic readAt;
+  dynamic parentSenderId;
+  dynamic parentSenderName;
   dynamic parentMessage;
+  dynamic parentAttachment;
 
-  ChatHistoryData({
-    this.id,
-    this.message,
-    this.readAt,
-    this.parentMessageId,
-    this.attachment,
-    this.senderId,
-    this.senderName,
-    this.senderEmail,
-    this.senderImage,
-    this.createdAt,
-    this.createdDate,
-    this.parentSenderId,
-    this.parentSenderName,
-    this.parentMessage,
-  });
+  ChatHistoryData(
+      {this.id,
+      this.message,
+      this.parentMessageId,
+      this.attachment,
+      this.senderId,
+      this.senderName,
+      this.senderEmail,
+      this.senderImage,
+      this.createdAt,
+      this.createdDate,
+      this.readAt,
+      this.parentSenderId,
+      this.parentSenderName,
+      this.parentMessage,
+      this.parentAttachment});
 
   ChatHistoryData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     message = json['message'];
-    readAt = json['read_at'];
     parentMessageId = json['parent_message_id'];
     attachment = json['attachment'];
     senderId = json['sender_id'];
@@ -69,16 +69,17 @@ class ChatHistoryData {
     senderImage = json['sender_image'];
     createdAt = json['created_at'];
     createdDate = json['created_date'];
+    readAt = json['read_at'];
     parentSenderId = json['parent_sender_id'];
     parentSenderName = json['parent_sender_name'];
     parentMessage = json['parent_message'];
+    parentAttachment = json['parent_attachment'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['message'] = this.message;
-    data['read_at'] = this.readAt;
     data['parent_message_id'] = this.parentMessageId;
     data['attachment'] = this.attachment;
     data['sender_id'] = this.senderId;
@@ -87,9 +88,11 @@ class ChatHistoryData {
     data['sender_image'] = this.senderImage;
     data['created_at'] = this.createdAt;
     data['created_date'] = this.createdDate;
+    data['read_at'] = this.readAt;
     data['parent_sender_id'] = this.parentSenderId;
     data['parent_sender_name'] = this.parentSenderName;
     data['parent_message'] = this.parentMessage;
+    data['parent_attachment'] = this.parentAttachment;
     return data;
   }
 }

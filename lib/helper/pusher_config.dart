@@ -270,4 +270,5 @@ class PusherConfig2 {
   void onMemberRemoved(String channelName, PusherMember member) {
     log("onMemberRemoved: $channelName user: $member");
   }
+  
 }
