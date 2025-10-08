@@ -31,6 +31,10 @@ class ChatController extends GetxController {
   StreamController<ChatHistoryModel> streamController = StreamController();
   RxInt totalUnsenMessage = 0.obs;
   RxList<ChatListData> chatList = <ChatListData>[].obs;
+  
+  // Online status tracking
+  RxSet<int> onlineUserIds = <int>{}.obs;
+  RxBool isOnlineStatusInitialized = false.obs;
 
   Future<void> chatListApi(String s) async {
     if (s != "refresh") {
@@ -309,6 +313,45 @@ class ChatController extends GetxController {
   }
 
   var isChatTyping = false.obs;
+
+  // Handle online status updates from pusher
+  void updateOnlineStatus(Map<String, dynamic> eventData) {
+    try {
+      print('updateOnlineStatus called with: $eventData');
+      
+      if (eventData.containsKey('online_users') && eventData['online_users'] is List) {
+        List<dynamic> onlineUsers = eventData['online_users'];
+        print('Processing online users: $onlineUsers');
+        
+        onlineUserIds.clear();
+        for (var user in onlineUsers) {
+          if (user is Map && user.containsKey('id')) {
+            int userId = user['id'];
+            onlineUserIds.add(userId);
+            print('Added user $userId to online list');
+          }
+        }
+        onlineUserIds.refresh();
+        print('Online users updated: ${onlineUserIds.toList()}');
+      } else {
+        print('No online_users found in event data or not a list');
+      }
+    } catch (e) {
+      print('Error updating online status: $e');
+    }
+  }
+
+  // Check if a user is online
+  bool isUserOnline(int userId) {
+    return onlineUserIds.contains(userId);
+  }
+
+  // Test method to manually add online users (for debugging)
+  void addTestOnlineUsers() {
+    onlineUserIds.addAll([99, 235, 262]); // Add some test user IDs
+    onlineUserIds.refresh();
+    print('Added test online users: ${onlineUserIds.toList()}');
+  }
   Future<void> chatTyping(dynamic chatId) async {
     isChatTyping.value = true;
 

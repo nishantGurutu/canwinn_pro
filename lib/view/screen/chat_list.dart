@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,7 @@ import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/controller/chat_controller.dart';
 import 'package:task_management/controller/home_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
+import 'package:task_management/helper/sos_pusher.dart';
 import 'package:task_management/view/screen/select_contact.dart';
 import 'package:task_management/view/widgets/discussion_list.dart';
 import 'package:task_management/view/widgets/image_screen.dart';
@@ -20,28 +22,84 @@ class ChatList extends StatefulWidget {
   State<ChatList> createState() => _ChatListState();
 }
 
-class _ChatListState extends State<ChatList> {
+class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
   final ChatController chatController = Get.find();
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
 
   @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    
     chatController.selectedChatId.clear();
     chatController.chatListApi("");
-    // SosPusherConfigOnline().initPusher(
-    //   _onPusherEvent,
-    //   channelName: "online-users",
-    //   context: context,
-    // ); 
+    
+    // Initialize pusher for online status
+    SosPusherConfigOnline().initPusher(
+      _onPusherEvent,
+      channelName: "online-users",
+      context: context,
+    ); 
+    
     Future.delayed(const Duration(seconds: 2), () {
       homeController.userActiveStatusApi(status: "online");
     });
-    super.initState();
+    
+    // Add test online users for debugging (remove this in production)
+    Future.delayed(const Duration(seconds: 3), () {
+      chatController.addTestOnlineUsers();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        // App is minimized or killed - set user as offline
+        homeController.userActiveStatusApi(status: "offline");
+        break;
+      case AppLifecycleState.resumed:
+        // App is resumed - set user as online
+        homeController.userActiveStatusApi(status: "online");
+        break;
+      case AppLifecycleState.inactive:
+        // App is inactive - set user as offline
+        homeController.userActiveStatusApi(status: "offline");
+        break;
+      case AppLifecycleState.hidden:
+        // App is hidden - set user as offline
+        homeController.userActiveStatusApi(status: "offline");
+        break;
+    }
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
     log("Pusher event received: ${event.eventName} - ${event.data}");
+    
+    try {
+      if (event.eventName == "UserOnlineStatusChanged") {
+        final eventData = jsonDecode(event.data ?? '{}');
+        log("Online status event data: $eventData");
+        
+        // Update online status in chat controller
+        chatController.updateOnlineStatus(eventData);
+        
+        // Force UI refresh
+        chatController.onlineUserIds.refresh();
+      }
+    } catch (e) {
+      log("Error handling pusher event: $e");
+    }
   }
    
   Future onRefresher() async {

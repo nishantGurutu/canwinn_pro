@@ -106,54 +106,87 @@ class DiscussionList extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              height: 45.h,
-                              width: 45.h,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF4E2FF),
-                                borderRadius: BorderRadius.circular(22.5.h),
-                              ),
-                              child:
-                                  item.type?.toLowerCase() == 'group'
-                                      ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                          22.5.h,
-                                        ),
-                                        child: Image.network(
-                                          '${item.groupIcon}',
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (
-                                            context,
-                                            error,
-                                            stackTrace,
-                                          ) {
-                                            return Image.asset(backgroundLogo);
-                                          },
-                                        ),
-                                      )
-                                      : InkWell(
-                                        onTap: () {
-                                          openFile(item.image ?? "");
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            22.5.h,
-                                          ),
-                                          child: Image.network(
-                                            '${item.image}',
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (
-                                              context,
-                                              error,
-                                              stackTrace,
-                                            ) {
-                                              return Image.asset(
-                                                backgroundLogo,
-                                              );
+                            Stack(
+                              children: [
+                                Container(
+                                  height: 45.h,
+                                  width: 45.h,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffF4E2FF),
+                                    borderRadius: BorderRadius.circular(22.5.h),
+                                  ),
+                                  child:
+                                      item.type?.toLowerCase() == 'group'
+                                          ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              22.5.h,
+                                            ),
+                                            child: Image.network(
+                                              '${item.groupIcon}',
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) {
+                                                return Image.asset(backgroundLogo);
+                                              },
+                                            ),
+                                          )
+                                          : InkWell(
+                                            onTap: () {
+                                              openFile(item.image ?? "");
                                             },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                22.5.h,
+                                              ),
+                                              child: Image.network(
+                                                '${item.image}',
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (
+                                                  context,
+                                                  error,
+                                                  stackTrace,
+                                                ) {
+                                                  return Image.asset(
+                                                    backgroundLogo,
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                ),
+                                // Green dot for online users (only for individual chats)
+                                Obx(() {
+                                  final isOnline = item.type?.toLowerCase() != 'group' && 
+                                      item.userId != null && 
+                                      chatController.isUserOnline(item.userId!);
+                                  
+                                  print('User ${item.userId} (${item.name}) - isOnline: $isOnline, type: ${item.type}');
+                                  print('Online user IDs: ${chatController.onlineUserIds.toList()}');
+                                  
+                                  if (isOnline) {
+                                    return Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        width: 12.w,
+                                        height: 12.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2,
                                           ),
                                         ),
                                       ),
+                                    );
+                                  }
+                                  return SizedBox.shrink();
+                                }),
+                              ],
                             ),
                             SizedBox(width: 8.w),
                             Expanded(

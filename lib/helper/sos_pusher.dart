@@ -137,13 +137,20 @@ class SosPusherConfigOnline {
                 dt,
                 eventData["title"],
               );
-            } else {
+            } else if(eventData.containsKey("sosmsg") && eventData["action"] == "sosmsg"){
               await StorageHelper.setSosMessage(true);
               await ShowDialogFunction().sosMsg(
                 context,
                 eventData["message"],
                 dt,
               );
+            }else if(eventData.containsKey("online_users") && eventData.containsKey("is_online")){
+              // Handle online users event
+              print("Online Users Event: ${eventData['online_users']}");
+              print("User Online Status: ${eventData['is_online']}");
+              
+              // Call the onMessageReceived callback to pass the event data
+              onMessageReceived(event);
             }
           } catch (e) {
             print("Error parsing Pusher event: $e");
