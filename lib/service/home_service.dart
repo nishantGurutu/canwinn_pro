@@ -147,7 +147,6 @@ class HomeService {
       final formData = FormData.fromMap(formDataMap);
       final response = await _dio.post(url, data: formData);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        CustomToast().showCustomToast(response.data["message"]);
         return true;
       } else {
         throw Exception('Failed to fetch responsible person list');
