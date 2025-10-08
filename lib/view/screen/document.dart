@@ -50,6 +50,7 @@ class _DocumentFileState extends State<DocumentFile> {
       return;
     }
 
+    // Create folder locally
     String newFolderPath = '$currentPath/$folderName';
     final directory = Directory(newFolderPath);
 
@@ -57,18 +58,24 @@ class _DocumentFileState extends State<DocumentFile> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Folder "$folderName" already exists.')),
       );
-    } else {
-      try {
-        await directory.create(recursive: true);
-        setState(() {});
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Folder "$folderName" created.')),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: Unable to create folder.')),
-        );
-      }
+      return;
+    }
+
+    try {
+      // Create folder locally
+      await directory.create(recursive: true);
+      
+      // Also create folder on server via API
+      await documentController.addFolder(folderName);
+      
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Folder "$folderName" created successfully.')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: Unable to create folder.')),
+      );
     }
   }
 
@@ -93,15 +100,23 @@ class _DocumentFileState extends State<DocumentFile> {
               },
               child: const Text('Cancel'),
             ),
-            TextButton(
-              onPressed: () {
-                createFolder(folderController.text.trim());
-                folderController.clear();
-                Get.back();
-                Get.back();
-              },
-              child: const Text('Create'),
-            ),
+            Obx(() => TextButton(
+              onPressed: documentController.isDocumentAdding.value 
+                ? null 
+                : () async {
+                    await createFolder(folderController.text.trim());
+                    folderController.clear();
+                    Get.back();
+                    Get.back();
+                  },
+              child: documentController.isDocumentAdding.value
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Create'),
+            )),
           ],
         );
       },
@@ -300,7 +315,7 @@ class _DocumentFileState extends State<DocumentFile> {
                   ],
                 );
 
-                final result = await SharePlus.instance.share(params);
+                await SharePlus.instance.share(params);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Cannot share a folder!")));
@@ -673,26 +688,39 @@ class _DocumentFileState extends State<DocumentFile> {
                         ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        uploadFile();
-                      },
+                    Obx(() => InkWell(
+                      onTap: documentController.isFileUploading.value 
+                        ? null 
+                        : () {
+                            uploadFile();
+                          },
                       child: Container(
                         child: Row(
                           children: [
-                            Icon(Icons.file_copy, color: Colors.blue),
+                            documentController.isFileUploading.value
+                              ? SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.blue,
+                                  ),
+                                )
+                              : Icon(Icons.file_copy, color: Colors.blue),
                             SizedBox(
                               width: 8.w,
                             ),
                             Text(
-                              "Upload File",
+                              documentController.isFileUploading.value 
+                                ? "Uploading..." 
+                                : "Upload File",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )
                           ],
                         ),
                       ),
-                    ),
+                    )),
                   ],
                 ),
                 SizedBox(
@@ -729,7 +757,11 @@ class _DocumentFileState extends State<DocumentFile> {
         final File file = File(filePath);
         final String newPath = path.join(currentPath, path.basename(file.path));
 
+        // Copy file locally
         await file.copy(newPath);
+
+        // Also upload file to server via API
+        await documentController.uploadFile(file);
 
         if (mounted) {
           setState(() {});
