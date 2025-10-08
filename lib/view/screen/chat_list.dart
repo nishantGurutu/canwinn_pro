@@ -9,7 +9,6 @@ import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/controller/chat_controller.dart';
 import 'package:task_management/controller/home_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
-import 'package:task_management/helper/sos_pusher.dart';
 import 'package:task_management/view/screen/select_contact.dart';
 import 'package:task_management/view/widgets/discussion_list.dart';
 import 'package:task_management/view/widgets/image_screen.dart';
@@ -30,11 +29,11 @@ class _ChatListState extends State<ChatList> {
   void initState() {
     chatController.selectedChatId.clear();
     chatController.chatListApi("");
-    SosPusherConfigOnline().initPusher(
-      _onPusherEvent,
-      channelName: "online-users",
-      context: context,
-    ); 
+    // SosPusherConfigOnline().initPusher(
+    //   _onPusherEvent,
+    //   channelName: "online-users",
+    //   context: context,
+    // ); 
     Future.delayed(const Duration(seconds: 2), () {
       homeController.userActiveStatusApi(status: "online");
     });

@@ -154,7 +154,6 @@ class SosPusherConfigOnline {
         onMemberAdded: onMemberAdded,
         onMemberRemoved: onMemberRemoved,
       );
-      // await pusher?.subscribe(channelName: "test-channel");
       await pusher?.subscribe(channelName: channelName ?? "online-users");
 
       print("Subscribed to: $channelName");

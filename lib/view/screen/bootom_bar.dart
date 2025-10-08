@@ -142,6 +142,10 @@ class _BottomNavigationBarExampleState
       channelName: "online-users",
       context: context,
     ); 
+
+    // Future.delayed(const Duration(seconds: 2), () {
+    //   homeController.userActiveStatusApi(status: "online");
+    // });
   }
 
   Future<void> _onPusherEvent(PusherEvent event) async {
