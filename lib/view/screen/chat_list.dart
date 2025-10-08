@@ -50,6 +50,11 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
     Future.delayed(const Duration(seconds: 3), () {
       chatController.addTestOnlineUsers();
     });
+    
+    // Test offline scenario after 8 seconds (remove this in production)
+    Future.delayed(const Duration(seconds: 8), () {
+      chatController.clearAllOnlineUsers();
+    });
   }
 
   @override
@@ -62,22 +67,28 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     
+    print('App lifecycle state changed to: $state');
+    
     switch (state) {
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
         // App is minimized or killed - set user as offline
+        print('Setting user as offline due to app pause/detach');
         homeController.userActiveStatusApi(status: "offline");
         break;
       case AppLifecycleState.resumed:
         // App is resumed - set user as online
+        print('Setting user as online due to app resume');
         homeController.userActiveStatusApi(status: "online");
         break;
       case AppLifecycleState.inactive:
         // App is inactive - set user as offline
+        print('Setting user as offline due to app inactive');
         homeController.userActiveStatusApi(status: "offline");
         break;
       case AppLifecycleState.hidden:
         // App is hidden - set user as offline
+        print('Setting user as offline due to app hidden');
         homeController.userActiveStatusApi(status: "offline");
         break;
     }
@@ -167,12 +178,38 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
                   ),
                 ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: darkBlue,
-        child: Icon(Icons.add, color: whiteColor, size: 30.h),
-        onPressed: () {
-          Get.to(() => SelectContact());
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // Test offline button (remove in production)
+          FloatingActionButton(
+            backgroundColor: Colors.red,
+            mini: true,
+            child: Icon(Icons.offline_bolt, color: whiteColor, size: 20.h),
+            onPressed: () {
+              chatController.clearAllOnlineUsers();
+            },
+          ),
+          SizedBox(height: 10.h),
+          // Test online button (remove in production)
+          FloatingActionButton(
+            backgroundColor: Colors.green,
+            mini: true,
+            child: Icon(Icons.online_prediction, color: whiteColor, size: 20.h),
+            onPressed: () {
+              chatController.addTestOnlineUsers();
+            },
+          ),
+          SizedBox(height: 10.h),
+          // Main add contact button
+          FloatingActionButton(
+            backgroundColor: darkBlue,
+            child: Icon(Icons.add, color: whiteColor, size: 30.h),
+            onPressed: () {
+              Get.to(() => SelectContact());
+            },
+          ),
+        ],
       ),
     );
   }

@@ -319,6 +319,27 @@ class ChatController extends GetxController {
     try {
       print('updateOnlineStatus called with: $eventData');
       
+      // Check if this is an offline event for a specific user
+      if (eventData.containsKey('user_id') && eventData.containsKey('is_online')) {
+        int userId = eventData['user_id'];
+        String status = eventData['is_online'];
+        
+        print('User $userId status changed to: $status');
+        
+        if (status == 'offline') {
+          onlineUserIds.remove(userId);
+          print('Removed user $userId from online list');
+        } else if (status == 'online') {
+          onlineUserIds.add(userId);
+          print('Added user $userId to online list');
+        }
+        
+        onlineUserIds.refresh();
+        print('Online users updated: ${onlineUserIds.toList()}');
+        return;
+      }
+      
+      // Handle bulk online users list
       if (eventData.containsKey('online_users') && eventData['online_users'] is List) {
         List<dynamic> onlineUsers = eventData['online_users'];
         print('Processing online users: $onlineUsers');
@@ -351,6 +372,20 @@ class ChatController extends GetxController {
     onlineUserIds.addAll([99, 235, 262]); // Add some test user IDs
     onlineUserIds.refresh();
     print('Added test online users: ${onlineUserIds.toList()}');
+  }
+
+  // Test method to clear all online users (for debugging offline)
+  void clearAllOnlineUsers() {
+    onlineUserIds.clear();
+    onlineUserIds.refresh();
+    print('Cleared all online users: ${onlineUserIds.toList()}');
+  }
+
+  // Test method to simulate user going offline
+  void simulateUserOffline(int userId) {
+    onlineUserIds.remove(userId);
+    onlineUserIds.refresh();
+    print('Simulated user $userId going offline. Online users: ${onlineUserIds.toList()}');
   }
   Future<void> chatTyping(dynamic chatId) async {
     isChatTyping.value = true;

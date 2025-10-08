@@ -144,11 +144,13 @@ class SosPusherConfigOnline {
                 eventData["message"],
                 dt,
               );
-            }else if(eventData.containsKey("online_users") && eventData.containsKey("is_online")){
+            }else if(eventData.containsKey("online_users")){
+             // Online status event data: {user_id: 235, is_online: online, online_users: [{id: 99}, {id: 235}, {id: 262}], online_user_ids: 99,235,262}
+
               // Handle online users event
               print("Online Users Event: ${eventData['online_users']}");
               print("User Online Status: ${eventData['is_online']}");
-              
+              //  {user_id: 235, is_online: online, online_users: [{id: 99}, {id: 235}, {id: 262}], online_user_ids: 99,235,262}
               // Call the onMessageReceived callback to pass the event data
               onMessageReceived(event);
             }
