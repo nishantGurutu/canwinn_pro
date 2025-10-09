@@ -46,15 +46,6 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
       homeController.userActiveStatusApi(status: "online");
     });
     
-    // Add test online users for debugging (remove this in production)
-    Future.delayed(const Duration(seconds: 3), () {
-      chatController.addTestOnlineUsers();
-    });
-    
-    // Test offline scenario after 8 seconds (remove this in production)
-    Future.delayed(const Duration(seconds: 8), () {
-      chatController.clearAllOnlineUsers();
-    });
   }
 
   @override

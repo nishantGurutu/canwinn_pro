@@ -220,8 +220,7 @@ class ChatController extends GetxController {
 
   String getDisplayDate(DateTime inputDateTime) {
     final now = DateTime.now();
-
-    // Remove Time (only Date part)
+ 
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(Duration(days: 1));
     final inputDate = DateTime(
@@ -235,7 +234,6 @@ class ChatController extends GetxController {
     } else if (inputDate == yesterday) {
       return 'Yesterday';
     } else {
-      // Format as "dd MMM yyyy"
       return DateFormat('dd MMM yyyy').format(inputDateTime);
     }
   }
@@ -314,12 +312,10 @@ class ChatController extends GetxController {
 
   var isChatTyping = false.obs;
 
-  // Handle online status updates from pusher
   void updateOnlineStatus(Map<String, dynamic> eventData) {
     try {
       print('updateOnlineStatus called with: $eventData');
       
-      // Check if this is an offline event for a specific user
       if (eventData.containsKey('user_id') && eventData.containsKey('is_online')) {
         int userId = eventData['user_id'];
         String status = eventData['is_online'];
@@ -339,7 +335,6 @@ class ChatController extends GetxController {
         return;
       }
       
-      // Handle bulk online users list
       if (eventData.containsKey('online_users') && eventData['online_users'] is List) {
         List<dynamic> onlineUsers = eventData['online_users'];
         print('Processing online users: $onlineUsers');
