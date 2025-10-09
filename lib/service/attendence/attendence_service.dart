@@ -89,7 +89,6 @@ class AttendenceService {
   ) async {
     try {
       var token = StorageHelper.getToken();
-      var addressData = StorageHelper.getUserLocationName();
       _dio.options.headers = {
         "Authorization": "Bearer $token",
         "Content-Type": "multipart/form-data",

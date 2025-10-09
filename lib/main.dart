@@ -182,8 +182,6 @@ Future<void> _storeLocationInDb({double? lat, double? lon}) async {
 }
 
 Location location = Location();
-LocationData? _currentPosition;
-String _currentAddress = "";
 
 Future<void> requestPermissionHandlar() async {
   if (await Permission.ignoreBatteryOptimizations.isDenied) {

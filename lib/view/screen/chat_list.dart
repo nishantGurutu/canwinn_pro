@@ -178,38 +178,12 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
                   ),
                 ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          // Test offline button (remove in production)
-          FloatingActionButton(
-            backgroundColor: Colors.red,
-            mini: true,
-            child: Icon(Icons.offline_bolt, color: whiteColor, size: 20.h),
-            onPressed: () {
-              chatController.clearAllOnlineUsers();
-            },
-          ),
-          SizedBox(height: 10.h),
-          // Test online button (remove in production)
-          FloatingActionButton(
-            backgroundColor: Colors.green,
-            mini: true,
-            child: Icon(Icons.online_prediction, color: whiteColor, size: 20.h),
-            onPressed: () {
-              chatController.addTestOnlineUsers();
-            },
-          ),
-          SizedBox(height: 10.h),
-          // Main add contact button
-          FloatingActionButton(
-            backgroundColor: darkBlue,
-            child: Icon(Icons.add, color: whiteColor, size: 30.h),
-            onPressed: () {
-              Get.to(() => SelectContact());
-            },
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: darkBlue,
+        child: Icon(Icons.add, color: whiteColor, size: 30.h),
+        onPressed: () {
+          Get.to(() => SelectContact());
+        },
       ),
     );
   }

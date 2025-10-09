@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
@@ -9,8 +8,6 @@ import 'package:get/get.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/controller/lead_controller.dart';
-import 'package:task_management/controller/notes_controller.dart';
-
 import '../widgets/image_screen.dart';
 import '../widgets/pdf_screen.dart';
 

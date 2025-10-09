@@ -90,9 +90,9 @@ class _CalendarscreenpageState extends State<Calendarscreenpage> {
         Fluttertoast.showToast(msg: "Event deleted successfully");
       } else {
         final errorMessage =
-            result.errors?.isNotEmpty == true
-                ? result.errors!
-                    .map((e) => e.errorMessage ?? "Unknown error")
+            result.errors.isNotEmpty == true
+                ? result.errors
+                    .map((e) => e.errorMessage )
                     .join(', ')
                 : "Unknown error";
         Fluttertoast.showToast(msg: "Failed to delete event: $errorMessage");
@@ -148,7 +148,7 @@ class _CalendarscreenpageState extends State<Calendarscreenpage> {
         RetrieveEventsParams(eventIds: [event.eventId!]),
       );
 
-      if (eventsResult?.data?.isEmpty ?? true) {
+      if (eventsResult.data?.isEmpty ?? true) {
         Fluttertoast.showToast(
           msg: "Event not found. It may have been deleted.",
         );
@@ -158,7 +158,7 @@ class _CalendarscreenpageState extends State<Calendarscreenpage> {
         return;
       }
 
-      final originalEvent = eventsResult!.data!.first;
+      final originalEvent = eventsResult.data!.first;
 
       // Show update dialog
       await showDialog(
@@ -305,11 +305,11 @@ class _CalendarscreenpageState extends State<Calendarscreenpage> {
                           await _fetchTodayEvents();
                         } else {
                           final errorMessage =
-                              result?.errors?.isNotEmpty == true
-                                  ? result!.errors!
+                              result?.errors.isNotEmpty == true
+                                  ? result!.errors
                                       .map(
                                         (e) =>
-                                            e.errorMessage ?? "Unknown error",
+                                            e.errorMessage,
                                       )
                                       .join(', ')
                                   : "Unknown error while updating event";
@@ -429,7 +429,7 @@ class _CalendarscreenpageState extends State<Calendarscreenpage> {
           ),
         );
 
-        final events = eventsResult?.data ?? [];
+        final events = eventsResult.data ?? [];
         for (var event in events) {
           event.calendarId = cal.id;
           if (event.start != null) {
@@ -657,12 +657,11 @@ class _CalendarscreenpageState extends State<Calendarscreenpage> {
                           await _fetchTodayEvents();
                         } else {
                           final errorMessage =
-                              result?.errors?.isNotEmpty == true
-                                  ? result!.errors!
+                              result?.errors.isNotEmpty == true
+                                  ? result!.errors
                                       .map(
                                         (e) =>
-                                            e.errorMessage ??
-                                            "Unknown platform error",
+                                            e.errorMessage,
                                       )
                                       .join(', ')
                                   : "Device calendar plugin ran into an issue. Please check calendar sync settings.";

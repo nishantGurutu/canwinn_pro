@@ -1,3 +1,4 @@
+
 class SalarySlipModel {
   User? user;
   dynamic userId;
@@ -67,9 +68,9 @@ class SalarySlipModel {
 class User {
   String? name;
   String? fatherName;
-  Null? joiningDate;
+  dynamic joiningDate;
   Department? department;
-  Null? role;
+  dynamic role;
 
   User(
       {this.name,
@@ -103,11 +104,11 @@ class User {
 
 class Department {
   int? id;
-  int? companyId;
-  String? name;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
+  dynamic companyId;
+  dynamic name;
+  dynamic status;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Department(
       {this.id,
@@ -140,13 +141,13 @@ class Department {
 
 class Salary {
   int? employeeId;
-  int? basicSalary;
-  int? hra;
-  int? conveyanceAllowance;
-  int? specialAllowance;
-  int? lwf;
-  int? epf;
-  int? ctc;
+  dynamic basicSalary;
+  dynamic hra;
+  dynamic conveyanceAllowance;
+  dynamic specialAllowance;
+  dynamic lwf;
+  dynamic epf;
+  dynamic ctc;
 
   Salary(
       {this.employeeId,

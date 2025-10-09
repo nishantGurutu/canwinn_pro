@@ -565,6 +565,7 @@ class _BottomNavigationBarExampleState
         ),
         child: Padding(
           padding: EdgeInsets.all(10),
+          // ignore: deprecated_member_use
           child: SvgPicture.asset(activeIconPath, color: whiteColor),
         ),
       ),

@@ -306,7 +306,6 @@ class ProjectService {
       dynamic id) async {
     try {
       var token = StorageHelper.getToken();
-      var assignedDept = StorageHelper.getAssignedDept();
       var url =
           "${ApiConstant.baseUrl + ApiConstant.responsiblePersonList}?dept_id=$id";
 

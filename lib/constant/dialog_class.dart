@@ -4,11 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/image_constant.dart';
 import 'package:task_management/constant/style_constant.dart';
-import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/attendence/attendence_controller.dart';
 import 'package:task_management/controller/priority_controller.dart';
 import 'package:task_management/helper/storage_helper.dart';
@@ -18,8 +16,6 @@ import 'package:task_management/view/screen/leads_list.dart';
 import 'package:task_management/view/screen/meeting/get_meeting.dart';
 import 'package:task_management/view/screen/meeting_screen.dart';
 import 'package:task_management/view/screen/task_screen.dart';
-import 'package:task_management/view/widgets/custom_calender.dart'; 
-import 'package:task_management/view/widgets/custom_date_picker.dart';
 import 'package:task_management/view/widgets/pending_box.dart';
 
 class ShowDialogFunction {
@@ -91,8 +87,6 @@ class ShowDialogFunction {
     DateTime dt,
     title,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    // await _audioPlayer.play(AssetSource('mp3/emergency_alarm_69780.mp3'));
     return showDialog(
       barrierDismissible: false,
       context: context,
