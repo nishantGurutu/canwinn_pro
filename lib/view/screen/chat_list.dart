@@ -61,21 +61,29 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
         // App is minimized or killed - set user as offline
         print('Setting user as offline due to app pause/detach');
         homeController.userActiveStatusApi(status: "offline");
+        // Also update online status in chat controller
+        chatController.updateOnlineStatus({"user_id": profileController.userProfileModel.value?.data?.id, "is_online": "offline"});
         break;
       case AppLifecycleState.resumed:
         // App is resumed - set user as online
         print('Setting user as online due to app resume');
         homeController.userActiveStatusApi(status: "online");
+        // Also update online status in chat controller
+        chatController.updateOnlineStatus({"user_id": profileController.userProfileModel.value?.data?.id, "is_online": "online"});
         break;
       case AppLifecycleState.inactive:
         // App is inactive - set user as offline
         print('Setting user as offline due to app inactive');
         homeController.userActiveStatusApi(status: "offline");
+        // Also update online status in chat controller
+        chatController.updateOnlineStatus({"user_id": profileController.userProfileModel.value?.data?.id, "is_online": "offline"});
         break;
       case AppLifecycleState.hidden:
         // App is hidden - set user as offline
         print('Setting user as offline due to app hidden');
         homeController.userActiveStatusApi(status: "offline");
+        // Also update online status in chat controller
+        chatController.updateOnlineStatus({"user_id": profileController.userProfileModel.value?.data?.id, "is_online": "offline"});
         break;
     }
   }

@@ -11,6 +11,7 @@ import 'package:task_management/controller/project_controller.dart';
 import 'package:task_management/controller/register_controller.dart';
 import 'package:task_management/controller/source_controller.dart';
 import 'package:task_management/controller/task_controller.dart';
+import 'package:task_management/service/app_lifecycle_service.dart';
 
 class ControllerBinding extends Bindings {
   @override
@@ -28,5 +29,6 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => SourceController(), fenix: true);
     Get.lazyPut(() => IndustryController(), fenix: true);
     Get.lazyPut(() => LeadController(), fenix: true);
+    Get.lazyPut(() => AppLifecycleService(), fenix: true);
   }
 }
