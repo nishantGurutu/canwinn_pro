@@ -219,8 +219,7 @@ class ChatController extends GetxController {
   }
 
   String getDisplayDate(DateTime inputDateTime) {
-    final now = DateTime.now();
- 
+    final now = DateTime.now(); 
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(Duration(days: 1));
     final inputDate = DateTime(

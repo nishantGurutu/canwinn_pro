@@ -31,21 +31,16 @@ class _ChatListState extends State<ChatList> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    
     chatController.selectedChatId.clear();
     chatController.chatListApi("");
-    
-    // Initialize pusher for online status
     SosPusherConfigOnline().initPusher(
       _onPusherEvent,
       channelName: "online-users",
       context: context,
     ); 
-    
     Future.delayed(const Duration(seconds: 2), () {
       homeController.userActiveStatusApi(status: "online");
     });
-    
   }
 
   @override

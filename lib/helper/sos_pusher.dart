@@ -125,10 +125,7 @@ class SosPusherConfigOnline {
           try {
             print("event Data value in pusher: $event");
             DateTime dt = DateTime.now();
-
-            final eventData = jsonDecode(event.data ?? '{}');
-            print("event Data value in pusher usyetyu : $event");
-
+            final eventData = jsonDecode(event.data ?? '{}'); 
             if (eventData["action"] == "dailymsg") {
               await StorageHelper.setDailyMessage(true);
               await ShowDialogFunction().dailyMessage(
@@ -157,7 +154,6 @@ class SosPusherConfigOnline {
         onMemberRemoved: onMemberRemoved,
       );
       await pusher?.subscribe(channelName: channelName ?? "online-users");
-
       print("Subscribed to: $channelName");
       await pusher?.connect();
     } catch (e) {
