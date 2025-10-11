@@ -269,8 +269,19 @@ class ChatService {
       var token = StorageHelper.getToken();
       print("uey376te7 e36e37 ${chatId}");
       _dio.options.headers["Authorization"] = "Bearer $token";
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          error: true,
+          logPrint: (object) {
+            print('Add lead log print data value ${object}');
+          },
+        ),
+      );
       final response = await _dio.post(
-        "${ApiConstant.baseUrl + ApiConstant.chat_typing}",
+        "${ApiConstant.baseUrl+ApiConstant.chat_typing}",
         data: {"chat_id": chatId, "is_typing": true},
       );
 
@@ -279,8 +290,12 @@ class ChatService {
       } else {
         throw Exception('Failed to send message');
       }
-    } catch (e) {
-      return null;
+    } on DioException catch (e) {
+      print("Dio error: ${e.response?.statusCode}");
+      print("Error response: ${e.response?.data}");
+      print("Message: ${e.message}");
+      CustomToast().showCustomToast("Error: ${e.message}");
+      return false;
     }
   }
 }

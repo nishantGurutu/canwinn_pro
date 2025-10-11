@@ -77,6 +77,8 @@ class _MessageScreenState extends State<MessageScreen> {
           channelName: "chat", roomId: chatController.chatIdvalue.value);
       PusherConfig2().initPusher(chatController.onPusherEvent,
           channelName: "chatseen", roomId: chatController.chatIdvalue.value);
+      PusherConfigTyping().initPusher(chatController.onPusherEvent,
+          channelName: "typing", roomId: chatController.chatIdvalue.value);
     } 
   }
 
@@ -1129,6 +1131,12 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               .newline,
                                                       minLines: 1,
                                                       maxLines: null,
+                                                      onChanged: (value) async{
+                                                        print('typing.... ${widget.chatId}');
+                                                        await chatController.chatTyping(
+                                                          widget.chatId ?? "",
+                                                        );
+                                                      },
                                                       decoration: InputDecoration(
                                                         prefixIcon: InkWell(
                                                           onTap: () {
