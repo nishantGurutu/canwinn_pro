@@ -366,7 +366,7 @@ class _MessageScreenState extends State<MessageScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("${widget.name}", style: rubikBlack),
-                          Text("Active", style: rubikSmall),
+                          Obx(()=> chatController.isChatTyping.value == true ? Text('Typing..',style: rubikSmall) : Text("Active", style: rubikSmall)),
                         ],
                       ),
                     ),

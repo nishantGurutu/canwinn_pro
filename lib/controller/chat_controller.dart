@@ -381,15 +381,22 @@ class ChatController extends GetxController {
     onlineUserIds.refresh();
     print('Simulated user $userId going offline. Online users: ${onlineUserIds.toList()}');
   }
-  Future<void> chatTyping(dynamic chatId) async {
-    isChatTyping.value = true;
 
-    final result = await ChatService().chatTyping(chatId);
-    if (result != null) {
-      isChatTyping.value = false;
-    } else {
-      isChatTyping.value = false;
-    }
-    isChatTyping.value = false;
+  RxBool isTyping = false.obs;
+  Timer? _typingTimer;
+  
+  Future<void> chatTyping(dynamic chatId) async {
+    // Cancel previous timer if exists
+    _typingTimer?.cancel();
+    
+    // Send typing event to server
+    await ChatService().chatTyping(chatId);
+    
+    // Set a timer to stop typing indicator after 3 seconds of inactivity
+    _typingTimer = Timer(Duration(seconds: 3), () {
+      // The typing indicator will be automatically hidden by the server
+      // or by the PusherConfigTyping timeout
+      print('Typing timeout reached');
+    });
   }
 }

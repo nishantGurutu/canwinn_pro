@@ -180,9 +180,10 @@ class PusherConfigTyping {
         onSubscriptionSucceeded: (channelName, data) {
         },
         onEvent: (event) async {
-          chatController.seenMessageIds.clear();
+          // chatController.seenMessageIds.clear();
           try {
             final eventData = jsonDecode(event.data);
+            print('event name dfgdfg ${eventData}');
             if (event.eventName == "message") {
               if (eventData.containsKey("message")) {
                 if (StorageHelper.getId() != eventData["senderId"]) {
@@ -221,6 +222,30 @@ class PusherConfigTyping {
               if (index != -1) {
                 chatController.chatHistoryList[index].readAt = "";
                 chatController.chatHistoryList.refresh();
+              }
+            } else if (event.eventName == "typing") {
+              print('Typing event received: $eventData');
+              final typingUserId = eventData["userId"];
+              final isTyping = eventData["isTyping"];
+              
+              // Only show typing indicator if it's not from the current user
+              if (StorageHelper.getId() != typingUserId.toString()) {
+                if (isTyping == true) {
+                  chatController.isChatTyping.value = true;
+                  chatController.isChatTyping.refresh();
+                  print('User $typingUserId is typing');
+                  
+                  // Auto-hide typing indicator after 3 seconds
+                  Future.delayed(Duration(seconds: 3), () {
+                    chatController.isChatTyping.value = false;
+                    chatController.isChatTyping.refresh();
+                    print('Typing indicator auto-hidden');
+                  });
+                } else {
+                  chatController.isChatTyping.value = false;
+                  chatController.isChatTyping.refresh();
+                  print('User $typingUserId stopped typing');
+                }
               }
             }
           } catch (e) {
